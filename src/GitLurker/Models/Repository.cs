@@ -1,25 +1,34 @@
-﻿using System.IO;
-
-namespace GitLurker.Models
+﻿namespace GitLurker.Models
 {
+    using System.IO;
+
     public class Repository
     {
         #region Fields
 
-        /// <summary>
-        /// The name
-        /// </summary>
         private string _name;
-
-        /// <summary>
-        /// The configuration
-        /// </summary>
         private Configuration _configuration;
+        private FileInfo[] _slnFiles;
 
         #endregion
 
         #region Constructors
 
+        public Repository(string folder)
+        {
+            this._name = Path.GetFileName(folder);
+            this._slnFiles = new DirectoryInfo(folder).GetFiles("*.sln", SearchOption.AllDirectories);
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Returns true if ... is valid.
+        /// </summary>
+        /// <param name="folder">The folder.</param>
+        /// <returns><c>true</c> if the specified folder is valid; otherwise, <c>false</c>.</returns>
         public static bool IsValid(string folder)
         {
             if (Path.GetFileName(folder).StartsWith("."))
@@ -28,11 +37,6 @@ namespace GitLurker.Models
             }
 
             return true;
-        }
-
-        public Repository(string folder)
-        {
-            this._name = Path.GetFileName(folder);
         }
 
         #endregion
