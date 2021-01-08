@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30711.63
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitLurker.UI", "src\GitLurker.UI\GitLurker.UI.csproj", "{308A97B8-F14D-482E-ACC3-E81AB3D5C8AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitLurker.UI", "src\GitLurker.UI\GitLurker.UI.csproj", "{308A97B8-F14D-482E-ACC3-E81AB3D5C8AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitLurker", "src\GitLurker\GitLurker.csproj", "{A1C0CC3F-B407-4EE5-B596-CFFF24D2430E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitLurker", "src\GitLurker\GitLurker.csproj", "{A1C0CC3F-B407-4EE5-B596-CFFF24D2430E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitLurker.Console", "GitLurker.Console\GitLurker.Console.csproj", "{29D2C52F-699D-4E8E-B6F1-4B1C2E2583F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{A1C0CC3F-B407-4EE5-B596-CFFF24D2430E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1C0CC3F-B407-4EE5-B596-CFFF24D2430E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1C0CC3F-B407-4EE5-B596-CFFF24D2430E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{29D2C52F-699D-4E8E-B6F1-4B1C2E2583F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{29D2C52F-699D-4E8E-B6F1-4B1C2E2583F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{29D2C52F-699D-4E8E-B6F1-4B1C2E2583F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{29D2C52F-699D-4E8E-B6F1-4B1C2E2583F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
