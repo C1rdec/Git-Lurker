@@ -34,5 +34,15 @@
         }
 
         #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Gets the repositories.
+        /// </summary>
+        /// <value>The repositories.</value>
+        public IEnumerable<Repository> Repositories => this._repositories;
+
+        #endregion
     }
 }

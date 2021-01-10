@@ -41,10 +41,9 @@
         public Guid AddProfile(string filePath)
         {
             var id = Guid.NewGuid();
-            var directory = Path.GetDirectoryName(filePath);
             var termitJson = File.ReadAllText(filePath);
             var config = JObject.Parse(termitJson);
-            config["startingDirectory"] = directory;
+            config["startingDirectory"] = Path.GetDirectoryName(filePath);
             config["guid"] = $"{{{id}}}";
 
             var folder = Directory.GetDirectories(this.PackagesFolder).FirstOrDefault(d => d.Contains(TerminalFolderName));

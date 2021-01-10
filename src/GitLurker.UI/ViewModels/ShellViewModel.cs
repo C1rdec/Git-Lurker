@@ -1,10 +1,6 @@
 ﻿namespace GitLurker.UI.ViewModels
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
+    using GitLurker.Models;
 
     public class ShellViewModel : Caliburn.Micro.PropertyChangedBase
     {
@@ -15,7 +11,7 @@
         /// </summary>
         public ShellViewModel()
         {
-
+            this.WorkspaceViewModel = new WorkspaceViewModel(new Workspace(@"D:\Github"));
         }
 
         #endregion
@@ -27,6 +23,12 @@
         /// </summary>
         /// <value>The title.</value>
         public string Title => ".NET 5!!!";
+
+        /// <summary>
+        /// Gets the workspace view model.
+        /// </summary>
+        /// <value>The workspace view model.</value>
+        public WorkspaceViewModel WorkspaceViewModel { get; private set; }
 
         #endregion
     }

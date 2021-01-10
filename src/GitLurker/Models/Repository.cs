@@ -40,5 +40,15 @@
         }
 
         #endregion
+
+        #region Properties
+
+        /// <summary>
+        /// Gets the name.
+        /// </summary>
+        /// <value>The name.</value>
+        public string Name => this._name;
+
+        #endregion
     }
 }

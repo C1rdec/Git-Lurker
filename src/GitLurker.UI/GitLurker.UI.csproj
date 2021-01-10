@@ -10,4 +10,8 @@
     <PackageReference Include="Caliburn.Micro" Version="4.0.158-rc" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\GitLurker\GitLurker.csproj" />
+  </ItemGroup>
+
 </Project>
