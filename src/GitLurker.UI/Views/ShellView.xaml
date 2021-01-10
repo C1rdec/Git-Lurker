@@ -9,7 +9,7 @@
         Background="Transparent"
         mc:Ignorable="d"
         Title="ShellView" Height="450" Width="800">
-    <Grid Background="Transparent">
+    <Grid>
         <ContentControl x:Name="WorkspaceViewModel"/>
     </Grid>
 </Window>
