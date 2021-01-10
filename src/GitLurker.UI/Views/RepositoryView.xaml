@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:GitLurker.UI.Views"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+    <Button x:Name="Open">
         <TextBlock x:Name="Name" FontSize="28"/>
-    </Grid>
+    </Button>
 </UserControl>

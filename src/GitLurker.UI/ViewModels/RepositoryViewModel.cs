@@ -32,5 +32,17 @@
         public string Name => this._repo.Name;
 
         #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Opens this instance.
+        /// </summary>
+        public void Open()
+        {
+            this._repo.Open();
+        }
+
+        #endregion
     }
 }

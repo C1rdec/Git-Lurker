@@ -11,7 +11,7 @@
         /// </summary>
         public ShellViewModel()
         {
-            this.WorkspaceViewModel = new WorkspaceViewModel(new Workspace(@"D:\Github"));
+            this.WorkspaceViewModel = new WorkspaceViewModel(new Workspace(@"C:\Github"));
         }
 
         #endregion
