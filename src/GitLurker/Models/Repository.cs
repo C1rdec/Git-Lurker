@@ -66,7 +66,7 @@
                 {
                     StartInfo = new ProcessStartInfo(file.FullName)
                     {
-                        UseShellExecute = true
+                        UseShellExecute = true,
                     }
                 }.Start();
                 return;
