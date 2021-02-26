@@ -7,6 +7,13 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Button x:Name="Open">
-        <TextBlock x:Name="Name" FontSize="28"/>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Image Height="35" Source="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Visual_Studio_Icon_2019.svg/1200px-Visual_Studio_Icon_2019.svg.png"/>
+            <TextBlock x:Name="Name" Grid.Row="1" FontSize="18"/>
+        </Grid>
     </Button>
 </UserControl>

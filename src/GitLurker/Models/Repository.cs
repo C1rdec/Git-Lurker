@@ -72,8 +72,14 @@
                 return;
             }
 
-            var packageFile = new DirectoryInfo(this._folder).GetFiles("package.json").FirstOrDefault();
-            if (packageFile != null)
+            var directoryInformation = new DirectoryInfo(this._folder);
+
+            // TODO: Parse file to check project type
+            var packageFile = directoryInformation.GetFiles("package.json").FirstOrDefault();
+
+            // Flutter
+            var pubspecFile = directoryInformation.GetFiles("pubspec.yaml").FirstOrDefault();
+            if (packageFile != null || pubspecFile != null)
             {
                 new Process()
                 {
@@ -86,7 +92,10 @@
                         Arguments = "/C code .",
                     },
                 }.Start();
+                return;
             }
+
+            
         }
 
         #endregion
