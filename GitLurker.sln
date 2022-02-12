@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitLurker.UI", "src\GitLurk
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitLurker", "src\GitLurker\GitLurker.csproj", "{A1C0CC3F-B407-4EE5-B596-CFFF24D2430E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitLurker.Console", "GitLurker.Console\GitLurker.Console.csproj", "{29D2C52F-699D-4E8E-B6F1-4B1C2E2583F8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitLurker.Console", "src\GitLurker.Console\GitLurker.Console.csproj", "{29D2C52F-699D-4E8E-B6F1-4B1C2E2583F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
