@@ -37,7 +37,7 @@
         /// <param name="e">The args.</param>
         protected override void OnStartup(object sender, System.Windows.StartupEventArgs e)
         {
-            this.DisplayRootViewFor<ShellViewModel>();
+            this.DisplayRootViewForAsync<ShellViewModel>();
         }
 
         /// <summary>

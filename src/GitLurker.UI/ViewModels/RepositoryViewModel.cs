@@ -29,7 +29,7 @@
         /// Gets the name.
         /// </summary>
         /// <value>The name.</value>
-        public string Name => this._repo.Name;
+        public string RepoName => this._repo.Name;
 
         #endregion
 

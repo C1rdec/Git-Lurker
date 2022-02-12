@@ -13,7 +13,7 @@
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
             <Image Height="35" Source="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Visual_Studio_Icon_2019.svg/1200px-Visual_Studio_Icon_2019.svg.png"/>
-            <TextBlock x:Name="Name" Grid.Row="1" FontSize="15"/>
+            <TextBlock x:Name="RepoName" Grid.Row="1" FontSize="15"/>
         </Grid>
     </Button>
 </UserControl>

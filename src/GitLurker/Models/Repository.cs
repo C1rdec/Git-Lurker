@@ -9,7 +9,6 @@
         #region Fields
 
         private string _name;
-        private Configuration _configuration;
         private FileInfo[] _slnFiles;
         private string _folder;
 
