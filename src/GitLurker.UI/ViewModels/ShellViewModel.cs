@@ -84,6 +84,11 @@
             return Task.CompletedTask;
         }
 
+        public void Close()
+        {
+            IsVisible = false;
+        }
+
         #endregion
     }
 }

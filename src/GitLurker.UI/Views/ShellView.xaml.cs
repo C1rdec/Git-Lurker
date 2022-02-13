@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace GitLurker.UI.Views
 {
@@ -14,9 +15,7 @@ namespace GitLurker.UI.Views
         {
             this.InitializeComponent();
             this.HideFromAltTab();
-
         }
-
         /// <summary>
         /// Hides the window from alt tab.
         /// </summary>

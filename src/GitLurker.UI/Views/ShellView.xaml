@@ -10,22 +10,26 @@
         ShowInTaskbar="False"
         AllowsTransparency="True"
         Topmost="True"
+        xmlns:cal="http://www.caliburnproject.org"
         Background="Transparent"
+        cal:Message.Attach="[Event Deactivated]=[Action Close()]"
         Title="ShellView" Height="450" Width="800">
-    <Grid Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+    <Grid Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+          FocusManager.FocusedElement="{Binding ElementName=SearchTerm}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-        
         <TextBox x:Name="SearchTerm"
+                 VerticalAlignment="Bottom"
                  Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"
                  FontSize="45" 
                  BorderThickness="0,0,0,1"
                  Margin="0,0,0,10" 
                  Controls:TextBoxHelper.SelectAllOnFocus="True"
                  Controls:TextBoxHelper.Watermark="Search"
-                 BorderBrush="{DynamicResource MahApps.Brushes.Accent}"></TextBox>
+                 BorderBrush="{DynamicResource MahApps.Brushes.Accent}">
+        </TextBox>
         <ContentControl x:Name="WorkspaceViewModel" Grid.Row="1"/>
     </Grid>
 </Window>
