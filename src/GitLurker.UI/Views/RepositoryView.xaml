@@ -27,7 +27,7 @@
             </Grid.ColumnDefinitions>
             <Image Height="60" Source="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Visual_Studio_Icon_2019.svg/1200px-Visual_Studio_Icon_2019.svg.png"/>
             <TextBlock x:Name="RepoName" 
-                       Foreground="{DynamicResource MahApps.Brushes.Gray5}"
+                       Foreground="White"
                        Grid.Row="1" 
                        Grid.Column="1"
                        TextTrimming="CharacterEllipsis"

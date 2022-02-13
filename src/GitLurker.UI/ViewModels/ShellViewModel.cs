@@ -93,7 +93,7 @@
                 return;
             }
 
-            _debounceService.Debounce(50, () => WorkspaceViewModel.Search(term));
+            WorkspaceViewModel.Search(term);
         }
 
         public Task HandleAsync(object message, CancellationToken cancellationToken)
