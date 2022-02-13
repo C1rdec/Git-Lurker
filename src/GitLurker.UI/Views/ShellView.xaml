@@ -3,13 +3,28 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:GitLurker.UI.Views"
+        xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         AllowsTransparency="True"
+        Topmost="True"
         Background="Transparent"
-        mc:Ignorable="d"
         Title="ShellView" Height="450" Width="800">
     <Grid>
-        <ContentControl x:Name="WorkspaceViewModel"/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        
+        <TextBox x:Name="SearchTerm"
+                 Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"
+                 FontSize="45" 
+                 BorderThickness="0,0,0,1"
+                 Margin="0,0,0,10" 
+                 Controls:TextBoxHelper.SelectAllOnFocus="True"
+                 Controls:TextBoxHelper.Watermark="Search"
+                 BorderBrush="{DynamicResource MahApps.Brushes.Accent}"></TextBox>
+        <ContentControl x:Name="WorkspaceViewModel" Grid.Row="1"/>
     </Grid>
 </Window>

@@ -1,9 +1,17 @@
 ﻿namespace GitLurker.UI.ViewModels
 {
     using GitLurker.Models;
+    using GitLurker.Services;
 
     public class ShellViewModel : Caliburn.Micro.PropertyChangedBase
     {
+        #region Fields
+
+        private string _searchTerm;
+        private DebounceService _debounceService;
+
+        #endregion
+
         #region Constructors
 
         /// <summary>
@@ -12,6 +20,7 @@
         public ShellViewModel()
         {
             this.WorkspaceViewModel = new WorkspaceViewModel(new Workspace(@"D:\Github"));
+            _debounceService = new DebounceService();
         }
 
         #endregion
@@ -29,6 +38,26 @@
         /// </summary>
         /// <value>The workspace view model.</value>
         public WorkspaceViewModel WorkspaceViewModel { get; private set; }
+
+        public string SearchTerm
+        {
+            get => _searchTerm;
+            set
+            {
+                _searchTerm = value;
+                this.Search(_searchTerm);
+                NotifyOfPropertyChange();
+            }
+        }
+
+        #endregion
+
+        #region Methods
+
+        public void Search(string term)
+        {
+            _debounceService.Debounce(200, () => WorkspaceViewModel.Search(term));
+        }
 
         #endregion
     }

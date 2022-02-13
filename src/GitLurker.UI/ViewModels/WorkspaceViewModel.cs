@@ -1,6 +1,7 @@
 ﻿namespace GitLurker.UI.ViewModels
 {
     using System.Collections.ObjectModel;
+    using System.Linq;
     using GitLurker.Models;
 
     public class WorkspaceViewModel
@@ -20,12 +21,8 @@
         /// <param name="workspace">The workspace.</param>
         public WorkspaceViewModel(Workspace workspace)
         {
-            this._workspace = workspace;
-            this._repos = new ObservableCollection<RepositoryViewModel>();
-            foreach(var repo in this._workspace.Repositories)
-            {
-                this._repos.Add(new RepositoryViewModel(repo));
-            }
+            _workspace = workspace;
+            _repos = new ObservableCollection<RepositoryViewModel>();
         }
 
         #endregion
@@ -36,7 +33,22 @@
         /// Gets the repos.
         /// </summary>
         /// <value>The repos.</value>
-        public ObservableCollection<RepositoryViewModel> Repos => this._repos;
+        public ObservableCollection<RepositoryViewModel> Repos => _repos;
+
+        #endregion
+
+        #region Methods
+
+        public void Search(string term)
+        {
+            _repos.Clear();
+
+            var result = _workspace.Repositories.Where(r => r.Name.ToUpper().Contains(term.ToUpper())).ToList();
+            foreach (var repo in result)
+            {
+                _repos.Add(new RepositoryViewModel(repo));
+            }
+        }
 
         #endregion
     }

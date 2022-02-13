@@ -2,9 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
-    using System.Threading.Tasks;
     using Caliburn.Micro;
     using GitLurker.UI.ViewModels;
 
@@ -23,7 +20,7 @@
         /// </summary>
         public AppBootstrapper()
         {
-            this.Initialize();
+            Initialize();
         }
 
         #endregion
@@ -37,7 +34,7 @@
         /// <param name="e">The args.</param>
         protected override void OnStartup(object sender, System.Windows.StartupEventArgs e)
         {
-            this.DisplayRootViewForAsync<ShellViewModel>();
+            DisplayRootViewForAsync<ShellViewModel>();
         }
 
         /// <summary>
@@ -45,10 +42,10 @@
         /// </summary>
         protected override void Configure()
         {
-            this._container = new SimpleContainer();
-            this._container.Singleton<IWindowManager, WindowManager>();
-            this._container.Singleton<IEventAggregator, EventAggregator>();
-            this._container.PerRequest<ShellViewModel, ShellViewModel>();
+            _container = new SimpleContainer();
+            _container.Singleton<IWindowManager, WindowManager>();
+            _container.Singleton<IEventAggregator, EventAggregator>();
+            _container.PerRequest<ShellViewModel, ShellViewModel>();
         }
 
         /// <summary>
@@ -61,7 +58,7 @@
         /// </returns>
         protected override object GetInstance(Type service, string key)
         {
-            return this._container.GetInstance(service, key);
+            return _container.GetInstance(service, key);
         }
 
         /// <summary>
@@ -73,7 +70,7 @@
         /// </returns>
         protected override IEnumerable<object> GetAllInstances(Type service)
         {
-            return this._container.GetAllInstances(service);
+            return _container.GetAllInstances(service);
         }
 
         /// <summary>
@@ -82,7 +79,7 @@
         /// <param name="instance">The instance to perform injection on.</param>
         protected override void BuildUp(object instance)
         {
-            this._container.BuildUp(instance);
+            _container.BuildUp(instance);
         }
 
         #endregion

@@ -4,16 +4,35 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GitLurker.UI.Views"
+             xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Button x:Name="Open" HorizontalAlignment="Center" Width="100" Margin="0,0,0,10">
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-            </Grid.RowDefinitions>
-            <Image Height="35" Source="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Visual_Studio_Icon_2019.svg/1200px-Visual_Studio_Icon_2019.svg.png"/>
-            <TextBlock x:Name="RepoName" Grid.Row="1" FontSize="15"/>
+    <Border CornerRadius="6"
+            cal:Message.Attach="[Event MouseDown] = [Action Open()]"
+            Cursor="Hand">
+        <Border.Style>
+            <Style TargetType="Border">
+                <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent3}"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
+        </Border.Style>
+        <Grid Margin="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Image Height="60" Source="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Visual_Studio_Icon_2019.svg/1200px-Visual_Studio_Icon_2019.svg.png"/>
+            <TextBlock x:Name="RepoName" 
+                       Grid.Row="1" 
+                       Grid.Column="1"
+                       TextTrimming="CharacterEllipsis"
+                       FontSize="35" 
+                       Margin="20,0,0,0" 
+                       VerticalAlignment="Center"/>
         </Grid>
-    </Button>
+    </Border>
 </UserControl>

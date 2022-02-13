@@ -9,7 +9,7 @@
     {
         public App()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
     }
 }

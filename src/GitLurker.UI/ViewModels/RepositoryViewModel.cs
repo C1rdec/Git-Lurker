@@ -18,7 +18,7 @@
         /// <param name="repo">The repo.</param>
         public RepositoryViewModel(Repository repo)
         {
-            this._repo = repo;
+            _repo = repo;
         }
 
         #endregion
@@ -40,7 +40,7 @@
         /// </summary>
         public void Open()
         {
-            this._repo.Open();
+            _repo.Open();
         }
 
         #endregion
