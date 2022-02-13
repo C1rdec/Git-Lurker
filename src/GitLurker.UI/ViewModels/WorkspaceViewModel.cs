@@ -50,6 +50,17 @@
             }
         }
 
+        public void OpenFirst()
+        {
+            var repo = _repos.FirstOrDefault();
+            if (repo == null)
+            {
+                return;
+            }
+
+            repo.Open();
+        }
+
         #endregion
     }
 }

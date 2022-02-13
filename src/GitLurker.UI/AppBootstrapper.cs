@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using Caliburn.Micro;
+    using GitLurker.UI.Models;
     using GitLurker.UI.ViewModels;
 
     public class AppBootstrapper: BootstrapperBase
@@ -42,10 +43,14 @@
         /// </summary>
         protected override void Configure()
         {
+            var settings = new SettingsFile();
+            settings.Initialize();
+
             _container = new SimpleContainer();
             _container.Singleton<IWindowManager, WindowManager>();
             _container.Singleton<IEventAggregator, EventAggregator>();
             _container.PerRequest<ShellViewModel, ShellViewModel>();
+            _container.Instance(settings);
         }
 
         /// <summary>
