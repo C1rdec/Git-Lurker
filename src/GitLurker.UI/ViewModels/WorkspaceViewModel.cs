@@ -43,7 +43,7 @@
         {
             _repos.Clear();
 
-            var result = _workspace.Repositories.Where(r => r.Name.ToUpper().Contains(term.ToUpper())).ToList();
+            var result = _workspace.Repositories.Where(r => r.Name.ToUpper().Contains(term.ToUpper())).Take(10).ToList();
             foreach (var repo in result)
             {
                 _repos.Add(new RepositoryViewModel(repo));

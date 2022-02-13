@@ -1,11 +1,13 @@
 ﻿namespace GitLurker.UI.ViewModels
 {
+    using Caliburn.Micro;
     using GitLurker.Models;
 
-    public class RepositoryViewModel : Caliburn.Micro.PropertyChangedBase
+    public class RepositoryViewModel : PropertyChangedBase
     {
         #region Fields
 
+        private static object CloseObject = new();
         private Repository _repo;
 
         #endregion
@@ -40,6 +42,7 @@
         /// </summary>
         public void Open()
         {
+            IoC.Get<IEventAggregator>().PublishOnCurrentThreadAsync(CloseObject);
             _repo.Open();
         }
 

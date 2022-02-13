@@ -58,12 +58,12 @@
         public void Open()
         {
             // TODO: Handle multiple sln files
-            var file = this._slnFiles.FirstOrDefault();
-            if (file != null)
+            var slnFile = _slnFiles.FirstOrDefault();
+            if (slnFile != null)
             {
                 new Process()
                 {
-                    StartInfo = new ProcessStartInfo(file.FullName)
+                    StartInfo = new ProcessStartInfo(slnFile.FullName)
                     {
                         UseShellExecute = true,
                     }

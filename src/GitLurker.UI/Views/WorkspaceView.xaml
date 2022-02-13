@@ -5,9 +5,6 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
              d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.Background>
-        <SolidColorBrush Color="White" Opacity="0.003"/>
-    </UserControl.Background>
     <ScrollViewer  HorizontalScrollBarVisibility="Hidden" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel" VerticalScrollBarVisibility="Hidden">
         <ItemsControl x:Name="Repos">
             <ItemsControl.ItemContainerStyle>
@@ -17,7 +14,11 @@
             </ItemsControl.ItemContainerStyle>
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <StackPanel/>
+                    <StackPanel VerticalAlignment="Top">
+                        <StackPanel.Background>
+                            <SolidColorBrush Color="White" Opacity="0.003"/>
+                        </StackPanel.Background>
+                    </StackPanel>
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
         </ItemsControl>

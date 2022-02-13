@@ -7,11 +7,12 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
+        ShowInTaskbar="False"
         AllowsTransparency="True"
         Topmost="True"
         Background="Transparent"
         Title="ShellView" Height="450" Width="800">
-    <Grid>
+    <Grid Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition></RowDefinition>
