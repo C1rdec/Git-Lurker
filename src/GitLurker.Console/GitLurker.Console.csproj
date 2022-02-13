@@ -5,8 +5,4 @@
     <TargetFramework>net6.0</TargetFramework>
   </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\src\GitLurker\GitLurker.csproj" />
-  </ItemGroup>
-
 </Project>

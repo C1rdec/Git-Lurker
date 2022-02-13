@@ -30,7 +30,7 @@
         /// </summary>
         public ShellViewModel(IEventAggregator aggregator, SettingsFile settings)
         {
-            _isVisible = true;
+            _isVisible = false;
             _eventAggregator = aggregator;
             _debounceService = new DebounceService();
             var first = settings.Entity.Workspaces.FirstOrDefault();
@@ -102,7 +102,7 @@
             return Task.CompletedTask;
         }
 
-        public void Close()
+        public void HideWindow()
         {
             IsVisible = false;
             SearchTerm = string.Empty;
