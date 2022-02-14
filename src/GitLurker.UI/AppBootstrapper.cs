@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using Caliburn.Micro;
+    using GitLurker.Services;
     using GitLurker.UI.Models;
     using GitLurker.UI.ViewModels;
 
@@ -35,7 +36,7 @@
         /// <param name="e">The args.</param>
         protected override void OnStartup(object sender, System.Windows.StartupEventArgs e)
         {
-            DisplayRootViewForAsync<ShellViewModel>();
+            DisplayRootViewFor<ShellViewModel>();
         }
 
         /// <summary>
@@ -47,6 +48,7 @@
             settings.Initialize();
 
             _container = new SimpleContainer();
+            _container.Singleton<KeyboardService, KeyboardService>();
             _container.Singleton<IWindowManager, WindowManager>();
             _container.Singleton<IEventAggregator, EventAggregator>();
             _container.PerRequest<ShellViewModel, ShellViewModel>();

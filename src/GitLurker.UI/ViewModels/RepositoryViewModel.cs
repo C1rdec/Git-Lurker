@@ -7,8 +7,9 @@
     {
         #region Fields
 
-        private static object CloseObject = new();
+        private static readonly object CloseObject = new();
         private Repository _repo;
+        private bool _isSelected;
 
         #endregion
 
@@ -27,19 +28,22 @@
 
         #region Properties
 
-        /// <summary>
-        /// Gets the name.
-        /// </summary>
-        /// <value>The name.</value>
         public string RepoName => this._repo.Name;
+
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                _isSelected = value;
+                NotifyOfPropertyChange();
+            }
+        }
 
         #endregion
 
         #region Methods
 
-        /// <summary>
-        /// Opens this instance.
-        /// </summary>
         public void Open()
         {
             IoC.Get<IEventAggregator>().PublishOnCurrentThreadAsync(CloseObject);

@@ -7,13 +7,13 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
-        ShowInTaskbar="False"
+        ShowInTaskbar="{Binding ShowInTaskBar}"
         AllowsTransparency="True"
         Topmost="True"
-        xmlns:cal="http://www.caliburnproject.org"
         Background="Transparent"
+        xmlns:cal="http://www.caliburnproject.org"
         cal:Message.Attach="[Event Deactivated]=[Action HideWindow()]"
-        Title="ShellView" Height="450" Width="800">
+        Height="450" Width="800">
     <Grid Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
           FocusManager.FocusedElement="{Binding ElementName=SearchTerm}">
         <Grid.RowDefinitions>

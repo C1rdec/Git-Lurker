@@ -3,11 +3,13 @@
     using System.Collections.ObjectModel;
     using System.Linq;
     using GitLurker.Models;
+    using GitLurker.Services;
 
     public class WorkspaceViewModel
     {
         #region Fields
 
+        private KeyboardService _keyboardService;
         private Workspace _workspace;
         private ObservableCollection<RepositoryViewModel> _repos;
 
@@ -19,10 +21,11 @@
         /// Initializes a new instance of the <see cref="WorkspaceViewModel"/> class.
         /// </summary>
         /// <param name="workspace">The workspace.</param>
-        public WorkspaceViewModel(Workspace workspace)
+        public WorkspaceViewModel(Workspace workspace, KeyboardService keyboardService)
         {
             _workspace = workspace;
             _repos = new ObservableCollection<RepositoryViewModel>();
+            _keyboardService = keyboardService;
         }
 
         #endregion

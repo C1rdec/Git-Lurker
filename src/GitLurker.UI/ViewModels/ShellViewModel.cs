@@ -16,10 +16,14 @@
     {
         #region Fields
 
+        private Window _parent;
         private string _searchTerm;
         private DebounceService _debounceService;
+        private KeyboardService _keyboardService;
         private bool _isVisible;
+        private bool _showInTaskBar;
         private IEventAggregator _eventAggregator;
+
 
         #endregion
 
@@ -28,15 +32,19 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ShellViewModel"/> class.
         /// </summary>
-        public ShellViewModel(IEventAggregator aggregator, SettingsFile settings)
+        public ShellViewModel(IEventAggregator aggregator, SettingsFile settings, KeyboardService keyboardService)
         {
+            _searchTerm = string.Empty;
             _isVisible = false;
+            _showInTaskBar = true;
             _eventAggregator = aggregator;
             _debounceService = new DebounceService();
+            _keyboardService = keyboardService;
+
             var first = settings.Entity.Workspaces.FirstOrDefault();
             if (first != null)
             {
-                WorkspaceViewModel = new WorkspaceViewModel(new Workspace(settings.Entity.Workspaces.FirstOrDefault()));
+                WorkspaceViewModel = new WorkspaceViewModel(new Workspace(settings.Entity.Workspaces.FirstOrDefault()), keyboardService);
             }
 
             _eventAggregator.SubscribeOnPublishedThread(this);
@@ -46,12 +54,6 @@
         #endregion
 
         #region Properties
-
-        /// <summary>
-        /// Gets the title.
-        /// </summary>
-        /// <value>The title.</value>
-        public string Title => ".NET 5!!!";
 
         /// <summary>
         /// Gets the workspace view model.
@@ -64,6 +66,11 @@
             get => _searchTerm;
             set
             {
+                if (_searchTerm == value)
+                {
+                    return;
+
+                }
                 _searchTerm = value;
                 Search(_searchTerm);
                 NotifyOfPropertyChange();
@@ -76,6 +83,16 @@
             set
             {
                 _isVisible = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
+        public bool ShowInTaskBar
+        {
+            get => _showInTaskBar;
+            set
+            {
+                _showInTaskBar = value;
                 NotifyOfPropertyChange();
             }
         }
@@ -108,15 +125,39 @@
             SearchTerm = string.Empty;
         }
 
-        public void Show()
+        public async void Show()
         {
             IsVisible = true;
             DockingHelper.SetForeground(View);
         }
 
-        protected override void OnViewLoaded(object view)
+        protected override async void OnViewLoaded(object view)
         {
-            this.View = view as Window;
+            View = view as Window;
+            await Task.Delay(200);
+            await _keyboardService.InstallAsync();
+
+            // Needs to be done after Winook
+            ShowInTaskBar = false;
+            HideFromAltTab(View);
+        }
+
+        private void HideFromAltTab(Window view)
+        {
+            this._parent = new Window
+            {
+                Top = -100,
+                Left = -100,
+                Width = 1,
+                Height = 1,
+
+                WindowStyle = WindowStyle.ToolWindow, // Set window style as ToolWindow to avoid its icon in AltTab
+                ShowInTaskbar = false,
+            };
+
+            this._parent.Show();
+            view.Owner = this._parent;
+            this._parent.Hide();
         }
 
         #endregion

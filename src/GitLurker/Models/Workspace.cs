@@ -25,7 +25,7 @@
             this._repositories = new List<Repository>();
             foreach (var folder in Directory.GetDirectories(folderPath))
             {
-                // Check is the folder is a git repository.
+                // Check if the folder is a git repository.
                 if (Repository.IsValid(folder))
                 {
                     this._repositories.Add(new Repository(folder));
