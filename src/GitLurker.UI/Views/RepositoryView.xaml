@@ -18,7 +18,7 @@
                         <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
                     </Trigger>
                     <DataTrigger Binding="{Binding IsSelected}" Value="true">
-                        <Setter Property="Background" Value="{DynamicResource Brushes.HighLight}"/>
+                        <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
