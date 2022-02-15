@@ -11,6 +11,7 @@
     using System.Windows.Input;
     using System.Windows;
     using GitLurker.UI.Helpers;
+    using GitLurker.UI.Views;
 
     public class ShellViewModel : Screen, IHandle<object>
     {
@@ -18,12 +19,10 @@
 
         private Window _parent;
         private string _searchTerm;
-        private DebounceService _debounceService;
         private KeyboardService _keyboardService;
         private bool _isVisible;
         private bool _showInTaskBar;
         private IEventAggregator _eventAggregator;
-
 
         #endregion
 
@@ -38,28 +37,23 @@
             _isVisible = false;
             _showInTaskBar = true;
             _eventAggregator = aggregator;
-            _debounceService = new DebounceService();
             _keyboardService = keyboardService;
 
             var first = settings.Entity.Workspaces.FirstOrDefault();
             if (first != null)
             {
-                WorkspaceViewModel = new WorkspaceViewModel(new Workspace(settings.Entity.Workspaces.FirstOrDefault()), keyboardService);
+                WorkspaceViewModel = new WorkspaceViewModel(new Workspace(first), keyboardService);
             }
 
             _eventAggregator.SubscribeOnPublishedThread(this);
-            HotkeyManager.Current.AddOrReplace("Increment", Key.G, ModifierKeys.Control , (s, e) => ShowWindow());
+            HotkeyManager.Current.AddOrReplace("Open", Key.G, ModifierKeys.Control , (s, e) => ShowWindow());
         }
 
         #endregion
 
         #region Properties
 
-        /// <summary>
-        /// Gets the workspace view model.
-        /// </summary>
-        /// <value>The workspace view model.</value>
-        public WorkspaceViewModel WorkspaceViewModel { get; private set; }
+        public WorkspaceViewModel WorkspaceViewModel { get; init; }
 
         public string SearchTerm
         {
@@ -97,7 +91,7 @@
             }
         }
 
-        protected Window View { get; private set; }
+        protected ShellView View { get; private set; }
 
         #endregion
 
@@ -105,12 +99,7 @@
 
         public void Search(string term)
         {
-            if (WorkspaceViewModel == null)
-            {
-                return;
-            }
-
-            WorkspaceViewModel.Search(term);
+            WorkspaceViewModel?.Search(term);
         }
 
         public Task HandleAsync(object message, CancellationToken cancellationToken)
@@ -123,18 +112,18 @@
         {
             IsVisible = false;
             SearchTerm = string.Empty;
-            WorkspaceViewModel.Clear();
+            WorkspaceViewModel?.Clear();
         }
 
-        public async void ShowWindow()
+        public void ShowWindow()
         {
             IsVisible = true;
-            DockingHelper.SetForeground(View);
+            DockingHelper.SetForeground(View, () => View.SearchTerm.Focus());
         }
 
         protected override async void OnViewLoaded(object view)
         {
-            View = view as Window;
+            View = view as ShellView;
             await Task.Delay(200);
             await _keyboardService.InstallAsync();
 
@@ -145,20 +134,21 @@
 
         private void HideFromAltTab(Window view)
         {
-            this._parent = new Window
+            _parent = new Window
             {
                 Top = -100,
                 Left = -100,
                 Width = 1,
                 Height = 1,
 
-                WindowStyle = WindowStyle.ToolWindow, // Set window style as ToolWindow to avoid its icon in AltTab
+                // Set window style as ToolWindow to avoid its icon in AltTab
+                WindowStyle = WindowStyle.ToolWindow, 
                 ShowInTaskbar = false,
             };
 
-            this._parent.Show();
+            _parent.Show();
             view.Owner = this._parent;
-            this._parent.Hide();
+            _parent.Hide();
         }
 
         #endregion
