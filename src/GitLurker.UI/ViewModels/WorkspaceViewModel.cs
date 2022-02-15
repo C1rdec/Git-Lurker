@@ -47,14 +47,19 @@
 
         public void Search(string term)
         {
-            _selectedRepo = null;
-            _repos.Clear();
+            Clear();
 
             var result = _workspace.Repositories.Where(r => r.Name.ToUpper().Contains(term.ToUpper())).ToList();
             foreach (var repo in result)
             {
                 _repos.Add(new RepositoryViewModel(repo));
             }
+        }
+
+        public void Clear()
+        {
+            _selectedRepo = null;
+            _repos.Clear();
         }
 
         public void OpenFirst()

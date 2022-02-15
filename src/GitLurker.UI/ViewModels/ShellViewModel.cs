@@ -48,7 +48,7 @@
             }
 
             _eventAggregator.SubscribeOnPublishedThread(this);
-            HotkeyManager.Current.AddOrReplace("Increment", Key.G, ModifierKeys.Control , (s, e) => Show());
+            HotkeyManager.Current.AddOrReplace("Increment", Key.G, ModifierKeys.Control , (s, e) => ShowWindow());
         }
 
         #endregion
@@ -123,9 +123,10 @@
         {
             IsVisible = false;
             SearchTerm = string.Empty;
+            WorkspaceViewModel.Clear();
         }
 
-        public async void Show()
+        public async void ShowWindow()
         {
             IsVisible = true;
             DockingHelper.SetForeground(View);
