@@ -12,6 +12,7 @@
         private KeyboardService _keyboardService;
         private Workspace _workspace;
         private ObservableCollection<RepositoryViewModel> _repos;
+        private RepositoryViewModel _selectedRepo;
 
         #endregion
 
@@ -26,6 +27,8 @@
             _workspace = workspace;
             _repos = new ObservableCollection<RepositoryViewModel>();
             _keyboardService = keyboardService;
+            _keyboardService.DownPressed += KeyboardService_DownPressed;
+            _keyboardService.UpPressed += KeyboardService_UpPressed;
         }
 
         #endregion
@@ -44,6 +47,7 @@
 
         public void Search(string term)
         {
+            _selectedRepo = null;
             _repos.Clear();
 
             var result = _workspace.Repositories.Where(r => r.Name.ToUpper().Contains(term.ToUpper())).ToList();
@@ -55,6 +59,12 @@
 
         public void OpenFirst()
         {
+            if (_selectedRepo != null)
+            {
+                _selectedRepo.Open();
+                return;
+            }
+
             var repo = _repos.FirstOrDefault();
             if (repo == null)
             {
@@ -62,6 +72,46 @@
             }
 
             repo.Open();
+        }
+
+        private void KeyboardService_DownPressed(object sender, System.EventArgs e)
+        {
+            if (_selectedRepo == null)
+            {
+                _selectedRepo = _repos.FirstOrDefault();
+                _selectedRepo.Select();
+                return;
+            }
+
+            var index = _repos.IndexOf(_selectedRepo);
+            if (index == -1 || (index + 1) >= _repos.Count)
+            {
+                return;
+            }
+
+            index++;
+            _selectedRepo.IsSelected = false;
+            _selectedRepo = Repos.ElementAt(index);
+            _selectedRepo.Select();
+        }
+
+        private void KeyboardService_UpPressed(object sender, System.EventArgs e)
+        {
+            if (_selectedRepo == null)
+            {
+                return;
+            }
+
+            var index = _repos.IndexOf(_selectedRepo);
+            if (index <= 0)
+            {
+                return;
+            }
+
+            index--;
+            _selectedRepo.IsSelected = false;
+            _selectedRepo = Repos.ElementAt(index);
+            _selectedRepo.Select();
         }
 
         #endregion

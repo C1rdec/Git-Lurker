@@ -2,8 +2,9 @@
 {
     using Caliburn.Micro;
     using GitLurker.Models;
+    using GitLurker.UI.Views;
 
-    public class RepositoryViewModel : PropertyChangedBase
+    public class RepositoryViewModel : Screen
     {
         #region Fields
 
@@ -48,6 +49,26 @@
         {
             IoC.Get<IEventAggregator>().PublishOnCurrentThreadAsync(CloseObject);
             _repo.Open();
+        }
+
+        #endregion
+
+        #region Methods
+
+        public void Select()
+        {
+            IsSelected = true;
+
+            Execute.OnUIThread(() =>
+            {
+                var view = GetView() as RepositoryView;
+                if (view == null)
+                {
+                    return;
+                }
+
+                view.MainBorder.BringIntoView();
+            });
         }
 
         #endregion
