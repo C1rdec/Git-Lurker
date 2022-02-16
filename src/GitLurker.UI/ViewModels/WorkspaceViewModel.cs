@@ -2,10 +2,11 @@
 {
     using System.Collections.ObjectModel;
     using System.Linq;
+    using Caliburn.Micro;
     using GitLurker.Models;
     using GitLurker.Services;
 
-    public class WorkspaceViewModel
+    public class WorkspaceViewModel: PropertyChangedBase
     {
         #region Fields
 
@@ -41,6 +42,22 @@
         /// <value>The repos.</value>
         public ObservableCollection<RepositoryViewModel> Repos => _repos;
 
+        public RepositoryViewModel SelectedRepo
+        {
+            get
+            {
+                return _selectedRepo;
+            }
+
+            private set
+            {
+                _selectedRepo = value;
+                this.NotifyOfPropertyChange(() => HasSelectedRepo);
+            }
+        }
+
+        public bool HasSelectedRepo => SelectedRepo != null;
+
         #endregion
 
         #region Methods
@@ -57,15 +74,15 @@
 
         public void Clear()
         {
-            _selectedRepo = null;
+            SelectedRepo = null;
             _repos.Clear();
         }
 
-        public void OpenFirst()
+        public void Open()
         {
-            if (_selectedRepo != null)
+            if (SelectedRepo != null)
             {
-                _selectedRepo.Open();
+                SelectedRepo.Open();
                 return;
             }
 
@@ -80,10 +97,10 @@
 
         private void KeyboardService_DownPressed(object sender, System.EventArgs e)
         {
-            if (_selectedRepo == null)
+            if (SelectedRepo == null)
             {
-                _selectedRepo = _repos.FirstOrDefault();
-                _selectedRepo.Select();
+                SelectedRepo = _repos.FirstOrDefault();
+                SelectedRepo.Select();
                 return;
             }
 
@@ -94,28 +111,28 @@
             }
 
             index++;
-            _selectedRepo.IsSelected = false;
-            _selectedRepo = Repos.ElementAt(index);
-            _selectedRepo.Select();
+            SelectedRepo.IsSelected = false;
+            SelectedRepo = Repos.ElementAt(index);
+            SelectedRepo.Select();
         }
 
         private void KeyboardService_UpPressed(object sender, System.EventArgs e)
         {
-            if (_selectedRepo == null)
+            if (SelectedRepo == null)
             {
                 return;
             }
 
-            var index = _repos.IndexOf(_selectedRepo);
+            var index = _repos.IndexOf(SelectedRepo);
             if (index <= 0)
             {
                 return;
             }
 
             index--;
-            _selectedRepo.IsSelected = false;
-            _selectedRepo = Repos.ElementAt(index);
-            _selectedRepo.Select();
+            SelectedRepo.IsSelected = false;
+            SelectedRepo = Repos.ElementAt(index);
+            SelectedRepo.Select();
         }
 
         #endregion
