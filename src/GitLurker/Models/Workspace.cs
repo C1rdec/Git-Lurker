@@ -53,7 +53,7 @@
 
         public IEnumerable<Repository> Search(string term)
         {
-            var startWith = Repositories.Where(r => r.Name.StartsWith(term));
+            var startWith = Repositories.Where(r => r.Name.ToUpper().StartsWith(term.ToUpper()));
             var contain = Repositories.Where(r => r.Name.ToUpper().Contains(term.ToUpper())).ToList();
             contain.InsertRange(0, startWith);
             return contain.Distinct();
