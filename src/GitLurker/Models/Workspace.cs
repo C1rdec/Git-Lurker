@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
 
     /// <summary>
     /// Class Workspace.
@@ -23,12 +24,15 @@
         public Workspace(string folderPath)
         {
             this._repositories = new List<Repository>();
-            foreach (var folder in Directory.GetDirectories(folderPath))
+            foreach (var folder in Directory.GetDirectories(folderPath, ".git", SearchOption.AllDirectories))
             {
+                var parentFolderInformation = Directory.GetParent(folder);
+                var path = parentFolderInformation.ToString();
+
                 // Check if the folder is a git repository.
-                if (Repository.IsValid(folder))
+                if (Repository.IsValid(path))
                 {
-                    this._repositories.Add(new Repository(folder));
+                    this._repositories.Add(new Repository(path));
                 }
             }
         }
@@ -42,6 +46,18 @@
         /// </summary>
         /// <value>The repositories.</value>
         public IEnumerable<Repository> Repositories => this._repositories;
+
+        #endregion
+
+        #region Methods
+
+        public IEnumerable<Repository> Search(string term)
+        {
+            var startWith = Repositories.Where(r => r.Name.StartsWith(term));
+            var contain = Repositories.Where(r => r.Name.ToUpper().Contains(term.ToUpper())).ToList();
+            contain.InsertRange(0, startWith);
+            return contain.Distinct();
+        }
 
         #endregion
     }

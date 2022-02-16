@@ -49,8 +49,7 @@
                 return false;
             }
 
-            var directory  = new DirectoryInfo(folder);
-            return directory.GetDirectories().Any(d => d.Name == ".git");
+            return true;
         }
 
         /// <summary>
