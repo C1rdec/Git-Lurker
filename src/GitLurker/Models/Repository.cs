@@ -57,6 +57,13 @@
         /// </summary>
         public void Open()
         {
+            if (Native.IsKeyPressed(Native.VirtualKeyStates.VK_CONTROL))
+            {
+                // {wt}Windows Terminal, {nt}New Tab {d}Destination
+                ExecuteCommand($"wt nt -d \"{_folder}\"");
+                return;
+            }
+
             // TODO: Handle multiple sln files
             var slnFile = _slnFiles.FirstOrDefault();
             if (slnFile != null)
@@ -80,19 +87,24 @@
             var pubspecFile = directoryInformation.GetFiles("pubspec.yaml").FirstOrDefault();
             if (packageFile != null || pubspecFile != null)
             {
-                new Process()
-                {
-                    StartInfo = new ProcessStartInfo()
-                    {
-                        WorkingDirectory = this._folder,
-                        WindowStyle = ProcessWindowStyle.Hidden,
-                        UseShellExecute = true,
-                        FileName = "cmd.exe",
-                        Arguments = "/C code .",
-                    },
-                }.Start();
+                ExecuteCommand("code .");
                 return;
             }
+        }
+
+        private void ExecuteCommand(string command)
+        {
+            new Process()
+            {
+                StartInfo = new ProcessStartInfo()
+                {
+                    WorkingDirectory = this._folder,
+                    WindowStyle = ProcessWindowStyle.Hidden,
+                    UseShellExecute = true,
+                    FileName = "cmd.exe",
+                    Arguments = $"/C {command}",
+                },
+            }.Start();
         }
 
         #endregion
