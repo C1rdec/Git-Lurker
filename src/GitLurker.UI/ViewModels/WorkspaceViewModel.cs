@@ -86,13 +86,7 @@
                 return;
             }
 
-            var repo = _repos.FirstOrDefault();
-            if (repo == null)
-            {
-                return;
-            }
-
-            repo.Open();
+            _repos.FirstOrDefault()?.Open();
         }
 
         private void KeyboardService_DownPressed(object sender, System.EventArgs e)
