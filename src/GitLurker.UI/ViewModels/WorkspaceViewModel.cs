@@ -93,7 +93,7 @@
             _repos.FirstOrDefault()?.Open();
         }
 
-        protected override async void OnViewLoaded(object view)
+        protected override void OnViewLoaded(object view)
         {
             View = view as WorkspaceView;
         }
