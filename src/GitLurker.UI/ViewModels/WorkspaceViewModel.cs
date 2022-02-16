@@ -5,8 +5,9 @@
     using Caliburn.Micro;
     using GitLurker.Models;
     using GitLurker.Services;
+    using GitLurker.UI.Views;
 
-    public class WorkspaceViewModel: PropertyChangedBase
+    public class WorkspaceViewModel: Screen
     {
         #region Fields
 
@@ -58,6 +59,8 @@
 
         public bool HasSelectedRepo => SelectedRepo != null;
 
+        public WorkspaceView View { get; set; }
+
         #endregion
 
         #region Methods
@@ -76,6 +79,7 @@
         {
             SelectedRepo = null;
             _repos.Clear();
+            View.ScrollViewer.ScrollToHome();
         }
 
         public void Open()
@@ -89,12 +93,17 @@
             _repos.FirstOrDefault()?.Open();
         }
 
+        protected override async void OnViewLoaded(object view)
+        {
+            View = view as WorkspaceView;
+        }
+
         private void KeyboardService_DownPressed(object sender, System.EventArgs e)
         {
             if (SelectedRepo == null)
             {
                 SelectedRepo = _repos.FirstOrDefault();
-                SelectedRepo.Select();
+                SelectedRepo?.Select();
                 return;
             }
 

@@ -35,7 +35,10 @@
             </Style>
         </Grid.Style>
         <Button BorderThickness="0" x:Name="Open" IsDefault="true" Width="1" Height="1" Background="Transparent"/>
-        <ScrollViewer  HorizontalScrollBarVisibility="Hidden" PreviewMouseWheel="ScrollViewer_PreviewMouseWheel" VerticalScrollBarVisibility="Hidden">
+        <ScrollViewer  x:Name="ScrollViewer"
+                       HorizontalScrollBarVisibility="Hidden" 
+                       PreviewMouseWheel="ScrollViewer_PreviewMouseWheel" 
+                       VerticalScrollBarVisibility="Hidden">
             <ItemsControl x:Name="Repos">
                 <ItemsControl.ItemContainerStyle>
                     <Style>
