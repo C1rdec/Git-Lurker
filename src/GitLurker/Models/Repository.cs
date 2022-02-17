@@ -18,9 +18,9 @@
 
         public Repository(string folder)
         {
-            this._folder = folder;
-            this._name = Path.GetFileName(folder);
-            this._slnFiles = new DirectoryInfo(folder).GetFiles("*.sln", SearchOption.AllDirectories);
+            _folder = folder;
+            _name = Path.GetFileName(folder);
+            _slnFiles = new DirectoryInfo(folder).GetFiles("*.sln", SearchOption.AllDirectories);
         }
 
         #endregion
@@ -31,7 +31,7 @@
         /// Gets the name.
         /// </summary>
         /// <value>The name.</value>
-        public string Name => this._name;
+        public string Name => _name;
 
         #endregion
 

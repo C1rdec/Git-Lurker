@@ -1,5 +1,6 @@
 ﻿namespace GitLurker.Models
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
@@ -23,8 +24,14 @@
         /// <param name="folder">The folder.</param>
         public Workspace(string folderPath)
         {
-            this._repositories = new List<Repository>();
-            foreach (var folder in Directory.GetDirectories(folderPath, ".git", SearchOption.AllDirectories))
+            _repositories = new List<Repository>();
+            var option = new EnumerationOptions()
+            {
+                IgnoreInaccessible = true,
+                AttributesToSkip = FileAttributes.ReparsePoint,
+                RecurseSubdirectories = true,
+            };
+            foreach (var folder in Directory.GetDirectories(folderPath, ".git", option))
             {
                 var parentFolderInformation = Directory.GetParent(folder);
                 var path = parentFolderInformation.ToString();
@@ -32,7 +39,7 @@
                 // Check if the folder is a git repository.
                 if (Repository.IsValid(path))
                 {
-                    this._repositories.Add(new Repository(path));
+                    _repositories.Add(new Repository(path));
                 }
             }
         }
@@ -57,6 +64,26 @@
             var contain = Repositories.Where(r => r.Name.ToUpper().Contains(term.ToUpper())).ToList();
             contain.InsertRange(0, startWith);
             return contain.Distinct();
+        }
+
+        private static IEnumerable<string> ShowAllFoldersUnder(string path, string searchTerm, int indent = 0)
+        {
+            var folders = new List<string>();
+            try
+            {
+                if ((File.GetAttributes(path) & FileAttributes.ReparsePoint) != FileAttributes.ReparsePoint)
+                {
+                    foreach (string folder in Directory.GetDirectories(path, searchTerm))
+                    {
+                        folders.Add(folder);
+                        folders.AddRange(ShowAllFoldersUnder(folder, searchTerm, indent + 2));
+                    }
+                }
+            }
+            catch (UnauthorizedAccessException) 
+            { }
+
+            return folders;
         }
 
         #endregion
