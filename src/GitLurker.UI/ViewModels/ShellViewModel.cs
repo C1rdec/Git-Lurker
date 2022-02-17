@@ -39,10 +39,11 @@
             _eventAggregator = aggregator;
             _keyboardService = keyboardService;
 
-            var first = settings.Entity.Workspaces.FirstOrDefault();
-            if (first != null)
+            var worskspacePaths = settings.Entity.Workspaces;
+            if (worskspacePaths.Any())
             {
-                WorkspaceViewModel = new WorkspaceViewModel(new Workspace(first), keyboardService);
+                var worskspaces = worskspacePaths.Select(w => new Workspace(w)).ToArray();
+                WorkspaceViewModel = new WorkspaceViewModel(worskspaces, keyboardService);
             }
 
             _eventAggregator.SubscribeOnPublishedThread(this);

@@ -1,5 +1,6 @@
 ﻿namespace GitLurker.UI.ViewModels
 {
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
     using System.Linq;
     using Caliburn.Micro;
@@ -12,7 +13,7 @@
         #region Fields
 
         private KeyboardService _keyboardService;
-        private Workspace _workspace;
+        private IEnumerable<Workspace> _workspaces;
         private ObservableCollection<RepositoryViewModel> _repos;
         private RepositoryViewModel _selectedRepo;
 
@@ -24,9 +25,9 @@
         /// Initializes a new instance of the <see cref="WorkspaceViewModel"/> class.
         /// </summary>
         /// <param name="workspace">The workspace.</param>
-        public WorkspaceViewModel(Workspace workspace, KeyboardService keyboardService)
+        public WorkspaceViewModel(IEnumerable<Workspace> workspaces, KeyboardService keyboardService)
         {
-            _workspace = workspace;
+            _workspaces = workspaces;
             _repos = new ObservableCollection<RepositoryViewModel>();
             _keyboardService = keyboardService;
             _keyboardService.DownPressed += KeyboardService_DownPressed;
@@ -69,9 +70,18 @@
         {
             Clear();
 
-            foreach (var repo in _workspace.Search(term))
+            var allRepos = new List<Repository>();
+            foreach (var workspace in _workspaces)
             {
-                _repos.Add(new RepositoryViewModel(repo));
+                allRepos.AddRange(workspace.Repositories);
+            }
+
+            var startWith = allRepos.Where(r => r.Name.ToUpper().StartsWith(term.ToUpper()));
+            var contain = allRepos.Where(r => r.Name.ToUpper().Contains(term.ToUpper())).ToList();
+            contain.InsertRange(0, startWith);
+            foreach (var repo in contain.Distinct())
+            {
+                Repos.Add(new RepositoryViewModel(repo));
             }
         }
 
