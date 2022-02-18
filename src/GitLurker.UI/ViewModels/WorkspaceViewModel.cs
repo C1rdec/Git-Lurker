@@ -92,6 +92,17 @@
             View.ScrollViewer.ScrollToHome();
         }
 
+        public void ShowRecent()
+        {
+            var file = new SettingsFile();
+            file.Initialize();
+
+            foreach (var folder in file.Entity.RecentRepos)
+            {
+                Repos.Add(new RepositoryViewModel(new Repository(folder)));
+            }
+        }
+
         public void Open()
         {
             if (SelectedRepo != null)

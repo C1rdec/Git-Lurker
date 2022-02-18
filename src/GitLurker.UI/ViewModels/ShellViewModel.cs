@@ -143,6 +143,8 @@
         {
             IsVisible = true;
             DockingHelper.SetForeground(View, () => View.SearchTerm.Focus());
+
+            WorkspaceViewModel?.ShowRecent();
         }
 
         private void HideFromAltTab(Window view)
