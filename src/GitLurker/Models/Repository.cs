@@ -57,6 +57,8 @@
         /// </summary>
         public void Open()
         {
+            AddToRecent();
+
             if (Native.IsKeyPressed(Native.VirtualKeyStates.VK_CONTROL))
             {
                 // {wt}Windows Terminal, {nt}New Tab {d}Destination
@@ -81,6 +83,13 @@
                 ExecuteCommand("code .");
                 return;
             }
+        }
+
+        private void AddToRecent()
+        {
+            var settings = new SettingsFile();
+            settings.Initialize();
+            settings.AddToRecent(_folder);
         }
 
         private void ExecuteCommand(string command)

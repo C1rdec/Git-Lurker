@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GitLurker.UI.Models
+namespace GitLurker.Models
 {
     public class Settings
     {
@@ -9,13 +9,13 @@ namespace GitLurker.UI.Models
         public Settings()
         {
             Workspaces = new List<string>();
-            LastFiveRepos = new List<string>();
+            RecentRepos = new List<string>();
         }
 
         #endregion
 
         public List<string> Workspaces { get; set; }
 
-        public List<string> LastFiveRepos { get; set; }
+        public List<string> RecentRepos { get; set; }
     }
 }

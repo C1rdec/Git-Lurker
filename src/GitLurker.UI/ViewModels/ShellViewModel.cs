@@ -6,7 +6,6 @@
     using Caliburn.Micro;
     using GitLurker.Models;
     using GitLurker.Services;
-    using GitLurker.UI.Models;
     using NHotkey.Wpf;
     using System.Windows.Input;
     using System.Windows;

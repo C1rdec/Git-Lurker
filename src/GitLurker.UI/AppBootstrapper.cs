@@ -3,8 +3,8 @@
     using System;
     using System.Collections.Generic;
     using Caliburn.Micro;
+    using GitLurker.Models;
     using GitLurker.Services;
-    using GitLurker.UI.Models;
     using GitLurker.UI.ViewModels;
 
     public class AppBootstrapper: BootstrapperBase
