@@ -54,6 +54,8 @@
 
         #region Properties
 
+        public DoubleClickCommand ShowSettings => new DoubleClickCommand(OpenSettings);
+
         public WorkspaceViewModel WorkspaceViewModel { get; init; }
 
         public string SearchTerm
@@ -116,10 +118,15 @@
             WorkspaceViewModel?.Clear();
         }
 
-        public void ShowWindow()
+        public async void Close()
         {
-            IsVisible = true;
-            DockingHelper.SetForeground(View, () => View.SearchTerm.Focus());
+            _parent.Close();
+            await TryCloseAsync();
+        }
+
+        public void OpenSettings()
+        {
+
         }
 
         protected override async void OnViewLoaded(object view)
@@ -131,6 +138,12 @@
             // Needs to be done after Winook
             ShowInTaskBar = false;
             HideFromAltTab(View);
+        }
+
+        private void ShowWindow()
+        {
+            IsVisible = true;
+            DockingHelper.SetForeground(View, () => View.SearchTerm.Focus());
         }
 
         private void HideFromAltTab(Window view)

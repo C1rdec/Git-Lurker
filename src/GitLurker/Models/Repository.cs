@@ -110,7 +110,7 @@
             var runningVS = Process.GetProcessesByName("devenv");
             var solutionName = Path.GetFileName(slnFile.FullName).Replace(".sln", string.Empty);
             var expectedTitle = $"{solutionName} - Microsoft Visual Studio";
-            var process = runningVS.FirstOrDefault(p => p.MainWindowTitle == expectedTitle);
+            var process = runningVS.FirstOrDefault(p => p.MainWindowTitle.StartsWith(expectedTitle));
 
             if (process != null)
             {

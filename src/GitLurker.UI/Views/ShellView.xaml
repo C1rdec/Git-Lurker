@@ -8,6 +8,7 @@
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         ShowInTaskbar="{Binding ShowInTaskBar}"
+        xmlns:tb="http://www.hardcodet.net/taskbar"
         AllowsTransparency="True"
         Topmost="True"
         Background="Transparent"
@@ -21,6 +22,28 @@
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <Button BorderThickness="0" x:Name="HideWindow" IsCancel="true" Width="1" Height="1" Background="Transparent"/>
+        <tb:TaskbarIcon
+            IconSource="pack://application:,,,/Resources/GitLurker.ico"
+            ToolTipText="GitLurker" 
+            DoubleClickCommand="{Binding ShowSettings}">
+            <tb:TaskbarIcon.ContextMenu>
+                <ContextMenu>
+                    <MenuItem cal:Message.Attach="[Event Click] = [Action Close]">
+                        <MenuItem.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock>Close</TextBlock>
+                                <TextBlock Foreground="DarkGray" Margin="15,0,0,0" Grid.Column="1" Text="{Binding Version}"/>
+                            </Grid>
+                        </MenuItem.Header>
+                    </MenuItem>
+                </ContextMenu>
+            </tb:TaskbarIcon.ContextMenu>
+        </tb:TaskbarIcon>
+
         <TextBox x:Name="SearchTerm"
                  VerticalAlignment="Bottom"
                  Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"
