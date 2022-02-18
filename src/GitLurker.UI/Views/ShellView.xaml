@@ -23,7 +23,7 @@
         </Grid.RowDefinitions>
         <Button BorderThickness="0" x:Name="HideWindow" IsCancel="true" Width="1" Height="1" Background="Transparent"/>
         <tb:TaskbarIcon
-            IconSource="pack://application:,,,/Resources/GitLurker.ico"
+            IconSource="/Resources/GitLurker.ico"
             ToolTipText="GitLurker" 
             DoubleClickCommand="{Binding ShowSettings}">
             <tb:TaskbarIcon.ContextMenu>

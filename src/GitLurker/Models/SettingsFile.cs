@@ -1,6 +1,8 @@
-﻿namespace GitLurker.Models
+﻿using AppDataFileManager;
+
+namespace GitLurker.Models
 {
-    public class SettingsFile : AppDataFileManager.AppDataFileBase<Settings>
+    public class SettingsFile : AppDataFileBase<Settings>
     {
         private static readonly int MaxRecentCount = 5;
 

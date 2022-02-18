@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Windows;
 
 namespace GitLurker.UI.Views
@@ -8,14 +7,13 @@ namespace GitLurker.UI.Views
     {
         public ShellView()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         protected override void OnActivated(EventArgs e)
         {
             base.OnActivated(e);
-            this.SearchTerm.Focus();
-            Debug.WriteLine("Focus");
+            SearchTerm.Focus();
         }
     }
 }
