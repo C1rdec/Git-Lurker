@@ -106,14 +106,6 @@ namespace GitLurker.UI.ViewModels
             _save();
         }
 
-        /// <summary>
-        /// Removes this instance.
-        /// </summary>
-        public void Remove()
-        {
-            SetKeyCode();
-        }
-
         #endregion
     }
 }
