@@ -8,10 +8,13 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Viewbox>
-            <StackPanel>
-                <TextBlock>C:\Github</TextBlock>
-                <TextBlock>C:\Sylc</TextBlock>
-            </StackPanel>
+            <ItemsControl x:Name="Paths">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
         </Viewbox>
     </Grid>
 </UserControl>

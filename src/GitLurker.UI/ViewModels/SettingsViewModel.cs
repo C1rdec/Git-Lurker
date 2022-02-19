@@ -10,11 +10,11 @@ namespace GitLurker.UI.ViewModels
 
         public SettingsViewModel(Action onSave)
         {
-            RepoManager = new RepoManagerViewModel();
             _onSave = onSave;
             _settingsFile = new SettingsFile();
             _settingsFile.Initialize();
 
+            RepoManager = new RepoManagerViewModel(_settingsFile);
             HotkeyViewModel = new HotkeyViewModel(_settingsFile.Entity.HotKey, Save);
         }
 
