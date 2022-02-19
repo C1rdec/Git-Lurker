@@ -10,6 +10,11 @@ namespace GitLurker.Models
         {
             Workspaces = new List<string>();
             RecentRepos = new List<string>();
+            HotKey = new Hotkey()
+            {
+                Modifier = Winook.Modifiers.Control,
+                KeyCode = Winook.KeyCode.G,
+            };
         }
 
         #endregion
@@ -17,5 +22,7 @@ namespace GitLurker.Models
         public List<string> Workspaces { get; set; }
 
         public List<string> RecentRepos { get; set; }
+
+        public Hotkey HotKey { get; set; }
     }
 }

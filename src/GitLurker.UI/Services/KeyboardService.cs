@@ -85,6 +85,46 @@ namespace GitLurker.Services
             await _hook.InstallAsync();
         }
 
+        public Task<(KeyCode Key, Modifiers Modifier)> GetNextKeyAsync()
+        {
+            var taskCompletionSource = new TaskCompletionSource<(KeyCode key, Modifiers modifier)>();
+
+            EventHandler<KeyboardMessageEventArgs> handler = default;
+            handler = (object s, KeyboardMessageEventArgs e) =>
+            {
+                if (e.Direction == KeyDirection.Up)
+                {
+                    var code = (KeyCode)e.KeyValue;
+                    if (code == KeyCode.Escape)
+                    {
+                        return;
+                    }
+
+                    var keyCode = code;
+                    var modifier = Modifiers.None;
+                    if (e.Control)
+                    {
+                        modifier = Modifiers.Control;
+                    }
+                    else if (e.Alt)
+                    {
+                        modifier = Modifiers.Alt;
+                    }
+                    else if (e.Shift)
+                    {
+                        modifier = Modifiers.Shift;
+                    }
+
+                    _hook.MessageReceived -= handler;
+                    taskCompletionSource.SetResult((keyCode, modifier));
+                }
+            };
+
+            _hook.MessageReceived += handler;
+
+            return taskCompletionSource.Task;
+        }
+
         #endregion
     }
 }

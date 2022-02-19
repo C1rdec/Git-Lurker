@@ -11,6 +11,7 @@
     using System.Windows;
     using GitLurker.UI.Helpers;
     using GitLurker.UI.Views;
+    using System;
 
     public class ShellViewModel : Screen, IHandle<object>
     {
@@ -45,8 +46,8 @@
                 WorkspaceViewModel = new WorkspaceViewModel(worskspaces, keyboardService);
             }
 
+            SetGlobalHotkey();
             _eventAggregator.SubscribeOnPublishedThread(this);
-            HotkeyManager.Current.AddOrReplace("Open", Key.G, ModifierKeys.Control , (s, e) => ShowWindow());
         }
 
         #endregion
@@ -125,7 +126,7 @@
 
         public void OpenSettings()
         {
-
+            IoC.Get<IWindowManager>().ShowWindowAsync(new SettingsViewModel(SetGlobalHotkey));
         }
 
         protected override async void OnViewLoaded(object view)
@@ -164,6 +165,18 @@
             _parent.Show();
             view.Owner = this._parent;
             _parent.Hide();
+        }
+
+        private void SetGlobalHotkey()
+        {
+            var settings = new SettingsFile();
+            settings.Initialize();
+            var hotkey = settings.Entity.HotKey;
+
+            var modifier = Enum.Parse<ModifierKeys>(hotkey.Modifier.ToString());
+            var key = Enum.Parse<Key>(hotkey.KeyCode.ToString());
+
+            HotkeyManager.Current.AddOrReplace("Open", key, modifier , (s, e) => ShowWindow());
         }
 
         #endregion
