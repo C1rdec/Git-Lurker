@@ -48,6 +48,7 @@
             settings.Initialize();
 
             _container = new SimpleContainer();
+            _container.Singleton<DialogService, DialogService>();
             _container.Singleton<KeyboardService, KeyboardService>();
             _container.Singleton<IWindowManager, WindowManager>();
             _container.Singleton<IEventAggregator, EventAggregator>();

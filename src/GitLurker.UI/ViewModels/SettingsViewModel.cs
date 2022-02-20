@@ -1,14 +1,15 @@
-﻿using System;
+﻿using Caliburn.Micro;
 using GitLurker.Models;
+using GitLurker.Services;
 
 namespace GitLurker.UI.ViewModels
 {
     public class SettingsViewModel
     {
-        private Action _onSave;
+        private System.Action _onSave;
         private SettingsFile _settingsFile;
 
-        public SettingsViewModel(Action onSave)
+        public SettingsViewModel(System.Action onSave)
         {
             _onSave = onSave;
             _settingsFile = new SettingsFile();
@@ -16,6 +17,7 @@ namespace GitLurker.UI.ViewModels
 
             RepoManager = new RepoManagerViewModel(_settingsFile);
             HotkeyViewModel = new HotkeyViewModel(_settingsFile.Entity.HotKey, Save);
+            IoC.Get<DialogService>().Register(this);
         }
 
         #region Properties

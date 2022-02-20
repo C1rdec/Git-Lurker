@@ -172,9 +172,9 @@
             var settings = new SettingsFile();
             settings.Initialize();
             var hotkey = settings.Entity.HotKey;
-
             var modifier = Enum.Parse<ModifierKeys>(hotkey.Modifier.ToString());
-            var key = Enum.Parse<Key>(hotkey.KeyCode.ToString());
+
+            Enum.TryParse(hotkey.KeyCode.ToString(), out Key key);
 
             HotkeyManager.Current.AddOrReplace("Open", key, modifier , (s, e) => ShowWindow());
         }

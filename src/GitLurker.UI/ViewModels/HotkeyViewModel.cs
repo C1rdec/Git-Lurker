@@ -98,7 +98,11 @@ namespace GitLurker.UI.ViewModels
         /// </summary>
         public async void SetKeyCode()
         {
-            var result = await IoC.Get<KeyboardService>().GetNextKeyAsync();
+            var dialog = IoC.Get<DialogService>();
+
+            var task = IoC.Get<KeyboardService>().GetNextKeyAsync();
+            await dialog.ShowProgressAsync("Waiting...", "Press any keys", task);
+            var result = await task;
 
             Modifier = result.Modifier;
             KeyCode = result.Key;
