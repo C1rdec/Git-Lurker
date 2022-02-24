@@ -3,6 +3,7 @@
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
+    using System.Text.Json;
 
     public class Repository
     {
@@ -11,6 +12,7 @@
         private string _name;
         private FileInfo[] _slnFiles;
         private string _folder;
+        private Configuration _configuration;
 
         #endregion
 
@@ -21,27 +23,23 @@
             _folder = folder;
             _name = Path.GetFileName(folder);
             _slnFiles = new DirectoryInfo(folder).GetFiles("*.sln", SearchOption.AllDirectories);
+            _configuration = GetConfiguration(folder);
         }
 
         #endregion
 
         #region Properties
 
-        /// <summary>
-        /// Gets the name.
-        /// </summary>
-        /// <value>The name.</value>
         public string Name => _name;
+
+        public bool HasIcon => _configuration != null && !string.IsNullOrEmpty(_configuration.IconPath);
+
+        public string IconPath => _configuration == null ? string.Empty : Path.Join(_folder, _configuration.IconPath);
 
         #endregion
 
         #region Methods
 
-        /// <summary>
-        /// Returns true if ... is valid.
-        /// </summary>
-        /// <param name="folder">The folder.</param>
-        /// <returns><c>true</c> if the specified folder is valid; otherwise, <c>false</c>.</returns>
         public static bool IsValid(string folder)
         {
             if (Path.GetFileName(folder).StartsWith("."))
@@ -61,6 +59,12 @@
 
             if (Native.IsKeyPressed(Native.VirtualKeyStates.VK_CONTROL))
             {
+                if (Native.IsKeyPressed(Native.VirtualKeyStates.VK_SHIFT))
+                {
+                    Process.Start("explorer.exe", _folder);
+                    return;
+                }
+
                 // {wt}Windows Terminal, {nt}New Tab {d}Destination
                 ExecuteCommand($"wt nt -d \"{_folder}\"");
                 return;
@@ -82,6 +86,30 @@
             {
                 ExecuteCommand("code .");
                 return;
+            }
+        }
+
+        private static Configuration GetConfiguration(string folder)
+        {
+            var configPath = Path.Join(folder, "gitlurker");
+            if (!File.Exists(configPath))
+            {
+                return null;
+            }
+
+            var text = File.ReadAllText(configPath);
+            if (string.IsNullOrEmpty(text))
+            {
+                return null;
+            }
+
+            try
+            {
+                return JsonSerializer.Deserialize<Configuration>(text);
+            }
+            catch
+            {
+                return null;
             }
         }
 

@@ -1,5 +1,9 @@
 ﻿namespace GitLurker.UI.ViewModels
 {
+    using System.Drawing;
+    using System.IO;
+    using System.Windows.Media;
+    using System.Windows.Media.Imaging;
     using Caliburn.Micro;
     using GitLurker.Models;
     using GitLurker.UI.Views;
@@ -28,6 +32,10 @@
         #endregion
 
         #region Properties
+
+        public bool HasIcon => _repo.HasIcon;
+
+        public string IconSource => _repo.IconPath;
 
         public string RepoName => this._repo.Name;
 

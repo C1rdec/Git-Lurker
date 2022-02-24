@@ -15,8 +15,7 @@
         xmlns:cal="http://www.caliburnproject.org"
         cal:Message.Attach="[Event Deactivated]=[Action HideWindow()]"
         Height="450" Width="800">
-    <Grid Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-          FocusManager.FocusedElement="{Binding ElementName=SearchTerm}">
+    <Grid Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition></RowDefinition>
