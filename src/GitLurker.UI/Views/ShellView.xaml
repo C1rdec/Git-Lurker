@@ -10,7 +10,7 @@
         ShowInTaskbar="{Binding ShowInTaskBar}"
         xmlns:tb="http://www.hardcodet.net/taskbar"
         AllowsTransparency="True"
-        Topmost="True"
+        Topmost="{Binding TopMost}"
         Background="Transparent"
         xmlns:cal="http://www.caliburnproject.org"
         cal:Message.Attach="[Event Deactivated]=[Action HideWindow()]"

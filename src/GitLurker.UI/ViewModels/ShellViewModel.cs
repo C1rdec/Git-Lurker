@@ -23,6 +23,7 @@
         private bool _isVisible;
         private bool _showInTaskBar;
         private IEventAggregator _eventAggregator;
+        private bool _topMost;
 
         #endregion
 
@@ -94,6 +95,16 @@
             }
         }
 
+        public bool TopMost
+        {
+            get => _topMost;
+            set
+            {
+                _topMost = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
         protected ShellView View { get; private set; }
 
         #endregion
@@ -113,6 +124,7 @@
 
         public void HideWindow()
         {
+            TopMost = false;
             IsVisible = false;
             SearchTerm = string.Empty;
             WorkspaceViewModel?.Clear();
@@ -142,6 +154,7 @@
 
         private void ShowWindow()
         {
+            TopMost = false;
             IsVisible = true;
             DockingHelper.SetForeground(View, () => View.SearchTerm.Focus());
 
