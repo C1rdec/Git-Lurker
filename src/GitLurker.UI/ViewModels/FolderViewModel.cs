@@ -1,12 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GitLurker.UI.ViewModels
+﻿namespace GitLurker.UI.ViewModels
 {
-    internal class FolderViewModel
+    public class FolderViewModel
     {
+        #region Fields
+
+        private string _folder;
+
+        #endregion
+
+        #region Constructors
+
+        public FolderViewModel(string folder)
+        {
+            _folder = folder;
+        }
+
+        #endregion
+
+        #region Properties
+
+        public string Folder => _folder;
+
+        #endregion
+
+        #region Methods
+
+        public void Delete()
+        {
+
+        }
+
+        #endregion
     }
 }

@@ -11,13 +11,13 @@ namespace GitLurker.UI.ViewModels
         {
             _settings = settings;
 
-            Paths = new ObservableCollection<string>();
+            Folders = new ObservableCollection<FolderViewModel>();
             foreach (var workspace in _settings.Entity.Workspaces)
             {
-                Paths.Add(workspace);
+                Folders.Add(new FolderViewModel(workspace));
             }
         }
 
-        public ObservableCollection<string> Paths { get; set; }
+        public ObservableCollection<FolderViewModel> Folders { get; set; }
     }
 }
