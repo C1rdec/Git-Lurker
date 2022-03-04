@@ -15,7 +15,6 @@ namespace GitLurker.UI.ViewModels
 
         #region Constructors
 
-
         public RepoManagerViewModel(SettingsFile settings)
         {
             _settings = settings;
