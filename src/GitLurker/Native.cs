@@ -8,7 +8,6 @@ namespace GitLurker
 {
     using System;
     using System.Runtime.InteropServices;
-    using System.Text;
 
 #pragma warning disable
     public static class Native
@@ -29,115 +28,14 @@ namespace GitLurker
             }
         }
 
-        [DllImport("user32.dll")]
-        public static extern int SetWindowLong(IntPtr hWnd, int nIndex, uint dwNewLong);
-
-        public static IntPtr SetWindowLongPtr(HandleRef hWnd, int nIndex, IntPtr dwNewLong)
-        {
-            if (IntPtr.Size == 8)
-                return SetWindowLongPtr64(hWnd, nIndex, dwNewLong);
-            else
-                return new IntPtr(SetWindowLong32(hWnd, nIndex, dwNewLong.ToInt32()));
-        }
-
-        [DllImport("user32.dll", EntryPoint = "SetWindowLong")]
-        private static extern int SetWindowLong32(HandleRef hWnd, int nIndex, int dwNewLong);
-
-        [DllImport("user32.dll", EntryPoint = "SetWindowLongPtr")]
-        private static extern IntPtr SetWindowLongPtr64(HandleRef hWnd, int nIndex, IntPtr dwNewLong);
-
-        public delegate int HookProc(int code, IntPtr wParam, IntPtr lParam);
-
         [DllImport("User32.dll")]
         public static extern short GetKeyState(VirtualKeyStates nVirtKey);
 
         [DllImport("User32.dll")]
         public static extern int SetForegroundWindow(IntPtr point);
 
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern IntPtr SetWindowsHookEx(HookType hookType, HookProc lpfn, IntPtr hMod, uint dwThreadId);
-
-        [DllImport("user32.dll")]
-        public static extern int CallNextHookEx(IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam);
-
         [DllImport("user32.dll")]
         public static extern IntPtr GetForegroundWindow();
-
-        [DllImport("user32.dll")]
-        public static extern bool GetWindowRect(IntPtr hwnd, ref Rect rectangle);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern bool UnhookWinEvent(IntPtr hWinEventHook);
-
-        [DllImport("user32.dll")]
-        public static extern IntPtr SetWinEventHook(uint eventMin, uint eventMax, IntPtr hmodWinEventProc, WinEventDelegate lpfnWinEventProc, uint idProcess, uint idThread, uint dwFlags);
-
-        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-        public static extern IntPtr FindWindow(string lpClassName, string lpWindowName);
-
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint lpdwProcessId);
-
-        [DllImport("Kernel32.dll")]
-        public static extern bool QueryFullProcessImageName([In] IntPtr hProcess, [In] uint dwFlags, [Out] StringBuilder lpExeName, [In, Out] ref uint lpdwSize);
-
-        [DllImport("user32.dll", EntryPoint = "GetWindowLong")]
-        public static extern IntPtr GetWindowLong(IntPtr hWnd, int nIndex);
-
-        public delegate void WinEventDelegate(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime);
-
-        public enum GWL
-        {
-            GWL_WNDPROC = (-4),
-            GWL_HINSTANCE = (-6),
-            GWL_HWNDPARENT = (-8),
-            GWL_STYLE = (-16),
-            GWL_EXSTYLE = (-20),
-            GWL_USERDATA = (-21),
-            GWL_ID = (-12)
-        }
-
-        public struct Rect
-        {
-            /// <summary>
-            /// Specifies the x-coordinate of the upper-left corner of the rectangle.
-            /// </summary>
-            public int Left { get; set; }
-
-            /// <summary>
-            /// Specifies the y-coordinate of the upper-left corner of the rectangle.
-            /// </summary>
-            public int Top { get; set; }
-
-            /// <summary>
-            /// Specifies the x-coordinate of the lower-right corner of the rectangle.
-            /// </summary>
-            public int Right { get; set; }
-
-            /// <summary>
-            /// Specifies the y-coordinate of the lower-right corner of the rectangle.
-            /// </summary>
-            public int Bottom { get; set; }
-        }
-
-        public enum HookType : int
-        {
-            WH_JOURNALRECORD = 0,
-            WH_JOURNALPLAYBACK = 1,
-            WH_KEYBOARD = 2,
-            WH_GETMESSAGE = 3,
-            WH_CALLWNDPROC = 4,
-            WH_CBT = 5,
-            WH_SYSMSGFILTER = 6,
-            WH_MOUSE = 7,
-            WH_HARDWARE = 8,
-            WH_DEBUG = 9,
-            WH_SHELL = 10,
-            WH_FOREGROUNDIDLE = 11,
-            WH_CALLWNDPROCRET = 12,
-            WH_KEYBOARD_LL = 13,
-            WH_MOUSE_LL = 14
-        }
 
         public enum VirtualKeyStates : int
         {
