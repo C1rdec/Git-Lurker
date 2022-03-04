@@ -144,11 +144,7 @@
                 return false;
             }
 
-            var runningVS = Process.GetProcessesByName("devenv");
-            var solutionName = Path.GetFileName(slnFile.FullName).Replace(".sln", string.Empty);
-            var expectedTitle = $"{solutionName} - Microsoft Visual Studio";
-            var process = runningVS.FirstOrDefault(p => p.MainWindowTitle.StartsWith(expectedTitle));
-
+            var process = GetActiveSlnProcess(slnFile);
             if (process != null)
             {
                 Native.SetForegroundWindow(process.MainWindowHandle);
@@ -165,6 +161,34 @@
             }
 
             return true;
+        }
+
+        private Process GetActiveSlnProcess(FileInfo slnFile)
+        {
+            if (slnFile == null)
+            {
+                return null;
+            }
+
+            var runningVS = Process.GetProcessesByName("devenv");
+            var solutionName = Path.GetFileName(slnFile.FullName).Replace(".sln", string.Empty);
+            var expectedTitles = new[]
+            {
+                $"{solutionName} - Microsoft Visual Studio",
+                $"{solutionName} (Running) - Microsoft Visual Studio",
+                // TODO: Handle Rider
+            };
+
+            foreach(var title in expectedTitles)
+            {
+                var process = runningVS.FirstOrDefault(p => p.MainWindowTitle.StartsWith(title));
+                if (process != null)
+                {
+                    return process;
+                }
+            }
+
+            return null;
         }
 
         #endregion
