@@ -36,7 +36,6 @@
                     <iconPacks:PackIconMaterial Kind="Plus" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </DataTemplate>
             </Button.ContentTemplate>
-
         </Button>
     </Grid>
 </UserControl>
