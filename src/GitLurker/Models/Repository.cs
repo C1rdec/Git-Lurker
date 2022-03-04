@@ -1,5 +1,6 @@
 ﻿namespace GitLurker.Models
 {
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
     using System.Linq;
@@ -241,7 +242,34 @@
             }
 
             var text = File.ReadAllText(configFilePath);
-            return text.GetLineAfter("url = ");
+            var url = text.GetLineAfter("url = ");
+            if (!string.IsNullOrEmpty(url) && url.StartsWith("git@ssh"))
+            {
+                try
+                {
+                    return FormatSshUrl(url);
+                }
+                catch
+                {
+                }
+            }
+
+            return url;
+        }
+
+        private string FormatSshUrl(string url)
+        {
+            url = url.Replace("git@ssh.", string.Empty);
+            var segments = url.Split('/');
+            var firstSegment = segments.First();
+            var index = firstSegment.IndexOf(":v");
+            var domainName = firstSegment.Substring(0, index);
+            var newSegments = new List<string>();
+            newSegments.Add($"https://{domainName}");
+            newSegments.AddRange(segments.Skip(1).Take(segments.Length - 2));
+            newSegments.Add("_git");
+            newSegments.Add(segments.Last());
+            return string.Join("/", newSegments);
         }
 
         #endregion
