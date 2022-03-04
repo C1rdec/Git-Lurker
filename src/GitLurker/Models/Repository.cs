@@ -4,6 +4,7 @@
     using System.IO;
     using System.Linq;
     using System.Text.Json;
+    using GitLurker.Extensions;
 
     public class Repository
     {
@@ -57,16 +58,8 @@
         {
             AddToRecent();
 
-            if (Native.IsKeyPressed(Native.VirtualKeyStates.VK_CONTROL))
+            if (HandleModifiers())
             {
-                if (Native.IsKeyPressed(Native.VirtualKeyStates.VK_SHIFT))
-                {
-                    Process.Start("explorer.exe", _folder);
-                    return;
-                }
-
-                // {wt}Windows Terminal, {nt}New Tab {d}Destination
-                ExecuteCommand($"wt nt -d \"{_folder}\"");
                 return;
             }
 
@@ -75,16 +68,8 @@
                 return;
             }
 
-            var directoryInformation = new DirectoryInfo(this._folder);
-
-            // TODO: Parse file to check project type
-            var packageFile = directoryInformation.GetFiles("package.json").FirstOrDefault();
-
-            // Flutter
-            var pubspecFile = directoryInformation.GetFiles("pubspec.yaml").FirstOrDefault();
-            if (packageFile != null || pubspecFile != null)
+            if (HandleVsCode())
             {
-                ExecuteCommand("code .");
                 return;
             }
         }
@@ -163,6 +148,62 @@
             return true;
         }
 
+        private bool HandleModifiers()
+        {
+            // Control
+            if (Native.IsKeyPressed(Native.VirtualKeyStates.VK_CONTROL))
+            {
+                // Shift
+                if (Native.IsKeyPressed(Native.VirtualKeyStates.VK_SHIFT))
+                {
+                    Process.Start("explorer.exe", _folder);
+                    return true;
+                }
+
+                // Alt
+                if (Native.IsKeyPressed(Native.VirtualKeyStates.VK_MENU))
+                {
+                    var repoUrl = GetRepoUrl();
+                    if (string.IsNullOrEmpty(repoUrl))
+                    {
+                        return true;
+                    }
+
+                    var psi = new ProcessStartInfo
+                    {
+                        FileName = repoUrl,
+                        UseShellExecute = true
+                    };
+                    Process.Start(psi);
+                    return true;
+                }
+
+                // {wt}Windows Terminal, {nt}New Tab {d}Destination
+                ExecuteCommand($"wt nt -d \"{_folder}\"");
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool HandleVsCode()
+        {
+            var directoryInformation = new DirectoryInfo(this._folder);
+
+            // TODO: Parse file to check project type
+            var packageFile = directoryInformation.GetFiles("package.json").FirstOrDefault();
+
+            // Flutter
+            var pubspecFile = directoryInformation.GetFiles("pubspec.yaml").FirstOrDefault();
+            if (packageFile != null || pubspecFile != null)
+            {
+                ExecuteCommand("code .");
+                return true;
+            }
+
+            return false;
+        }
+
         private Process GetActiveSlnProcess(FileInfo slnFile)
         {
             if (slnFile == null)
@@ -189,6 +230,18 @@
             }
 
             return null;
+        }
+
+        private string GetRepoUrl()
+        {
+            var configFilePath = Path.Join(_folder, ".git", "config");
+            if (!File.Exists(configFilePath))
+            {
+                return string.Empty;
+            }
+
+            var text = File.ReadAllText(configFilePath);
+            return text.GetLineAfter("url = ");
         }
 
         #endregion
