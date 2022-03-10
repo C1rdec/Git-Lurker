@@ -5,16 +5,14 @@
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                  Topmost="True"
-                 ResizeMode="CanMinimize"
-                 WindowStyle="SingleBorderWindow"
                  WindowStartupLocation="CenterScreen"
                  Title="Settings"
                  xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
-                 Dialog:DialogParticipation.Register="{Binding}"
-                 MaxHeight="450" Width="400">
+                 Dialog:DialogParticipation.Register="{Binding}" 
+                 Width="400">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition/>
+            <RowDefinition Height="2*"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <ContentControl x:Name="RepoManager"/>

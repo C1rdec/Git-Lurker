@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Forms;
 using Caliburn.Micro;
 using GitLurker.Models;
@@ -22,7 +23,7 @@ namespace GitLurker.UI.ViewModels
             Folders = new ObservableCollection<FolderViewModel>();
             foreach (var workspace in _settings.Entity.Workspaces)
             {
-                Folders.Add(new FolderViewModel(workspace));
+                Folders.Add(new FolderViewModel(workspace, Delete));
             }
         }
 
@@ -44,12 +45,26 @@ namespace GitLurker.UI.ViewModels
             {
                 return;
             }
+            var existingWorkspace = _settings.Entity.Workspaces.FirstOrDefault(w => w == dialog.SelectedPath);
+            if (existingWorkspace != null)
+            {
+                return;
+            }
 
-            var settings = IoC.Get<SettingsFile>();
-            settings.Entity.Workspaces.Add(dialog.SelectedPath);
-            settings.Save();
+            _settings.Entity.Workspaces.Add(dialog.SelectedPath);
+            _settings.Save();
 
-            Folders.Add(new FolderViewModel(dialog.SelectedPath));
+            Folders.Add(new FolderViewModel(dialog.SelectedPath, Delete));
+        }
+
+        private void Delete(string folderPath)
+        {
+            var folder = Folders.FirstOrDefault(f => f.Folder == folderPath);
+            if (folder != null)
+            {
+                Folders.Remove(folder);
+                _settings.RemoveWorkspace(folderPath);
+            }
         }
 
         #endregion

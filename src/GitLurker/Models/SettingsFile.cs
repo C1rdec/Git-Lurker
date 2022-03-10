@@ -1,4 +1,5 @@
-﻿using AppDataFileManager;
+﻿using System.Linq;
+using AppDataFileManager;
 
 namespace GitLurker.Models
 {
@@ -27,6 +28,18 @@ namespace GitLurker.Models
             }
 
             Entity.RecentRepos.Insert(0, folder);
+            Save();
+        }
+
+        public void RemoveWorkspace(string folderPath)
+        {
+            var workspace = Entity.Workspaces.FirstOrDefault(w => w == folderPath);
+            if (workspace == null)
+            {
+                return;
+            }
+
+            Entity.Workspaces.Remove(workspace);
             Save();
         }
     }

@@ -12,7 +12,7 @@ namespace GitLurker.UI.ViewModels
         public SettingsViewModel(System.Action onSave)
         {
             _onSave = onSave;
-            _settingsFile = new SettingsFile();
+            _settingsFile = IoC.Get<SettingsFile>();
             _settingsFile.Initialize();
 
             RepoManager = new RepoManagerViewModel(_settingsFile);
