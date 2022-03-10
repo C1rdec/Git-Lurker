@@ -7,9 +7,13 @@
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid HorizontalAlignment="Left" ShowGridLines="True" Margin="0,5,0,0">
-        <TextBlock x:Name="Folder" FontSize="38"/>
-        <Button VerticalAlignment="Top" HorizontalAlignment="Right" x:Name="Delete" BorderThickness="0" Cursor="Hand" Margin="0,-5,-25,0">
+    <Grid HorizontalAlignment="Left" Margin="0,5,0,0">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="25"></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <TextBlock x:Name="Folder" FontSize="38" Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center"/>
+        <Button Grid.Column="0" x:Name="Delete" BorderThickness="0" Cursor="Hand" Margin="0,4,0,4">
             <Button.ContentTemplate>
                 <DataTemplate>
                     <iconPacks:PackIconMaterial Kind="Delete" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.3"/>
