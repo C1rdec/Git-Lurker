@@ -38,6 +38,8 @@
 
         public string IconPath => _configuration == null ? string.Empty : Path.Join(_folder, _configuration.IconPath);
 
+        public string Folder => _folder;
+
         #endregion
 
         #region Methods

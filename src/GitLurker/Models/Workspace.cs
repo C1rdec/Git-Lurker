@@ -48,10 +48,6 @@
 
         #region Properties
 
-        /// <summary>
-        /// Gets the repositories.
-        /// </summary>
-        /// <value>The repositories.</value>
         public IEnumerable<Repository> Repositories => this._repositories;
 
         #endregion
@@ -65,6 +61,8 @@
             contain.InsertRange(0, startWith);
             return contain.Distinct();
         }
+
+        public Repository GetRepo(string folderPath) => _repositories.FirstOrDefault(r => r.Folder == folderPath);
 
         private static IEnumerable<string> ShowAllFoldersUnder(string path, string searchTerm, int indent = 0)
         {

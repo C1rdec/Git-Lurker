@@ -99,7 +99,11 @@
 
             foreach (var folder in file.Entity.RecentRepos)
             {
-                Repos.Add(new RepositoryViewModel(new Repository(folder)));
+                var repo = this.GetRepo(folder);
+                if (repo != null)
+                {
+                    Repos.Add(new RepositoryViewModel(repo));
+                }
             }
         }
 
@@ -157,6 +161,20 @@
             SelectedRepo.IsSelected = false;
             SelectedRepo = Repos.ElementAt(index);
             SelectedRepo.Select();
+        }
+
+        private Repository GetRepo(string folderPath)
+        {
+            foreach(var workspace in _workspaces)
+            {
+                var repo = workspace.GetRepo(folderPath);
+                if (repo != null)
+                {
+                    return repo;
+                }
+            }
+
+            return null;
         }
 
         #endregion
