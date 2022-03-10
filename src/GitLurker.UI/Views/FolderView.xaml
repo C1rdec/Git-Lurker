@@ -12,7 +12,7 @@
         <Button VerticalAlignment="Top" HorizontalAlignment="Right" x:Name="Delete" BorderThickness="0" Cursor="Hand" Margin="0,-5,-25,0">
             <Button.ContentTemplate>
                 <DataTemplate>
-                    <iconPacks:PackIconMaterial Kind="Delete" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <iconPacks:PackIconMaterial Kind="Delete" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.3"/>
                 </DataTemplate>
             </Button.ContentTemplate>
         </Button>

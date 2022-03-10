@@ -9,7 +9,7 @@
                  Title="Settings"
                  xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
                  Dialog:DialogParticipation.Register="{Binding}" 
-                 Width="400">
+                 Width="350" Height="420">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="2*"/>
