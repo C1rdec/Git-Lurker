@@ -32,7 +32,6 @@
             Foreground="{DynamicResource MahApps.Brushes.Accent}"
             Grid.Column="1"
             Cursor="Hand"
-            Visibility="{Binding RequestMode, Converter={StaticResource BooleanToVisibilityConverter}}"
             Style="{StaticResource MahApps.Styles.Button.Circle}">
             <Button.ContentTemplate>
                 <DataTemplate>

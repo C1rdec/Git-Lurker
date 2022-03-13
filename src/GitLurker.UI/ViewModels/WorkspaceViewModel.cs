@@ -118,6 +118,12 @@
             _repos.FirstOrDefault()?.Open();
         }
 
+        public void Refresh(IEnumerable<Workspace> workspaces)
+        {
+            _workspaces = workspaces;
+            _repos.Clear();
+        }
+
         protected override void OnViewLoaded(object view)
         {
             View = view as WorkspaceView;

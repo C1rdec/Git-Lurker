@@ -12,18 +12,24 @@
     using GitLurker.UI.Helpers;
     using GitLurker.UI.Views;
     using System;
+    using System.Reflection;
+    using System.Collections.Generic;
 
     public class ShellViewModel : Screen, IHandle<object>
     {
         #region Fields
 
         private Window _parent;
+        private SettingsFile _settingsFile;
         private string _searchTerm;
+        private string _searchWatermark;
         private KeyboardService _keyboardService;
         private bool _isVisible;
         private bool _showInTaskBar;
+        private bool _disable;
         private IEventAggregator _eventAggregator;
         private bool _topMost;
+        private string _version;
 
         #endregion
 
@@ -35,10 +41,15 @@
         public ShellViewModel(IEventAggregator aggregator, SettingsFile settings, KeyboardService keyboardService)
         {
             _searchTerm = string.Empty;
+            _searchWatermark = "Search";
             _isVisible = false;
             _showInTaskBar = true;
             _eventAggregator = aggregator;
             _keyboardService = keyboardService;
+            _settingsFile = settings;
+
+            var assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
+            _version = $"{assemblyVersion.Major}.{assemblyVersion.Minor}.{assemblyVersion.Build}";
 
             var worskspacePaths = settings.Entity.Workspaces;
             if (worskspacePaths.Any())
@@ -69,8 +80,19 @@
                     return;
 
                 }
+
                 _searchTerm = value;
                 Search(_searchTerm);
+                NotifyOfPropertyChange();
+            }
+        }
+
+        public string SearchWatermark
+        {
+            get => _searchWatermark;
+            set
+            {
+                _searchWatermark = value;
                 NotifyOfPropertyChange();
             }
         }
@@ -104,6 +126,18 @@
                 NotifyOfPropertyChange();
             }
         }
+
+        public bool Disable
+        {
+            get => _disable;
+            set
+            {
+                _disable = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
+        public string Version => _version;
 
         protected ShellView View { get; private set; }
 
@@ -141,6 +175,25 @@
             IoC.Get<IWindowManager>().ShowWindowAsync(new SettingsViewModel(SetGlobalHotkey));
         }
 
+        public async void RefreshWorkspace()
+        {
+            _settingsFile.Initialize();
+            var worskspacePaths = _settingsFile.Entity.Workspaces;
+            if (worskspacePaths.Any())
+            {
+                Disable = true;
+                SearchTerm = String.Empty;
+                SearchWatermark = "Loading...";
+
+                WorkspaceViewModel.Clear();
+                var worskspaces = await GetWorkspaces(worskspacePaths);
+                WorkspaceViewModel.Refresh(worskspaces);
+
+                Disable = false;
+                SearchWatermark = "Search";
+            }
+        }
+
         protected override async void OnViewLoaded(object view)
         {
             View = view as ShellView;
@@ -151,6 +204,8 @@
             ShowInTaskBar = false;
             HideFromAltTab(View);
         }
+
+        private Task<Workspace[]> GetWorkspaces(IEnumerable<string> paths) => Task.Run(() => paths.Select(w => new Workspace(w)).ToArray());
 
         private void ToggleWindow()
         {
