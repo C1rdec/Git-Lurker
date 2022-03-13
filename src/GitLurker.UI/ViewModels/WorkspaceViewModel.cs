@@ -34,6 +34,11 @@
             _keyboardService.UpPressed += KeyboardService_UpPressed;
         }
 
+        public WorkspaceViewModel(KeyboardService keyboardService)
+            : this(Enumerable.Empty<Workspace>(), keyboardService)
+        {
+        }
+
         #endregion
 
         #region Properties
@@ -89,7 +94,11 @@
         {
             SelectedRepo = null;
             _repos.Clear();
-            View.ScrollViewer.ScrollToHome();
+
+            if (View != null)
+            {
+                View.ScrollViewer.ScrollToHome();
+            }
         }
 
         public void ShowRecent()

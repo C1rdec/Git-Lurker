@@ -56,12 +56,7 @@
             var assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
             _version = $"{assemblyVersion.Major}.{assemblyVersion.Minor}.{assemblyVersion.Build}";
 
-            var worskspacePaths = settings.Entity.Workspaces;
-            if (worskspacePaths.Any())
-            {
-                var worskspaces = worskspacePaths.Select(w => new Workspace(w)).ToArray();
-                WorkspaceViewModel = new WorkspaceViewModel(worskspaces, keyboardService);
-            }
+            RefreshWorkspace();
 
             SetGlobalHotkey();
             _eventAggregator.SubscribeOnPublishedThread(this);
@@ -73,7 +68,7 @@
 
         public DoubleClickCommand ShowSettings => new DoubleClickCommand(OpenSettings);
 
-        public WorkspaceViewModel WorkspaceViewModel { get; init; }
+        public WorkspaceViewModel WorkspaceViewModel { get; private set; }
 
         public string SearchTerm
         {
@@ -182,7 +177,15 @@
 
         public async void RefreshWorkspace()
         {
-            _settingsFile.Initialize();
+            if (WorkspaceViewModel == null)
+            {
+                WorkspaceViewModel = new WorkspaceViewModel(_keyboardService);
+            }
+            else
+            {
+                _settingsFile.Initialize();
+            }
+
             var worskspacePaths = _settingsFile.Entity.Workspaces;
             if (worskspacePaths.Any())
             {
