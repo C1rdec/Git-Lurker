@@ -1,4 +1,6 @@
-﻿using Caliburn.Micro;
+﻿using System;
+using System.IO;
+using Caliburn.Micro;
 using GitLurker.Models;
 using GitLurker.Services;
 
@@ -6,8 +8,14 @@ namespace GitLurker.UI.ViewModels
 {
     public class SettingsViewModel
     {
+        #region Fields
+
         private System.Action _onSave;
         private SettingsFile _settingsFile;
+
+        #endregion
+
+        #region Constructors
 
         public SettingsViewModel(System.Action onSave)
         {
@@ -19,6 +27,8 @@ namespace GitLurker.UI.ViewModels
             HotkeyViewModel = new HotkeyViewModel(_settingsFile.Entity.HotKey, Save);
             IoC.Get<DialogService>().Register(this);
         }
+
+        #endregion
 
         #region Properties
 
