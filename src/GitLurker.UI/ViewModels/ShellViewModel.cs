@@ -152,9 +152,15 @@
             HideFromAltTab(View);
         }
 
-        private void ShowWindow()
+        private void ToggleWindow()
         {
-            TopMost = false;
+            if (IsVisible)
+            {
+                HideWindow();
+                return;
+            }
+
+            TopMost = true;
             IsVisible = true;
             DockingHelper.SetForeground(View, () => View.SearchTerm.Focus());
 
@@ -189,7 +195,7 @@
 
             Enum.TryParse(hotkey.KeyCode.ToString(), out Key key);
 
-            HotkeyManager.Current.AddOrReplace("Open", key, modifier , (s, e) => ShowWindow());
+            HotkeyManager.Current.AddOrReplace("Open", key, modifier , (s, e) => ToggleWindow());
         }
 
         #endregion
