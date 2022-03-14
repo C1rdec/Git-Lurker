@@ -8,6 +8,7 @@
                  xmlns:cal="http://www.caliburnproject.org"
                  WindowStartupLocation="CenterScreen"
                  Title="Settings"
+                 Icon="pack://application:,,,/Resources/GitLurker.ico"
                  xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
                  Dialog:DialogParticipation.Register="{Binding}" 
                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
