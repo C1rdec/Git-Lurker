@@ -38,7 +38,7 @@
         /// <param name="sender">The sender.</param>
         /// <param name="e">The args.</param>
         protected override void OnStartup(object sender, System.Windows.StartupEventArgs e)
-        {g
+        {
             if (RunningInstance() != null)
             {
                 System.Windows.MessageBox.Show("Another instance is running");
