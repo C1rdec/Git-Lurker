@@ -1,11 +1,13 @@
-﻿using Caliburn.Micro;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Caliburn.Micro;
 using GitLurker.Models;
 using GitLurker.Services;
 using GitLurker.UI.Services;
 
 namespace GitLurker.UI.ViewModels
 {
-    public class SettingsViewModel : PropertyChangedBase
+    public class SettingsViewModel : Screen
     {
         #region Fields
 
@@ -95,6 +97,12 @@ namespace GitLurker.UI.ViewModels
             }
 
             Save();
+        }
+
+        protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
+        {
+            Save();
+            return base.OnDeactivateAsync(close, cancellationToken);
         }
 
         #endregion
