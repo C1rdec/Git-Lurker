@@ -1,17 +1,17 @@
-﻿using System;
-using System.IO;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 using GitLurker.Models;
 using GitLurker.Services;
+using GitLurker.UI.Services;
 
 namespace GitLurker.UI.ViewModels
 {
-    public class SettingsViewModel
+    public class SettingsViewModel : PropertyChangedBase
     {
         #region Fields
 
         private System.Action _onSave;
         private SettingsFile _settingsFile;
+        private WindowsStartupService _windowsStartupService;
 
         #endregion
 
@@ -25,6 +25,7 @@ namespace GitLurker.UI.ViewModels
 
             RepoManager = new RepoManagerViewModel(_settingsFile);
             HotkeyViewModel = new HotkeyViewModel(_settingsFile.Entity.HotKey, Save);
+            _windowsStartupService = IoC.Get<WindowsStartupService>();
             IoC.Get<DialogService>().Register(this);
         }
 
@@ -36,6 +37,26 @@ namespace GitLurker.UI.ViewModels
 
         public HotkeyViewModel HotkeyViewModel { get; set; }
 
+        public bool StartWithWindows
+        {
+            get => _settingsFile.Entity.StartWithWindows;
+            set
+            {
+                _settingsFile.Entity.StartWithWindows = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
+        public bool AddToStartMenu
+        {
+            get => _settingsFile.Entity.AddToStartMenu;
+            set
+            {
+                _settingsFile.Entity.AddToStartMenu = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -44,6 +65,36 @@ namespace GitLurker.UI.ViewModels
         {
             _settingsFile.Save();
             _onSave?.Invoke();
+        }
+
+        public void ToggleAddMenu()
+        {
+            AddToStartMenu = !AddToStartMenu;
+            if (AddToStartMenu)
+            {
+                _windowsStartupService.AddToStartMenu();
+            }
+            else
+            {
+                _windowsStartupService.RemoveMenu();
+            }
+
+            Save();
+        }
+
+        public void ToggleStartWithWindows()
+        {
+            StartWithWindows = !StartWithWindows;
+            if (StartWithWindows)
+            {
+                _windowsStartupService.AddStartup();
+            }
+            else
+            {
+                _windowsStartupService.RemoveStartup();
+            }
+
+            Save();
         }
 
         #endregion

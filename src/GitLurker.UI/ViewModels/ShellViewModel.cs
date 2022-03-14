@@ -51,7 +51,15 @@
             _settingsFile = settings;
             _startupService = startupService;
 
-            _startupService.AddLink();
+            if (settings.Entity.StartWithWindows)
+            {
+                _startupService.AddStartup();
+            }
+
+            if (settings.Entity.AddToStartMenu)
+            {
+                _startupService.AddToStartMenu();
+            }
 
             var assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
             _version = $"{assemblyVersion.Major}.{assemblyVersion.Minor}.{assemblyVersion.Build}";
@@ -172,7 +180,7 @@
 
         public void OpenSettings()
         {
-            IoC.Get<IWindowManager>().ShowWindowAsync(new SettingsViewModel(SetGlobalHotkey));
+            IoC.Get<IWindowManager>().ShowWindowAsync(new SettingsViewModel(OnSettingsSave));
         }
 
         public async void RefreshWorkspace()
@@ -247,6 +255,12 @@
             _parent.Show();
             view.Owner = this._parent;
             _parent.Hide();
+        }
+
+        private void OnSettingsSave()
+        {
+            SetGlobalHotkey();
+            RefreshWorkspace();
         }
 
         private void SetGlobalHotkey()

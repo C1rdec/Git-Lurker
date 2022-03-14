@@ -5,17 +5,93 @@
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                  Topmost="True"
+                 xmlns:cal="http://www.caliburnproject.org"
                  WindowStartupLocation="CenterScreen"
                  Title="Settings"
                  xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
                  Dialog:DialogParticipation.Register="{Binding}" 
+                 xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                  MinWidth="350" MinHeight="420" Width="350" Height="420">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="2*"/>
             <RowDefinition/>
+            <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
         <ContentControl x:Name="RepoManager"/>
         <ContentControl x:Name="HotkeyViewModel" Grid.Row="1" Margin="65,0,65,0"/>
+        <Grid Grid.Row="2" Height="40">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Border cal:Message.Attach="[Event MouseDown] = [Action ToggleAddMenu]"
+                    Cursor="Hand">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Opacity" Value="0.25"/>
+                        <Setter Property="Background">
+                            <Setter.Value>
+                                <SolidColorBrush Color="White" Opacity="0.05"></SolidColorBrush>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <SolidColorBrush Color="White" Opacity="0.15"></SolidColorBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <DataTrigger Binding="{Binding AddToStartMenu}" Value="True">
+                                <Setter Property="Opacity" Value="1"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <iconPacks:PackIconMaterial Kind="MenuOpen" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="1" 
+                               Margin="10,0,0,0"
+                               HorizontalAlignment="Center" 
+                               VerticalAlignment="Center">Start Menu</TextBlock>
+                </StackPanel>
+            </Border>
+            <Border Grid.Column="1"
+                    cal:Message.Attach="[Event MouseDown] = [Action ToggleStartWithWindows]"
+                    Cursor="Hand">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Opacity" Value="0.25"></Setter>
+                        <Setter Property="Background">
+                            <Setter.Value>
+                                <SolidColorBrush Color="White" Opacity="0.05"></SolidColorBrush>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <SolidColorBrush Color="White" Opacity="0.15"></SolidColorBrush>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <DataTrigger Binding="{Binding StartWithWindows}" Value="True">
+                                <Setter Property="Opacity" Value="1"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                    <iconPacks:PackIconMaterial Kind="MicrosoftWindows"
+                                                HorizontalAlignment="Center" 
+                                                VerticalAlignment="Center"/>
+                    <TextBlock Grid.Column="1"
+                               HorizontalAlignment="Center"
+                               Margin="10,0,0,0"
+                               VerticalAlignment="Center">Start with Windows</TextBlock>
+                </StackPanel>
+            </Border>
+        </Grid>
     </Grid>
 </mah:MetroWindow>

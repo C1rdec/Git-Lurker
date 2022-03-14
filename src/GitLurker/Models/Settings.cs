@@ -15,6 +15,9 @@ namespace GitLurker.Models
                 Modifier = Winook.Modifiers.Control,
                 KeyCode = Winook.KeyCode.G,
             };
+
+            StartWithWindows = true;
+            AddToStartMenu = true;
         }
 
         #endregion
@@ -24,5 +27,9 @@ namespace GitLurker.Models
         public List<string> RecentRepos { get; set; }
 
         public Hotkey HotKey { get; set; }
+
+        public bool StartWithWindows { get; set; }
+
+        public bool AddToStartMenu { get; set; }
     }
 }

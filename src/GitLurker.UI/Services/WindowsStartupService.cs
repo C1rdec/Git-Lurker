@@ -29,32 +29,44 @@ namespace GitLurker.UI.Services
 
         private string ApplicationDataFolderPath => Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
 
-        private string StartupFolderPath => Path.Combine(this.ApplicationDataFolderPath, @"Microsoft\Windows\Start Menu\Programs\Startup");
+        private string ProgramsFolderPath => Path.Combine(ApplicationDataFolderPath, @"Microsoft\Windows\Start Menu\Programs");
 
-        private string ShortcutFilePath => Path.Combine(this.StartupFolderPath, this._linkName);
+        private string StartupFolderPath => Path.Combine(ProgramsFolderPath, "Startup");
+
+        private string StartupFilePath => Path.Combine(StartupFolderPath, _linkName);
+
+        private string MenuFilePath => Path.Combine(ProgramsFolderPath, _linkName);
 
         #endregion
 
         #region Methods
 
-        public void AddLink()
+        public void AddStartup() => CreateLink(StartupFilePath);
+
+        public void RemoveStartup() => RemoveLink(StartupFilePath);
+
+        public void AddToStartMenu() => CreateLink(MenuFilePath);
+
+        public void RemoveMenu() => RemoveLink(MenuFilePath);
+
+        private void RemoveLink(string path)
         {
-            RemoveLink();
+            if (File.Exists(path))
+            {
+                File.Delete(path);
+            }
+        }
+
+        private void CreateLink(string path)
+        {
+            RemoveLink(path);
 
             var link = (IShellLink)new ShellLink();
             link.SetDescription(_description);
             var exePath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
             link.SetPath(exePath);
             var file = (IPersistFile)link;
-            file.Save(this.ShortcutFilePath, false);
-        }
-
-        public void RemoveLink()
-        {
-            if (File.Exists(ShortcutFilePath))
-            {
-                File.Delete(ShortcutFilePath);
-            }
+            file.Save(path, false);
         }
 
         #endregion
