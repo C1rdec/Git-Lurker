@@ -51,15 +51,7 @@
             _settingsFile = settings;
             _startupService = startupService;
 
-            if (settings.Entity.StartWithWindows)
-            {
-                _startupService.AddStartup();
-            }
-
-            if (settings.Entity.AddToStartMenu)
-            {
-                _startupService.AddToStartMenu();
-            }
+            ApplySettings(settings);
 
             var assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
             _version = $"{assemblyVersion.Major}.{assemblyVersion.Minor}.{assemblyVersion.Build}";
@@ -273,6 +265,27 @@
             Enum.TryParse(hotkey.KeyCode.ToString(), out Key key);
 
             HotkeyManager.Current.AddOrReplace("Open", key, modifier , (s, e) => ToggleWindow());
+        }
+
+        private void ApplySettings(SettingsFile settings)
+        {
+            if (settings.Entity.StartWithWindows)
+            {
+                _startupService.AddStartup();
+            }
+            else
+            {
+                _startupService.RemoveStartup();
+            }
+
+            if (settings.Entity.AddToStartMenu)
+            {
+                _startupService.AddToStartMenu();
+            }
+            else
+            {
+                _startupService.RemoveMenu();
+            }
         }
 
         #endregion
