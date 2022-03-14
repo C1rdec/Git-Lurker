@@ -220,7 +220,6 @@
             {
                 $"{solutionName} - Microsoft Visual Studio",
                 $"{solutionName} (Running) - Microsoft Visual Studio",
-                // TODO: Handle Rider
             };
 
             foreach(var title in expectedTitles)
