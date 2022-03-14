@@ -8,6 +8,7 @@ namespace GitLurker
 {
     using System;
     using System.Runtime.InteropServices;
+    using System.Text;
 
 #pragma warning disable
     public static class Native
@@ -36,6 +37,9 @@ namespace GitLurker
 
         [DllImport("user32.dll")]
         public static extern IntPtr GetForegroundWindow();
+
+        [DllImport("Kernel32.dll")]
+        public static extern bool QueryFullProcessImageName([In] IntPtr hProcess, [In] uint dwFlags, [Out] StringBuilder lpExeName, [In, Out] ref uint lpdwSize);
 
         public enum VirtualKeyStates : int
         {

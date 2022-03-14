@@ -2,9 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using Caliburn.Micro;
     using GitLurker.Models;
     using GitLurker.Services;
+    using GitLurker.UI.Extensions;
     using GitLurker.UI.Services;
     using GitLurker.UI.ViewModels;
 
@@ -36,7 +38,14 @@
         /// <param name="sender">The sender.</param>
         /// <param name="e">The args.</param>
         protected override void OnStartup(object sender, System.Windows.StartupEventArgs e)
-        {
+        {g
+            if (RunningInstance() != null)
+            {
+                System.Windows.MessageBox.Show("Another instance is running");
+                System.Windows.Application.Current.Shutdown();
+                return;
+            }
+
             DisplayRootViewFor<ShellViewModel>();
         }
 
@@ -92,6 +101,26 @@
         protected override void BuildUp(object instance)
         {
             _container.BuildUp(instance);
+        }
+
+        public static Process RunningInstance()
+        {
+            var currentProcess = Process.GetCurrentProcess();
+            var processes = Process.GetProcessesByName(currentProcess.ProcessName);
+
+            var currentFilePath = currentProcess.GetMainModuleFileName();
+            foreach (var process in processes)
+            {
+                if (process.Id != currentProcess.Id)
+                {
+                    if (process.GetMainModuleFileName() == currentFilePath)
+                    {
+                        return process;
+                    }
+                }
+            }
+
+            return null;
         }
 
         #endregion
