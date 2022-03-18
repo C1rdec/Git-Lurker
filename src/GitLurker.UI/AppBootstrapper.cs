@@ -7,8 +7,8 @@
     using GitLurker.Models;
     using GitLurker.Services;
     using GitLurker.UI.Extensions;
-    using GitLurker.UI.Services;
     using GitLurker.UI.ViewModels;
+    using WindowsUtilities;
 
     public class AppBootstrapper: BootstrapperBase
     {
@@ -65,7 +65,7 @@
             settings.Initialize();
             _container.Instance(settings);
 
-            var startupService = new WindowsStartupService("GitLurker.lnk", "GitLurker");
+            var startupService = new WindowsLink("GitLurker.lnk", "GitLurker");
             _container.Instance(startupService);
         }
 

@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Caliburn.Micro;
 using GitLurker.Models;
 using GitLurker.Services;
-using GitLurker.UI.Services;
+using WindowsUtilities;
 
 namespace GitLurker.UI.ViewModels
 {
@@ -13,7 +13,7 @@ namespace GitLurker.UI.ViewModels
 
         private System.Action _onSave;
         private SettingsFile _settingsFile;
-        private WindowsStartupService _windowsStartupService;
+        private WindowsLink _windowsStartupService;
 
         #endregion
 
@@ -27,7 +27,7 @@ namespace GitLurker.UI.ViewModels
 
             RepoManager = new RepoManagerViewModel(_settingsFile);
             HotkeyViewModel = new HotkeyViewModel(_settingsFile.Entity.HotKey, Save);
-            _windowsStartupService = IoC.Get<WindowsStartupService>();
+            _windowsStartupService = IoC.Get<WindowsLink>();
             IoC.Get<DialogService>().Register(this);
         }
 
@@ -74,11 +74,11 @@ namespace GitLurker.UI.ViewModels
             AddToStartMenu = !AddToStartMenu;
             if (AddToStartMenu)
             {
-                _windowsStartupService.AddToStartMenu();
+                _windowsStartupService.AddStartMenu();
             }
             else
             {
-                _windowsStartupService.RemoveMenu();
+                _windowsStartupService.RemoveStartMenu();
             }
 
             Save();
@@ -89,11 +89,11 @@ namespace GitLurker.UI.ViewModels
             StartWithWindows = !StartWithWindows;
             if (StartWithWindows)
             {
-                _windowsStartupService.AddStartup();
+                _windowsStartupService.AddStartWithWindows();
             }
             else
             {
-                _windowsStartupService.RemoveStartup();
+                _windowsStartupService.RemoveStartWithWindows();
             }
 
             Save();

@@ -14,7 +14,7 @@
     using System;
     using System.Reflection;
     using System.Collections.Generic;
-    using GitLurker.UI.Services;
+    using WindowsUtilities;
 
     public class ShellViewModel : Screen, IHandle<object>
     {
@@ -23,7 +23,7 @@
         private Window _parent;
         private SettingsFile _settingsFile;
         private KeyboardService _keyboardService;
-        private WindowsStartupService _startupService;
+        private WindowsLink _startupService;
         private string _searchTerm;
         private string _searchWatermark;
         private bool _isVisible;
@@ -40,7 +40,7 @@
         /// <summary>
         /// Initializes a new instance of the <see cref="ShellViewModel"/> class.
         /// </summary>
-        public ShellViewModel(IEventAggregator aggregator, SettingsFile settings, KeyboardService keyboardService, WindowsStartupService startupService)
+        public ShellViewModel(IEventAggregator aggregator, SettingsFile settings, KeyboardService keyboardService, WindowsLink startupService)
         {
             _searchTerm = string.Empty;
             _searchWatermark = "Search";
@@ -271,20 +271,20 @@
         {
             if (settings.Entity.StartWithWindows)
             {
-                _startupService.AddStartup();
+                _startupService.AddStartMenu();
             }
             else
             {
-                _startupService.RemoveStartup();
+                _startupService.RemoveStartMenu();
             }
 
             if (settings.Entity.AddToStartMenu)
             {
-                _startupService.AddToStartMenu();
+                _startupService.AddStartWithWindows();
             }
             else
             {
-                _startupService.RemoveMenu();
+                _startupService.RemoveStartWithWindows();
             }
         }
 
