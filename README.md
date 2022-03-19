@@ -1,5 +1,5 @@
 # Git-Lurker
-GitLurker is an overlay to ease the navigation between Git Repositories
+GitLurker is an OSS that create an overlay to ease the navigation between Git Repositories
 
 ![2022-03-18_23-45-15](https://user-images.githubusercontent.com/5436436/159105476-c1a2fd86-b49a-49e2-9be9-7e803f224de7.gif)
 
