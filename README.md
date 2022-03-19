@@ -10,7 +10,8 @@ GitLurker is an OSS that create an overlay to ease the navigation between Git Re
 
 | System Tray | Add Workspace Folder Path |
 | ------------- | ------------- |
-| ![image](https://user-images.githubusercontent.com/5436436/159106241-eac5b233-10a4-4dbc-a781-3f1944c08c84.png)  | ![image](https://user-images.githubusercontent.com/5436436/159106403-d0ed9197-261f-4c16-9a9b-09570047f57b.png) |
+| ![image](https://user-images.githubusercontent.com/5436436/159106241-eac5b233-10a4-4dbc-a781-3f1944c08c84.png)  | ![image](https://user-images.githubusercontent.com/5436436/159107960-7c627048-b1b9-4e8f-8486-1ac536e37855.png)
+|
 
 - After the first Launch **GitLurker** will have a Shortcut to the Startup Menu and start with Windows.
     - *Can be disabled in the settings* 
