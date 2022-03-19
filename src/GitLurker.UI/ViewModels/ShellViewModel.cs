@@ -15,6 +15,7 @@
     using System.Reflection;
     using System.Collections.Generic;
     using WindowsUtilities;
+    using GitLurker.UI.Helper;
 
     public class ShellViewModel : Screen, IHandle<object>
     {
@@ -32,6 +33,7 @@
         private IEventAggregator _eventAggregator;
         private bool _topMost;
         private string _version;
+        private bool _isCopiedOpen;
 
         #endregion
 
@@ -139,6 +141,20 @@
 
         public string Version => _version;
 
+        public bool IsCopiedOpen
+        {
+            get
+            {
+                return _isCopiedOpen;
+            }
+
+            set
+            {
+                _isCopiedOpen = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
         protected ShellView View { get; private set; }
 
         #endregion
@@ -200,6 +216,13 @@
                 Disable = false;
                 SearchWatermark = "Search";
             }
+        }
+
+        public void Share()
+        {
+            IsCopiedOpen = true;
+            Task.Delay(1400).ContinueWith(t => IsCopiedOpen = false);
+            ClipboardHelper.SetText("https://github.com/C1rdec/Git-Lurker");
         }
 
         protected override async void OnViewLoaded(object view)
