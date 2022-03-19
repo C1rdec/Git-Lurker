@@ -4,9 +4,11 @@ GitLurker is an overlay to ease the navigation between Git Repositories
 ![2022-03-18_23-45-15](https://user-images.githubusercontent.com/5436436/159105476-c1a2fd86-b49a-49e2-9be9-7e803f224de7.gif)
 
 # Usage
-- Clone GitLurker  `Git clone https://github.com/C1rdec/Git-Lurker.git`
+- `git clone https://github.com/C1rdec/Git-Lurker.git`
 - `cd Git-Lurker/src/GitLurker.UI`
 - `dotnet run`
+- After the first Launch **GitLurker** will have a Shortcut to the Startup Menu and start with Windows.
+    - *Can be disabled in the settings* 
 
 # Shoutouts
 | Windows System Tray | Add Workspace Folder Path |
