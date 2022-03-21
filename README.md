@@ -4,7 +4,7 @@ GitLurker is an OSS that create an overlay to ease the navigation between Git Re
 ## Hotkeys   *(When the overlay is open)*
 
 
-`Enter` : Will launch the project using your default editor. ([Visual Studio](https://visualstudio.microsoft.com/vs/community/) | [Rider](https://www.jetbrains.com/rider/) | [VSCode](https://code.visualstudio.com/)) 
+`Enter` : Will launch the selected project using your default editor. ([Visual Studio](https://visualstudio.microsoft.com/vs/community/) | [Rider](https://www.jetbrains.com/rider/) | [VSCode](https://code.visualstudio.com/)) 
 
 `CTRL + Enter` : Will open [Windows Terminal](https://www.microsoft.com/en-ca/p/windows-terminal/9n0dx20hk701?activetab=pivot:overviewtab) to the Git Repository path.
 
