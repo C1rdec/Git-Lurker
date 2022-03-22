@@ -215,6 +215,7 @@
 
                 Disable = false;
                 SearchWatermark = "Search";
+                HideWindow();
             }
         }
 

@@ -140,7 +140,7 @@
                     Style="{StaticResource MahApps.Styles.Button.Circle}">
                     <Button.ContentTemplate>
                         <DataTemplate>
-                            <iconPacks:PackIconMaterial Kind="ShareVariantOutline" Height="28" Width="28" Margin="-6,0,0,0"/>
+                            <iconPacks:PackIconMaterial Kind="ShareVariantOutline" Height="28" Width="28" Margin="-6,-4,0,0"/>
                         </DataTemplate>
                     </Button.ContentTemplate>
                 </Button>
