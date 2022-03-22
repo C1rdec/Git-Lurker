@@ -215,7 +215,7 @@
 
                 Disable = false;
                 SearchWatermark = "Search";
-                HideWindow();
+                SelectSearch();
             }
         }
 
@@ -247,12 +247,17 @@
                 return;
             }
 
+            WorkspaceViewModel?.ShowRecent();
+
             TopMost = true;
             IsVisible = true;
-            DockingHelper.SetForeground(View, () => View.SearchTerm.Focus());
-
-            WorkspaceViewModel?.ShowRecent();
+            SelectSearch();
         }
+
+        private void SelectSearch() => DockingHelper.SetForeground(View, () =>
+        {
+            View.SearchTerm.Focus();
+        }); 
 
         private void HideFromAltTab(Window view)
         {

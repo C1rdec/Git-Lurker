@@ -108,7 +108,7 @@
 
             foreach (var folder in file.Entity.RecentRepos)
             {
-                var repo = this.GetRepo(folder);
+                var repo = GetRepo(folder);
                 if (repo != null)
                 {
                     Repos.Add(new RepositoryViewModel(repo));

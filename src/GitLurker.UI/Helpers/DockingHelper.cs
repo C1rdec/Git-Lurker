@@ -9,15 +9,9 @@ namespace GitLurker.UI.Helpers
         public static void SetForeground(Window window, Action callback)
         {
             var handle = new WindowInteropHelper(window).Handle;
-
-            var foreground = Native.GetForegroundWindow();
-
-            if (handle == foreground)
-            {
-                callback();
-            }
-
             Native.SetForegroundWindow(handle);
+
+            callback();
         }
     }
 }
