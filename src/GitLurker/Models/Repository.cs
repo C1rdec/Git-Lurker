@@ -182,7 +182,7 @@
                 }
 
                 // {wt}Windows Terminal, {nt}New Tab {d}Destination
-                ExecuteCommand($"wt nt -d \"{_folder}\"");
+                ExecuteCommand($"wt -w 0 nt -d \"{_folder}\"");
                 return true;
             }
 
