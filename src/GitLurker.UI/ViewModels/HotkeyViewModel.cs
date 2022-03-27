@@ -16,12 +16,6 @@ namespace GitLurker.UI.ViewModels
 
         #region Constructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HotkeyViewModel" /> class.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="hotkey">The hotkey.</param>
-        /// <param name="getKey">The get key.</param>
         public HotkeyViewModel(Hotkey hotkey, System.Action callback)
         {
             _hotkey = hotkey;
@@ -32,24 +26,12 @@ namespace GitLurker.UI.ViewModels
 
         #region Properties
 
-        /// <summary>
-        /// Gets a value indicating whether [not defined].
-        /// </summary>
-        public bool NotDefined => !this._hotkey.IsDefined();
+        public bool NotDefined => !_hotkey.IsDefined();
 
-        /// <summary>
-        /// Gets a value indicating whether this instance has modifier.
-        /// </summary>
-        public bool HasModifier => this.Modifier != Modifiers.None;
+        public bool HasModifier => Modifier != Modifiers.None;
 
-        /// <summary>
-        /// Gets a value indicating whether this instance has key code.
-        /// </summary>
-        public bool HasKeyCode => this.KeyCode != KeyCode.None;
+        public bool HasKeyCode => KeyCode != KeyCode.None;
 
-        /// <summary>
-        /// Gets the modifier.
-        /// </summary>
         public Modifiers Modifier
         {
             get
@@ -61,13 +43,10 @@ namespace GitLurker.UI.ViewModels
             {
                 _hotkey.Modifier = value;
                 NotifyOfPropertyChange();
-                NotifyOfPropertyChange(() => this.HasModifier);
+                NotifyOfPropertyChange(() => HasModifier);
             }
         }
 
-        /// <summary>
-        /// Gets the key code.
-        /// </summary>
         public KeyCode KeyCode
         {
             get
@@ -84,18 +63,12 @@ namespace GitLurker.UI.ViewModels
             }
         }
 
-        /// <summary>
-        /// Gets the name value.
-        /// </summary>
         public string NameValue => "Open";
 
         #endregion
 
         #region Methods
 
-        /// <summary>
-        /// Sets the key code.
-        /// </summary>
         public async void SetKeyCode()
         {
             var dialog = IoC.Get<DialogService>();
