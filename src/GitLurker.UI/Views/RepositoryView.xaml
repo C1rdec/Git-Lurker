@@ -52,7 +52,7 @@
                                VerticalAlignment="Center"/>
                 </StackPanel>
             </Border>
-            <Border CornerRadius="0,6,6,0" Grid.Column="1" cal:Message.Attach="[Event MouseDown] = [Action Pull()]">
+            <Border CornerRadius="0,6,6,0" Grid.Column="1" cal:Message.Attach="[Event MouseDown] = [Action Pull()]; [Event MouseEnter] = [Action ShowBranchName()]; [Event MouseLeave] = [Action ShowBranchName()]">
                 <Border.Style>
                     <Style TargetType="Border">
                         <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent4}"/>
@@ -68,7 +68,16 @@
                         </Style.Triggers>
                     </Style>
                 </Border.Style>
-                <iconPacks:PackIconMaterial Kind="ChevronDown" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.3"/>
+                <Grid>
+                    <TextBlock x:Name="BranchName" 
+                               HorizontalAlignment="Center" 
+                               VerticalAlignment="Bottom" 
+                               Foreground="LightGray" 
+                               FontSize="14" 
+                               Margin="4,0,4,4" 
+                               FontWeight="SemiBold"/>
+                    <iconPacks:PackIconMaterial Kind="ChevronDown" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.3"/>
+                </Grid>
             </Border>
         </Grid>
     </Border>

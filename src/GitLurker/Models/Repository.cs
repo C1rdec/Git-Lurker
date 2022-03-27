@@ -8,6 +8,7 @@
     using System.Text.Json;
     using Desktop.Robot;
     using GitLurker.Extensions;
+    using GitLurker.Services;
 
     public class Repository
     {
@@ -18,6 +19,7 @@
         private FileInfo[] _slnFiles;
         private string _folder;
         private Configuration _configuration;
+        private GitConfigurationService _gitConfigurationService;
 
         #endregion
 
@@ -29,6 +31,9 @@
             _name = Path.GetFileName(folder);
             _slnFiles = new DirectoryInfo(folder).GetFiles("*.sln", SearchOption.AllDirectories);
             _configuration = GetConfiguration(folder);
+            _gitConfigurationService = new GitConfigurationService(folder);
+
+            var branch = _gitConfigurationService.GetCurrentBranchName();
         }
 
         #endregion
@@ -84,6 +89,8 @@
                 return;
             }
         }
+
+        public string GetCurrentBranchName() => _gitConfigurationService.GetCurrentBranchName();
 
         private static Configuration GetConfiguration(string folder)
         {

@@ -13,6 +13,7 @@
         private Repository _repo;
         private bool _isSelected;
         private IEventAggregator _aggregator;
+        private string _branchName;
 
         #endregion
 
@@ -54,6 +55,16 @@
             }
         }
 
+        public string BranchName
+        {
+            get => _branchName;
+            set
+            {
+                _branchName = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -65,6 +76,18 @@
         }
 
         public void Pull() => _repo.Pull();
+
+        public void ShowBranchName()
+        {
+            if (string.IsNullOrEmpty(BranchName))
+            {
+                BranchName = _repo.GetCurrentBranchName();
+            }
+            else
+            {
+                BranchName = string.Empty;
+            }
+        }
 
         #endregion
 
