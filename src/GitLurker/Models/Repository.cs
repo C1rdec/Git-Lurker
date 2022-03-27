@@ -54,9 +54,11 @@
             return true;
         }
 
-        /// <summary>
-        /// Opens this instance.
-        /// </summary>
+        public void Pull()
+        {
+            ExecuteCommand("git pull");
+        }
+
         public void Open()
         {
             AddToRecent();
@@ -110,17 +112,19 @@
 
         private void ExecuteCommand(string command)
         {
-            new Process()
+            var process = new Process()
             {
                 StartInfo = new ProcessStartInfo()
                 {
-                    WorkingDirectory = this._folder,
+                    WorkingDirectory = _folder,
                     WindowStyle = ProcessWindowStyle.Hidden,
                     UseShellExecute = true,
                     FileName = "cmd.exe",
                     Arguments = $"/C {command}",
                 },
-            }.Start();
+            };
+
+            process.Start();
         }
 
         private bool HandleSln()

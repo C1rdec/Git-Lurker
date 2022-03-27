@@ -215,7 +215,9 @@
 
                 Disable = false;
                 SearchWatermark = "Search";
+
                 SelectSearch();
+                WorkspaceViewModel.ShowRecent();
             }
         }
 

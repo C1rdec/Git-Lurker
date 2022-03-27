@@ -59,6 +59,8 @@
             _repo.Open();
         }
 
+        public void Pull() => _repo.Pull();
+
         #endregion
 
         #region Methods
