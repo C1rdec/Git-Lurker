@@ -179,6 +179,7 @@
             SearchWatermark = message;
             await Task.Delay(1600);
             SearchWatermark = DefaultWaterMark;
+            FocusSearch();
         }
 
         public void HideWindow()
@@ -225,7 +226,7 @@
                 Disable = false;
                 SearchWatermark = DefaultWaterMark;
 
-                SelectSearch();
+                FocusSearch();
                 WorkspaceViewModel.ShowRecent();
             }
         }
@@ -262,10 +263,10 @@
 
             TopMost = true;
             IsVisible = true;
-            SelectSearch();
+            FocusSearch();
         }
 
-        private void SelectSearch() => DockingHelper.SetForeground(View, () =>
+        private void FocusSearch() => DockingHelper.SetForeground(View, () =>
         {
             View.SearchTerm.Focus();
         }); 
