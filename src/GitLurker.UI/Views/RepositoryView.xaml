@@ -44,12 +44,12 @@
                         </Image.Style>
                     </Image>
                     <TextBlock x:Name="RepoName" 
-                           Foreground="White"
-                           Grid.Column="1"
-                           TextTrimming="CharacterEllipsis"
-                           FontSize="35" 
-                           Margin="20,0,0,0" 
-                           VerticalAlignment="Center"/>
+                               Foreground="White"
+                               MaxWidth="620"
+                               TextTrimming="CharacterEllipsis"
+                               FontSize="35" 
+                               Margin="20,0,0,0" 
+                               VerticalAlignment="Center"/>
                 </StackPanel>
             </Border>
             <Border CornerRadius="0,6,6,0" Grid.Column="1" cal:Message.Attach="[Event MouseDown] = [Action Pull()]">

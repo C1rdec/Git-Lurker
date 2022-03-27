@@ -285,7 +285,7 @@
             };
 
             _parent.Show();
-            view.Owner = this._parent;
+            view.Owner = _parent;
             _parent.Hide();
         }
 
