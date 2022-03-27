@@ -1,5 +1,6 @@
 ﻿namespace GitLurker.Models
 {
+    using System;
     using System.Collections.Generic;
     using System.Diagnostics;
     using System.IO;
@@ -30,6 +31,12 @@
 
         #endregion
 
+        #region Events
+
+        public event EventHandler<string> NewProcessMessage;
+
+        #endregion
+
         #region Properties
 
         public string Name => _name;
@@ -54,7 +61,7 @@
             return true;
         }
 
-        public void Pull() => ExecuteCommand("git pull");
+        public void Pull() => ExecuteCommand("git pull", true);
 
         public void Open()
         {
@@ -107,7 +114,9 @@
             settings.AddToRecent(_folder);
         }
 
-        private void ExecuteCommand(string command)
+        private void ExecuteCommand(string command) => ExecuteCommand(command, false);
+
+        private void ExecuteCommand(string command, bool listen)
         {
             var process = new Process()
             {
@@ -115,13 +124,37 @@
                 {
                     WorkingDirectory = _folder,
                     WindowStyle = ProcessWindowStyle.Hidden,
-                    UseShellExecute = true,
+                    CreateNoWindow = listen,
+                    UseShellExecute = !listen,
+                    RedirectStandardOutput = listen,
                     FileName = "cmd.exe",
                     Arguments = $"/C {command}",
                 },
             };
 
+            if (listen)
+            {
+                DataReceivedEventHandler handler = default;
+                handler = (s, a) =>
+                {
+                    if (string.IsNullOrEmpty(a.Data))
+                    {
+                        process.OutputDataReceived -= handler;
+                        return;
+                    }
+
+                    NewProcessMessage?.Invoke(this, a.Data);
+                };
+
+                process.OutputDataReceived += handler;
+            }
+
             process.Start();
+
+            if (listen)
+            {
+                process.BeginOutputReadLine();
+            }
         }
 
         private bool HandleSln()

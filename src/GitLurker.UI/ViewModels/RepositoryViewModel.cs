@@ -1,20 +1,18 @@
 ﻿namespace GitLurker.UI.ViewModels
 {
-    using System.Drawing;
-    using System.IO;
-    using System.Windows.Media;
-    using System.Windows.Media.Imaging;
     using Caliburn.Micro;
     using GitLurker.Models;
+    using GitLurker.UI.Messages;
     using GitLurker.UI.Views;
 
     public class RepositoryViewModel : Screen
     {
         #region Fields
 
-        private static readonly object CloseObject = new();
+        private static readonly CloseMessage CloseMessage = new();
         private Repository _repo;
         private bool _isSelected;
+        private IEventAggregator _aggregator;
 
         #endregion
 
@@ -27,6 +25,13 @@
         public RepositoryViewModel(Repository repo)
         {
             _repo = repo;
+            _aggregator = IoC.Get<IEventAggregator>();
+            _repo.NewProcessMessage += Repo_NewProcessMessage;
+        }
+
+        private void Repo_NewProcessMessage(object sender, string e)
+        {
+            _aggregator.PublishOnUIThreadAsync(e);
         }
 
         #endregion
@@ -55,7 +60,7 @@
 
         public void Open()
         {
-            IoC.Get<IEventAggregator>().PublishOnCurrentThreadAsync(CloseObject);
+            IoC.Get<IEventAggregator>().PublishOnCurrentThreadAsync(CloseMessage);
             _repo.Open();
         }
 

@@ -16,11 +16,13 @@
     using System.Collections.Generic;
     using WindowsUtilities;
     using GitLurker.UI.Helper;
+    using GitLurker.UI.Messages;
 
-    public class ShellViewModel : Screen, IHandle<object>
+    public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<string>
     {
         #region Fields
 
+        private static readonly string DefaultWaterMark = "Search";
         private Window _parent;
         private SettingsFile _settingsFile;
         private KeyboardService _keyboardService;
@@ -45,7 +47,7 @@
         public ShellViewModel(IEventAggregator aggregator, SettingsFile settings, KeyboardService keyboardService, WindowsLink startupService)
         {
             _searchTerm = string.Empty;
-            _searchWatermark = "Search";
+            _searchWatermark = DefaultWaterMark;
             _isVisible = false;
             _showInTaskBar = true;
             _eventAggregator = aggregator;
@@ -166,10 +168,17 @@
             WorkspaceViewModel?.Search(term);
         }
 
-        public Task HandleAsync(object message, CancellationToken cancellationToken)
+        public Task HandleAsync(CloseMessage message, CancellationToken cancellationToken)
         {
             IsVisible = false;
             return Task.CompletedTask;
+        }
+
+        public async Task HandleAsync(string message, CancellationToken cancellationToken)
+        {
+            SearchWatermark = message;
+            await Task.Delay(1600);
+            SearchWatermark = DefaultWaterMark;
         }
 
         public void HideWindow()
@@ -214,7 +223,7 @@
                 WorkspaceViewModel.Refresh(worskspaces);
 
                 Disable = false;
-                SearchWatermark = "Search";
+                SearchWatermark = DefaultWaterMark;
 
                 SelectSearch();
                 WorkspaceViewModel.ShowRecent();
