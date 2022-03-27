@@ -4,54 +4,54 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:cal="http://www.caliburnproject.org"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="400">
     <Border CornerRadius="6"
             x:Name="MainBorder"
+            Background="{DynamicResource MahApps.Brushes.Accent3}"
             Cursor="Hand">
-        <Border.Style>
-            <Style TargetType="Border">
-                <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent3}"/>
-                <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
-                    </Trigger>
-                    <DataTrigger Binding="{Binding IsSelected}" Value="true">
-                        <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-        </Border.Style>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="8*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Grid Margin="8" cal:Message.Attach="[Event MouseDown] = [Action Open()]">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="auto"/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Image Height="60">
-                    <Image.Style>
-                        <Style TargetType="Image">
-                            <Setter Property="Source" Value="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Visual_Studio_Icon_2019.svg/1200px-Visual_Studio_Icon_2019.svg.png"></Setter>
-                            <Style.Triggers>
-                                <DataTrigger Binding="{Binding HasIcon}" Value="true">
-                                    <Setter Property="Source" Value="{Binding IconSource}"></Setter>
-                                </DataTrigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Image.Style>
-                </Image>
-                <TextBlock x:Name="RepoName" 
-                       Foreground="White"
-                       Grid.Column="1"
-                       TextTrimming="CharacterEllipsis"
-                       FontSize="35" 
-                       Margin="20,0,0,0" 
-                       VerticalAlignment="Center"/>
-            </Grid>
+            <Border cal:Message.Attach="[Event MouseDown] = [Action Open()]" CornerRadius="6,0,0,6">
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent3}"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
+                            </Trigger>
+                            <DataTrigger Binding="{Binding IsSelected}" Value="true">
+                                <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Image Height="60" Margin="8">
+                        <Image.Style>
+                            <Style TargetType="Image">
+                                <Setter Property="Source" Value="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Visual_Studio_Icon_2019.svg/1200px-Visual_Studio_Icon_2019.svg.png"></Setter>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding HasIcon}" Value="true">
+                                        <Setter Property="Source" Value="{Binding IconSource}"></Setter>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Image.Style>
+                    </Image>
+                    <TextBlock x:Name="RepoName" 
+                           Foreground="White"
+                           Grid.Column="1"
+                           TextTrimming="CharacterEllipsis"
+                           FontSize="35" 
+                           Margin="20,0,0,0" 
+                           VerticalAlignment="Center"/>
+                </StackPanel>
+            </Border>
             <Border CornerRadius="0,6,6,0" Grid.Column="1" cal:Message.Attach="[Event MouseDown] = [Action Pull()]">
                 <Border.Style>
                     <Style TargetType="Border">
@@ -68,6 +68,7 @@
                         </Style.Triggers>
                     </Style>
                 </Border.Style>
+                <iconPacks:PackIconMaterial Kind="ChevronDown" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.3"/>
             </Border>
         </Grid>
     </Border>
