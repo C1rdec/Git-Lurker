@@ -54,10 +54,7 @@
             return true;
         }
 
-        public void Pull()
-        {
-            ExecuteCommand("git pull");
-        }
+        public void Pull() => ExecuteCommand("git pull");
 
         public void Open()
         {
