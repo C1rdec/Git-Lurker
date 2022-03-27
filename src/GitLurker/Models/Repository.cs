@@ -6,12 +6,14 @@
     using System.IO;
     using System.Linq;
     using System.Text.Json;
+    using Desktop.Robot;
     using GitLurker.Extensions;
 
     public class Repository
     {
         #region Fields
 
+        private static readonly Lazy<Robot> MyRobot = new(() => new Robot());
         private string _name;
         private FileInfo[] _slnFiles;
         private string _folder;
@@ -170,6 +172,7 @@
             if (process != null)
             {
                 Native.SetForegroundWindow(process.MainWindowHandle);
+                MyRobot.Value.KeyPress(Key.Alt);
             }
             else
             {
