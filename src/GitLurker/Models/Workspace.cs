@@ -31,10 +31,22 @@
                 AttributesToSkip = FileAttributes.ReparsePoint,
                 RecurseSubdirectories = true,
             };
+
             foreach (var folder in Directory.GetDirectories(folderPath, ".git", option))
             {
                 var parentFolderInformation = Directory.GetParent(folder);
                 var path = parentFolderInformation.ToString();
+
+                var parentRepo = _repositories.FirstOrDefault(r => folder.StartsWith(r.Folder));
+                if (parentRepo != null)
+                {
+                    var directoryName = Path.GetFileName(Path.GetDirectoryName(folder));
+                    var parentDirectoryName = Path.GetFileName(parentRepo.Folder);
+                    if (!directoryName.StartsWith(parentDirectoryName))
+                    {
+                        continue;
+                    }
+                }
 
                 // Check if the folder is a git repository.
                 if (Repository.IsValid(path))
