@@ -31,7 +31,7 @@
                     </Style>
                 </Border.Style>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <Image Height="60" Margin="8">
+                    <Image Height="60" Width="60" Margin="8">
                         <Image.Style>
                             <Style TargetType="Image">
                                 <Setter Property="Source" Value="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Visual_Studio_Icon_2019.svg/1200px-Visual_Studio_Icon_2019.svg.png"></Setter>
