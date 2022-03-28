@@ -25,7 +25,7 @@
                                 <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
                             </Trigger>
                             <DataTrigger Binding="{Binding IsSelected}" Value="true">
-                                <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
+                                <Setter Property="Background" Value="{DynamicResource Brushes.HighLight}"/>
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>
@@ -59,7 +59,7 @@
                         <Setter Property="Opacity" Value="0.6"/>
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
+                                <Setter Property="Background" Value="{DynamicResource Brushes.HighLight}"/>
                                 <Setter Property="Opacity" Value="1"/>
                             </Trigger>
                             <DataTrigger Binding="{Binding IsSelected}" Value="true">
