@@ -74,6 +74,11 @@
         public void Search(string term)
         {
             Clear();
+            if (string.IsNullOrWhiteSpace(term))
+            {
+                ShowRecent();
+                return;
+            }
 
             var allRepos = new List<Repository>();
             foreach (var workspace in _workspaces)
