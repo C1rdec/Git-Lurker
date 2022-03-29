@@ -9,6 +9,8 @@
                     <local:AppBootstrapper x:Key="bootstrapper" />
                     <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
                 </ResourceDictionary>
+                <!--Busy Indicator-->
+                <ResourceDictionary Source="pack://application:,,,/BusyIndicator;component/Theme/Default.xaml"/>
                 <!--Mahapps-->
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />

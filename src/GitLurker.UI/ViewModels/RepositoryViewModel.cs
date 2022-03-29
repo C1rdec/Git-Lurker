@@ -14,6 +14,7 @@
         private bool _isSelected;
         private IEventAggregator _aggregator;
         private string _branchName;
+        private bool _busy;
 
         #endregion
 
@@ -65,6 +66,19 @@
             }
         }
 
+        public bool Busy
+        {
+            get => _busy;
+            set
+            {
+                _busy = value;
+                NotifyOfPropertyChange();
+                NotifyOfPropertyChange(() => NotBusy);
+            }
+        }
+
+        public bool NotBusy => !Busy;
+
         #endregion
 
         #region Methods
@@ -75,7 +89,12 @@
             _repo.Open();
         }
 
-        public void Pull() => _repo.Pull();
+        public async void Pull() 
+        {
+            Busy = true;
+            await _repo.PullAsync();
+            Busy = false;
+        }
 
         public void ShowBranchName()
         {

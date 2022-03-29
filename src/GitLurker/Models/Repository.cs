@@ -6,6 +6,7 @@
     using System.IO;
     using System.Linq;
     using System.Text.Json;
+    using System.Threading.Tasks;
     using Desktop.Robot;
     using GitLurker.Extensions;
     using GitLurker.Services;
@@ -68,7 +69,7 @@
             return true;
         }
 
-        public void Pull() => ExecuteCommand("git pull", true);
+        public Task PullAsync() => ExecuteCommandAsync("git pull", true);
 
         public void Open()
         {
@@ -123,9 +124,9 @@
             settings.AddToRecent(_folder);
         }
 
-        private void ExecuteCommand(string command) => ExecuteCommand(command, false);
+        private Task ExecuteCommandAsync(string command) => ExecuteCommandAsync(command, false);
 
-        private void ExecuteCommand(string command, bool listen)
+        private Task ExecuteCommandAsync(string command, bool listen)
         {
             var process = new Process()
             {
@@ -163,7 +164,10 @@
             if (listen)
             {
                 process.BeginOutputReadLine();
+                return process.WaitForExitAsync();
             }
+
+            return Task.CompletedTask;
         }
 
         private bool HandleSln()
@@ -226,7 +230,7 @@
                 }
 
                 // {wt}Windows Terminal, {nt}New Tab {d}Destination
-                ExecuteCommand($"wt -w 0 nt -d \"{_folder}\"");
+                _ = ExecuteCommandAsync($"wt -w 0 nt -d \"{_folder}\"");
                 return true;
             }
 
@@ -244,7 +248,7 @@
             var pubspecFile = directoryInformation.GetFiles("pubspec.yaml").FirstOrDefault();
             if (packageFile != null || pubspecFile != null)
             {
-                ExecuteCommand("code .");
+                _ = ExecuteCommandAsync("code .");
                 return true;
             }
 

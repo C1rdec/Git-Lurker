@@ -6,6 +6,7 @@
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" 
+             xmlns:busy="https://github.com/Peoky/BusyIndicator"
              d:DesignHeight="100" d:DesignWidth="400">
     <Border CornerRadius="6"
             x:Name="MainBorder"
@@ -69,14 +70,21 @@
                     </Style>
                 </Border.Style>
                 <Grid>
+                    <busy:BusyMask x:Name="BusyIndicator" IsBusy="{Binding Busy}" IndicatorType="Piston" BusyContent=" " Background="Transparent" VerticalAlignment="Center" Height="80" Margin="0,0,0,-20"/>
                     <TextBlock x:Name="BranchName" 
-                               HorizontalAlignment="Center" 
-                               VerticalAlignment="Bottom" 
-                               Foreground="LightGray" 
-                               FontSize="14" 
-                               Margin="4,0,4,4" 
-                               FontWeight="SemiBold"/>
-                    <iconPacks:PackIconMaterial Kind="ChevronDown" Width="50" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.3"/>
+                                HorizontalAlignment="Center" 
+                                VerticalAlignment="Bottom" 
+                                Foreground="LightGray" 
+                                FontSize="14" 
+                                Margin="4,0,4,4" 
+                                Visibility="{Binding NotBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                FontWeight="SemiBold"/>
+                    <iconPacks:PackIconMaterial Kind="ChevronDown"
+                                                Width="50" 
+                                                HorizontalAlignment="Center" 
+                                                Visibility="{Binding NotBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                VerticalAlignment="Center"
+                                                Opacity="0.3"/>
                 </Grid>
             </Border>
         </Grid>
