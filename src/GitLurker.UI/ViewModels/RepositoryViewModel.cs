@@ -91,6 +91,11 @@
 
         public async void Pull() 
         {
+            if (Busy)
+            {
+                return;
+            }
+
             Busy = true;
             await _repo.PullAsync();
             Busy = false;
