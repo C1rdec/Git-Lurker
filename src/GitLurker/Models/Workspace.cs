@@ -43,7 +43,7 @@
                 // Check if the folder is a git repository.
                 if (Repository.IsValid(path))
                 {
-                    _repositories.Add(new Repository(path));
+                    _repositories.Add(new Repository(path, _repositories));
                 }
             }
         }

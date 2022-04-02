@@ -14,7 +14,7 @@
             Cursor="Hand">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="8*"/>
+                <ColumnDefinition Width="8*" MaxWidth="710"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Border cal:Message.Attach="[Event MouseDown] = [Action Open()]" CornerRadius="6,0,0,6">
@@ -44,13 +44,22 @@
                             </Style>
                         </Image.Style>
                     </Image>
-                    <TextBlock x:Name="RepoName" 
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock x:Name="RepoName" 
                                Foreground="White"
                                MaxWidth="620"
                                TextTrimming="CharacterEllipsis"
                                FontSize="35" 
                                Margin="20,0,0,0" 
                                VerticalAlignment="Center"/>
+                        <TextBlock x:Name="ParentFolderName"
+                                   Visibility="{Binding ShowParentFolder, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                   HorizontalAlignment="Right" 
+                                   VerticalAlignment="Center"
+                                   Foreground="{DynamicResource MahApps.Brushes.Gray6}"
+                                   FontSize="20"
+                                   Margin="15,16,0,5"/>
+                    </StackPanel>
                 </StackPanel>
             </Border>
             <Border CornerRadius="0,6,6,0" Grid.Column="1" cal:Message.Attach="[Event MouseDown] = [Action Pull()]; [Event MouseEnter] = [Action ShowBranchName()]; [Event MouseLeave] = [Action ShowBranchName()]">

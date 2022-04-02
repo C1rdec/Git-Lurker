@@ -19,6 +19,7 @@
         private string _name;
         private FileInfo[] _slnFiles;
         private string _folder;
+        private bool _duplicate;
         private Configuration _configuration;
         private GitConfigurationService _gitConfigurationService;
 
@@ -26,7 +27,7 @@
 
         #region Constructors
 
-        public Repository(string folder)
+        public Repository(string folder, IEnumerable<Repository> existingRepos)
         {
             _folder = folder;
             _slnFiles = new DirectoryInfo(folder).GetFiles("*.sln", SearchOption.AllDirectories);
@@ -34,6 +35,14 @@
             _gitConfigurationService = new GitConfigurationService(folder);
 
             SetName();
+
+            var repos = existingRepos.Where(r => r.Name == _name);
+            _duplicate = repos.Any();
+
+            foreach(var repo in repos)
+            {
+                repo.SetDuplicate();
+            }
         }
 
         #endregion
@@ -54,6 +63,8 @@
 
         public string Folder => _folder;
 
+        public bool Duplicate => _duplicate;
+
         #endregion
 
         #region Methods
@@ -66,6 +77,11 @@
             }
 
             return true;
+        }
+
+        public void SetDuplicate()
+        {
+            _duplicate = true;
         }
 
         public Task PullAsync() => ExecuteCommandAsync("git pull", true);

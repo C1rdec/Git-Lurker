@@ -15,6 +15,7 @@
         private IEventAggregator _aggregator;
         private string _branchName;
         private bool _busy;
+        private bool _showParentFolder;
 
         #endregion
 
@@ -23,6 +24,7 @@
         public RepositoryViewModel(Repository repo)
         {
             _repo = repo;
+            _showParentFolder = repo.Duplicate;
             _aggregator = IoC.Get<IEventAggregator>();
             _repo.NewProcessMessage += Repo_NewProcessMessage;
         }
@@ -73,7 +75,19 @@
             }
         }
 
+        public bool ShowParentFolder
+        {
+            get => _showParentFolder;
+            set
+            {
+                _showParentFolder = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
         public bool NotBusy => !Busy;
+
+        public string ParentFolderName => GetParentFolder();
 
         #endregion
 
@@ -127,6 +141,13 @@
 
                 view.MainBorder.BringIntoView();
             });
+        }
+
+        private string GetParentFolder()
+        {
+            var segments = _repo.Folder.Split('\\');
+
+            return $"({segments[segments.Length - 2]})";
         }
 
         #endregion
