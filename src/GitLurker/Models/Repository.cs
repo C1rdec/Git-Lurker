@@ -29,12 +29,11 @@
         public Repository(string folder)
         {
             _folder = folder;
-            _name = Path.GetFileName(folder);
             _slnFiles = new DirectoryInfo(folder).GetFiles("*.sln", SearchOption.AllDirectories);
             _configuration = GetConfiguration(folder);
             _gitConfigurationService = new GitConfigurationService(folder);
 
-            var branch = _gitConfigurationService.GetCurrentBranchName();
+            SetName();
         }
 
         #endregion
@@ -95,7 +94,7 @@
 
         private static Configuration GetConfiguration(string folder)
         {
-            var configPath = Path.Join(folder, "gitlurker");
+            var configPath = Path.Join(folder, ".gitlurker");
             if (!File.Exists(configPath))
             {
                 return null;
@@ -115,6 +114,24 @@
             {
                 return null;
             }
+        }
+
+        private void SetName()
+        {
+            if (_configuration != null && !string.IsNullOrEmpty(_configuration.Name))
+            {
+                _name = _configuration.Name;
+                return;
+            }
+
+            var firstSln = _slnFiles.FirstOrDefault();
+            if (firstSln != null)
+            {
+                _name = Path.GetFileNameWithoutExtension(firstSln.Name);
+                return;
+            }
+
+            _name = Path.GetFileName(_folder);
         }
 
         private void AddToRecent()
