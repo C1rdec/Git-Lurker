@@ -44,7 +44,7 @@
 
         public string IconSource => _repo.IconPath;
 
-        public string RepoName => this._repo.Name;
+        public string RepoName => _repo.Name;
 
         public bool IsSelected
         {

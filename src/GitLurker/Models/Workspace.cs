@@ -1,13 +1,9 @@
 ﻿namespace GitLurker.Models
 {
-    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
 
-    /// <summary>
-    /// Class Workspace.
-    /// </summary>
     public class Workspace
     {
         #region Fields
@@ -18,10 +14,6 @@
 
         #region Constructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Workspace"/> class.
-        /// </summary>
-        /// <param name="folder">The folder.</param>
         public Workspace(string folderPath)
         {
             _repositories = new List<Repository>();
@@ -60,7 +52,7 @@
 
         #region Properties
 
-        public IEnumerable<Repository> Repositories => this._repositories;
+        public IEnumerable<Repository> Repositories => _repositories;
 
         #endregion
 
@@ -75,26 +67,6 @@
         }
 
         public Repository GetRepo(string folderPath) => _repositories.FirstOrDefault(r => r.Folder == folderPath);
-
-        private static IEnumerable<string> ShowAllFoldersUnder(string path, string searchTerm, int indent = 0)
-        {
-            var folders = new List<string>();
-            try
-            {
-                if ((File.GetAttributes(path) & FileAttributes.ReparsePoint) != FileAttributes.ReparsePoint)
-                {
-                    foreach (string folder in Directory.GetDirectories(path, searchTerm))
-                    {
-                        folders.Add(folder);
-                        folders.AddRange(ShowAllFoldersUnder(folder, searchTerm, indent + 2));
-                    }
-                }
-            }
-            catch (UnauthorizedAccessException) 
-            { }
-
-            return folders;
-        }
 
         #endregion
     }

@@ -9,35 +9,16 @@
     {
         #region Properties
 
-        /// <summary>
-        /// Gets the local application data.
-        /// </summary>
         private string LocalAppData => Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
 
-        /// <summary>
-        /// Gets the packages folder.
-        /// </summary>
         private string PackagesFolder => Path.Join(LocalAppData, "Packages");
 
-        /// <summary>
-        /// Gets the name of the terminal folder.
-        /// </summary>
         private string TerminalFolderName => "Microsoft.WindowsTerminal";
 
         #endregion
 
         #region Methods
 
-        /// <summary>
-        /// Adds the profile.
-        /// </summary>
-        /// <param name="filePath">The file path.</param>
-        /// <returns></returns>
-        /// <exception cref="System.Exception">
-        /// Cannot find terminal folder
-        /// or
-        /// Cannot find terminal settings file
-        /// </exception>
         public Guid AddProfile(string filePath)
         {
             var id = Guid.NewGuid();
@@ -46,7 +27,7 @@
             config["startingDirectory"] = Path.GetDirectoryName(filePath);
             config["guid"] = $"{{{id}}}";
 
-            var folder = Directory.GetDirectories(this.PackagesFolder).FirstOrDefault(d => d.Contains(TerminalFolderName));
+            var folder = Directory.GetDirectories(PackagesFolder).FirstOrDefault(d => d.Contains(TerminalFolderName));
             if (folder == null)
             {
                 throw new Exception("Cannot find terminal folder");

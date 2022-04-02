@@ -263,7 +263,7 @@
 
         private bool HandleVsCode()
         {
-            var directoryInformation = new DirectoryInfo(this._folder);
+            var directoryInformation = new DirectoryInfo(_folder);
 
             // TODO: Parse file to check project type
             var packageFile = directoryInformation.GetFiles("package.json").FirstOrDefault();

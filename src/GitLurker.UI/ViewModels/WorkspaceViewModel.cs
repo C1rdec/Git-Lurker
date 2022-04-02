@@ -59,7 +59,7 @@
             private set
             {
                 _selectedRepo = value;
-                this.NotifyOfPropertyChange(() => HasSelectedRepo);
+                NotifyOfPropertyChange(() => HasSelectedRepo);
             }
         }
 

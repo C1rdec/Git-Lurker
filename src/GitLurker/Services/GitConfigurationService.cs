@@ -30,8 +30,7 @@ namespace GitLurker.Services
                 return string.Empty;
             }
 
-            var text = File.ReadAllText(headFilePath);
-            return text.GetLineAfter("ref: refs/heads/");
+            return File.ReadAllText(headFilePath).GetLineAfter("ref: refs/heads/");
         }
 
         #endregion

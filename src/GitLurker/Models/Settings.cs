@@ -22,6 +22,8 @@ namespace GitLurker.Models
 
         #endregion
 
+        #region Properties
+
         public List<string> Workspaces { get; set; }
 
         public List<string> RecentRepos { get; set; }
@@ -31,5 +33,7 @@ namespace GitLurker.Models
         public bool StartWithWindows { get; set; }
 
         public bool AddToStartMenu { get; set; }
+
+        #endregion
     }
 }

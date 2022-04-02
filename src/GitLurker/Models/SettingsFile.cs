@@ -5,11 +5,21 @@ namespace GitLurker.Models
 {
     public class SettingsFile : AppDataFileBase<Settings>
     {
+        #region Fields
+
         private static readonly int MaxRecentCount = 5;
+
+        #endregion
+
+        #region Properties
 
         protected override string FileName => "Workspaces.json";
 
         protected override string FolderName => "GitLurker";
+
+        #endregion
+
+        #region Methods
 
         public void AddToRecent(string folder)
         {
@@ -42,5 +52,7 @@ namespace GitLurker.Models
             Entity.Workspaces.Remove(workspace);
             Save();
         }
+
+        #endregion
     }
 }
