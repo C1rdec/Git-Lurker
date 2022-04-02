@@ -20,10 +20,6 @@
 
         #region Constructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RepositoryViewModel"/> class.
-        /// </summary>
-        /// <param name="repo">The repo.</param>
         public RepositoryViewModel(Repository repo)
         {
             _repo = repo;

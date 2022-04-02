@@ -21,10 +21,6 @@
 
         #region Constructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="WorkspaceViewModel"/> class.
-        /// </summary>
-        /// <param name="workspace">The workspace.</param>
         public WorkspaceViewModel(IEnumerable<Workspace> workspaces, KeyboardService keyboardService)
         {
             _workspaces = workspaces;
@@ -43,10 +39,6 @@
 
         #region Properties
 
-        /// <summary>
-        /// Gets the repos.
-        /// </summary>
-        /// <value>The repos.</value>
         public ObservableCollection<RepositoryViewModel> Repos => _repos;
 
         public RepositoryViewModel SelectedRepo
