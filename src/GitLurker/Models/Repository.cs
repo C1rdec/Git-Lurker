@@ -124,11 +124,18 @@
                 return;
             }
 
-            var firstSln = _slnFiles.FirstOrDefault();
-            if (firstSln != null)
+            if (_slnFiles.Count() == 1)
             {
-                _name = Path.GetFileNameWithoutExtension(firstSln.Name);
-                return;
+                var sln = _slnFiles.FirstOrDefault();
+                var name = Path.GetFileNameWithoutExtension(sln.Name);
+                var segments = name.Split('.');
+
+                // To escape big solution name 
+                if (segments.Length < 3)
+                {
+                    _name = name;
+                    return;
+                }
             }
 
             _name = Path.GetFileName(_folder);
