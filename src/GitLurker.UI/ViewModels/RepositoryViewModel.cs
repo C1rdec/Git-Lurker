@@ -29,11 +29,6 @@
             _repo.NewProcessMessage += Repo_NewProcessMessage;
         }
 
-        private void Repo_NewProcessMessage(object sender, string e)
-        {
-            _aggregator.PublishOnUIThreadAsync(e);
-        }
-
         #endregion
 
         #region Properties
@@ -123,10 +118,6 @@
             }
         }
 
-        #endregion
-
-        #region Methods
-
         public void Select()
         {
             IsSelected = true;
@@ -148,6 +139,11 @@
             var segments = _repo.Folder.Split('\\');
 
             return $"({segments[segments.Length - 2]})";
+        }
+
+        private void Repo_NewProcessMessage(object sender, string e)
+        {
+            _aggregator.PublishOnUIThreadAsync(e);
         }
 
         #endregion
