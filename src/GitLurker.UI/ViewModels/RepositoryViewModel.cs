@@ -138,7 +138,7 @@
         {
             var segments = _repo.Folder.Split('\\');
 
-            return $"({segments[segments.Length - 2]})";
+            return $"({segments[segments.Length - 1]})";
         }
 
         private void Repo_NewProcessMessage(object sender, string e)
