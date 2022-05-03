@@ -302,7 +302,13 @@
 
             Enum.TryParse(hotkey.KeyCode.ToString(), out Key key);
 
-            HotkeyManager.Current.AddOrReplace("Open", key, modifier , (s, e) => ToggleWindow());
+            try
+            {
+                HotkeyManager.Current.AddOrReplace("Open", key, modifier , (s, e) => ToggleWindow());
+            }
+            catch (NHotkey.HotkeyAlreadyRegisteredException)
+            {
+            }
         }
 
         private void ApplySettings(SettingsFile settings)
