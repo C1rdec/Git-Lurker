@@ -59,7 +59,6 @@
             _container.Singleton<KeyboardService, KeyboardService>();
             _container.Singleton<IWindowManager, WindowManager>();
             _container.Singleton<IEventAggregator, EventAggregator>();
-            _container.PerRequest<ActionBarViewModel, ActionBarViewModel>();
             _container.PerRequest<ShellViewModel, ShellViewModel>();
 
             var settings = new SettingsFile();
