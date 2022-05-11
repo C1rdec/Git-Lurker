@@ -13,10 +13,6 @@
             Background="{DynamicResource MahApps.Brushes.Accent3}"
             Cursor="Hand">
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="8*" MaxWidth="710"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
             <Border cal:Message.Attach="[Event MouseDown] = [Action Open()]" CornerRadius="6,0,0,6">
                 <Border.Style>
                     <Style TargetType="Border">
@@ -32,7 +28,7 @@
                     </Style>
                 </Border.Style>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <Image Height="60" Width="60" Margin="8">
+                    <Image Height="50" Width="50" Margin="16">
                         <Image.Style>
                             <Style TargetType="Image">
                                 <Setter Property="Source" Value="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Visual_Studio_Icon_2019.svg/1200px-Visual_Studio_Icon_2019.svg.png"></Setter>
@@ -62,40 +58,7 @@
                     </StackPanel>
                 </StackPanel>
             </Border>
-            <Border CornerRadius="0,6,6,0" Grid.Column="1" cal:Message.Attach="[Event MouseDown] = [Action Pull()]; [Event MouseEnter] = [Action ShowBranchName()]; [Event MouseLeave] = [Action ShowBranchName()]">
-                <Border.Style>
-                    <Style TargetType="Border">
-                        <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent4}"/>
-                        <Setter Property="Opacity" Value="0.6"/>
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="{DynamicResource Brushes.HighLight}"/>
-                                <Setter Property="Opacity" Value="1"/>
-                            </Trigger>
-                            <DataTrigger Binding="{Binding IsSelected}" Value="true">
-                                <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Border.Style>
-                <Grid>
-                    <busy:BusyMask x:Name="BusyIndicator" IsBusy="{Binding Busy}" IndicatorType="Piston" BusyContent=" " Background="Transparent" VerticalAlignment="Center" Height="80" Margin="0,0,0,-20"/>
-                    <TextBlock x:Name="BranchName" 
-                                HorizontalAlignment="Center" 
-                                VerticalAlignment="Bottom" 
-                                Foreground="LightGray" 
-                                FontSize="14" 
-                                Margin="4,0,4,4" 
-                                Visibility="{Binding NotBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                FontWeight="SemiBold"/>
-                    <iconPacks:PackIconMaterial Kind="ChevronDown"
-                                                Width="50" 
-                                                HorizontalAlignment="Center" 
-                                                Visibility="{Binding NotBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                VerticalAlignment="Center"
-                                                Opacity="0.3"/>
-                </Grid>
-            </Border>
+            <ContentControl x:Name="ActionBar" Grid.Column="1" HorizontalAlignment="Right" />
         </Grid>
     </Border>
 </UserControl>
