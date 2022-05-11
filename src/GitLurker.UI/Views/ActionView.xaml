@@ -4,22 +4,22 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-             xmlns:local="clr-namespace:GitLurker.UI.Views"
+             xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
              d:DesignHeight="80" d:DesignWidth="80">
-    <!--cal:Message.Attach="[Event MouseDown] = [Action Pull()]; [Event MouseEnter] = [Action ShowBranchName()]; [Event MouseLeave] = [Action ShowBranchName()]"-->
-    <Border CornerRadius="6" Grid.Column="1" Height="50" Width="50">
+    <Border cal:Message.Attach="[Event MouseDown] = [Action OnClick()]"
+        CornerRadius="6" Grid.Column="1" Height="50" Width="50">
         <Border.Style>
             <Style TargetType="Border">
                 <Setter Property="Background">
                     <Setter.Value>
-                        <SolidColorBrush Color="White" Opacity="0.003"/>
+                        <SolidColorBrush Color="White" Opacity="0.0003"/>
                     </Setter.Value>
                 </Setter>
                 <Setter Property="Opacity" Value="0.6"/>
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="{DynamicResource Brushes.HighLight}"/>
+                        <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
                         <Setter Property="Opacity" Value="1"/>
                     </Trigger>
                     <DataTrigger Binding="{Binding IsSelected}" Value="true">
@@ -28,12 +28,9 @@
                 </Style.Triggers>
             </Style>
         </Border.Style>
-        <iconPacks:PackIconMaterial Kind="ChevronDown"
-                                    Width="30" 
-                                    Height="30"
-                                    HorizontalAlignment="Center" 
-                                    Visibility="{Binding NotBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                    VerticalAlignment="Center"
-                                    Opacity="0.3"/>
+        <ContentControl Content="{Binding Icon}" 
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Opacity="0.4"/>
     </Border>
 </UserControl>

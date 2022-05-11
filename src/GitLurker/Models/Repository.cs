@@ -15,6 +15,7 @@
     {
         #region Fields
 
+        private static readonly string OpenVsCodeCommand = "code .";
         private static readonly Lazy<Robot> MyRobot = new(() => new Robot());
         private string _name;
         private FileInfo[] _slnFiles;
@@ -65,6 +66,8 @@
 
         public bool Duplicate => _duplicate;
 
+        public bool HasFrontEnd => _configuration != null && !string.IsNullOrEmpty(_configuration.FrontEndPath);
+
         #endregion
 
         #region Methods
@@ -104,6 +107,17 @@
             {
                 return;
             }
+        }
+
+        public Task OpenFrontEnd()
+        {
+            if (_configuration == null || string.IsNullOrEmpty(_configuration.FrontEndPath))
+            {
+                return Task.CompletedTask;
+            }
+
+            var path = Path.Combine(_folder, _configuration.FrontEndPath);
+            return ExecuteCommandAsync(OpenVsCodeCommand, path);
         }
 
         public string GetCurrentBranchName() => _gitConfigurationService.GetCurrentBranchName();
@@ -166,13 +180,17 @@
 
         private Task ExecuteCommandAsync(string command) => ExecuteCommandAsync(command, false);
 
-        private Task ExecuteCommandAsync(string command, bool listen)
+        private Task ExecuteCommandAsync(string command, string workingDirectory) => ExecuteCommandAsync(command, false, workingDirectory);
+
+        private Task ExecuteCommandAsync(string command, bool listen) => ExecuteCommandAsync(command, listen, _folder);
+
+        private Task ExecuteCommandAsync(string command, bool listen, string workingDirectory)
         {
             var process = new Process()
             {
                 StartInfo = new ProcessStartInfo()
                 {
-                    WorkingDirectory = _folder,
+                    WorkingDirectory = workingDirectory,
                     WindowStyle = ProcessWindowStyle.Hidden,
                     CreateNoWindow = listen,
                     UseShellExecute = !listen,
@@ -288,7 +306,7 @@
             var pubspecFile = directoryInformation.GetFiles("pubspec.yaml").FirstOrDefault();
             if (packageFile != null || pubspecFile != null)
             {
-                _ = ExecuteCommandAsync("code .");
+                _ = ExecuteCommandAsync(OpenVsCodeCommand);
                 return true;
             }
 

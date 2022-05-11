@@ -25,7 +25,7 @@
         public RepositoryViewModel(Repository repo)
         {
             _repo = repo;
-            _actionBar = new ActionBarViewModel();
+            _actionBar = new ActionBarViewModel(repo);
             _showParentFolder = repo.Duplicate;
             _aggregator = IoC.Get<IEventAggregator>();
             _repo.NewProcessMessage += Repo_NewProcessMessage;
@@ -74,6 +74,8 @@
             }
         }
 
+        public bool NotBusy => !Busy;
+
         public bool ShowParentFolder
         {
             get => _showParentFolder;
@@ -83,8 +85,6 @@
                 NotifyOfPropertyChange();
             }
         }
-
-        public bool NotBusy => !Busy;
 
         public string ParentFolderName => GetParentFolder();
 

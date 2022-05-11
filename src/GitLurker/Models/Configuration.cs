@@ -8,6 +8,8 @@
 
         public string IconPath { get; set; }
 
+        public string FrontEndPath { get; set; }
+
         #endregion
     }
 }
