@@ -16,6 +16,7 @@
         private string _branchName;
         private bool _busy;
         private bool _showParentFolder;
+        private ActionBarViewModel _actionBar;
 
         #endregion
 
@@ -24,6 +25,7 @@
         public RepositoryViewModel(Repository repo)
         {
             _repo = repo;
+            _actionBar = new ActionBarViewModel();
             _showParentFolder = repo.Duplicate;
             _aggregator = IoC.Get<IEventAggregator>();
             _repo.NewProcessMessage += Repo_NewProcessMessage;
@@ -32,6 +34,8 @@
         #endregion
 
         #region Properties
+
+        public ActionBarViewModel ActionBar => _actionBar;
 
         public bool HasIcon => _repo.HasIcon;
 
