@@ -109,6 +109,49 @@
             }
         }
 
+        public void OpenPullRequest()
+        {
+            var repoUrl = GetRepoUrl();
+            if (string.IsNullOrEmpty(repoUrl))
+            {
+                return;
+            }
+
+            string pullRequestUrl = default;
+
+            if (repoUrl.Contains("dev.azure.com"))
+            {
+                pullRequestUrl = AzurePullRequestUrl(repoUrl);
+            }
+            else if (repoUrl.Contains("github.com"))
+            {
+                pullRequestUrl = GithubPullRequestUrl(repoUrl);
+            }
+
+            if (string.IsNullOrEmpty(pullRequestUrl))
+            {
+                return;
+            }
+
+            var psi = new ProcessStartInfo
+            {
+                FileName = pullRequestUrl,
+                UseShellExecute = true
+            };
+            Process.Start(psi);
+        }
+
+        private string AzurePullRequestUrl(string repoUrl)
+        {
+            return $"{repoUrl}/pullrequestcreate?sourceRef={GetCurrentBranchName()}";
+        }
+
+        private string GithubPullRequestUrl(string repoUrl)
+        {
+            repoUrl = repoUrl.Replace(".git", "");
+            return $"{repoUrl}/compare/{GetCurrentBranchName()}?expand=1";
+        }
+
         public Task OpenFrontEnd()
         {
             if (_configuration == null || string.IsNullOrEmpty(_configuration.FrontEndPath))
@@ -355,11 +398,17 @@
             {
                 try
                 {
-                    return FormatSshUrl(url);
+                    url = FormatSshUrl(url);
                 }
                 catch
                 {
                 }
+            }
+
+            if (url.Contains("dev.azure.com"))
+            {
+                var uri = new Uri(url);
+                url = $"{uri.Scheme}://{uri.Authority}{uri.AbsolutePath}";
             }
 
             return url;

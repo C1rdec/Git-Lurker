@@ -13,7 +13,7 @@
             Background="{DynamicResource MahApps.Brushes.Accent3}"
             Cursor="Hand">
         <Grid>
-            <Border cal:Message.Attach="[Event MouseDown] = [Action Open()]" CornerRadius="6,0,0,6">
+            <Border cal:Message.Attach="[Event MouseUp] = [Action Open()]; [Event MouseDown] = [Action Delay()]" CornerRadius="6,0,0,6">
                 <Border.Style>
                     <Style TargetType="Border">
                         <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent3}"/>

@@ -1,5 +1,7 @@
 ﻿namespace GitLurker.UI.ViewModels
 {
+    using System.Threading;
+    using System.Threading.Tasks;
     using Caliburn.Micro;
     using GitLurker.Models;
     using GitLurker.UI.Messages;
@@ -10,6 +12,7 @@
         #region Fields
 
         private static readonly CloseMessage CloseMessage = new();
+        private CancellationTokenSource _tokenSource;
         private Repository _repo;
         private bool _isSelected;
         private IEventAggregator _aggregator;
@@ -92,9 +95,35 @@
 
         #region Methods
 
+        public async void Delay()
+        {
+            if (_tokenSource != null)
+            {
+                return;
+            }
+
+            try
+            {
+                _tokenSource = new CancellationTokenSource();
+                await Task.Delay(800);
+                if (_tokenSource.IsCancellationRequested)
+                {
+                    return;
+                }
+
+                await _aggregator.PublishOnCurrentThreadAsync(CloseMessage);
+                _repo.OpenPullRequest();
+            }
+            finally
+            {
+                _tokenSource.Dispose();
+                _tokenSource = null;
+            }
+        }
+
         public void Open()
         {
-            IoC.Get<IEventAggregator>().PublishOnCurrentThreadAsync(CloseMessage);
+            _aggregator.PublishOnCurrentThreadAsync(CloseMessage);
             _repo.Open();
         }
 
