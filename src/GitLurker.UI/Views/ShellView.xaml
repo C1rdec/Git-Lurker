@@ -139,19 +139,6 @@
                         </Style.Triggers>
                     </Style>
                 </Grid.Style>
-                <Button x:Name="Share"
-                        Margin="0,6,0,0"
-                    Width="36" Height="36"
-                    BorderThickness="0"
-                    Foreground="{DynamicResource MahApps.Brushes.Accent}"
-                    Cursor="Hand"
-                    Style="{StaticResource MahApps.Styles.Button.Circle}">
-                    <Button.ContentTemplate>
-                        <DataTemplate>
-                            <iconPacks:PackIconMaterial Kind="ShareVariantOutline" Height="28" Width="28" Margin="-6,-4,0,0"/>
-                        </DataTemplate>
-                    </Button.ContentTemplate>
-                </Button>
             </Grid>
         </Grid>
         
