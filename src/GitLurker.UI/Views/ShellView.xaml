@@ -14,8 +14,9 @@
         Background="Transparent"
         xmlns:cal="http://www.caliburnproject.org"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-        cal:Message.Attach="[Event Deactivated]=[Action HideWindow()]"
         Height="510" Width="800">
+        <!--cal:Message.Attach="[Event Deactivated]=[Action HideWindow()]"-->
+
     <Grid Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>

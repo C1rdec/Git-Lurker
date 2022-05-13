@@ -63,8 +63,11 @@
             {
                 _branchName = value;
                 NotifyOfPropertyChange();
+                NotifyOfPropertyChange(() => BranchNameVisible);
             }
         }
+
+        public bool BranchNameVisible => !string.IsNullOrEmpty(_branchName);
 
         public bool Busy
         {
@@ -105,7 +108,7 @@
             try
             {
                 _tokenSource = new CancellationTokenSource();
-                await Task.Delay(800);
+                await Task.Delay(600);
                 if (_tokenSource.IsCancellationRequested)
                 {
                     return;
@@ -123,6 +126,11 @@
 
         public void Open()
         {
+            if (_tokenSource != null)
+            {
+                _tokenSource.Cancel();
+            }
+
             _aggregator.PublishOnCurrentThreadAsync(CloseMessage);
             _repo.Open();
         }

@@ -6,59 +6,82 @@
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" 
-             xmlns:busy="https://github.com/Peoky/BusyIndicator"
              d:DesignHeight="100" d:DesignWidth="400">
-    <Border CornerRadius="6"
+    <Border CornerRadius="6">
+        <Border.Style>
+            <Style TargetType="Border">
+                <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent3}"/>
+                <Style.Triggers>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
+                    </Trigger>
+                    <DataTrigger Binding="{Binding IsSelected}" Value="true">
+                        <Setter Property="Background" Value="{DynamicResource Brushes.HighLight}"/>
+                    </DataTrigger>
+                </Style.Triggers>
+            </Style>
+        </Border.Style>
+        <Border CornerRadius="6"
             x:Name="MainBorder"
-            Background="{DynamicResource MahApps.Brushes.Accent3}"
+            cal:Message.Attach="[Event MouseEnter] = [Action ShowBranchName()]; [Event MouseLeave] = [Action ShowBranchName()]"
             Cursor="Hand">
-        <Grid>
-            <Border cal:Message.Attach="[Event MouseUp] = [Action Open()]; [Event MouseDown] = [Action Delay()]" CornerRadius="6,0,0,6">
-                <Border.Style>
-                    <Style TargetType="Border">
-                        <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent3}"/>
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
-                            </Trigger>
-                            <DataTrigger Binding="{Binding IsSelected}" Value="true">
-                                <Setter Property="Background" Value="{DynamicResource Brushes.HighLight}"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Border.Style>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                    <Image Height="50" Width="50" Margin="16">
-                        <Image.Style>
-                            <Style TargetType="Image">
-                                <Setter Property="Source" Value="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Visual_Studio_Icon_2019.svg/1200px-Visual_Studio_Icon_2019.svg.png"></Setter>
-                                <Style.Triggers>
-                                    <DataTrigger Binding="{Binding HasIcon}" Value="true">
-                                        <Setter Property="Source" Value="{Binding IconSource}"></Setter>
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Image.Style>
-                    </Image>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock x:Name="RepoName" 
+            <Border.Background>
+                <SolidColorBrush Opacity="0.003" Color="White"/>
+            </Border.Background>
+            <Grid>
+                <Border CornerRadius="6,0,0,6" cal:Message.Attach="[Event MouseUp] = [Action Open()]; [Event MouseDown] = [Action Delay()]">
+                    <Border.Background>
+                        <SolidColorBrush Opacity="0.003" Color="White"/>
+                    </Border.Background>
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                        <Image Height="50" Width="50" Margin="16">
+                            <Image.Style>
+                                <Style TargetType="Image">
+                                    <Setter Property="Source" Value="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Visual_Studio_Icon_2019.svg/1200px-Visual_Studio_Icon_2019.svg.png"></Setter>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding HasIcon}" Value="true">
+                                            <Setter Property="Source" Value="{Binding IconSource}"></Setter>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Image.Style>
+                        </Image>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock x:Name="RepoName" 
                                Foreground="White"
                                MaxWidth="620"
                                TextTrimming="CharacterEllipsis"
                                FontSize="35" 
                                Margin="20,0,0,0" 
                                VerticalAlignment="Center"/>
-                        <TextBlock x:Name="ParentFolderName"
+                            <TextBlock x:Name="ParentFolderName"
                                    Visibility="{Binding ShowParentFolder, Converter={StaticResource BooleanToVisibilityConverter}}"
                                    HorizontalAlignment="Right" 
                                    VerticalAlignment="Center"
                                    Foreground="{DynamicResource MahApps.Brushes.Gray6}"
                                    FontSize="20"
                                    Margin="15,16,0,5"/>
+                            <iconPacks:PackIconMaterial VerticalAlignment="Center" 
+                                                    Kind="SourceBranch" 
+                                                    Height="35"
+                                                    Opacity="0.8"
+                                                    Width="35"
+                                                    Margin="20,0,0,0"
+                                                    Visibility="{Binding BranchNameVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                    Foreground="{DynamicResource MahApps.Brushes.Gray4}" />
+                            <TextBlock x:Name="BranchName" 
+                                   Opacity="0.8"
+                                   VerticalAlignment="Center"
+                                   FontSize="40" 
+                                   Margin="5,0,0,0"
+                                   Foreground="{DynamicResource MahApps.Brushes.Gray4}" 
+                                   FontWeight="Light"/>
+
+                        </StackPanel>
                     </StackPanel>
-                </StackPanel>
-            </Border>
-            <ContentControl x:Name="ActionBar" Grid.Column="1" HorizontalAlignment="Right" />
-        </Grid>
+                </Border>
+                <ContentControl x:Name="ActionBar" Grid.Column="1" HorizontalAlignment="Right" />
+            </Grid>
+        </Border>
     </Border>
 </UserControl>
