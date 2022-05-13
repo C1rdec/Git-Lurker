@@ -22,12 +22,10 @@
             </Style>
         </Border.Style>
         <Border CornerRadius="6"
-            x:Name="MainBorder"
-            cal:Message.Attach="[Event MouseEnter] = [Action ShowBranchName()]; [Event MouseLeave] = [Action ShowBranchName()]"
-            Cursor="Hand">
-            <Border.Background>
-                <SolidColorBrush Opacity="0.003" Color="White"/>
-            </Border.Background>
+                x:Name="MainBorder"
+                Background="{DynamicResource MahApps.Brushes.Accent4}"
+                cal:Message.Attach="[Event MouseEnter] = [Action ShowBranchName()]; [Event MouseLeave] = [Action ShowBranchName()]"
+                Cursor="Hand">
             <Grid>
                 <Border CornerRadius="6,0,0,6" cal:Message.Attach="[Event MouseUp] = [Action Open()]; [Event MouseDown] = [Action Delay()]">
                     <Border.Background>
