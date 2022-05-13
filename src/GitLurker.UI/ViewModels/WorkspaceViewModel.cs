@@ -17,6 +17,7 @@
         private ObservableCollection<RepositoryViewModel> _repos;
         private RepositoryViewModel _selectedRepo;
         private string _lastSearchTerm;
+        private bool _mouseOver;
 
         #endregion
 
@@ -56,13 +57,25 @@
             }
         }
 
-        public bool HasSelectedRepo => SelectedRepo != null || !string.IsNullOrEmpty(_lastSearchTerm);
+        public bool HasSelectedRepo => SelectedRepo != null || !string.IsNullOrEmpty(_lastSearchTerm) || _mouseOver;
 
         public WorkspaceView View { get; set; }
 
         #endregion
 
         #region Methods
+
+        public void OnMouseEnter()
+        {
+            _mouseOver = true;
+            NotifyOfPropertyChange(() => HasSelectedRepo);
+        }
+
+        public void OnMouseLeave()
+        {
+            _mouseOver = false;
+            NotifyOfPropertyChange(() => HasSelectedRepo);
+        }
 
         public void Search(string term)
         {
