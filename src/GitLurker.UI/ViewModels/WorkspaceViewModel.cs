@@ -16,6 +16,7 @@
         private IEnumerable<Workspace> _workspaces;
         private ObservableCollection<RepositoryViewModel> _repos;
         private RepositoryViewModel _selectedRepo;
+        private string _lastSearchTerm;
 
         #endregion
 
@@ -55,7 +56,7 @@
             }
         }
 
-        public bool HasSelectedRepo => SelectedRepo != null;
+        public bool HasSelectedRepo => SelectedRepo != null || !string.IsNullOrEmpty(_lastSearchTerm);
 
         public WorkspaceView View { get; set; }
 
@@ -65,7 +66,13 @@
 
         public void Search(string term)
         {
+            _lastSearchTerm = term;
             Clear();
+
+            if (string.IsNullOrEmpty(term))
+            {
+                return;
+            }
 
             var allRepos = new List<Repository>();
             foreach (var workspace in _workspaces)
@@ -76,7 +83,7 @@
             var startWith = allRepos.Where(r => r.Name.ToUpper().StartsWith(term.ToUpper()));
             var contain = allRepos.Where(r => r.Name.ToUpper().Contains(term.ToUpper())).ToList();
             contain.InsertRange(0, startWith);
-            foreach (var repo in contain.Distinct())
+            foreach (var repo in contain.Distinct().Take(10))
             {
                 Repos.Add(new RepositoryViewModel(repo));
             }

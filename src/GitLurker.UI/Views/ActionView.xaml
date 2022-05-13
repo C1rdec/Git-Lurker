@@ -22,9 +22,6 @@
                         <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
                         <Setter Property="Opacity" Value="1"/>
                     </Trigger>
-                    <DataTrigger Binding="{Binding IsSelected}" Value="true">
-                        <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
-                    </DataTrigger>
                 </Style.Triggers>
             </Style>
         </Border.Style>
