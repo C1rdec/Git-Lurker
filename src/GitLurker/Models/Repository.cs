@@ -119,7 +119,7 @@
 
             string pullRequestUrl = default;
 
-            if (repoUrl.Contains("dev.azure.com"))
+            if (repoUrl.Contains("dev.azure.com") || repoUrl.Contains("visualstudio.com"))
             {
                 pullRequestUrl = AzurePullRequestUrl(repoUrl);
             }
