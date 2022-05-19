@@ -21,17 +21,20 @@
                 </Style.Triggers>
             </Style>
         </Border.Style>
-        <Border CornerRadius="6"
-                x:Name="MainBorder"
-                Background="{DynamicResource MahApps.Brushes.Accent4}"
-                cal:Message.Attach="[Event MouseEnter] = [Action ShowBranchName()]; [Event MouseLeave] = [Action ShowBranchName()]"
-                Cursor="Hand">
+        <Grid x:Name="MainBorder"
+              Background="{DynamicResource MahApps.Brushes.Accent4}"
+              cal:Message.Attach="[Event MouseEnter] = [Action ShowBranchName()]; [Event MouseLeave] = [Action ShowBranchName()]"
+              Cursor="Hand">
             <Grid>
-                <Border CornerRadius="6,0,0,6" cal:Message.Attach="[Event MouseUp] = [Action Open()]; [Event MouseDown] = [Action Delay()]">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <Border CornerRadius="6,0,0,6" cal:Message.Attach="[Event MouseUp] = [Action Open()]; [Event MouseDown] = [Action Delay()]" Grid.ColumnSpan="2">
                     <Border.Background>
                         <SolidColorBrush Opacity="0.003" Color="White"/>
                     </Border.Background>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <DockPanel HorizontalAlignment="Left">
                         <Image Height="50" Width="50" Margin="16">
                             <Image.Style>
                                 <Style TargetType="Image">
@@ -44,42 +47,40 @@
                                 </Style>
                             </Image.Style>
                         </Image>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock x:Name="RepoName" 
+                        <TextBlock x:Name="RepoName" 
                                Foreground="White"
                                MaxWidth="620"
                                TextTrimming="CharacterEllipsis"
                                FontSize="35" 
                                Margin="20,0,0,0" 
                                VerticalAlignment="Center"/>
-                            <TextBlock x:Name="ParentFolderName"
+                        <TextBlock x:Name="ParentFolderName"
                                    Visibility="{Binding ShowParentFolder, Converter={StaticResource BooleanToVisibilityConverter}}"
                                    HorizontalAlignment="Right" 
                                    VerticalAlignment="Center"
                                    Foreground="{DynamicResource MahApps.Brushes.Gray6}"
                                    FontSize="20"
                                    Margin="15,16,0,5"/>
-                            <iconPacks:PackIconMaterial VerticalAlignment="Center" 
+                        <iconPacks:PackIconMaterial VerticalAlignment="Center" 
                                                     Kind="SourceBranch" 
-                                                    Height="35"
+                                                    Height="30"
                                                     Opacity="0.8"
-                                                    Width="35"
+                                                    Width="30"
                                                     Margin="20,0,0,0"
                                                     Visibility="{Binding BranchNameVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                     Foreground="{DynamicResource MahApps.Brushes.Gray4}" />
-                            <TextBlock x:Name="BranchName" 
+                        <TextBlock x:Name="BranchName" 
                                    Opacity="0.8"
+                                   MaxWidth="350"
                                    VerticalAlignment="Center"
-                                   FontSize="40" 
+                                   FontSize="25" 
                                    Margin="5,0,0,0"
                                    Foreground="{DynamicResource MahApps.Brushes.Gray4}" 
                                    FontWeight="Light"/>
-
-                        </StackPanel>
-                    </StackPanel>
+                    </DockPanel>
                 </Border>
-                <ContentControl x:Name="ActionBar" Grid.Column="1" HorizontalAlignment="Right" />
+                <ContentControl x:Name="ActionBar" Grid.Column="1"/>
             </Grid>
-        </Border>
+        </Grid>
     </Border>
 </UserControl>
