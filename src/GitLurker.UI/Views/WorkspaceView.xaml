@@ -36,26 +36,21 @@
             </Style>
         </Grid.Style>
         <Button BorderThickness="0" x:Name="Open" IsDefault="true" Width="1" Height="1" Background="Transparent"/>
-        <ScrollViewer  x:Name="ScrollViewer"
-                       HorizontalScrollBarVisibility="Hidden" 
-                       PreviewMouseWheel="ScrollViewer_PreviewMouseWheel" 
-                       VerticalScrollBarVisibility="Hidden">
-            <ItemsControl x:Name="Repos">
-                <ItemsControl.ItemContainerStyle>
-                    <Style>
-                        <Setter Property="FrameworkElement.Margin" Value="0,0,0,10"/>
-                    </Style>
-                </ItemsControl.ItemContainerStyle>
-                <ItemsControl.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <StackPanel VerticalAlignment="Top">
-                            <StackPanel.Background>
-                                <SolidColorBrush Color="White" Opacity="0.003"/>
-                            </StackPanel.Background>
-                        </StackPanel>
-                    </ItemsPanelTemplate>
-                </ItemsControl.ItemsPanel>
-            </ItemsControl>
-        </ScrollViewer>
+        <ItemsControl x:Name="Repos">
+            <ItemsControl.ItemContainerStyle>
+                <Style>
+                    <Setter Property="FrameworkElement.Margin" Value="0,0,0,10"/>
+                </Style>
+            </ItemsControl.ItemContainerStyle>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel VerticalAlignment="Top">
+                        <StackPanel.Background>
+                            <SolidColorBrush Color="White" Opacity="0.003"/>
+                        </StackPanel.Background>
+                    </StackPanel>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
     </Grid>
 </UserControl>

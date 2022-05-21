@@ -8,7 +8,7 @@
     using GitLurker.Services;
     using GitLurker.UI.Views;
 
-    public class WorkspaceViewModel: Screen
+    public class WorkspaceViewModel: PropertyChangedBase
     {
         #region Fields
 
@@ -59,8 +59,6 @@
 
         public bool HasSelectedRepo => SelectedRepo != null || !string.IsNullOrEmpty(_lastSearchTerm) || _mouseOver;
 
-        public WorkspaceView View { get; set; }
-
         #endregion
 
         #region Methods
@@ -96,7 +94,7 @@
             var startWith = allRepos.Where(r => r.Name.ToUpper().StartsWith(term.ToUpper()));
             var contain = allRepos.Where(r => r.Name.ToUpper().Contains(term.ToUpper())).ToList();
             contain.InsertRange(0, startWith);
-            foreach (var repo in contain.Distinct().Take(10))
+            foreach (var repo in contain.Distinct().Take(5))
             {
                 Repos.Add(new RepositoryViewModel(repo));
             }
@@ -106,11 +104,6 @@
         {
             SelectedRepo = null;
             _repos.Clear();
-
-            if (View != null)
-            {
-                View.ScrollViewer.ScrollToHome();
-            }
         }
 
         public void ShowRecent()
@@ -143,11 +136,6 @@
         {
             _workspaces = workspaces;
             _repos.Clear();
-        }
-
-        protected override void OnViewLoaded(object view)
-        {
-            View = view as WorkspaceView;
         }
 
         private void KeyboardService_DownPressed(object sender, System.EventArgs e)
