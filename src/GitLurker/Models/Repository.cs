@@ -159,6 +159,7 @@
                 return Task.CompletedTask;
             }
 
+            AddToRecent();
             var path = Path.Combine(_folder, _configuration.FrontEndPath);
             return ExecuteCommandAsync(OpenVsCodeCommand, path);
         }
