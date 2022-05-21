@@ -16,8 +16,10 @@
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Fonts.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Themes/Dark.Steel.xaml" />
                 <ResourceDictionary>
-                    <Color x:Key="Colors.HighLight">#1565C0</Color>
-                    <SolidColorBrush x:Key="Brushes.HighLight" Color="{StaticResource Colors.HighLight}" />
+                    <Color x:Key="Colors.Primary">#1565C0</Color>
+                    <SolidColorBrush x:Key="Brushes.Primary" Color="{StaticResource Colors.Primary}" />
+                    <SolidColorBrush x:Key="Brushes.Secondary" Color="{StaticResource MahApps.Colors.Gray4}" />
+                    <SolidColorBrush x:Key="IndicatorForeground" Color="{StaticResource MahApps.Colors.Gray4}" />
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

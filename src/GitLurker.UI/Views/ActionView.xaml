@@ -22,7 +22,7 @@
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="BorderThickness" Value="1.5"/>
-                        <Setter Property="BorderBrush" Value="{DynamicResource MahApps.Brushes.Gray4}"/>
+                        <Setter Property="BorderBrush" Value="{DynamicResource Brushes.Secondary}"/>
                         <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
                         <Setter Property="Opacity" Value="1"/>
                     </Trigger>

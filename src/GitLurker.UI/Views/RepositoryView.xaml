@@ -16,7 +16,7 @@
                         <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
                     </Trigger>
                     <DataTrigger Binding="{Binding IsSelected}" Value="true">
-                        <Setter Property="Background" Value="{DynamicResource Brushes.HighLight}"/>
+                        <Setter Property="Background" Value="{DynamicResource Brushes.Primary}"/>
                     </DataTrigger>
                 </Style.Triggers>
             </Style>
@@ -68,14 +68,14 @@
                                                     Width="30"
                                                     Margin="20,0,0,0"
                                                     Visibility="{Binding BranchNameVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                    Foreground="{DynamicResource MahApps.Brushes.Gray4}" />
+                                                    Foreground="{DynamicResource Brushes.Secondary}" />
                         <TextBlock x:Name="BranchName" 
                                    Opacity="0.8"
                                    MaxWidth="350"
                                    VerticalAlignment="Center"
                                    FontSize="25" 
                                    Margin="5,0,0,0"
-                                   Foreground="{DynamicResource MahApps.Brushes.Gray4}" 
+                                   Foreground="{DynamicResource Brushes.Secondary}" 
                                    FontWeight="Light"/>
                     </DockPanel>
                 </Border>
