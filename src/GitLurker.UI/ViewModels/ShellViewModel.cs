@@ -36,6 +36,8 @@
         private bool _topMost;
         private string _version;
         private bool _isCopiedOpen;
+        private double _dpiX = 1;
+        private double _dpiY = 1;
 
         #endregion
 
@@ -238,6 +240,13 @@
         protected override async void OnViewLoaded(object view)
         {
             View = view as ShellView;
+            var source = PresentationSource.FromVisual(this.View);
+            if (source != null)
+            {
+                _dpiX = source.CompositionTarget.TransformToDevice.M11;
+                _dpiY = source.CompositionTarget.TransformToDevice.M22;
+            }
+
             await Task.Delay(200);
             await _keyboardService.InstallAsync();
 
@@ -338,8 +347,10 @@
             Execute.OnUIThread(() =>
             {
                 var primaryScreen = System.Windows.Forms.Screen.PrimaryScreen;
-                View.Top = (primaryScreen.Bounds.Height / 2) - (View.Height / 2);
-                View.Left = (primaryScreen.Bounds.Width / 2) - (View.Width / 2);
+                var top = (primaryScreen.Bounds.Height / 2) - (View.Height / 2);
+                var left = (primaryScreen.Bounds.Width / 2) - (View.Width / 2);
+                View.Top = top / _dpiY;
+                View.Left = left / _dpiX;
             });
         }
 
