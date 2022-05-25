@@ -1,22 +1,22 @@
 ﻿namespace GitLurker.UI.ViewModels
 {
+    using System;
+    using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
     using System.Threading;
     using System.Threading.Tasks;
+    using System.Windows;
+    using System.Windows.Input;
     using Caliburn.Micro;
     using GitLurker.Models;
     using GitLurker.Services;
-    using NHotkey.Wpf;
-    using System.Windows.Input;
-    using System.Windows;
-    using GitLurker.UI.Helpers;
-    using GitLurker.UI.Views;
-    using System;
-    using System.Reflection;
-    using System.Collections.Generic;
-    using WindowsUtilities;
     using GitLurker.UI.Helper;
+    using GitLurker.UI.Helpers;
     using GitLurker.UI.Messages;
+    using GitLurker.UI.Views;
+    using NHotkey.Wpf;
+    using WindowsUtilities;
 
     public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<string>
     {
@@ -256,6 +256,7 @@
                 return;
             }
 
+            HandleScreenPosition();
             WorkspaceViewModel?.ShowRecent();
 
             TopMost = true;
@@ -330,6 +331,16 @@
             {
                 _startupService.RemoveStartWithWindows();
             }
+        }
+
+        private void HandleScreenPosition()
+        {
+            Execute.OnUIThread(() =>
+            {
+                var primaryScreen = System.Windows.Forms.Screen.PrimaryScreen;
+                View.Top = (primaryScreen.Bounds.Height / 2) - (View.Height / 2);
+                View.Left = (primaryScreen.Bounds.Width / 2) - (View.Width / 2);
+            });
         }
 
         #endregion

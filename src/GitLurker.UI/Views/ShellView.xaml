@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:Controls="http://metro.mahapps.com/winfx/xaml/controls"
         mc:Ignorable="d"
-        WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         ShowInTaskbar="{Binding ShowInTaskBar}"
         xmlns:tb="http://www.hardcodet.net/taskbar"
