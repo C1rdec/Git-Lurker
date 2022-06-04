@@ -1,12 +1,10 @@
 ﻿namespace GitLurker.UI.ViewModels
 {
-    using System.Diagnostics;
     using System.Threading;
     using System.Threading.Tasks;
     using Caliburn.Micro;
     using GitLurker.Models;
     using GitLurker.UI.Messages;
-    using GitLurker.UI.Views;
     using MahApps.Metro.IconPacks;
 
     public class RepositoryViewModel : Screen
@@ -22,6 +20,7 @@
         private bool _busy;
         private bool _showParentFolder;
         private ActionBarViewModel _actionBar;
+        private SettingsFile _settingsFile;
 
         #endregion
 
@@ -30,6 +29,7 @@
         public RepositoryViewModel(Repository repo)
         {
             _repo = repo;
+            _settingsFile = IoC.Get<SettingsFile>();
             _actionBar = new ActionBarViewModel(repo);
             _showParentFolder = repo.Duplicate;
             _aggregator = IoC.Get<IEventAggregator>();
@@ -159,17 +159,20 @@
                 _tokenSource.Dispose();
             }
 
-            _tokenSource = new CancellationTokenSource();
-            var token = _tokenSource.Token;
-            if (await _repo.HasNugetAsync())
+            if (_settingsFile.HasLocalNuget())
             {
-                if (token.IsCancellationRequested)
+                _tokenSource = new CancellationTokenSource();
+                var token = _tokenSource.Token;
+                if (await _repo.HasNugetAsync())
                 {
-                    return;
-                }
+                    if (token.IsCancellationRequested)
+                    {
+                        return;
+                    }
 
-                var action = new ActionViewModel(() => Task.CompletedTask, new PackIconSimpleIcons() { Kind = PackIconSimpleIconsKind.NuGet }, false);
-                _actionBar.AddAction(action);
+                    var action = new ActionViewModel(() => Task.CompletedTask, new PackIconSimpleIcons() { Kind = PackIconSimpleIconsKind.NuGet }, false);
+                    _actionBar.AddAction(action);
+                }
             }
         }
 
@@ -183,17 +186,6 @@
         public void Select()
         {
             IsSelected = true;
-
-            Execute.OnUIThread(() =>
-            {
-                var view = GetView() as RepositoryView;
-                if (view == null)
-                {
-                    return;
-                }
-
-                view.MainBorder.BringIntoView();
-            });
         }
 
         private string GetParentFolder()

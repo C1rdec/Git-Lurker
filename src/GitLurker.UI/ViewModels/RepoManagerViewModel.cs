@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Forms;
-using Caliburn.Micro;
 using GitLurker.Models;
 
 namespace GitLurker.UI.ViewModels
@@ -45,6 +44,7 @@ namespace GitLurker.UI.ViewModels
             {
                 return;
             }
+
             var existingWorkspace = _settings.Entity.Workspaces.FirstOrDefault(w => w == dialog.SelectedPath);
             if (existingWorkspace != null)
             {

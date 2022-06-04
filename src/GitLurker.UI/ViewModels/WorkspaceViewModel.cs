@@ -6,7 +6,6 @@
     using Caliburn.Micro;
     using GitLurker.Models;
     using GitLurker.Services;
-    using GitLurker.UI.Views;
 
     public class WorkspaceViewModel: PropertyChangedBase
     {

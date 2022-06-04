@@ -39,6 +39,8 @@ namespace GitLurker.UI.ViewModels
 
         public HotkeyViewModel HotkeyViewModel { get; set; }
 
+        public bool HasLocalNuget => !string.IsNullOrEmpty(_settingsFile.Entity.LocalNugetPath);
+
         public bool StartWithWindows
         {
             get => _settingsFile.Entity.StartWithWindows;
@@ -96,6 +98,27 @@ namespace GitLurker.UI.ViewModels
                 _windowsStartupService.RemoveStartWithWindows();
             }
 
+            Save();
+        }
+
+        public void ToggleLocalNuget()
+        {
+            string path = null;
+            if (!HasLocalNuget)
+            {
+                using var dialog = new System.Windows.Forms.FolderBrowserDialog();
+                var result = dialog.ShowDialog();
+
+                if (result != System.Windows.Forms.DialogResult.OK)
+                {
+                    return;
+                }
+
+                path = dialog.SelectedPath;
+            }
+
+            _settingsFile.Entity.LocalNugetPath = path;
+            NotifyOfPropertyChange(() => HasLocalNuget);
             Save();
         }
 
