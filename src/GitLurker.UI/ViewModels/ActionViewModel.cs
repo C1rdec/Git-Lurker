@@ -10,18 +10,25 @@ namespace GitLurker.UI.ViewModels
 
         private Func<Task> _action;
         private PackIconControlBase _icon;
+        private bool _permanent;
 
         #endregion
 
         #region Constructors
 
         public ActionViewModel(Func<Task> action, PackIconControlBase icon)
+            : this(action, icon, true)
+        {
+        }
+
+        public ActionViewModel(Func<Task> action, PackIconControlBase icon, bool permanent)
         {
             _action = action;
 
             icon.Height = 30;
             icon.Width = 30;
             _icon = icon;
+            _permanent = permanent;
         }
 
         #endregion
@@ -29,6 +36,8 @@ namespace GitLurker.UI.ViewModels
         #region Properties
 
         public PackIconControlBase Icon => _icon;
+
+        public bool Permanent => _permanent;
 
         #endregion
 

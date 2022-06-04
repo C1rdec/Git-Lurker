@@ -11,7 +11,7 @@
     using GitLurker.Extensions;
     using GitLurker.Services;
 
-    public class Repository
+    public class Repository : ProcessService
     {
         #region Fields
 
@@ -29,9 +29,10 @@
         #region Constructors
 
         public Repository(string folder, IEnumerable<Repository> existingRepos)
+            : base(folder)
         {
             _folder = folder;
-            _slnFiles = new DirectoryInfo(folder).GetFiles("*.sln", SearchOption.AllDirectories);
+            _slnFiles = GetFiles(".sln");
             _configuration = GetConfiguration(folder);
             _gitConfigurationService = new GitConfigurationService(folder);
 
@@ -45,12 +46,6 @@
                 repo.SetDuplicate();
             }
         }
-
-        #endregion
-
-        #region Events
-
-        public event EventHandler<string> NewProcessMessage;
 
         #endregion
 
@@ -166,6 +161,21 @@
 
         public string GetCurrentBranchName() => _gitConfigurationService.GetCurrentBranchName();
 
+        public Task<bool> HasNugetAsync()
+        {
+            var completionSource = new TaskCompletionSource<bool>();
+            Task.Run(() => 
+            {
+                var nugets = GetFiles($"*.nupkg");
+                completionSource.SetResult(nugets.Any(n => n.FullName.Contains("\\bin\\")));
+            });
+            
+
+            return completionSource.Task;
+        }
+
+        private FileInfo[] GetFiles(string extention) => new DirectoryInfo(_folder).GetFiles($"*{extention}", SearchOption.AllDirectories);
+
         private static Configuration GetConfiguration(string folder)
         {
             var configPath = Path.Join(folder, ".gitlurker");
@@ -220,56 +230,6 @@
             var settings = new SettingsFile();
             settings.Initialize();
             settings.AddToRecent(_folder);
-        }
-
-        private Task ExecuteCommandAsync(string command) => ExecuteCommandAsync(command, false);
-
-        private Task ExecuteCommandAsync(string command, string workingDirectory) => ExecuteCommandAsync(command, false, workingDirectory);
-
-        private Task ExecuteCommandAsync(string command, bool listen) => ExecuteCommandAsync(command, listen, _folder);
-
-        private Task ExecuteCommandAsync(string command, bool listen, string workingDirectory)
-        {
-            var process = new Process()
-            {
-                StartInfo = new ProcessStartInfo()
-                {
-                    WorkingDirectory = workingDirectory,
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    CreateNoWindow = listen,
-                    UseShellExecute = !listen,
-                    RedirectStandardOutput = listen,
-                    FileName = "cmd.exe",
-                    Arguments = $"/C {command}",
-                },
-            };
-
-            if (listen)
-            {
-                DataReceivedEventHandler handler = default;
-                handler = (s, a) =>
-                {
-                    if (string.IsNullOrEmpty(a.Data))
-                    {
-                        process.OutputDataReceived -= handler;
-                        return;
-                    }
-
-                    NewProcessMessage?.Invoke(this, a.Data);
-                };
-
-                process.OutputDataReceived += handler;
-            }
-
-            process.Start();
-
-            if (listen)
-            {
-                process.BeginOutputReadLine();
-                return process.WaitForExitAsync();
-            }
-
-            return Task.CompletedTask;
         }
 
         private bool HandleSln()

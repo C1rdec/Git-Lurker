@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using GitLurker.Models;
@@ -52,6 +53,26 @@ namespace GitLurker.UI.ViewModels
         #endregion
 
         #region Methods
+
+        public void RemoveActions()
+        {
+            Execute.OnUIThread(() =>
+            {
+                var notPermanentActions = Actions.Where(a => !a.Permanent).ToArray();
+                foreach (var action in notPermanentActions)
+                {
+                    Actions.Remove(action);
+                }
+            });
+        }
+
+        public void AddAction(ActionViewModel newAction)
+        {
+            Execute.OnUIThread(() => 
+            {
+                Actions.Insert(0, newAction);
+            });
+        }
 
         private void AddAction(Func<Task> task, PackIconControlBase icon)
         {

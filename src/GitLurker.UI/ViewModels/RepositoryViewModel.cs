@@ -1,11 +1,13 @@
 ﻿namespace GitLurker.UI.ViewModels
 {
+    using System.Diagnostics;
     using System.Threading;
     using System.Threading.Tasks;
     using Caliburn.Micro;
     using GitLurker.Models;
     using GitLurker.UI.Messages;
     using GitLurker.UI.Views;
+    using MahApps.Metro.IconPacks;
 
     public class RepositoryViewModel : Screen
     {
@@ -147,16 +149,35 @@
             Busy = false;
         }
 
-        public void ShowBranchName()
+        public async void OnMouseEnter()
         {
-            if (string.IsNullOrEmpty(BranchName))
+            BranchName = _repo.GetCurrentBranchName();
+
+            if (_tokenSource != null)
             {
-                BranchName = _repo.GetCurrentBranchName();
+                _tokenSource.Cancel();
+                _tokenSource.Dispose();
             }
-            else
+
+            _tokenSource = new CancellationTokenSource();
+            var token = _tokenSource.Token;
+            if (await _repo.HasNugetAsync())
             {
-                BranchName = string.Empty;
+                if (token.IsCancellationRequested)
+                {
+                    return;
+                }
+
+                var action = new ActionViewModel(() => Task.CompletedTask, new PackIconSimpleIcons() { Kind = PackIconSimpleIconsKind.NuGet }, false);
+                _actionBar.AddAction(action);
             }
+        }
+
+        public void OnMouseLeave()
+        {
+            BranchName = string.Empty;
+            _tokenSource?.Cancel();
+            _actionBar.RemoveActions();
         }
 
         public void Select()

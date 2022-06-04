@@ -23,7 +23,7 @@
         </Border.Style>
         <Grid x:Name="MainBorder"
               Background="{DynamicResource MahApps.Brushes.Accent4}"
-              cal:Message.Attach="[Event MouseEnter] = [Action ShowBranchName()]; [Event MouseLeave] = [Action ShowBranchName()]"
+              cal:Message.Attach="[Event MouseEnter] = [Action OnMouseEnter()]; [Event MouseLeave] = [Action OnMouseLeave()]"
               Cursor="Hand">
             <Grid>
                 <Grid.ColumnDefinitions>
