@@ -161,16 +161,37 @@
 
         public string GetCurrentBranchName() => _gitConfigurationService.GetCurrentBranchName();
 
-        public Task<IEnumerable<FileInfo>> GetNugetsAsync()
+        public async Task<NugetInformation> GetNewNugetAsync(string nugetSource)
         {
-            var completionSource = new TaskCompletionSource<IEnumerable<FileInfo>>();
-            Task.Run(() => 
+            NugetInformation newNuget = null;
+            var existingNugets = await ExecuteCommandAsync($@"{NugetListCommand} -source {nugetSource}");
+
+            // To get out of the UI Thread
+            await Task.Run(() => 
             {
-                var nugets = GetFiles($"*.nupkg");
-                completionSource.SetResult(nugets.Where(n => n.FullName.Contains("\\bin\\")));
+                var filePaths = GetFiles($"*.nupkg").Where(n => n.FullName.Contains("\\bin\\"));
+                if (filePaths.Any())
+                {
+                    var nugetsInRepo = filePaths.Select(p => NugetInformation.Parse(p.FullName));
+
+                    nugetsInRepo.GroupBy(n => n.PackageName).OrderBy(g => g.Count()).First();
+
+                    var list = nugetsInRepo.ToList();
+                    list.Sort((n1, n2) => n2.CompareTo(n1));
+                    newNuget = list.FirstOrDefault();
+                }
             });
 
-            return completionSource.Task;
+            if (newNuget != null)
+            {
+                // If the package is installed
+                if (existingNugets.Contains(newNuget.Name))
+                {
+                    return null;
+                }
+            }
+
+            return newNuget;
         }
 
         private FileInfo[] GetFiles(string extention) => new DirectoryInfo(_folder).GetFiles($"*{extention}", SearchOption.AllDirectories);

@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 using GitLurker.Models;
 
 namespace GitLurker.Services
@@ -20,22 +22,27 @@ namespace GitLurker.Services
 
         public string NugetAddCommand => $"{NugetCommandBase} add";
 
+        public string NugetListCommand => $"{NugetCommandBase} list";
+
         #endregion
 
         #region Methods
 
-        public Task AddNugetAsync(string nugetPath)
+        public async Task<IEnumerable<string>> AddNugetAsync(NugetInformation nuget)
         {
             var settings = new SettingsFile();
             settings.Initialize();
 
             if (!settings.HasNugetSource())
             {
-                return Task.CompletedTask;
+                return Enumerable.Empty<string>();
             }
 
-            var command = $@"{NugetAddCommand} ""{nugetPath}"" -source {settings.Entity.NugetSource}";
-            return ExecuteCommandAsync(command, true);
+
+            var nugetSource = $"-source {settings.Entity.NugetSource}";
+            var command = $@"{NugetAddCommand} ""{nuget.FilePath}"" {nugetSource}";
+
+            return await ExecuteCommandAsync(command, true);
         }
 
         #endregion

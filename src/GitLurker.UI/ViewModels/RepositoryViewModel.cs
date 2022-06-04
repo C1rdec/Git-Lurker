@@ -164,15 +164,15 @@
             {
                 _tokenSource = new CancellationTokenSource();
                 var token = _tokenSource.Token;
-                var nugets = await _repo.GetNugetsAsync();
-                if (nugets.Any())
+                var nuget = await _repo.GetNewNugetAsync(_settingsFile.Entity.NugetSource);
+                if (nuget != null)
                 {
                     if (token.IsCancellationRequested)
                     {
                         return;
                     }
 
-                    var action = new ActionViewModel(() => _repo.AddNugetAsync(nugets.ElementAt(1).FullName), new PackIconSimpleIcons() { Kind = PackIconSimpleIconsKind.NuGet }, false);
+                    var action = new ActionViewModel(() => _repo.AddNugetAsync(nuget), new PackIconSimpleIcons() { Kind = PackIconSimpleIconsKind.NuGet }, false);
                     _actionBar.AddAction(action);
                 }
             }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 
@@ -29,54 +30,57 @@ namespace GitLurker.Services
 
         #region Methods
 
-        public Task ExecuteCommandAsync(string command) => ExecuteCommandAsync(command, false);
+        public Task<IEnumerable<string>> ExecuteCommandAsync(string command) => ExecuteCommandAsync(command, false);
 
-        public Task ExecuteCommandAsync(string command, string workingDirectory) => ExecuteCommandAsync(command, false, workingDirectory);
+        public Task<IEnumerable<string>> ExecuteCommandAsync(string command, string workingDirectory) => ExecuteCommandAsync(command, false, workingDirectory);
 
-        public Task ExecuteCommandAsync(string command, bool listen) => ExecuteCommandAsync(command, listen, _folder);
+        public Task<IEnumerable<string>> ExecuteCommandAsync(string command, bool listen) => ExecuteCommandAsync(command, listen, _folder);
 
-        public Task ExecuteCommandAsync(string command, bool listen, string workingDirectory)
+        public Task<IEnumerable<string>> ExecuteCommandAsync(string command, bool listen, string workingDirectory)
         {
+            var taskCompletionSource = new TaskCompletionSource<IEnumerable<string>>();
+            var data = new List<string>();
             var process = new Process()
             {
                 StartInfo = new ProcessStartInfo()
                 {
                     WorkingDirectory = workingDirectory,
                     WindowStyle = ProcessWindowStyle.Hidden,
-                    CreateNoWindow = listen,
-                    UseShellExecute = !listen,
-                    RedirectStandardOutput = listen,
+                    CreateNoWindow = true,
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
                     FileName = "cmd.exe",
                     Arguments = $"/C {command}",
                 },
             };
 
-            if (listen)
+            DataReceivedEventHandler handler = default;
+            handler = (s, a) =>
             {
-                DataReceivedEventHandler handler = default;
-                handler = (s, a) =>
+                if (string.IsNullOrEmpty(a.Data))
                 {
-                    if (string.IsNullOrEmpty(a.Data))
-                    {
-                        process.OutputDataReceived -= handler;
-                        return;
-                    }
+                    process.OutputDataReceived -= handler;
+                    return;
+                }
 
+                data.Add(a.Data);
+
+                if (listen)
+                {
                     NewProcessMessage?.Invoke(this, a.Data);
-                };
+                }
+            };
 
-                process.OutputDataReceived += handler;
-            }
+            process.OutputDataReceived += handler;
 
             process.Start();
+            process.BeginOutputReadLine();
+            process.WaitForExitAsync().ContinueWith(t => 
+            { 
+                taskCompletionSource.SetResult(data);
+            });
 
-            if (listen)
-            {
-                process.BeginOutputReadLine();
-                return process.WaitForExitAsync();
-            }
-
-            return Task.CompletedTask;
+            return taskCompletionSource.Task;
         }
 
         #endregion
