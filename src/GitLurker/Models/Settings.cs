@@ -34,7 +34,7 @@ namespace GitLurker.Models
 
         public bool AddToStartMenu { get; set; }
 
-        public string LocalNugetPath { get; set; }
+        public string NugetSource { get; set; }
 
         #endregion
     }

@@ -11,7 +11,7 @@
     using GitLurker.Extensions;
     using GitLurker.Services;
 
-    public class Repository : ProcessService
+    public class Repository : NugetService
     {
         #region Fields
 
@@ -161,15 +161,14 @@
 
         public string GetCurrentBranchName() => _gitConfigurationService.GetCurrentBranchName();
 
-        public Task<bool> HasNugetAsync()
+        public Task<IEnumerable<FileInfo>> GetNugetsAsync()
         {
-            var completionSource = new TaskCompletionSource<bool>();
+            var completionSource = new TaskCompletionSource<IEnumerable<FileInfo>>();
             Task.Run(() => 
             {
                 var nugets = GetFiles($"*.nupkg");
-                completionSource.SetResult(nugets.Any(n => n.FullName.Contains("\\bin\\")));
+                completionSource.SetResult(nugets.Where(n => n.FullName.Contains("\\bin\\")));
             });
-            
 
             return completionSource.Task;
         }

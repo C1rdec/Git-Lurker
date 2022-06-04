@@ -1,5 +1,6 @@
 ﻿namespace GitLurker.UI.ViewModels
 {
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using Caliburn.Micro;
@@ -159,18 +160,19 @@
                 _tokenSource.Dispose();
             }
 
-            if (_settingsFile.HasLocalNuget())
+            if (_settingsFile.HasNugetSource())
             {
                 _tokenSource = new CancellationTokenSource();
                 var token = _tokenSource.Token;
-                if (await _repo.HasNugetAsync())
+                var nugets = await _repo.GetNugetsAsync();
+                if (nugets.Any())
                 {
                     if (token.IsCancellationRequested)
                     {
                         return;
                     }
 
-                    var action = new ActionViewModel(() => Task.CompletedTask, new PackIconSimpleIcons() { Kind = PackIconSimpleIconsKind.NuGet }, false);
+                    var action = new ActionViewModel(() => _repo.AddNugetAsync(nugets.ElementAt(1).FullName), new PackIconSimpleIcons() { Kind = PackIconSimpleIconsKind.NuGet }, false);
                     _actionBar.AddAction(action);
                 }
             }

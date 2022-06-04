@@ -59,7 +59,7 @@
                                     </Setter.Value>
                                 </Setter>
                             </Trigger>
-                            <DataTrigger Binding="{Binding HasLocalNuget}" Value="True">
+                            <DataTrigger Binding="{Binding HasNugetSource}" Value="True">
                                 <Setter Property="Opacity" Value="1"/>
                             </DataTrigger>
                         </Style.Triggers>

@@ -53,7 +53,7 @@ namespace GitLurker.Models
             Save();
         }
 
-        public bool HasLocalNuget() => !string.IsNullOrEmpty(Entity.LocalNugetPath);
+        public bool HasNugetSource() => !string.IsNullOrEmpty(Entity.NugetSource);
 
         #endregion
     }
