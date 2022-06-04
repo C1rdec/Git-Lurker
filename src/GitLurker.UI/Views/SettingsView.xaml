@@ -69,7 +69,7 @@
                     <iconPacks:PackIconSimpleIcons Kind="NuGet"
                                                 HorizontalAlignment="Center" 
                                                 VerticalAlignment="Center"/>
-                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0">Nugget</TextBlock>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0">Nuget</TextBlock>
                 </StackPanel>
                 
             </Border>
