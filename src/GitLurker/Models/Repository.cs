@@ -164,7 +164,7 @@
         public async Task<NugetInformation> GetNewNugetAsync(string nugetSource)
         {
             NugetInformation newNuget = null;
-            var existingNugets = await ExecuteCommandAsync($@"{NugetListCommand} -source {nugetSource}");
+            var existingNugets = await ExecuteCommandAsync($@"{NugetListCommand} -source {nugetSource} -prerelease");
 
             // To get out of the UI Thread
             await Task.Run(() => 
