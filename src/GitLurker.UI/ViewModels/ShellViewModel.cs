@@ -261,6 +261,7 @@
         {
             if (IsVisible)
             {
+                WorkspaceViewModel?.Open();
                 HideWindow();
                 return;
             }
