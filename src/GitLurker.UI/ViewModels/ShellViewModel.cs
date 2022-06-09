@@ -261,7 +261,7 @@
         {
             if (IsVisible)
             {
-                WorkspaceViewModel?.Open();
+                WorkspaceViewModel?.Open(skipModifier: true);
                 HideWindow();
                 return;
             }

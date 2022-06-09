@@ -120,15 +120,15 @@
             }
         }
 
-        public void Open()
+        public void Open(bool skipModifier)
         {
             if (SelectedRepo != null)
             {
-                SelectedRepo.Open();
+                SelectedRepo.Open(skipModifier);
                 return;
             }
 
-            _repos.FirstOrDefault()?.Open();
+            _repos.FirstOrDefault()?.Open(skipModifier);
         }
 
         public void Refresh(IEnumerable<Workspace> workspaces)

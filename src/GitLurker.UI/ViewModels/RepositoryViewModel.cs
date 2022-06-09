@@ -127,7 +127,9 @@
             }
         }
 
-        public void Open()
+        public void Open() => Open(skipModifier: false);
+
+        public void Open(bool skipModifier)
         {
             if (_tokenSource != null)
             {
@@ -135,7 +137,7 @@
             }
 
             _aggregator.PublishOnCurrentThreadAsync(CloseMessage);
-            _repo.Open();
+            _repo.Open(skipModifier);
         }
 
         public async void Pull() 

@@ -84,11 +84,13 @@
 
         public Task PullAsync() => ExecuteCommandAsync("git pull", true);
 
-        public void Open()
+        public void Open() => Open(false);
+
+        public void Open(bool skipModifier)
         {
             AddToRecent();
 
-            if (HandleModifiers())
+            if (!skipModifier && HandleModifiers())
             {
                 return;
             }
