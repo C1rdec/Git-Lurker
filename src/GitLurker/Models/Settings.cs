@@ -36,6 +36,8 @@ namespace GitLurker.Models
 
         public string NugetSource { get; set; }
 
+        public bool DoubleTabEnabled { get; set; }
+
         #endregion
     }
 }

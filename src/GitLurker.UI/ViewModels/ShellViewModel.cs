@@ -261,7 +261,11 @@
         {
             if (IsVisible)
             {
-                WorkspaceViewModel?.Open(skipModifier: true);
+                if (_settingsFile.Entity.DoubleTabEnabled)
+                {
+                    WorkspaceViewModel?.Open(skipModifier: true);
+                }
+
                 HideWindow();
                 return;
             }

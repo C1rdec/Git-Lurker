@@ -12,7 +12,7 @@
                  xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
                  Dialog:DialogParticipation.Register="{Binding}" 
                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-                 MinWidth="350" MinHeight="420" Width="350" Height="420">
+                 MinWidth="350" MinHeight="420" Width="650" Height="420">
     <mah:MetroWindow.IconTemplate>
         <DataTemplate>
             <Image Margin="4"
@@ -20,128 +20,163 @@
                    Source="{Binding}" />
         </DataTemplate>
     </mah:MetroWindow.IconTemplate>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="2*"/>
-            <RowDefinition/>
-            <RowDefinition Height="auto"/>
-        </Grid.RowDefinitions>
-        <ContentControl x:Name="RepoManager"/>
-        <ContentControl x:Name="HotkeyViewModel" Grid.Row="1" Margin="65,0,65,0"/>
-        <Grid Grid.Row="2" Height="90" Margin="0,10,0,0">
-            <Grid.RowDefinitions>
-                <RowDefinition></RowDefinition>
-                <RowDefinition></RowDefinition>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition></ColumnDefinition>
-                <ColumnDefinition></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <Border CornerRadius="15"
-                    Margin="0,0,0,10"
-                    Width="80"
-                    Grid.ColumnSpan="2"
-                    cal:Message.Attach="[Event MouseDown] = [Action ToggleLocalNuget]"
-                    Cursor="Hand">
-                <Border.Style>
-                    <Style TargetType="Border">
-                        <Setter Property="Opacity" Value="0.25"></Setter>
-                        <Setter Property="Background">
-                            <Setter.Value>
-                                <SolidColorBrush Color="White" Opacity="0.05"></SolidColorBrush>
-                            </Setter.Value>
-                        </Setter>
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
+    <mah:MetroWindow.Resources>
+        <ResourceDictionary>
+            <Style x:Key="LabelHeaderStyle"
+                   BasedOn="{StaticResource {x:Type Label}}"
+                   TargetType="{x:Type Label}">
+                <Setter Property="FontSize" Value="32" />
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="HorizontalAlignment" Value="Center" />
+            </Style>
+        </ResourceDictionary>
+    </mah:MetroWindow.Resources>
+    <mah:MetroAnimatedTabControl SelectedIndex="{Binding SelectedTabIndex}" mah:TabControlHelper.Underlined="TabPanel" TabStripPlacement="Left">
+        <TabItem Header="Workspace" Width="175">
+            <StackPanel>
+                <Label Style="{DynamicResource LabelHeaderStyle}">Workspace</Label>
+                <ContentControl x:Name="RepoManager"/>
+            </StackPanel>
+        </TabItem>
+        <TabItem Header="Hotkey">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <Label Style="{DynamicResource LabelHeaderStyle}">Hotkey</Label>
+                <StackPanel Grid.Row="1" VerticalAlignment="Center">
+                    <ContentControl x:Name="HotkeyViewModel" Margin="20,0,20,0" Focusable="False"/>
+                    <mah:ToggleSwitch HorizontalAlignment="Center"
+                                      Margin="110,0,0,0"
+                                      OffContent=""
+                                      OnContent=""
+                                      IsOn="{Binding DoubleTabEnabled}"/>
+                </StackPanel>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Advanced">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <Label Style="{DynamicResource LabelHeaderStyle}">Advanced</Label>
+                <WrapPanel Grid.Row="1" HorizontalAlignment="Center" Margin="0,-10,0,0">
+                    <Border CornerRadius="15"
+                            Height="45"
+                            Margin="0,10,10,0"
+                            HorizontalAlignment="Center"
+                            cal:Message.Attach="[Event MouseDown] = [Action ToggleLocalNuget]"
+                            Cursor="Hand">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Opacity" Value="0.25"></Setter>
                                 <Setter Property="Background">
                                     <Setter.Value>
-                                        <SolidColorBrush Color="White" Opacity="0.15"></SolidColorBrush>
+                                        <SolidColorBrush Color="White" Opacity="0.05"></SolidColorBrush>
                                     </Setter.Value>
                                 </Setter>
-                            </Trigger>
-                            <DataTrigger Binding="{Binding HasNugetSource}" Value="True">
-                                <Setter Property="Opacity" Value="1"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Border.Style>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <iconPacks:PackIconSimpleIcons Kind="NuGet"
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <SolidColorBrush Color="White" Opacity="0.15"></SolidColorBrush>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                    <DataTrigger Binding="{Binding HasNugetSource}" Value="True">
+                                        <Setter Property="Opacity" Value="1"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,0,10,0">
+                            <iconPacks:PackIconSimpleIcons Kind="NuGet"
                                                 HorizontalAlignment="Center" 
                                                 VerticalAlignment="Center"/>
-                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0">Nuget</TextBlock>
-                </StackPanel>
-                
-            </Border>
-            <Border cal:Message.Attach="[Event MouseDown] = [Action ToggleAddMenu]"
-                    Grid.Row="1"
-                    Cursor="Hand">
-                <Border.Style>
-                    <Style TargetType="Border">
-                        <Setter Property="Opacity" Value="0.25"/>
-                        <Setter Property="Background">
-                            <Setter.Value>
-                                <SolidColorBrush Color="White" Opacity="0.05"></SolidColorBrush>
-                            </Setter.Value>
-                        </Setter>
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0">Nuget</TextBlock>
+                        </StackPanel>
+                    </Border>
+                    <Border cal:Message.Attach="[Event MouseDown] = [Action ToggleAddMenu]"
+                            Grid.Row="1"
+                            Height="45"
+                            Margin="0,10,10,0"
+                            CornerRadius="15"
+                            HorizontalAlignment="Center"
+                            Cursor="Hand">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Opacity" Value="0.25"/>
                                 <Setter Property="Background">
                                     <Setter.Value>
-                                        <SolidColorBrush Color="White" Opacity="0.15"></SolidColorBrush>
+                                        <SolidColorBrush Color="White" Opacity="0.05"></SolidColorBrush>
                                     </Setter.Value>
                                 </Setter>
-                            </Trigger>
-                            <DataTrigger Binding="{Binding AddToStartMenu}" Value="True">
-                                <Setter Property="Opacity" Value="1"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Border.Style>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <iconPacks:PackIconMaterial Kind="MenuOpen" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                    <TextBlock Grid.Column="1" 
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <SolidColorBrush Color="White" Opacity="0.15"></SolidColorBrush>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                    <DataTrigger Binding="{Binding AddToStartMenu}" Value="True">
+                                        <Setter Property="Opacity" Value="1"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,0,10,0">
+                            <iconPacks:PackIconMaterial Kind="MenuOpen" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <TextBlock Grid.Column="1" 
                                Margin="10,0,0,0"
                                HorizontalAlignment="Center" 
                                VerticalAlignment="Center">Start Menu</TextBlock>
-                </StackPanel>
-            </Border>
-            <Border Grid.Column="1"
-                    Grid.Row="1"
-                    cal:Message.Attach="[Event MouseDown] = [Action ToggleStartWithWindows]"
-                    Cursor="Hand">
-                <Border.Style>
-                    <Style TargetType="Border">
-                        <Setter Property="Opacity" Value="0.25"></Setter>
-                        <Setter Property="Background">
-                            <Setter.Value>
-                                <SolidColorBrush Color="White" Opacity="0.05"></SolidColorBrush>
-                            </Setter.Value>
-                        </Setter>
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
+                        </StackPanel>
+                    </Border>
+                    <Border Grid.Column="1"
+                            Height="45"
+                            Margin="0,10,10,0"
+                            CornerRadius="15"
+                            HorizontalAlignment="Center"
+                            Grid.Row="1"
+                            cal:Message.Attach="[Event MouseDown] = [Action ToggleStartWithWindows]"
+                            Cursor="Hand">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Opacity" Value="0.25"></Setter>
                                 <Setter Property="Background">
                                     <Setter.Value>
-                                        <SolidColorBrush Color="White" Opacity="0.15"></SolidColorBrush>
+                                        <SolidColorBrush Color="White" Opacity="0.05"></SolidColorBrush>
                                     </Setter.Value>
                                 </Setter>
-                            </Trigger>
-                            <DataTrigger Binding="{Binding StartWithWindows}" Value="True">
-                                <Setter Property="Opacity" Value="1"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </Border.Style>
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                    <iconPacks:PackIconMaterial Kind="MicrosoftWindows"
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <SolidColorBrush Color="White" Opacity="0.15"></SolidColorBrush>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                    <DataTrigger Binding="{Binding StartWithWindows}" Value="True">
+                                        <Setter Property="Opacity" Value="1"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,0,10,0">
+                            <iconPacks:PackIconMaterial Kind="MicrosoftWindows"
                                                 HorizontalAlignment="Center" 
                                                 VerticalAlignment="Center"/>
-                    <TextBlock Grid.Column="1"
+                            <TextBlock Grid.Column="1"
                                HorizontalAlignment="Center"
                                Margin="10,0,0,0"
                                VerticalAlignment="Center">Start with Windows</TextBlock>
-                </StackPanel>
-            </Border>
-        </Grid>
-    </Grid>
+                        </StackPanel>
+                    </Border>
+                </WrapPanel>
+            </Grid>
+        </TabItem>
+    </mah:MetroAnimatedTabControl>
 </mah:MetroWindow>

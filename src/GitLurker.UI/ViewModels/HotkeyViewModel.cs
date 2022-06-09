@@ -1,16 +1,18 @@
 ﻿using Caliburn.Micro;
 using GitLurker.Models;
 using GitLurker.Services;
+using MahApps.Metro.IconPacks;
 using Winook;
 
 namespace GitLurker.UI.ViewModels
 {
-    public class HotkeyViewModel : Caliburn.Micro.PropertyChangedBase
+    public class HotkeyViewModel : PropertyChangedBase
     {
         #region Fields
 
         private Hotkey _hotkey;
         private System.Action _save;
+        private PackIconControlBase _icon;
 
         #endregion
 
@@ -20,6 +22,11 @@ namespace GitLurker.UI.ViewModels
         {
             _hotkey = hotkey;
             _save = callback;
+
+            if (hotkey != null)
+            {
+                HandleIcon(hotkey.KeyCode);
+            }
         }
 
         #endregion
@@ -30,15 +37,13 @@ namespace GitLurker.UI.ViewModels
 
         public bool HasModifier => Modifier != Modifiers.None;
 
-        public bool HasKeyCode => KeyCode != KeyCode.None;
+        public bool HasKeyCode => KeyCode != KeyCode.None && Icon == null;
+
+        public bool HasIcon => Icon != null;
 
         public Modifiers Modifier
         {
-            get
-            {
-                return _hotkey.Modifier;
-            }
-
+            get =>_hotkey.Modifier;
             private set
             {
                 _hotkey.Modifier = value;
@@ -49,17 +54,25 @@ namespace GitLurker.UI.ViewModels
 
         public KeyCode KeyCode
         {
-            get
-            {
-                return _hotkey.KeyCode;
-            }
-
+            get =>_hotkey.KeyCode;
             private set
             {
                 _hotkey.KeyCode = value;
                 NotifyOfPropertyChange();
                 NotifyOfPropertyChange(() => HasKeyCode);
                 NotifyOfPropertyChange(() => NotDefined);
+            }
+        }
+
+        public PackIconControlBase Icon
+        {
+            get => _icon;
+            private set
+            {
+                _icon = value;
+                NotifyOfPropertyChange();
+                NotifyOfPropertyChange(() => HasIcon);
+                NotifyOfPropertyChange(() => HasKeyCode);
             }
         }
 
@@ -80,7 +93,20 @@ namespace GitLurker.UI.ViewModels
             Modifier = result.Modifier;
             KeyCode = result.Key;
 
+            HandleIcon(KeyCode);
+
             _save();
+        }
+
+        private void HandleIcon(KeyCode code)
+        {
+            Icon = null;
+            var codeValue = code.ToString();
+
+            if (codeValue.ToLower().Contains("launchapplication"))
+            {
+                Icon = new PackIconBootstrapIcons() { Kind = PackIconBootstrapIconsKind.Calculator };
+            }
         }
 
         #endregion

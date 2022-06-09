@@ -14,6 +14,7 @@ namespace GitLurker.UI.ViewModels
         private System.Action _onSave;
         private SettingsFile _settingsFile;
         private WindowsLink _windowsStartupService;
+        private int _selectedTabIndex;
 
         #endregion
 
@@ -41,6 +42,16 @@ namespace GitLurker.UI.ViewModels
 
         public bool HasNugetSource => _settingsFile.HasNugetSource();
 
+        public int SelectedTabIndex
+        {
+            get => _selectedTabIndex;
+            set
+            {
+                _selectedTabIndex = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
         public bool StartWithWindows
         {
             get => _settingsFile.Entity.StartWithWindows;
@@ -57,6 +68,16 @@ namespace GitLurker.UI.ViewModels
             set
             {
                 _settingsFile.Entity.AddToStartMenu = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
+        public bool DoubleTabEnabled
+        {
+            get => _settingsFile.Entity.DoubleTabEnabled;
+            set
+            {
+                _settingsFile.Entity.DoubleTabEnabled = value;
                 NotifyOfPropertyChange();
             }
         }

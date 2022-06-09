@@ -12,7 +12,7 @@
             <ColumnDefinition Width="25"></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <TextBlock x:Name="Folder" FontSize="38" Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center"/>
+        <TextBlock x:Name="Folder" FontSize="22" Grid.Column="1" Margin="10,0,0,0" VerticalAlignment="Center"/>
         <Button Grid.Column="0" x:Name="Delete" BorderThickness="0" Cursor="Hand" Margin="0,4,0,4">
             <Button.ContentTemplate>
                 <DataTemplate>
