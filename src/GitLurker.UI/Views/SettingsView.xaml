@@ -12,7 +12,7 @@
                  xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
                  Dialog:DialogParticipation.Register="{Binding}" 
                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
-                 MinWidth="350" MinHeight="420" Width="650" Height="420">
+                 MinWidth="350" MinHeight="300" Width="500" Height="300">
     <mah:MetroWindow.IconTemplate>
         <DataTemplate>
             <Image Margin="4"
@@ -48,6 +48,7 @@
                 <StackPanel Grid.Row="1" VerticalAlignment="Center">
                     <ContentControl x:Name="HotkeyViewModel" Margin="20,0,20,0" Focusable="False"/>
                     <mah:ToggleSwitch HorizontalAlignment="Center"
+                                      Focusable="False"
                                       Margin="110,0,0,0"
                                       OffContent=""
                                       OnContent=""
