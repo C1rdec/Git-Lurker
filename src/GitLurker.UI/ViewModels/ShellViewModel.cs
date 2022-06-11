@@ -215,7 +215,7 @@
             if (worskspacePaths.Any())
             {
                 Disable = true;
-                SearchTerm = String.Empty;
+                SearchTerm = string.Empty;
                 SearchWatermark = "Loading...";
 
                 WorkspaceViewModel.Clear();
