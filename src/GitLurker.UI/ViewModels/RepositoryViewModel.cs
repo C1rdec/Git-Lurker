@@ -13,7 +13,8 @@
         #region Fields
 
         private static readonly CloseMessage CloseMessage = new();
-        private CancellationTokenSource _tokenSource;
+        private CancellationTokenSource _nugetTokenSource;
+        private CancellationTokenSource _pullRequestTokenSource;
         private Repository _repo;
         private bool _isSelected;
         private IEventAggregator _aggregator;
@@ -103,16 +104,16 @@
 
         public async void Delay()
         {
-            if (_tokenSource != null)
+            if (_pullRequestTokenSource != null)
             {
                 return;
             }
 
             try
             {
-                _tokenSource = new CancellationTokenSource();
+                _pullRequestTokenSource = new CancellationTokenSource();
                 await Task.Delay(600);
-                if (_tokenSource.IsCancellationRequested)
+                if (_pullRequestTokenSource.IsCancellationRequested)
                 {
                     return;
                 }
@@ -122,8 +123,8 @@
             }
             finally
             {
-                _tokenSource.Dispose();
-                _tokenSource = null;
+                _pullRequestTokenSource.Dispose();
+                _pullRequestTokenSource = null;
             }
         }
 
@@ -131,9 +132,9 @@
 
         public void Open(bool skipModifier)
         {
-            if (_tokenSource != null)
+            if (_pullRequestTokenSource != null)
             {
-                _tokenSource.Cancel();
+                _pullRequestTokenSource.Cancel();
             }
 
             _aggregator.PublishOnCurrentThreadAsync(CloseMessage);
@@ -156,16 +157,16 @@
         {
             BranchName = _repo.GetCurrentBranchName();
 
-            if (_tokenSource != null)
+            if (_nugetTokenSource != null)
             {
-                _tokenSource.Cancel();
-                _tokenSource.Dispose();
+                _nugetTokenSource.Cancel();
+                _nugetTokenSource.Dispose();
             }
 
             if (_settingsFile.HasNugetSource())
             {
-                _tokenSource = new CancellationTokenSource();
-                var token = _tokenSource.Token;
+                _nugetTokenSource = new CancellationTokenSource();
+                var token = _nugetTokenSource.Token;
                 var nuget = await _repo.GetNewNugetAsync(_settingsFile.Entity.NugetSource);
                 if (nuget != null)
                 {
@@ -183,7 +184,8 @@
         public void OnMouseLeave()
         {
             BranchName = string.Empty;
-            _tokenSource?.Cancel();
+            _nugetTokenSource?.Cancel();
+            _pullRequestTokenSource?.Cancel();
             _actionBar.RemoveActions();
         }
 
