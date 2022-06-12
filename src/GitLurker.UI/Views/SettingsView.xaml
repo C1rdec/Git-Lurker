@@ -46,7 +46,7 @@
                 </Grid.RowDefinitions>
                 <Label Style="{DynamicResource LabelHeaderStyle}">Hotkey</Label>
                 <StackPanel Grid.Row="1" VerticalAlignment="Center">
-                    <ContentControl x:Name="HotkeyViewModel" Margin="20,0,20,0" Focusable="False"/>
+                    <ContentControl x:Name="Hotkey" Margin="20,0,20,0" Focusable="False"/>
                     <ToggleButton Width="40"
                                   Cursor="Hand"
                                   BorderThickness="1.5"
@@ -63,6 +63,9 @@
                     </ToggleButton>
                 </StackPanel>
             </Grid>
+        </TabItem>
+        <TabItem Header="Action">
+            <ContentControl x:Name="ActionManager" Focusable="False"/>
         </TabItem>
         <TabItem Header="Advanced">
             <Grid>

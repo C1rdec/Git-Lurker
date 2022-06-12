@@ -65,6 +65,10 @@
             settings.Initialize();
             _container.Instance(settings);
 
+            var customActions = new CustomActionSettingsFile();
+            customActions.Initialize();
+            _container.Instance(customActions);
+
             var startupService = new WindowsLink("GitLurker.lnk", "GitLurker");
             _container.Instance(startupService);
         }

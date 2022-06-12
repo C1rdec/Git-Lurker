@@ -1,5 +1,6 @@
 ﻿namespace GitLurker.UI.ViewModels
 {
+    using System;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
@@ -23,6 +24,7 @@
         private bool _showParentFolder;
         private ActionBarViewModel _actionBar;
         private SettingsFile _settingsFile;
+        private CustomActionSettingsFile _actionsFile;
 
         #endregion
 
@@ -32,10 +34,20 @@
         {
             _repo = repo;
             _settingsFile = IoC.Get<SettingsFile>();
+            _actionsFile = IoC.Get<CustomActionSettingsFile>();
             _actionBar = new ActionBarViewModel(repo);
             _showParentFolder = repo.Duplicate;
             _aggregator = IoC.Get<IEventAggregator>();
             _repo.NewProcessMessage += Repo_NewProcessMessage;
+
+            foreach (var action in _actionsFile.GetActions(repo.Folder))
+            {
+                if (Enum.TryParse<PackIconMaterialKind>(action.Icon, out var kind))
+                {
+                    var icon = new PackIconMaterial() { Kind = kind };
+                    _actionBar.AddAction(new ActionViewModel(() => _repo.ExecuteCommandAsync(action.Command, true), icon));
+                }
+            }
         }
 
         #endregion

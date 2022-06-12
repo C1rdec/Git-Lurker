@@ -27,7 +27,8 @@ namespace GitLurker.UI.ViewModels
             _settingsFile.Initialize();
 
             RepoManager = new RepoManagerViewModel(_settingsFile);
-            HotkeyViewModel = new HotkeyViewModel(_settingsFile.Entity.HotKey, Save);
+            Hotkey = new HotkeyViewModel(_settingsFile.Entity.HotKey, Save);
+            ActionManager = new CustomActionManagerViewModel();
             _windowsStartupService = IoC.Get<WindowsLink>();
             IoC.Get<DialogService>().Register(this);
         }
@@ -38,7 +39,9 @@ namespace GitLurker.UI.ViewModels
 
         public RepoManagerViewModel RepoManager { get; set; }
 
-        public HotkeyViewModel HotkeyViewModel { get; set; }
+        public HotkeyViewModel Hotkey { get; set; }
+
+        public CustomActionManagerViewModel ActionManager { get; set; }
 
         public bool HasNugetSource => _settingsFile.HasNugetSource();
 
