@@ -31,9 +31,22 @@
             </Style>
         </ResourceDictionary>
     </mah:MetroWindow.Resources>
+    <mah:MetroWindow.Flyouts>
+        <mah:FlyoutsControl Focusable="False" KeyboardNavigation.TabNavigation="None">
+            <mah:Flyout Header="{Binding FlyoutHeader}"
+                             x:Name="MyFlyout"
+                             KeyboardNavigation.TabNavigation="None"
+                             Focusable="False"
+                             IsOpen="{Binding FlyoutOpen}" 
+                             Width="{Binding ActualWidth, ElementName=FlyoutWidth}"
+                             Position="Right">
+                <ContentControl cal:View.Model="{Binding Path=FlyoutContent,Mode=OneWay}"/>
+            </mah:Flyout>
+        </mah:FlyoutsControl>
+    </mah:MetroWindow.Flyouts>
     <mah:MetroAnimatedTabControl SelectedIndex="{Binding SelectedTabIndex}" mah:TabControlHelper.Underlined="TabPanel" TabStripPlacement="Left">
         <TabItem Header="Workspace" Width="175">
-            <StackPanel>
+            <StackPanel x:Name="FlyoutWidth">
                 <Label Style="{DynamicResource LabelHeaderStyle}">Workspace</Label>
                 <ContentControl x:Name="RepoManager"/>
             </StackPanel>
@@ -65,7 +78,10 @@
             </Grid>
         </TabItem>
         <TabItem Header="Action">
-            <ContentControl x:Name="ActionManager" Focusable="False"/>
+            <StackPanel>
+                <Label Style="{DynamicResource LabelHeaderStyle}">Action</Label>
+                <ContentControl x:Name="ActionManager" Focusable="False"/>
+            </StackPanel>
         </TabItem>
         <TabItem Header="Advanced">
             <Grid>

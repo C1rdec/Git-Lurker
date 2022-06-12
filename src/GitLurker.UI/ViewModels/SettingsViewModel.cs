@@ -1,8 +1,11 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using GitLurker.Models;
 using GitLurker.Services;
+using GitLurker.UI.Models;
+using GitLurker.UI.Services;
 using WindowsUtilities;
 
 namespace GitLurker.UI.ViewModels
@@ -14,6 +17,10 @@ namespace GitLurker.UI.ViewModels
         private System.Action _onSave;
         private SettingsFile _settingsFile;
         private WindowsLink _windowsStartupService;
+        private FlyoutService _flyoutService;
+        private bool _flyoutOpen;
+        private string _flyoutHeader;
+        private PropertyChangedBase _flyoutContent;
         private int _selectedTabIndex;
 
         #endregion
@@ -23,6 +30,7 @@ namespace GitLurker.UI.ViewModels
         public SettingsViewModel(System.Action onSave)
         {
             _onSave = onSave;
+            _flyoutService = IoC.Get<FlyoutService>();
             _settingsFile = IoC.Get<SettingsFile>();
             _settingsFile.Initialize();
 
@@ -31,6 +39,9 @@ namespace GitLurker.UI.ViewModels
             ActionManager = new CustomActionManagerViewModel();
             _windowsStartupService = IoC.Get<WindowsLink>();
             IoC.Get<DialogService>().Register(this);
+
+            _flyoutService.ShowFlyoutRequested += FlyoutService_ShowFlyout;
+            _flyoutService.CloseFlyoutRequested += FlyoutService_CloseFlyout;
         }
 
         #endregion
@@ -44,6 +55,53 @@ namespace GitLurker.UI.ViewModels
         public CustomActionManagerViewModel ActionManager { get; set; }
 
         public bool HasNugetSource => _settingsFile.HasNugetSource();
+
+        public string FlyoutHeader
+        {
+            get
+            {
+                return _flyoutHeader;
+            }
+
+            set
+            {
+                _flyoutHeader = value;
+                NotifyOfPropertyChange(() => FlyoutHeader);
+            }
+        }
+
+        public bool FlyoutOpen
+        {
+            get
+            {
+                return _flyoutOpen;
+            }
+
+            set
+            {
+                if (!value)
+                {
+                    _flyoutService.NotifyFlyoutClosed();
+                }
+
+                _flyoutOpen = value;
+                NotifyOfPropertyChange(() => FlyoutOpen);
+            }
+        }
+
+        public PropertyChangedBase FlyoutContent
+        {
+            get
+            {
+                return _flyoutContent;
+            }
+
+            set
+            {
+                _flyoutContent = value;
+                NotifyOfPropertyChange(() => FlyoutContent);
+            }
+        }
 
         public int SelectedTabIndex
         {
@@ -88,6 +146,21 @@ namespace GitLurker.UI.ViewModels
         #endregion
 
         #region Methods
+
+        public void ShowFlyout(string header, PropertyChangedBase content)
+        {
+            FlyoutHeader = header;
+            FlyoutContent = content;
+            FlyoutOpen = true;
+        }
+
+        public void CloseFlyout()
+        {
+            FlyoutOpen = false;
+
+            // We use the field since we dont want to notify the UI
+            _flyoutContent = null;
+        }
 
         public void Save()
         {
@@ -151,6 +224,10 @@ namespace GitLurker.UI.ViewModels
             Save();
             return base.OnDeactivateAsync(close, cancellationToken);
         }
+
+        private void FlyoutService_ShowFlyout(object _, FlyoutRequest e) => ShowFlyout(e.Header, e.Content);
+
+        private void FlyoutService_CloseFlyout(object _, EventArgs e) => CloseFlyout();
 
         #endregion
     }

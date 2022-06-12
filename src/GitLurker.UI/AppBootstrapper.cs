@@ -7,6 +7,7 @@
     using GitLurker.Models;
     using GitLurker.Services;
     using GitLurker.UI.Extensions;
+    using GitLurker.UI.Services;
     using GitLurker.UI.ViewModels;
     using WindowsUtilities;
 
@@ -55,6 +56,7 @@
         protected override void Configure()
         {
             _container = new SimpleContainer();
+            _container.Singleton<FlyoutService, FlyoutService>();
             _container.Singleton<DialogService, DialogService>();
             _container.Singleton<KeyboardService, KeyboardService>();
             _container.Singleton<IWindowManager, WindowManager>();

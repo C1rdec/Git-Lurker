@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
 using GitLurker.Models;
+using GitLurker.UI.Services;
 using MahApps.Metro.IconPacks;
 
 namespace GitLurker.UI.ViewModels
@@ -26,6 +27,15 @@ namespace GitLurker.UI.ViewModels
         public string ActionName => _action.Name;
 
         public PackIconControlBase Icon => new PackIconMaterial() { Kind = System.Enum.Parse<PackIconMaterialKind>(_action.Icon) };
+
+        #endregion
+
+        #region Methods
+
+        public void Open()
+        {
+            IoC.Get<FlyoutService>().Show(_action.Name, new CustomActionViewModel(_action), MahApps.Metro.Controls.Position.Right);
+        }
 
         #endregion
     }
