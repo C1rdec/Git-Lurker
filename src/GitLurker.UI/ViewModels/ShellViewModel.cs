@@ -26,6 +26,7 @@
         private Window _parent;
         private SettingsFile _settingsFile;
         private KeyboardService _keyboardService;
+        private RepositoryService _repositoryService;
         private WindowsLink _startupService;
         private string _searchTerm;
         private string _searchWatermark;
@@ -43,7 +44,12 @@
 
         #region Constructors
 
-        public ShellViewModel(IEventAggregator aggregator, SettingsFile settings, KeyboardService keyboardService, WindowsLink startupService)
+        public ShellViewModel(
+            IEventAggregator aggregator, 
+            SettingsFile settings, 
+            KeyboardService keyboardService, 
+            WindowsLink startupService,
+            RepositoryService repositoryService)
         {
             _searchTerm = string.Empty;
             _searchWatermark = DefaultWaterMark;
@@ -53,6 +59,7 @@
             _keyboardService = keyboardService;
             _settingsFile = settings;
             _startupService = startupService;
+            _repositoryService = repositoryService;
 
             ApplySettings(settings);
 
@@ -204,7 +211,7 @@
         {
             if (WorkspaceViewModel == null)
             {
-                WorkspaceViewModel = new WorkspaceViewModel(_keyboardService);
+                WorkspaceViewModel = new WorkspaceViewModel(_keyboardService, _repositoryService);
             }
             else
             {
@@ -219,8 +226,7 @@
                 SearchWatermark = "Loading...";
 
                 WorkspaceViewModel.Clear();
-                var worskspaces = await GetWorkspaces(worskspacePaths);
-                WorkspaceViewModel.Refresh(worskspaces);
+                await WorkspaceViewModel.RefreshRepositories();
 
                 Disable = false;
                 SearchWatermark = DefaultWaterMark;

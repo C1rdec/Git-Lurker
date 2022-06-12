@@ -56,6 +56,7 @@
         protected override void Configure()
         {
             _container = new SimpleContainer();
+            _container.Singleton<RepositoryService, RepositoryService>();
             _container.Singleton<FlyoutService, FlyoutService>();
             _container.Singleton<DialogService, DialogService>();
             _container.Singleton<KeyboardService, KeyboardService>();

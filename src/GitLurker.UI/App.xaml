@@ -20,6 +20,35 @@
                     <SolidColorBrush x:Key="Brushes.Primary" Color="{StaticResource Colors.Primary}" />
                     <SolidColorBrush x:Key="Brushes.Secondary" Color="{StaticResource MahApps.Colors.Gray4}" />
                     <SolidColorBrush x:Key="IndicatorForeground" Color="{StaticResource MahApps.Colors.Gray4}" />
+                    <Style x:Key="Tag"
+                       BasedOn="{StaticResource {x:Type Button}}"
+                       TargetType="{x:Type Button}">
+                        <Setter Property="Background" Value="{StaticResource MahApps.Brushes.Accent3}"/>
+                        <Setter Property="Cursor" Value="Hand"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="{x:Type Button}">
+                                    <Border CornerRadius="4">
+                                        <Border.Style>
+                                            <Style TargetType="{x:Type Border}">
+                                                <Setter Property="Background" Value="{StaticResource MahApps.Brushes.Accent3}"/>
+                                                <Style.Triggers>
+                                                    <Trigger Property="IsMouseOver" Value="True">
+                                                        <Setter Property="Background" Value="{StaticResource MahApps.Brushes.Accent2}" />
+                                                    </Trigger>
+                                                    <Trigger Property="IsEnabled" Value="False">
+                                                        <Setter Property="Background" Value="Gray"/>
+                                                        <Setter Property="Opacity" Value="0.5"/>
+                                                    </Trigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="6"></ContentPresenter>
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
                 </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

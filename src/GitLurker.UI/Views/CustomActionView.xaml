@@ -3,12 +3,53 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel>
-        <TextBox x:Name="ActionName"/>
-        <TextBox x:Name="Command"/>
-        <TextBox x:Name="Icon"/>
-        <TextBox x:Name="Repository"/>
-    </StackPanel>
+    <Grid>
+        <StackPanel Margin="15,0,15,0">
+            <TextBox x:Name="ActionName" 
+                     Style="{DynamicResource TextBoxStyle}"
+                     FontSize="22"
+                     mah:TextBoxHelper.UseFloatingWatermark="True"
+                     Margin="0,0,0,10"
+                     mah:TextBoxHelper.Watermark="Name"/>
+            <TextBox x:Name="Command" 
+                     Style="{DynamicResource TextBoxStyle}" 
+                     Margin="0,0,0,10"
+                     FontSize="22"
+                     mah:TextBoxHelper.UseFloatingWatermark="True"
+                     mah:TextBoxHelper.Watermark="Command"/>
+            <Grid Margin="0,0,0,10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <ComboBox ItemsSource="{Binding Icons}" SelectedItem="{Binding SelectedIcon}" BorderThickness="0,0,0,1" Cursor="Hand"/>
+                <iconPacks:PackIconMaterial Margin="10,0,0,0" VerticalAlignment="Center" Kind="{Binding SelectedIcon}" Grid.Column="1" Height="20"/>
+            </Grid>
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="auto"/>
+                </Grid.ColumnDefinitions>
+                <ComboBox ItemsSource="{Binding Repositories}" SelectedItem="{Binding SelectedRepository}" BorderThickness="0,0,0,1" Cursor="Hand"/>
+                <iconPacks:PackIconMaterial Margin="10,0,0,0" VerticalAlignment="Center" Kind="SourceRepository" Grid.Column="1" Height="20"/>
+            </Grid>
+        </StackPanel>
+        <Button x:Name="Save"
+                Style="{DynamicResource Tag}"
+                VerticalAlignment="Top" 
+                HorizontalAlignment="Right" 
+                Visibility="{Binding Modified, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Height="40" 
+                Width="40"
+                Margin="8,-40,10,8">
+            <Button.Content>
+                <iconPacks:PackIconMaterial Margin="6" Kind="ContentSave" Height="15" Width="15" />
+            </Button.Content>
+        </Button>
+    </Grid>
 </UserControl>

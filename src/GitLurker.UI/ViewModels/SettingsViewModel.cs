@@ -109,6 +109,7 @@ namespace GitLurker.UI.ViewModels
             set
             {
                 _selectedTabIndex = value;
+                FlyoutOpen = false;
                 NotifyOfPropertyChange();
             }
         }

@@ -31,9 +31,5 @@ namespace GitLurker.UI.ViewModels
         public ObservableCollection<CustomActionTileViewModel> Actions { get; set; }
 
         #endregion
-
-        #region Methods
-
-        #endregion
     }
 }

@@ -29,6 +29,11 @@
                 <Setter Property="FontWeight" Value="SemiBold" />
                 <Setter Property="HorizontalAlignment" Value="Center" />
             </Style>
+            <Style x:Key="TextBoxStyle"
+                   BasedOn="{StaticResource {x:Type TextBox}}"
+                   TargetType="{x:Type TextBox}">
+                <Setter Property="BorderThickness" Value="0,0,0,1" />
+            </Style>
         </ResourceDictionary>
     </mah:MetroWindow.Resources>
     <mah:MetroWindow.Flyouts>
@@ -40,13 +45,13 @@
                              IsOpen="{Binding FlyoutOpen}" 
                              Width="{Binding ActualWidth, ElementName=FlyoutWidth}"
                              Position="Right">
-                <ContentControl cal:View.Model="{Binding Path=FlyoutContent,Mode=OneWay}"/>
+                <ContentControl cal:View.Model="{Binding Path=FlyoutContent,Mode=OneWay}" VerticalAlignment="Center" MaxWidth="650"/>
             </mah:Flyout>
         </mah:FlyoutsControl>
     </mah:MetroWindow.Flyouts>
     <mah:MetroAnimatedTabControl SelectedIndex="{Binding SelectedTabIndex}" mah:TabControlHelper.Underlined="TabPanel" TabStripPlacement="Left">
         <TabItem Header="Workspace" Width="175">
-            <StackPanel x:Name="FlyoutWidth">
+            <StackPanel>
                 <Label Style="{DynamicResource LabelHeaderStyle}">Workspace</Label>
                 <ContentControl x:Name="RepoManager"/>
             </StackPanel>
@@ -78,9 +83,9 @@
             </Grid>
         </TabItem>
         <TabItem Header="Action">
-            <StackPanel>
+            <StackPanel x:Name="FlyoutWidth">
                 <Label Style="{DynamicResource LabelHeaderStyle}">Action</Label>
-                <ContentControl x:Name="ActionManager" Focusable="False"/>
+                <ContentControl x:Name="ActionManager" Focusable="False" MaxWidth="650" Margin="0,10,0,0"/>
             </StackPanel>
         </TabItem>
         <TabItem Header="Advanced">

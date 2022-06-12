@@ -26,7 +26,7 @@
             <ContentControl Content="{Binding Icon}"
                             Margin="10,0,0,0"
                             VerticalAlignment="Center"
-                    Opacity="0.4"/>
+                            Opacity="0.4"/>
         </StackPanel>
     </Border>
 </UserControl>
