@@ -21,7 +21,6 @@ namespace GitLurker.UI.ViewModels
         public CustomActionTileViewModel(CustomAction action)
         {
             _action = action;
-            CurrentFlyoutService.FlyoutClosed += CurrentFlyoutService_FlyoutClosed;
         }
 
         #endregion
@@ -47,12 +46,6 @@ namespace GitLurker.UI.ViewModels
 
             // To notify the parent
             NotifyOfPropertyChange("Deleted");
-        }
-
-        private void CurrentFlyoutService_FlyoutClosed(object sender, System.EventArgs e)
-        {
-            NotifyOfPropertyChange(() => ActionName);
-            NotifyOfPropertyChange(() => Icon);
         }
 
         #endregion
