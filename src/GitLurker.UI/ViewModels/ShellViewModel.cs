@@ -14,6 +14,7 @@
     using GitLurker.UI.Helper;
     using GitLurker.UI.Helpers;
     using GitLurker.UI.Messages;
+    using GitLurker.UI.Services;
     using GitLurker.UI.Views;
     using NHotkey.Wpf;
     using WindowsUtilities;
@@ -49,7 +50,8 @@
             SettingsFile settings, 
             KeyboardService keyboardService, 
             WindowsLink startupService,
-            RepositoryService repositoryService)
+            RepositoryService repositoryService,
+            ThemeService themeService)
         {
             _searchTerm = string.Empty;
             _searchWatermark = DefaultWaterMark;
@@ -57,9 +59,11 @@
             _showInTaskBar = true;
             _eventAggregator = aggregator;
             _keyboardService = keyboardService;
-            _settingsFile = settings;
             _startupService = startupService;
             _repositoryService = repositoryService;
+            _settingsFile = settings;
+
+            _settingsFile.OnFileSaved += OnSettingsSave;
 
             ApplySettings(settings);
 
@@ -70,6 +74,7 @@
 
             SetGlobalHotkey();
             _eventAggregator.SubscribeOnPublishedThread(this);
+            themeService.Apply();
         }
 
         #endregion
@@ -204,7 +209,13 @@
 
         public void OpenSettings()
         {
-            IoC.Get<IWindowManager>().ShowWindowAsync(new SettingsViewModel(OnSettingsSave));
+            var viewModel = IoC.Get<SettingsViewModel>();
+            if (viewModel.IsActive)
+            {
+                return;
+            }
+
+            IoC.Get<IWindowManager>().ShowWindowAsync(IoC.Get<SettingsViewModel>());
         }
 
         public async void RefreshWorkspace()
@@ -308,10 +319,9 @@
             _parent.Hide();
         }
 
-        private void OnSettingsSave()
+        private void OnSettingsSave(object sender, EventArgs e)
         {
             SetGlobalHotkey();
-            RefreshWorkspace();
         }
 
         private void SetGlobalHotkey()

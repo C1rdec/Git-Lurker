@@ -38,6 +38,8 @@ namespace GitLurker.Models
 
         public bool DoubleTabEnabled { get; set; }
 
+        public Scheme Scheme { get; set; }
+
         #endregion
     }
 }

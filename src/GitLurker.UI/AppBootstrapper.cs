@@ -57,7 +57,9 @@
         {
             _container = new SimpleContainer();
             _container.Singleton<RepositoryService, RepositoryService>();
+            _container.Singleton<ThemeService, ThemeService>();
             _container.Singleton<FlyoutService, FlyoutService>();
+            _container.Singleton<SettingsViewModel, SettingsViewModel>();
             _container.Singleton<DialogService, DialogService>();
             _container.Singleton<KeyboardService, KeyboardService>();
             _container.Singleton<IWindowManager, WindowManager>();
@@ -74,6 +76,7 @@
 
             var startupService = new WindowsLink("GitLurker.lnk", "GitLurker");
             _container.Instance(startupService);
+            _container.Instance(Application);
         }
 
         /// <summary>

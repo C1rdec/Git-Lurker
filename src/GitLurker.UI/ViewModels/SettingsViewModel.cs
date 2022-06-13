@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Caliburn.Micro;
@@ -14,31 +15,31 @@ namespace GitLurker.UI.ViewModels
     {
         #region Fields
 
-        private System.Action _onSave;
         private SettingsFile _settingsFile;
         private WindowsLink _windowsStartupService;
         private FlyoutService _flyoutService;
+        private PropertyChangedBase _flyoutContent;
+        private ThemeService _themeService;
         private bool _flyoutOpen;
         private string _flyoutHeader;
-        private PropertyChangedBase _flyoutContent;
         private int _selectedTabIndex;
 
         #endregion
 
         #region Constructors
 
-        public SettingsViewModel(System.Action onSave)
+        public SettingsViewModel(FlyoutService flyoutService, SettingsFile settingsFile, ThemeService themeService, WindowsLink windowsLink, DialogService dialogService)
         {
-            _onSave = onSave;
-            _flyoutService = IoC.Get<FlyoutService>();
-            _settingsFile = IoC.Get<SettingsFile>();
+            _flyoutService = flyoutService;
+            _themeService = themeService;
+            _windowsStartupService = windowsLink;
+            _settingsFile = settingsFile;
             _settingsFile.Initialize();
 
             RepoManager = new RepoManagerViewModel(_settingsFile);
             Hotkey = new HotkeyViewModel(_settingsFile.Entity.HotKey, Save);
             ActionManager = new CustomActionManagerViewModel();
-            _windowsStartupService = IoC.Get<WindowsLink>();
-            IoC.Get<DialogService>().Register(this);
+            dialogService.Register(this);
 
             _flyoutService.ShowFlyoutRequested += FlyoutService_ShowFlyout;
             _flyoutService.CloseFlyoutRequested += FlyoutService_CloseFlyout;
@@ -56,13 +57,11 @@ namespace GitLurker.UI.ViewModels
 
         public bool HasNugetSource => _settingsFile.HasNugetSource();
 
+        public IEnumerable<Scheme> Schemes => _themeService.GetSchemes();
+
         public string FlyoutHeader
         {
-            get
-            {
-                return _flyoutHeader;
-            }
-
+            get => _flyoutHeader;
             set
             {
                 _flyoutHeader = value;
@@ -70,13 +69,23 @@ namespace GitLurker.UI.ViewModels
             }
         }
 
+        public Scheme SelectedScheme
+        {
+            get => _settingsFile.Entity.Scheme;
+            set
+            {
+                if (_settingsFile.Entity.Scheme != value)
+                {
+                    _themeService.Change(Theme.Dark, value);
+                    _settingsFile.Entity.Scheme = value;
+                    NotifyOfPropertyChange();
+                }
+            }
+        }
+
         public bool FlyoutOpen
         {
-            get
-            {
-                return _flyoutOpen;
-            }
-
+            get =>_flyoutOpen;
             set
             {
                 if (!value)
@@ -91,11 +100,7 @@ namespace GitLurker.UI.ViewModels
 
         public PropertyChangedBase FlyoutContent
         {
-            get
-            {
-                return _flyoutContent;
-            }
-
+            get => _flyoutContent;
             set
             {
                 _flyoutContent = value;
@@ -166,7 +171,6 @@ namespace GitLurker.UI.ViewModels
         public void Save()
         {
             _settingsFile.Save();
-            _onSave?.Invoke();
         }
 
         public void ToggleAddMenu()
