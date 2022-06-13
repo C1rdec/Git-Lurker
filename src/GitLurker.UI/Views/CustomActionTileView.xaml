@@ -8,18 +8,7 @@
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="auto"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
-        <Button x:Name="Delete" BorderThickness="0" Cursor="Hand" Margin="0,4,0,4">
-            <Button.ContentTemplate>
-                <DataTemplate>
-                    <iconPacks:PackIconMaterial Kind="Delete" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.3"/>
-                </DataTemplate>
-            </Button.ContentTemplate>
-        </Button>
+    <Grid x:Name="Main">
         <Border CornerRadius="8" Margin="4" Cursor="Hand" cal:Message.Attach="[Event MouseUp] = [Action Open()]" Grid.Column="1">
             <Border.Style>
                 <Style TargetType="Border">
@@ -44,6 +33,25 @@
                             Opacity="0.4"/>
             </StackPanel>
         </Border>
+        <Button x:Name="Delete" BorderThickness="0" Cursor="Hand" Margin="8,4,0,4" VerticalAlignment="Center" HorizontalAlignment="Left">
+            <Button.Style>
+                <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                    <Setter Property="Visibility" Value="Hidden"/>
+                    <Setter Property="ContentTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <iconPacks:PackIconMaterial Kind="Delete" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.3"/>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=Main, Path=IsMouseOver}" Value="True">
+                            <Setter Property="Visibility" Value="Visible" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>
     </Grid>
 
 </UserControl>
