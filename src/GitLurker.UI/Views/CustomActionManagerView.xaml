@@ -4,18 +4,42 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GitLurker.UI.Views"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <ScrollViewer  x:Name="ScrollViewer"
-                    HorizontalScrollBarVisibility="Hidden" 
-                    PreviewMouseWheel="ScrollViewer_PreviewMouseWheel" 
-                    VerticalScrollBarVisibility="Hidden">
-        <ItemsControl x:Name="Actions">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
-    </ScrollViewer>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <ScrollViewer  x:Name="ScrollViewer"
+                        HorizontalScrollBarVisibility="Hidden" 
+                        PreviewMouseWheel="ScrollViewer_PreviewMouseWheel" 
+                        VerticalScrollBarVisibility="Hidden">
+            <ItemsControl x:Name="Actions">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <Button x:Name="Add"
+                Margin="0,10,0,0"
+                Grid.Row="1"
+                Width="40"
+                Height="40"
+                BorderThickness="1"
+                Foreground="{DynamicResource MahApps.Brushes.Accent}"
+                Grid.Column="1"
+                Cursor="Hand"
+                Style="{StaticResource MahApps.Styles.Button.Circle}">
+            <Button.ContentTemplate>
+                <DataTemplate>
+                    <iconPacks:PackIconMaterial Kind="Plus" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </DataTemplate>
+            </Button.ContentTemplate>
+        </Button>
+    </Grid>
 </UserControl>

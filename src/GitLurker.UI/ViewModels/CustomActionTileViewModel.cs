@@ -9,6 +9,9 @@ namespace GitLurker.UI.ViewModels
     {
         #region Fields
 
+
+        private static readonly CustomActionSettingsFile CustomActionSettingsFile = IoC.Get<CustomActionSettingsFile>();
+        private static readonly FlyoutService CurrentFlyoutService = IoC.Get<FlyoutService>();
         private CustomAction _action;
 
         #endregion
@@ -18,6 +21,7 @@ namespace GitLurker.UI.ViewModels
         public CustomActionTileViewModel(CustomAction action)
         {
             _action = action;
+            CurrentFlyoutService.FlyoutClosed += CurrentFlyoutService_FlyoutClosed;
         }
 
         #endregion
@@ -34,7 +38,21 @@ namespace GitLurker.UI.ViewModels
 
         public void Open()
         {
-            IoC.Get<FlyoutService>().Show(_action.Name, new CustomActionViewModel(_action), MahApps.Metro.Controls.Position.Right);
+            CurrentFlyoutService.Show(_action.Name, new CustomActionViewModel(_action), MahApps.Metro.Controls.Position.Right);
+        }
+
+        public void Delete()
+        {
+            CustomActionSettingsFile.DeleteAction(_action);
+
+            // To notify the parent
+            NotifyOfPropertyChange("Deleted");
+        }
+
+        private void CurrentFlyoutService_FlyoutClosed(object sender, System.EventArgs e)
+        {
+            NotifyOfPropertyChange(() => ActionName);
+            NotifyOfPropertyChange(() => Icon);
         }
 
         #endregion

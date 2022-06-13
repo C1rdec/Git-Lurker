@@ -22,6 +22,12 @@ namespace GitLurker.Models
             Save();
         }
 
+        public void DeleteAction(CustomAction action)
+        {
+            Entity.Actions.Remove(action);
+            Save();
+        }
+
         public IEnumerable<CustomAction> GetActions(string path) => Entity.Actions.Where(a => a.RepositoryPath == path);
 
         #endregion

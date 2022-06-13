@@ -5,28 +5,45 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:cal="http://www.caliburnproject.org"
              xmlns:local="clr-namespace:GitLurker.UI.Views"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Border CornerRadius="8" Margin="4" Cursor="Hand" cal:Message.Attach="[Event MouseUp] = [Action Open()]">
-        <Border.Style>
-            <Style TargetType="Border">
-                <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent3}"/>
-                <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
-                    </Trigger>
-                    <DataTrigger Binding="{Binding IsSelected}" Value="true">
-                        <Setter Property="Background" Value="{DynamicResource Brushes.Primary}"/>
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-        </Border.Style>
-        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-            <TextBlock x:Name="ActionName" FontSize="28"/>
-            <ContentControl Content="{Binding Icon}"
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Button x:Name="Delete" BorderThickness="0" Cursor="Hand" Margin="0,4,0,4">
+            <Button.ContentTemplate>
+                <DataTemplate>
+                    <iconPacks:PackIconMaterial Kind="Delete" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="0.3"/>
+                </DataTemplate>
+            </Button.ContentTemplate>
+        </Button>
+        <Border CornerRadius="8" Margin="4" Cursor="Hand" cal:Message.Attach="[Event MouseUp] = [Action Open()]" Grid.Column="1">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent3}"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
+                        </Trigger>
+                        <DataTrigger Binding="{Binding IsSelected}" Value="true">
+                            <Setter Property="Background" Value="{DynamicResource Brushes.Primary}"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                <Viewbox>
+                    <TextBlock x:Name="ActionName" FontSize="28"/>
+                </Viewbox>
+                <ContentControl Content="{Binding Icon}"
                             Margin="10,0,0,0"
                             VerticalAlignment="Center"
                             Opacity="0.4"/>
-        </StackPanel>
-    </Border>
+            </StackPanel>
+        </Border>
+    </Grid>
+
 </UserControl>
