@@ -91,7 +91,7 @@
         <TabItem Header="Theme">
             <StackPanel>
                 <Label Style="{DynamicResource LabelHeaderStyle}">Theme</Label>
-                <ComboBox VerticalAlignment="Center" x:Name="Schemes" Grid.Row="1" Margin="20,50,20,0" Cursor="Hand" HorizontalContentAlignment="Center" FontSize="28"/>
+                <ComboBox VerticalAlignment="Center" x:Name="Schemes" Grid.Row="1" Margin="20,50,20,0" Cursor="Hand" HorizontalContentAlignment="Center" FontSize="28" BorderThickness="0,0,0,1"/>
             </StackPanel>
         </TabItem>
         <TabItem Header="Advanced">
@@ -217,6 +217,5 @@
                 </WrapPanel>
             </Grid>
         </TabItem>
-        
     </mah:MetroAnimatedTabControl>
 </mah:MetroWindow>
