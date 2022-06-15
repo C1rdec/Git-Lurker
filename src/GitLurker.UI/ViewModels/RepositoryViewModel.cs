@@ -45,7 +45,7 @@
                 if (Enum.TryParse<PackIconMaterialKind>(action.Icon, out var kind))
                 {
                     var icon = new PackIconMaterial() { Kind = kind };
-                    _actionBar.AddAction(new ActionViewModel(() => _repo.ExecuteCommandAsync(action.Command, true), icon));
+                    _actionBar.AddAction(() => _repo.ExecuteCommandAsync(action.Command, true), icon);
                 }
             }
         }
@@ -187,8 +187,7 @@
                         return;
                     }
 
-                    var action = new ActionViewModel(() => _repo.AddNugetAsync(nuget), new PackIconSimpleIcons() { Kind = PackIconSimpleIconsKind.NuGet }, false);
-                    _actionBar.AddAction(action);
+                    _actionBar.AddAction(() => _repo.AddNugetAsync(nuget), new PackIconSimpleIcons() { Kind = PackIconSimpleIconsKind.NuGet });
                 }
             }
         }

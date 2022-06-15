@@ -28,7 +28,6 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
                 <Border CornerRadius="6,0,0,6" cal:Message.Attach="[Event MouseUp] = [Action Open()]; [Event MouseDown] = [Action Delay()]" Grid.ColumnSpan="2">
                     <Border.Background>
@@ -79,8 +78,8 @@
                                    FontWeight="Light"/>
                     </DockPanel>
                 </Border>
-                <ContentControl x:Name="ActionBar" Grid.Column="1"/>
             </Grid>
+            <ContentControl x:Name="ActionBar" HorizontalAlignment="Right"/>
         </Grid>
     </Border>
 </UserControl>

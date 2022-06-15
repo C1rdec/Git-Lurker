@@ -21,13 +21,12 @@ namespace GitLurker.UI.ViewModels
         public ActionBarViewModel(Repository repo)
         {
             Actions = new ObservableCollection<ActionViewModel>();
+            AddAction(repo.PullAsync, new PackIconMaterial() { Kind = PackIconMaterialKind.ChevronDown });
 
             if (repo.HasFrontEnd)
             {
                 AddAction(repo.OpenFrontEnd, new PackIconSimpleIcons() { Kind = PackIconSimpleIconsKind.VisualStudioCode });
             }
-
-            AddAction(repo.PullAsync, new PackIconMaterial() { Kind = PackIconMaterialKind.ChevronDown });
         }
 
         #endregion
@@ -66,15 +65,7 @@ namespace GitLurker.UI.ViewModels
             });
         }
 
-        public void AddAction(ActionViewModel newAction)
-        {
-            Execute.OnUIThread(() => 
-            {
-                Actions.Insert(0, newAction);
-            });
-        }
-
-        private void AddAction(Func<Task> task, PackIconControlBase icon)
+        public void AddAction(Func<Task> task, PackIconControlBase icon)
         {
             var callback = async () =>
             {
@@ -88,7 +79,7 @@ namespace GitLurker.UI.ViewModels
                 Busy = false;
             };
 
-            Actions.Add(new ActionViewModel(callback, icon));
+            Actions.Insert(0, new ActionViewModel(callback, icon));
         }
 
         #endregion
