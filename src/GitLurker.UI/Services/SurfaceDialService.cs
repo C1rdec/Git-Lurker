@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
@@ -46,7 +47,7 @@ namespace GitLurker.UI.Services
             _controller.ButtonClicked += Controller_ButtonClicked;
             _controller.RotationChanged += Controller_RotationChanged;
 
-            SetDefaultItems(handle);
+            RemoveSystemItems(handle);
         }
 
         private void Controller_RotationChanged(RadialController sender, RadialControllerRotationChangedEventArgs args)
@@ -64,14 +65,14 @@ namespace GitLurker.UI.Services
         private void Controller_ButtonClicked(RadialController sender, RadialControllerButtonClickedEventArgs args) 
             => ButtonClicked?.Invoke(this, EventArgs.Empty);
 
-        private void SetDefaultItems(IntPtr hwnd)
+        private void RemoveSystemItems(IntPtr hwnd)
         {
             RadialControllerConfiguration config;
             var radialControllerConfigInterop = (IRadialControllerConfigurationInterop)System.Runtime.InteropServices.WindowsRuntime.WindowsRuntimeMarshal.GetActivationFactory(typeof(RadialControllerConfiguration));
             var guid = typeof(RadialControllerConfiguration).GetInterface("IRadialControllerConfiguration").GUID;
 
             config = radialControllerConfigInterop.GetForWindow(hwnd, ref guid);
-            config.SetDefaultMenuItems(new RadialControllerSystemMenuItemKind[0]);
+            config.SetDefaultMenuItems(Enumerable.Empty<RadialControllerSystemMenuItemKind>());
         }
 
         public void Dispose()
