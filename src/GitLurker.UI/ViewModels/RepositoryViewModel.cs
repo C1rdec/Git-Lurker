@@ -152,6 +152,8 @@
             _repo.Open(skipModifier);
         }
 
+        public void OpenPullRequest() => _repo.OpenPullRequest();
+
         public async void Pull() 
         {
             if (Busy)

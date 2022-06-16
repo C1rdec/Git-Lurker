@@ -58,6 +58,30 @@
 
         #region Methods
 
+        public void Open() => Open(false);
+
+        public void Open(bool skipModifier)
+        {
+            if (SelectedRepo != null)
+            {
+                SelectedRepo.Open(skipModifier);
+                return;
+            }
+
+            _repos.FirstOrDefault()?.Open(skipModifier);
+        }
+
+        public void OpenPullRequest()
+        {
+            if (SelectedRepo != null)
+            {
+                SelectedRepo.OpenPullRequest();
+                return;
+            }
+
+            _repos.FirstOrDefault()?.OpenPullRequest();
+        }
+
         public void MoveUp()
         {
             if (SelectedRepo == null)
@@ -146,19 +170,6 @@
                     Repos.Add(new RepositoryViewModel(repo));
                 }
             }
-        }
-
-        public void Open() => Open(false);
-
-        public void Open(bool skipModifier)
-        {
-            if (SelectedRepo != null)
-            {
-                SelectedRepo.Open(skipModifier);
-                return;
-            }
-
-            _repos.FirstOrDefault()?.Open(skipModifier);
         }
 
         public async Task RefreshRepositories()

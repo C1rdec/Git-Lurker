@@ -16,6 +16,8 @@ namespace GitLurker.UI.Services
         #region Fields
 
         private RadialController _controller;
+        private bool _holding;
+        private bool _ignoreNextClick;
 
         #endregion
 
@@ -48,12 +50,23 @@ namespace GitLurker.UI.Services
             _controller.ButtonClicked += Controller_ButtonClicked;
             _controller.RotationChanged += Controller_RotationChanged;
             _controller.ButtonHolding += Controller_ButtonHolding;
+            _controller.ButtonReleased += Controller_ButtonReleased;
 
             RemoveSystemItems(handle);
         }
 
+        private void Controller_ButtonReleased(RadialController sender, RadialControllerButtonReleasedEventArgs args)
+        {
+            if (_holding)
+            {
+                _holding = false;
+                _ignoreNextClick = true;
+                ButtonHolding?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
         private void Controller_ButtonHolding(RadialController sender, RadialControllerButtonHoldingEventArgs args)
-            => ButtonHolding?.Invoke(this, EventArgs.Empty);
+            => _holding = true;
 
         private void Controller_RotationChanged(RadialController sender, RadialControllerRotationChangedEventArgs args)
         {
@@ -67,8 +80,16 @@ namespace GitLurker.UI.Services
             }
         }
 
-        private void Controller_ButtonClicked(RadialController sender, RadialControllerButtonClickedEventArgs args) 
-            => ButtonClicked?.Invoke(this, EventArgs.Empty);
+        private void Controller_ButtonClicked(RadialController sender, RadialControllerButtonClickedEventArgs args)
+        {
+            if (_ignoreNextClick)
+            {
+                _ignoreNextClick = false;
+                return;
+            }
+
+            ButtonClicked?.Invoke(this, EventArgs.Empty);
+        }
 
         private void RemoveSystemItems(IntPtr hwnd)
         {

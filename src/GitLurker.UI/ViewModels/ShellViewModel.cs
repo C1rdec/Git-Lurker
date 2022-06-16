@@ -259,13 +259,13 @@
             HideFromAltTab(View);
         }
 
-        private void SurfaceDialService_ButtonHolding(object sender, EventArgs e) => HideWindow();
+        private void SurfaceDialService_ButtonHolding(object sender, EventArgs e) => WorkspaceViewModel.OpenPullRequest();
 
         private void SurfaceDialService_RotatedLeft(object sender, EventArgs e) => WorkspaceViewModel.MoveUp();
 
         private void SurfaceDialService_RotatedRight(object sender, EventArgs e) => WorkspaceViewModel.MoveDown();
 
-        private void SurfaceDialService_ButtonClicked(object sender, EventArgs e) => WorkspaceViewModel.Open();
+        private void SurfaceDialService_ButtonClicked(object sender, EventArgs e) => WorkspaceViewModel.Open(); 
 
         private void ToggleWindow()
         {
