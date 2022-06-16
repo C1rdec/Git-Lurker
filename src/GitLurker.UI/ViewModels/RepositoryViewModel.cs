@@ -1,7 +1,6 @@
 ﻿namespace GitLurker.UI.ViewModels
 {
     using System;
-    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using Caliburn.Micro;
@@ -13,7 +12,7 @@
     {
         #region Fields
 
-        private static readonly CloseMessage CloseMessage = new();
+        private static readonly CloseMessage CloseMessage = new CloseMessage();
         private CancellationTokenSource _nugetTokenSource;
         private CancellationTokenSource _pullRequestTokenSource;
         private Repository _repo;

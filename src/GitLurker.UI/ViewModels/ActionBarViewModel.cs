@@ -67,7 +67,7 @@ namespace GitLurker.UI.ViewModels
 
         public void AddAction(Func<Task> task, PackIconControlBase icon)
         {
-            var callback = async () =>
+            Func<Task> callback = async () =>
             {
                 if (Busy)
                 {

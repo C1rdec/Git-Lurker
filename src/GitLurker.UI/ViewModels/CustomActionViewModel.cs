@@ -13,7 +13,7 @@ namespace GitLurker.UI.ViewModels
     {
         #region Fields
 
-        private static readonly PackIconMaterialKind[] IconKinds = Enum.GetValues<PackIconMaterialKind>();
+        private static readonly PackIconMaterialKind[] IconKinds = Enum.GetValues(typeof(PackIconMaterialKind)).Cast<PackIconMaterialKind>().ToArray();
         private PackIconMaterialKind _selectedIcon;
         private CustomAction _action;
         private bool _modified;

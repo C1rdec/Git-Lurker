@@ -7,7 +7,6 @@
     using System.Linq;
     using System.Text.Json;
     using System.Threading.Tasks;
-    using Desktop.Robot;
     using GitLurker.Extensions;
     using GitLurker.Services;
 
@@ -16,7 +15,6 @@
         #region Fields
 
         private static readonly string OpenVsCodeCommand = "code .";
-        private static readonly Lazy<Robot> MyRobot = new(() => new Robot());
         private string _name;
         private FileInfo[] _slnFiles;
         private string _folder;
@@ -267,7 +265,6 @@
             if (process != null)
             {
                 Native.SetForegroundWindow(process.MainWindowHandle);
-                MyRobot.Value.KeyPress(Key.Alt);
             }
             else
             {
