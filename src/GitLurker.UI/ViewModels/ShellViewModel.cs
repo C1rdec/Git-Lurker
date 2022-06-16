@@ -1,7 +1,6 @@
 ﻿namespace GitLurker.UI.ViewModels
 {
     using System;
-    using System.Collections.Generic;
     using System.Linq;
     using System.Reflection;
     using System.Threading;
@@ -11,7 +10,6 @@
     using Caliburn.Micro;
     using GitLurker.Models;
     using GitLurker.Services;
-    using GitLurker.UI.Helper;
     using GitLurker.UI.Helpers;
     using GitLurker.UI.Messages;
     using GitLurker.UI.Services;
@@ -38,7 +36,6 @@
         private IEventAggregator _eventAggregator;
         private bool _topMost;
         private string _version;
-        private bool _isCopiedOpen;
         private double _dpiX = 1;
         private double _dpiY = 1;
 
@@ -157,20 +154,6 @@
 
         public string Version => _version;
 
-        public bool IsCopiedOpen
-        {
-            get
-            {
-                return _isCopiedOpen;
-            }
-
-            set
-            {
-                _isCopiedOpen = value;
-                NotifyOfPropertyChange();
-            }
-        }
-
         protected ShellView View { get; private set; }
 
         #endregion
@@ -248,13 +231,6 @@
                 FocusSearch();
                 WorkspaceViewModel.ShowRecent();
             }
-        }
-
-        public void Share()
-        {
-            IsCopiedOpen = true;
-            Task.Delay(1400).ContinueWith(t => IsCopiedOpen = false);
-            ClipboardHelper.SetText("https://github.com/C1rdec/Git-Lurker");
         }
 
         protected override async void OnViewLoaded(object view)
