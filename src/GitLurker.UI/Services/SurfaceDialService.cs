@@ -38,10 +38,9 @@ namespace GitLurker.UI.Services
             var handle = new WindowInteropHelper(window).Handle;
             _controller = interop.CreateForWindow(handle, ref guid);
 
-            string path = System.Reflection.Assembly.GetExecutingAssembly().Location;
-
-            var pngPath = Path.Combine(Path.GetDirectoryName(path), "GitLurker.png");
-            var file = await StorageFile.GetFileFromPathAsync(pngPath);
+            var root = System.Reflection.Assembly.GetExecutingAssembly().Location;
+            var filePath = Path.Combine(Path.GetDirectoryName(root), "GitLurker.png");
+            var file = await StorageFile.GetFileFromPathAsync(filePath);
             _controller.Menu.Items.Add(RadialControllerMenuItem.CreateFromIcon("Git Lurker", RandomAccessStreamReference.CreateFromFile(file)));
 
             _controller.ButtonClicked += Controller_ButtonClicked;
