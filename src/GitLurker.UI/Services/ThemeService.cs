@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using GitLurker.Models;
 
@@ -12,7 +10,6 @@ namespace GitLurker.UI.Services
     {
         #region Fields
 
-        private static Random _random = new();
         private Application _application;
         private SettingsFile _settingsService;
 

@@ -19,9 +19,9 @@ namespace GitLurker.Models
 
         public string Name => $"{PackageName} {Version.ToNormalizedString()}";
 
-        public NuGetVersion Version { get; init; }
+        public NuGetVersion Version { get; private set; }
 
-        public string PackageName { get; init; }
+        public string PackageName { get; private set; }
 
         public string FilePath { get; set; }
 

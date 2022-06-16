@@ -28,6 +28,7 @@
         private SettingsFile _settingsFile;
         private KeyboardService _keyboardService;
         private RepositoryService _repositoryService;
+        private SurfaceDialService _surfaceDialService;
         private WindowsLink _startupService;
         private string _searchTerm;
         private string _searchWatermark;
@@ -51,6 +52,7 @@
             KeyboardService keyboardService, 
             WindowsLink startupService,
             RepositoryService repositoryService,
+            SurfaceDialService surfaceDialService,
             ThemeService themeService)
         {
             _searchTerm = string.Empty;
@@ -61,6 +63,7 @@
             _keyboardService = keyboardService;
             _startupService = startupService;
             _repositoryService = repositoryService;
+            _surfaceDialService = surfaceDialService;
             _settingsFile = settings;
 
             _settingsFile.OnFileSaved += OnSettingsSave;
@@ -257,6 +260,13 @@
         protected override async void OnViewLoaded(object view)
         {
             View = view as ShellView;
+
+            await _surfaceDialService.Initialize(View);
+
+            _surfaceDialService.ButtonClicked += SurfaceDialService_ButtonClicked;
+            _surfaceDialService.RotatedRight += SurfaceDialService_RotatedRight;
+            _surfaceDialService.RotatedLeft += SurfaceDialService_RotatedLeft;
+
             var source = PresentationSource.FromVisual(this.View);
             if (source != null)
             {
@@ -272,7 +282,11 @@
             HideFromAltTab(View);
         }
 
-        private Task<Workspace[]> GetWorkspaces(IEnumerable<string> paths) => Task.Run(() => paths.Select(w => new Workspace(w)).ToArray());
+        private void SurfaceDialService_RotatedLeft(object sender, EventArgs e) => WorkspaceViewModel.MoveUp();
+
+        private void SurfaceDialService_RotatedRight(object sender, EventArgs e) => WorkspaceViewModel.MoveDown();
+
+        private void SurfaceDialService_ButtonClicked(object sender, EventArgs e) => WorkspaceViewModel.Open();
 
         private void ToggleWindow()
         {
@@ -336,6 +350,7 @@
             try
             {
                 HotkeyManager.Current.AddOrReplace("Open", key, modifier , (s, e) => ToggleWindow());
+                HotkeyManager.Current.AddOrReplace("OpenDial", Key.F12, ModifierKeys.Control, (s, e) => ToggleWindow());
             }
             catch (NHotkey.HotkeyAlreadyRegisteredException)
             {

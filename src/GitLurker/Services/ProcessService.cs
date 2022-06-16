@@ -75,7 +75,7 @@ namespace GitLurker.Services
 
             process.Start();
             process.BeginOutputReadLine();
-            process.WaitForExitAsync().ContinueWith(t => 
+            Task.Run(() => process.WaitForExit()).ContinueWith(t => 
             { 
                 taskCompletionSource.SetResult(data);
             });
