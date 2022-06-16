@@ -23,6 +23,8 @@ namespace GitLurker.UI.Services
 
         public event EventHandler ButtonClicked;
 
+        public event EventHandler ButtonHolding;
+
         public event EventHandler RotatedLeft;
 
         public event EventHandler RotatedRight;
@@ -45,9 +47,13 @@ namespace GitLurker.UI.Services
 
             _controller.ButtonClicked += Controller_ButtonClicked;
             _controller.RotationChanged += Controller_RotationChanged;
+            _controller.ButtonHolding += Controller_ButtonHolding;
 
             RemoveSystemItems(handle);
         }
+
+        private void Controller_ButtonHolding(RadialController sender, RadialControllerButtonHoldingEventArgs args)
+            => ButtonHolding?.Invoke(this, EventArgs.Empty);
 
         private void Controller_RotationChanged(RadialController sender, RadialControllerRotationChangedEventArgs args)
         {
@@ -71,6 +77,7 @@ namespace GitLurker.UI.Services
             var guid = typeof(RadialControllerConfiguration).GetInterface("IRadialControllerConfiguration").GUID;
 
             config = radialControllerConfigInterop.GetForWindow(hwnd, ref guid);
+            config.IsMenuSuppressed = true;
             config.SetDefaultMenuItems(Enumerable.Empty<RadialControllerSystemMenuItemKind>());
         }
 

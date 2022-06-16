@@ -242,6 +242,7 @@
             _surfaceDialService.ButtonClicked += SurfaceDialService_ButtonClicked;
             _surfaceDialService.RotatedRight += SurfaceDialService_RotatedRight;
             _surfaceDialService.RotatedLeft += SurfaceDialService_RotatedLeft;
+            _surfaceDialService.ButtonHolding += SurfaceDialService_ButtonHolding;
 
             var source = PresentationSource.FromVisual(this.View);
             if (source != null)
@@ -257,6 +258,8 @@
             ShowInTaskBar = false;
             HideFromAltTab(View);
         }
+
+        private void SurfaceDialService_ButtonHolding(object sender, EventArgs e) => HideWindow();
 
         private void SurfaceDialService_RotatedLeft(object sender, EventArgs e) => WorkspaceViewModel.MoveUp();
 
