@@ -58,6 +58,46 @@
 
         #region Methods
 
+        public void MoveUp()
+        {
+            if (SelectedRepo == null)
+            {
+                return;
+            }
+
+            var index = _repos.IndexOf(SelectedRepo);
+            if (index <= 0)
+            {
+                return;
+            }
+
+            index--;
+            SelectedRepo.IsSelected = false;
+            SelectedRepo = Repos.ElementAt(index);
+            SelectedRepo.Select();
+        }
+
+        public void MoveDown()
+        {
+            if (SelectedRepo == null)
+            {
+                SelectedRepo = _repos.FirstOrDefault();
+                SelectedRepo?.Select();
+                return;
+            }
+
+            var index = _repos.IndexOf(_selectedRepo);
+            if (index == -1 || (index + 1) >= _repos.Count)
+            {
+                return;
+            }
+
+            index++;
+            SelectedRepo.IsSelected = false;
+            SelectedRepo = Repos.ElementAt(index);
+            SelectedRepo.Select();
+        }
+
         public void OnMouseEnter()
         {
             _mouseOver = true;
@@ -108,6 +148,8 @@
             }
         }
 
+        public void Open() => Open(false);
+
         public void Open(bool skipModifier)
         {
             if (SelectedRepo != null)
@@ -125,45 +167,9 @@
             _repos.Clear();
         }
 
-        private void KeyboardService_DownPressed(object sender, System.EventArgs e)
-        {
-            if (SelectedRepo == null)
-            {
-                SelectedRepo = _repos.FirstOrDefault();
-                SelectedRepo?.Select();
-                return;
-            }
+        private void KeyboardService_DownPressed(object sender, System.EventArgs e) => MoveDown();
 
-            var index = _repos.IndexOf(_selectedRepo);
-            if (index == -1 || (index + 1) >= _repos.Count)
-            {
-                return;
-            }
-
-            index++;
-            SelectedRepo.IsSelected = false;
-            SelectedRepo = Repos.ElementAt(index);
-            SelectedRepo.Select();
-        }
-
-        private void KeyboardService_UpPressed(object sender, System.EventArgs e)
-        {
-            if (SelectedRepo == null)
-            {
-                return;
-            }
-
-            var index = _repos.IndexOf(SelectedRepo);
-            if (index <= 0)
-            {
-                return;
-            }
-
-            index--;
-            SelectedRepo.IsSelected = false;
-            SelectedRepo = Repos.ElementAt(index);
-            SelectedRepo.Select();
-        }
+        private void KeyboardService_UpPressed(object sender, System.EventArgs e) => MoveUp();
 
         #endregion
     }

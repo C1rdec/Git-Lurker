@@ -57,6 +57,7 @@
         {
             _container = new SimpleContainer();
             _container.Singleton<RepositoryService, RepositoryService>();
+            _container.Singleton<SurfaceDialService, SurfaceDialService>();
             _container.Singleton<ThemeService, ThemeService>();
             _container.Singleton<FlyoutService, FlyoutService>();
             _container.Singleton<SettingsViewModel, SettingsViewModel>();

@@ -9,12 +9,15 @@
     using System.Threading.Tasks;
     using GitLurker.Extensions;
     using GitLurker.Services;
+    using WindowsInput;
+    using WindowsInput.Native;
 
     public class Repository : NugetService
     {
         #region Fields
 
         private static readonly string OpenVsCodeCommand = "code .";
+        private static readonly InputSimulator InputSimulator = new InputSimulator();
         private string _name;
         private FileInfo[] _slnFiles;
         private string _folder;
@@ -265,6 +268,7 @@
             if (process != null)
             {
                 Native.SetForegroundWindow(process.MainWindowHandle);
+                InputSimulator.Keyboard.KeyPress(VirtualKeyCode.LMENU);
             }
             else
             {
