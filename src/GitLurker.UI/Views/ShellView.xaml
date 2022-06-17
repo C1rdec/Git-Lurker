@@ -17,22 +17,10 @@
         Height="560" Width="800">
 
     <Grid Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <Grid.RowDefinitions>
+        <Grid.RowDefinitions>
             <RowDefinition Height="auto"></RowDefinition>
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
-        <Popup IsOpen="{Binding IsCopiedOpen}" Placement="Mouse" PopupAnimation="Fade" AllowsTransparency="True" Opacity="1">
-            <Border CornerRadius="4" Background="{DynamicResource MahApps.Brushes.Accent}">
-                <Grid Margin="10,0,10,5">
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <TextBlock Margin="4" Foreground="White">GitLurker URL Copied!</TextBlock>
-                    <TextBlock HorizontalAlignment="Center" Margin="0,-4,0,0" Foreground="White" Opacity="0.75" FontSize="12" VerticalAlignment="Top" Grid.Row="1">Share the Love &lt;3</TextBlock>
-                </Grid>
-            </Border>
-        </Popup>
         <Button BorderThickness="0" x:Name="HideWindow" IsCancel="true" Width="1" Height="1" Background="Transparent"/>
         <tb:TaskbarIcon
             IconSource="/Resources/GitLurker.ico"
