@@ -346,7 +346,7 @@
             try
             {
                 HotkeyManager.Current.AddOrReplace("Open", key, modifier , (s, e) => ToggleWindow());
-                HotkeyManager.Current.AddOrReplace("OpenDial", Key.F12, ModifierKeys.Control, (s, e) => ToggleWindow());
+                HotkeyManager.Current.AddOrReplace("OpenDial", Key.F12, ModifierKeys.Control | ModifierKeys.Shift, (s, e) => ToggleWindow());
             }
             catch (NHotkey.HotkeyAlreadyRegisteredException)
             {
