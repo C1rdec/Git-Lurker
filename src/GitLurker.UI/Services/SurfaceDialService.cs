@@ -31,6 +31,10 @@ namespace GitLurker.UI.Services
 
         public event EventHandler RotatedRight;
 
+        public event EventHandler ControlAcquired;
+
+        public event EventHandler ControlLost;
+
         #endregion
 
         #region Methods
@@ -51,9 +55,17 @@ namespace GitLurker.UI.Services
             _controller.RotationChanged += Controller_RotationChanged;
             _controller.ButtonHolding += Controller_ButtonHolding;
             _controller.ButtonReleased += Controller_ButtonReleased;
+            _controller.ControlAcquired += Controller_ControlAcquired;
+            _controller.ControlLost += Controller_ControlLost;
 
-            RemoveSystemItems(handle);
+            ApplyConfigurations(handle);
         }
+
+        private void Controller_ControlLost(RadialController sender, object args)
+            => ControlLost?.Invoke(this, EventArgs.Empty);
+
+        private void Controller_ControlAcquired(RadialController sender, RadialControllerControlAcquiredEventArgs args)
+            => ControlAcquired?.Invoke(this, EventArgs.Empty);
 
         private void Controller_ButtonReleased(RadialController sender, RadialControllerButtonReleasedEventArgs args)
         {
@@ -91,15 +103,15 @@ namespace GitLurker.UI.Services
             ButtonClicked?.Invoke(this, EventArgs.Empty);
         }
 
-        private void RemoveSystemItems(IntPtr hwnd)
+        private void ApplyConfigurations(IntPtr hwnd)
         {
-            RadialControllerConfiguration config;
             var radialControllerConfigInterop = (IRadialControllerConfigurationInterop)System.Runtime.InteropServices.WindowsRuntime.WindowsRuntimeMarshal.GetActivationFactory(typeof(RadialControllerConfiguration));
             var guid = typeof(RadialControllerConfiguration).GetInterface("IRadialControllerConfiguration").GUID;
 
-            config = radialControllerConfigInterop.GetForWindow(hwnd, ref guid);
-            config.IsMenuSuppressed = true;
-            config.SetDefaultMenuItems(Enumerable.Empty<RadialControllerSystemMenuItemKind>());
+            var configuration = radialControllerConfigInterop.GetForWindow(hwnd, ref guid);
+            var t = RadialControllerConfiguration.IsAppControllerEnabled;
+            configuration.IsMenuSuppressed = true;
+            configuration.SetDefaultMenuItems(Enumerable.Empty<RadialControllerSystemMenuItemKind>());
         }
 
         public void Dispose()

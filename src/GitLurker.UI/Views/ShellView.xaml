@@ -57,7 +57,8 @@
         <Border Background="{DynamicResource MahApps.Brushes.Gray10}" 
                 CornerRadius="10" 
                 BorderThickness="0,0,0,1.6">
-            <TextBox x:Name="SearchTerm"
+            <Grid>
+                <TextBox x:Name="SearchTerm"
                      Margin="10,5,0,5"
                      Grid.Column="1"
                      Background="Transparent"
@@ -69,6 +70,21 @@
                      Controls:TextBoxHelper.SelectAllOnFocus="True"
                      Controls:TextBoxHelper.Watermark="{Binding SearchWatermark}"
                      BorderBrush="{DynamicResource MahApps.Brushes.Accent}"/>
+                <StackPanel Orientation="Horizontal" 
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Right"
+                            Visibility="{Binding HasSurfaceDial, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                            Margin="0,0,10,5">
+
+                    <iconPacks:PackIconMaterial Kind="HockeyPuck" 
+                                            Height="18"
+                                            Width="18"
+                                            Foreground="{DynamicResource MahApps.Brushes.Accent2}"/>
+                    <TextBlock VerticalAlignment="Center"
+                               Margin="10,0,0,0"
+                               Foreground="{DynamicResource MahApps.Brushes.Accent2}">Connected</TextBlock>
+                </StackPanel>
+            </Grid>
         </Border>
 
         <Grid VerticalAlignment="Top"

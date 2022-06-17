@@ -38,6 +38,7 @@
         private string _version;
         private double _dpiX = 1;
         private double _dpiY = 1;
+        private bool _hasSurfaceDial;
 
         #endregion
 
@@ -98,6 +99,16 @@
 
                 _searchTerm = value;
                 Search(_searchTerm);
+                NotifyOfPropertyChange();
+            }
+        }
+
+        public bool HasSurfaceDial
+        {
+            get => _hasSurfaceDial;
+            set
+            {
+                _hasSurfaceDial = value;
                 NotifyOfPropertyChange();
             }
         }
@@ -243,6 +254,8 @@
             _surfaceDialService.RotatedRight += SurfaceDialService_RotatedRight;
             _surfaceDialService.RotatedLeft += SurfaceDialService_RotatedLeft;
             _surfaceDialService.ButtonHolding += SurfaceDialService_ButtonHolding;
+            _surfaceDialService.ControlAcquired += SurfaceDialService_ControlAcquired;
+            _surfaceDialService.ControlLost += SurfaceDialService_ControlLost;
 
             var source = PresentationSource.FromVisual(this.View);
             if (source != null)
@@ -258,6 +271,10 @@
             ShowInTaskBar = false;
             HideFromAltTab(View);
         }
+
+        private void SurfaceDialService_ControlLost(object sender, EventArgs e) => HasSurfaceDial = false;
+
+        private void SurfaceDialService_ControlAcquired(object sender, EventArgs e) => HasSurfaceDial = true;
 
         private void SurfaceDialService_ButtonHolding(object sender, EventArgs e) => WorkspaceViewModel.OpenPullRequest();
 
