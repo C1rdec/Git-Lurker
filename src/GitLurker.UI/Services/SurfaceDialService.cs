@@ -67,6 +67,9 @@ namespace GitLurker.UI.Services
         private void Controller_ControlAcquired(RadialController sender, RadialControllerControlAcquiredEventArgs args)
             => ControlAcquired?.Invoke(this, EventArgs.Empty);
 
+        private void Controller_ButtonHolding(RadialController sender, RadialControllerButtonHoldingEventArgs args)
+            => _holding = true;
+
         private void Controller_ButtonReleased(RadialController sender, RadialControllerButtonReleasedEventArgs args)
         {
             if (_holding)
@@ -76,9 +79,6 @@ namespace GitLurker.UI.Services
                 ButtonHolding?.Invoke(this, EventArgs.Empty);
             }
         }
-
-        private void Controller_ButtonHolding(RadialController sender, RadialControllerButtonHoldingEventArgs args)
-            => _holding = true;
 
         private void Controller_RotationChanged(RadialController sender, RadialControllerRotationChangedEventArgs args)
         {
@@ -109,7 +109,6 @@ namespace GitLurker.UI.Services
             var guid = typeof(RadialControllerConfiguration).GetInterface("IRadialControllerConfiguration").GUID;
 
             var configuration = radialControllerConfigInterop.GetForWindow(hwnd, ref guid);
-            var t = RadialControllerConfiguration.IsAppControllerEnabled;
             configuration.IsMenuSuppressed = true;
             configuration.SetDefaultMenuItems(Enumerable.Empty<RadialControllerSystemMenuItemKind>());
         }
@@ -118,6 +117,10 @@ namespace GitLurker.UI.Services
         {
             _controller.ButtonClicked -= Controller_ButtonClicked;
             _controller.RotationChanged -= Controller_RotationChanged;
+            _controller.ButtonHolding -= Controller_ButtonHolding;
+            _controller.ButtonReleased -= Controller_ButtonReleased;
+            _controller.ControlAcquired -= Controller_ControlAcquired;
+            _controller.ControlLost -= Controller_ControlLost;
         }
 
         #endregion
