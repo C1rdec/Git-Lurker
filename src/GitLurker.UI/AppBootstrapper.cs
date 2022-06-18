@@ -56,16 +56,21 @@
         protected override void Configure()
         {
             _container = new SimpleContainer();
+
+            // Services
             _container.Singleton<RepositoryService, RepositoryService>();
             _container.Singleton<SurfaceDialService, SurfaceDialService>();
             _container.Singleton<ThemeService, ThemeService>();
             _container.Singleton<FlyoutService, FlyoutService>();
-            _container.Singleton<SettingsViewModel, SettingsViewModel>();
             _container.Singleton<DialogService, DialogService>();
             _container.Singleton<KeyboardService, KeyboardService>();
             _container.Singleton<IWindowManager, WindowManager>();
             _container.Singleton<IEventAggregator, EventAggregator>();
+
+            // ViewModels
             _container.PerRequest<ShellViewModel, ShellViewModel>();
+            _container.Singleton<SettingsViewModel, SettingsViewModel>();
+            _container.Singleton<ConsoleViewModel, ConsoleViewModel>();
 
             var settings = new SettingsFile();
             settings.Initialize();

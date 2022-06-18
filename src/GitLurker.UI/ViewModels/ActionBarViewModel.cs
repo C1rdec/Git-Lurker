@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using GitLurker.Models;
+using GitLurker.UI.Messages;
 using MahApps.Metro.IconPacks;
 
 namespace GitLurker.UI.ViewModels
@@ -13,6 +14,7 @@ namespace GitLurker.UI.ViewModels
         #region Fields
 
         private bool _busy;
+        private Repository _repo;
 
         #endregion
 
@@ -20,6 +22,7 @@ namespace GitLurker.UI.ViewModels
 
         public ActionBarViewModel(Repository repo)
         {
+            _repo = repo;
             Actions = new ObservableCollection<ActionViewModel>();
             AddAction(repo.PullAsync, new PackIconMaterial() { Kind = PackIconMaterialKind.ChevronDown });
 
@@ -75,6 +78,11 @@ namespace GitLurker.UI.ViewModels
                 }
 
                 Busy = true;
+                _ = IoC.Get<IEventAggregator>().PublishOnUIThreadAsync(new ConsoleMessage()
+                {
+                    Repository = _repo
+                });
+
                 await task();
                 Busy = false;
             };

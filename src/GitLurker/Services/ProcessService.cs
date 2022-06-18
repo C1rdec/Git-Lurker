@@ -57,15 +57,9 @@ namespace GitLurker.Services
             DataReceivedEventHandler handler = default;
             handler = (s, a) =>
             {
-                if (string.IsNullOrEmpty(a.Data))
-                {
-                    process.OutputDataReceived -= handler;
-                    return;
-                }
-
                 data.Add(a.Data);
 
-                if (listen)
+                if (listen && a.Data != null)
                 {
                     NewProcessMessage?.Invoke(this, a.Data);
                 }
@@ -76,7 +70,8 @@ namespace GitLurker.Services
             process.Start();
             process.BeginOutputReadLine();
             Task.Run(() => process.WaitForExit()).ContinueWith(t => 
-            { 
+            {
+                process.OutputDataReceived -= handler;
                 taskCompletionSource.SetResult(data);
             });
 

@@ -64,6 +64,8 @@
 
         public bool HasFrontEnd => _configuration != null && !string.IsNullOrEmpty(_configuration.FrontEndPath);
 
+        public bool Exist => Directory.Exists(_folder);
+
         #endregion
 
         #region Methods

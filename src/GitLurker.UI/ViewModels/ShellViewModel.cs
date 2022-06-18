@@ -17,7 +17,7 @@
     using NHotkey.Wpf;
     using WindowsUtilities;
 
-    public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<string>
+    public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<string>, IHandle<ConsoleMessage>
     {
         #region Fields
 
@@ -28,6 +28,7 @@
         private RepositoryService _repositoryService;
         private SurfaceDialService _surfaceDialService;
         private WindowsLink _startupService;
+        private ConsoleViewModel _console;
         private string _searchTerm;
         private string _searchWatermark;
         private bool _isVisible;
@@ -39,6 +40,8 @@
         private double _dpiX = 1;
         private double _dpiY = 1;
         private bool _hasSurfaceDial;
+        private bool _isConsoleOpen;
+        private string _consoleHeader;
 
         #endregion
 
@@ -51,8 +54,10 @@
             WindowsLink startupService,
             RepositoryService repositoryService,
             SurfaceDialService surfaceDialService,
-            ThemeService themeService)
+            ThemeService themeService,
+            ConsoleViewModel console)
         {
+            _console = console;
             _searchTerm = string.Empty;
             _searchWatermark = DefaultWaterMark;
             _isVisible = false;
@@ -85,6 +90,8 @@
         public DoubleClickCommand ShowSettings => new DoubleClickCommand(OpenSettings);
 
         public WorkspaceViewModel WorkspaceViewModel { get; private set; }
+
+        public ConsoleViewModel Console => _console;
 
         public string SearchTerm
         {
@@ -163,6 +170,26 @@
             }
         }
 
+        public bool IsConsoleOpen
+        {
+            get => _isConsoleOpen;
+            set
+            {
+                _isConsoleOpen = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
+        public string ConsoleHeader
+        {
+            get => string.IsNullOrEmpty(_consoleHeader) ? "Console output" : _consoleHeader;
+            set
+            {
+                _consoleHeader = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
         public string Version => _version;
 
         protected ShellView View { get; private set; }
@@ -176,6 +203,8 @@
             WorkspaceViewModel?.Search(term);
         }
 
+        public void OpenConsole() => IsConsoleOpen = true;
+
         public Task HandleAsync(CloseMessage message, CancellationToken cancellationToken)
         {
             IsVisible = false;
@@ -188,6 +217,24 @@
             await Task.Delay(1600);
             SearchWatermark = DefaultWaterMark;
             FocusSearch();
+        }
+
+        public Task HandleAsync(ConsoleMessage message, CancellationToken cancellationToken)
+        {
+            if (message.Invalid)
+            {
+                return Task.CompletedTask;
+            }
+
+            ConsoleHeader = message.ActionName;
+            _console.Initialize(message.Repository);
+
+            if (message.OpenConsole)
+            {
+                IsConsoleOpen = true;
+            }
+
+            return Task.CompletedTask;
         }
 
         public void HideWindow()

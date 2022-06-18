@@ -176,7 +176,7 @@
                 _nugetTokenSource.Dispose();
             }
 
-            if (_settingsFile.HasNugetSource())
+            if (_settingsFile.HasNugetSource() && _repo.Exist)
             {
                 _nugetTokenSource = new CancellationTokenSource();
                 var token = _nugetTokenSource.Token;
@@ -196,8 +196,16 @@
         public void OnMouseLeave()
         {
             BranchName = string.Empty;
-            _nugetTokenSource?.Cancel();
-            _pullRequestTokenSource?.Cancel();
+            if (_nugetTokenSource != null && !_nugetTokenSource.IsCancellationRequested)
+            {
+                _nugetTokenSource?.Cancel();
+            }
+
+            if (_pullRequestTokenSource != null && !_pullRequestTokenSource.IsCancellationRequested)
+            {
+                _pullRequestTokenSource?.Cancel();
+            }
+
             _actionBar.RemoveActions();
         }
 

@@ -49,9 +49,9 @@ namespace GitLurker.UI.Converters
         /// </returns>
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            var myCurrencyType = (Winook.Modifiers)Enum.Parse(typeof(Winook.Modifiers), parameter.ToString());
-            var currentCurrencyType = (Winook.Modifiers)Enum.Parse(typeof(Winook.Modifiers), value.ToString());
-            return myCurrencyType == currentCurrencyType ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
+            var myModifiers = (Winook.Modifiers)Enum.Parse(typeof(Winook.Modifiers), parameter.ToString());
+            var currentModifiers = (Winook.Modifiers)Enum.Parse(typeof(Winook.Modifiers), value.ToString());
+            return myModifiers == currentModifiers ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
         }
 
         /// <summary>
