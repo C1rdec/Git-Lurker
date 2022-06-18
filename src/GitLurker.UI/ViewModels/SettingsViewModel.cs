@@ -119,6 +119,16 @@ namespace GitLurker.UI.ViewModels
             }
         }
 
+        public bool ConsoleOuput
+        {
+            get => _settingsFile.Entity.ConsoleOuput;
+            set
+            {
+                _settingsFile.Entity.ConsoleOuput = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
         public bool StartWithWindows
         {
             get => _settingsFile.Entity.StartWithWindows;
@@ -200,6 +210,12 @@ namespace GitLurker.UI.ViewModels
                 _windowsStartupService.RemoveStartWithWindows();
             }
 
+            Save();
+        }
+
+        public void ToggleConsoleOutput()
+        {
+            ConsoleOuput = !ConsoleOuput;
             Save();
         }
 

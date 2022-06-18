@@ -93,6 +93,8 @@
 
         public ConsoleViewModel Console => _console;
 
+        public bool ShowConsoleOutput => _settingsFile.Entity.ConsoleOuput;
+
         public string SearchTerm
         {
             get => _searchTerm;
@@ -379,6 +381,7 @@
         private void OnSettingsSave(object sender, EventArgs e)
         {
             SetGlobalHotkey();
+            NotifyOfPropertyChange(() => ShowConsoleOutput);
         }
 
         private void SetGlobalHotkey()

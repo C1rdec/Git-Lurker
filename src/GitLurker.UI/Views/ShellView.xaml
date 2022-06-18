@@ -136,7 +136,8 @@
                         </Button.ContentTemplate>
                     </Button>
                 </StackPanel>
-                <Grid VerticalAlignment="Center" 
+                <Grid Visibility="{Binding ShowConsoleOutput, Converter={StaticResource BooleanToVisibilityConverter}}"
+                    VerticalAlignment="Center" 
                       HorizontalAlignment="Right" 
                       cal:Message.Attach="[Event MouseUp] = [Action OpenConsole()]"
                       Margin="0,10,10,0" 

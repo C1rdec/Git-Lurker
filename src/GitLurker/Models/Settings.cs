@@ -30,6 +30,8 @@ namespace GitLurker.Models
 
         public Hotkey HotKey { get; set; }
 
+        public bool ConsoleOuput { get; set; }
+
         public bool StartWithWindows { get; set; }
 
         public bool AddToStartMenu { get; set; }
