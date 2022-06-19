@@ -1,5 +1,5 @@
 # Git-Lurker
-GitLurker is an overlay to ease the navigation between Git Repositories
+GitLurker is an overlay to ease the navigation between Git Repositories.
 
 ## Hotkeys
 
