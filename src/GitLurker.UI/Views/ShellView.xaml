@@ -93,6 +93,7 @@
                                Foreground="{DynamicResource MahApps.Brushes.Accent4}">Connected</TextBlock>
                 </StackPanel>
                 <StackPanel VerticalAlignment="Top"
+                            Visibility="{Binding UpToDate, Converter={StaticResource BooleanToVisibilityConverter}}"
                             Margin="0,2,4,0"
                             HorizontalAlignment="Right" 
                             Orientation="Horizontal">
@@ -136,6 +137,32 @@
                         </Button.ContentTemplate>
                     </Button>
                 </StackPanel>
+                <Border Visibility="{Binding NeedUpdate, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Cursor="Hand"
+                        HorizontalAlignment="Right"
+                        Margin="0,2,15,0"
+                        cal:Message.Attach="[Event MouseUp] = [Action Update()]"
+                        VerticalAlignment="Center">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Background">
+                                <Setter.Value>
+                                    <SolidColorBrush Color="White" Opacity="0.003"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Border.Style>
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconMaterialDesign Kind="Update" 
+                                                   Height="22"
+                                                   Width="22"
+                                                   Foreground="{DynamicResource MahApps.Brushes.Accent}"/>
+                        <TextBlock VerticalAlignment="Center" 
+                                   FontSize="18"
+                                   Foreground="{DynamicResource MahApps.Brushes.Accent}"
+                                   Margin="8,0,0,0">Update</TextBlock>
+                    </StackPanel>
+                </Border>
                 <Grid Visibility="{Binding ShowConsoleOutput, Converter={StaticResource BooleanToVisibilityConverter}}"
                     VerticalAlignment="Center" 
                       HorizontalAlignment="Right" 

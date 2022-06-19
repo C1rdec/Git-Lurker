@@ -63,7 +63,8 @@
             _container.Singleton<ThemeService, ThemeService>();
             _container.Singleton<FlyoutService, FlyoutService>();
             _container.Singleton<DialogService, DialogService>();
-            _container.Singleton<KeyboardService, KeyboardService>();
+            _container.Singleton<KeyboardService, KeyboardService>(); 
+            _container.Singleton<GithubUpdateManager, GithubUpdateManager>();
             _container.Singleton<IWindowManager, WindowManager>();
             _container.Singleton<IEventAggregator, EventAggregator>();
 

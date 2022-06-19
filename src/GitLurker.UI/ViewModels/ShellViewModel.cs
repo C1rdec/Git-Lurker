@@ -27,6 +27,7 @@
         private KeyboardService _keyboardService;
         private RepositoryService _repositoryService;
         private SurfaceDialService _surfaceDialService;
+        private GithubUpdateManager _updateManager;
         private WindowsLink _startupService;
         private ConsoleViewModel _console;
         private string _searchTerm;
@@ -41,6 +42,7 @@
         private double _dpiY = 1;
         private bool _hasSurfaceDial;
         private bool _isConsoleOpen;
+        private bool _needUpdate;
         private string _consoleHeader;
 
         #endregion
@@ -48,13 +50,14 @@
         #region Constructors
 
         public ShellViewModel(
-            IEventAggregator aggregator, 
-            SettingsFile settings, 
-            KeyboardService keyboardService, 
+            IEventAggregator aggregator,
+            SettingsFile settings,
+            KeyboardService keyboardService,
             WindowsLink startupService,
             RepositoryService repositoryService,
             SurfaceDialService surfaceDialService,
             ThemeService themeService,
+            GithubUpdateManager updateManager,
             ConsoleViewModel console)
         {
             _console = console;
@@ -68,7 +71,9 @@
             _repositoryService = repositoryService;
             _surfaceDialService = surfaceDialService;
             _settingsFile = settings;
+            _updateManager = updateManager;
 
+            _updateManager.UpdateRequested += UpdateManager_UpdateRequested;
             _settingsFile.OnFileSaved += OnSettingsSave;
 
             ApplySettings(settings);
@@ -93,7 +98,7 @@
 
         public ConsoleViewModel Console => _console;
 
-        public bool ShowConsoleOutput => _settingsFile.Entity.ConsoleOuput;
+        public bool ShowConsoleOutput => _settingsFile.Entity.ConsoleOuput && UpToDate;
 
         public string SearchTerm
         {
@@ -111,6 +116,20 @@
                 NotifyOfPropertyChange();
             }
         }
+
+        public bool NeedUpdate
+        {
+            get => _needUpdate;
+            set
+            {
+                _needUpdate = value;
+                NotifyOfPropertyChange();
+                NotifyOfPropertyChange(() => UpToDate);
+                NotifyOfPropertyChange(() => ShowConsoleOutput);
+            }
+        }
+
+        public bool UpToDate => !NeedUpdate;
 
         public bool HasSurfaceDial
         {
@@ -284,6 +303,11 @@
 
                 WorkspaceViewModel.Clear();
                 await WorkspaceViewModel.RefreshRepositories();
+                var gitLurkerRepo = _repositoryService.GetAllRepo().FirstOrDefault(r => r.Name == "GitLurker");
+                if (gitLurkerRepo != null)
+                {
+                    _updateManager.WatchAsync(gitLurkerRepo);
+                }
 
                 Disable = false;
                 SearchWatermark = DefaultWaterMark;
@@ -292,6 +316,8 @@
                 WorkspaceViewModel.ShowRecent();
             }
         }
+
+        public async void Update() => await _updateManager.Update();
 
         protected override async void OnViewLoaded(object view)
         {
@@ -320,6 +346,8 @@
             ShowInTaskBar = false;
             HideFromAltTab(View);
         }
+
+        private void UpdateManager_UpdateRequested(object sender, EventArgs e) => NeedUpdate = true;
 
         private void SurfaceDialService_ControlLost(object sender, EventArgs e) => HasSurfaceDial = false;
 
