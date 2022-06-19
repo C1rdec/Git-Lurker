@@ -17,7 +17,7 @@
     using NHotkey.Wpf;
     using WindowsUtilities;
 
-    public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<string>, IHandle<ConsoleMessage>
+    public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<string>, IHandle<ConsoleMessage>, IDisposable
     {
         #region Fields
 
@@ -317,7 +317,11 @@
             }
         }
 
-        public async void Update() => await _updateManager.Update();
+        public async void Update()
+        {
+            _surfaceDialService.Dispose();
+            await _updateManager.Update();
+        }
 
         protected override async void OnViewLoaded(object view)
         {
@@ -462,6 +466,19 @@
                 View.Top = top / _dpiY;
                 View.Left = left / _dpiX;
             });
+        }
+
+        public void Dispose()
+        {
+            _keyboardService?.Dispose();
+            _surfaceDialService?.Dispose();
+
+            _surfaceDialService.ButtonClicked -= SurfaceDialService_ButtonClicked;
+            _surfaceDialService.RotatedRight -= SurfaceDialService_RotatedRight;
+            _surfaceDialService.RotatedLeft -= SurfaceDialService_RotatedLeft;
+            _surfaceDialService.ButtonHolding -= SurfaceDialService_ButtonHolding;
+            _surfaceDialService.ControlAcquired -= SurfaceDialService_ControlAcquired;
+            _surfaceDialService.ControlLost -= SurfaceDialService_ControlLost;
         }
 
         #endregion

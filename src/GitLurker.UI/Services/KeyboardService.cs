@@ -5,7 +5,7 @@ using Winook;
 
 namespace GitLurker.Services
 {
-    public class KeyboardService: IDisposable
+    public class KeyboardService : IDisposable
     {
         #region Fields
 
