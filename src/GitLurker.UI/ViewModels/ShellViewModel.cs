@@ -319,7 +319,7 @@
 
         public async void Update()
         {
-            _surfaceDialService.Dispose();
+            Dispose();
             await _updateManager.Update();
         }
 
