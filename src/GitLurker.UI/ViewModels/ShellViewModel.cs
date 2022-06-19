@@ -43,6 +43,7 @@
         private bool _hasSurfaceDial;
         private bool _isConsoleOpen;
         private bool _needUpdate;
+        private bool _updating;
         private string _consoleHeader;
 
         #endregion
@@ -319,6 +320,13 @@
 
         public async void Update()
         {
+            if (_updating)
+            {
+                return;
+            }
+
+            _updating = true;
+
             Dispose();
             await _updateManager.Update();
         }
