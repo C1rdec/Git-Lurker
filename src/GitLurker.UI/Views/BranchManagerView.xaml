@@ -35,7 +35,6 @@
         <mah:ProgressRing Foreground="{DynamicResource MahApps.Brushes.Accent}"
                           Grid.RowSpan="2"
                           IsActive="{Binding IsLoading}" />
-
         <Button x:Name="CleanBranches"
                 Width="40" Height="40"
                 BorderThickness="0"
@@ -47,7 +46,7 @@
                 Style="{StaticResource MahApps.Styles.Button.Circle}">
             <Button.ContentTemplate>
                 <DataTemplate>
-                    <iconPacks:PackIconModern Kind="Clean" Height="25" Width="25"/>
+                    <iconPacks:PackIconMaterial Kind="CloudRefresh" Height="25" Width="25"/>
                 </DataTemplate>
             </Button.ContentTemplate>
         </Button>
