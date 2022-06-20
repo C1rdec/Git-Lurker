@@ -25,6 +25,11 @@
               Background="{DynamicResource MahApps.Brushes.Accent4}"
               cal:Message.Attach="[Event MouseEnter] = [Action OnMouseEnter()]; [Event MouseLeave] = [Action OnMouseLeave()]"
               Cursor="Hand">
+            <Popup IsOpen="{Binding IsBranchManagerOpen}" Placement="MousePoint" AllowsTransparency="True" StaysOpen="False">
+                <Border Background="#252525" CornerRadius="10">
+                    <ContentControl cal:View.Model="{Binding Path=BranchManager,Mode=OneWay}" Margin="8"/>
+                </Border>
+            </Popup>
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
@@ -60,14 +65,37 @@
                                    Foreground="{DynamicResource MahApps.Brushes.Gray6}"
                                    FontSize="20"
                                    Margin="15,16,0,5"/>
-                        <iconPacks:PackIconMaterial VerticalAlignment="Center" 
-                                                    Kind="SourceBranch" 
-                                                    Height="30"
-                                                    Opacity="0.8"
-                                                    Width="30"
-                                                    Margin="20,0,0,0"
-                                                    Visibility="{Binding BranchNameVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                                                    Foreground="{DynamicResource Brushes.Secondary}" />
+                        <Border Visibility="{Binding BranchNameVisible, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                                CornerRadius="6"
+                                cal:Message.Attach="[Event MouseUp] = [Action ShowBranches()]"
+                                VerticalAlignment="Center">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <SolidColorBrush Color="White" Opacity="0.0003"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter Property="Opacity" Value="0.6"/>
+                                    <Setter Property="Margin" Value="20,0,0,0"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Margin" Value="18.5,-1.5,-1.5,-.5"/>
+                                            <Setter Property="BorderThickness" Value="1.5"/>
+                                            <Setter Property="BorderBrush" Value="{DynamicResource Brushes.Secondary}"/>
+                                            <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
+                                            <Setter Property="Opacity" Value="1"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <iconPacks:PackIconMaterial VerticalAlignment="Center" 
+                                                        Margin="4"
+                                                        Kind="SourceBranch" 
+                                                        Height="30"
+                                                        Width="30"
+                                                        Foreground="{DynamicResource Brushes.Secondary}" />
+                        </Border>
                         <TextBlock x:Name="BranchName" 
                                    Opacity="0.8"
                                    MaxWidth="350"

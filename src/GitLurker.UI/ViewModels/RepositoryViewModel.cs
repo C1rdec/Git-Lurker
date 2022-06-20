@@ -6,6 +6,7 @@
     using Caliburn.Micro;
     using GitLurker.Models;
     using GitLurker.UI.Messages;
+    using GitLurker.UI.Services;
     using MahApps.Metro.IconPacks;
 
     public class RepositoryViewModel : Screen
@@ -15,6 +16,7 @@
         private static readonly CloseMessage CloseMessage = new CloseMessage();
         private CancellationTokenSource _nugetTokenSource;
         private CancellationTokenSource _pullRequestTokenSource;
+        private PopupService _popupService;
         private Repository _repo;
         private bool _isSelected;
         private IEventAggregator _aggregator;
@@ -24,6 +26,7 @@
         private ActionBarViewModel _actionBar;
         private SettingsFile _settingsFile;
         private CustomActionSettingsFile _actionsFile;
+        private bool _skipOpen;
 
         #endregion
 
@@ -34,6 +37,7 @@
             _repo = repo;
             _settingsFile = IoC.Get<SettingsFile>();
             _actionsFile = IoC.Get<CustomActionSettingsFile>();
+            _popupService = IoC.Get<PopupService>();
             _actionBar = new ActionBarViewModel(repo);
             _showParentFolder = repo.Duplicate;
             _aggregator = IoC.Get<IEventAggregator>();
@@ -47,11 +51,15 @@
                     _actionBar.AddAction(() => _repo.ExecuteCommandAsync(action.Command, true), icon);
                 }
             }
+
+            BranchManager = new BranchManagerViewModel(repo, OnSelectionChanged);
         }
 
         #endregion
 
         #region Properties
+
+        public BranchManagerViewModel BranchManager { get; private set; }
 
         public ActionBarViewModel ActionBar => _actionBar;
 
@@ -107,11 +115,42 @@
             }
         }
 
+        public bool IsBranchManagerOpen
+        {
+            get => _popupService.IsOpen;
+            set
+            {
+                _popupService.IsOpen = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
         public string ParentFolderName => GetParentFolder();
 
         #endregion
 
         #region Methods
+
+        public void ShowBranches()
+        {
+            _skipOpen = true;
+
+            if (IsBranchManagerOpen)
+            {
+                IsBranchManagerOpen = false;
+                return;
+            }
+
+            BranchManager.ShowBranches();
+
+            IsBranchManagerOpen = true;
+        }
+
+        public void OnSelectionChanged(string branch)
+        {
+            BranchName = branch;
+            IsBranchManagerOpen = false;
+        }
 
         public async void Delay()
         {
@@ -146,6 +185,12 @@
             if (_pullRequestTokenSource != null)
             {
                 _pullRequestTokenSource.Cancel();
+            }
+
+            if (_skipOpen || _popupService.IsOpen)
+            {
+                _skipOpen = false;
+                return;
             }
 
             _aggregator.PublishOnCurrentThreadAsync(CloseMessage);

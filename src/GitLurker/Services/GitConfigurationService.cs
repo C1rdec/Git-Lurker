@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using GitLurker.Extensions;
 
 namespace GitLurker.Services
@@ -31,6 +33,20 @@ namespace GitLurker.Services
             }
 
             return File.ReadAllText(headFilePath).GetLineAfter("ref: refs/heads/");
+        }
+
+        public IEnumerable<string> GetBranchNames()
+        {
+            var headFilePath = Path.Combine(_gitFolderPath, "refs", "remotes", "origin");
+            var files = Directory.GetFiles(headFilePath, "*.*", SearchOption.AllDirectories);
+            var currentBranch = GetCurrentBranchName();
+            var branches = files.Where(f => !f.EndsWith("\\HEAD"))
+                                .Select(f => f.Substring(headFilePath.Length + 1).Replace(@"\", @"/")).ToList();
+
+            var index = branches.Remove(currentBranch);
+            branches.Insert(0, currentBranch);
+
+            return branches;
         }
 
         #endregion

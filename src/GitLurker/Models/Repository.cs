@@ -87,6 +87,8 @@
 
         public Task PullAsync() => ExecuteCommandAsync("git pull", true);
 
+        public Task CleanBranches() => ExecuteCommandAsync("git fetch origin --prune");
+
         public void Open() => Open(false);
 
         public void Open(bool skipModifier)
@@ -165,6 +167,8 @@
         }
 
         public string GetCurrentBranchName() => _gitConfigurationService.GetCurrentBranchName();
+
+        public IEnumerable<string> GetBranchNames() => _gitConfigurationService.GetBranchNames(); 
 
         public async Task<NugetInformation> GetNewNugetAsync(string nugetSource)
         {

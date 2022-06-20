@@ -58,6 +58,7 @@
             _container = new SimpleContainer();
 
             // Services
+            _container.Singleton<PopupService, PopupService>();
             _container.Singleton<RepositoryService, RepositoryService>();
             _container.Singleton<SurfaceDialService, SurfaceDialService>();
             _container.Singleton<ThemeService, ThemeService>();
