@@ -5,9 +5,14 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
         <StackPanel Margin="15,0,15,0">
             <TextBox x:Name="ActionName" 
                      Style="{DynamicResource TextBoxStyle}"
@@ -29,16 +34,43 @@
                 <ComboBox ItemsSource="{Binding Icons}" SelectedItem="{Binding SelectedIcon}" BorderThickness="0,0,0,1" Cursor="Hand"/>
                 <iconPacks:PackIconMaterial Margin="10,0,0,0" VerticalAlignment="Center" Kind="{Binding SelectedIcon}" Grid.Column="1" Height="20"/>
             </Grid>
-
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
-                <ComboBox ItemsSource="{Binding Repositories}" SelectedItem="{Binding SelectedRepository}" BorderThickness="0,0,0,1" Cursor="Hand"/>
+                <ComboBox ItemsSource="{Binding Repositories}" 
+                          DisplayMemberPath="Name" 
+                          SelectedItem="{Binding SelectedRepository}" 
+                          BorderThickness="0,0,0,1"
+                          Cursor="Hand"/>
                 <iconPacks:PackIconMaterial Margin="10,0,0,0" VerticalAlignment="Center" Kind="SourceRepository" Grid.Column="1" Height="20"/>
             </Grid>
         </StackPanel>
+        <ItemsControl x:Name="SelectedRepositories" Grid.Row="1" Margin="0,10,0,0">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel HorizontalAlignment="Center"></WrapPanel>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <Border CornerRadius="8" Cursor="Hand" Margin="0,0,5,0" cal:Message.Attach="[Event MouseUp] = [Action RemoveRepository($dataContext)]">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent3}"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#DC143C"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <TextBlock Text="{Binding Name}" FontSize="16" FontFamily="Consola" Margin="4"/>
+                    </Border>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
         <Button x:Name="Save"
                 Style="{DynamicResource Tag}"
                 VerticalAlignment="Top" 

@@ -18,6 +18,7 @@ namespace GitLurker.UI.ViewModels
         private CustomAction _action;
         private bool _modified;
         private RepositoryService _repositoryService;
+        private Repository _selectedRepository;
         private bool _isNew;
 
         #endregion
@@ -41,31 +42,36 @@ namespace GitLurker.UI.ViewModels
             }
             else
             {
-
                 _selectedIcon = Enum.Parse<PackIconMaterialKind>(action.Icon);
             }
 
             PropertyChanged += CustomActionViewModel_PropertyChanged;
             Icons = new ObservableCollection<PackIconMaterialKind>(IconKinds);
 
-            var repos = _repositoryService.GetAllRepo().Select(r => r.Folder);
-            Repositories = new ObservableCollection<string>(repos);
+            var repos = _repositoryService.GetAllRepo().OrderBy(r => r.Name);
+            Repositories = new ObservableCollection<Repository>(repos);
+
+            var selectedRepos = repos.Where(r => _action.Repositories.Contains(r.Folder));
+            SelectedRepositories = new ObservableCollection<Repository>(selectedRepos);
         }
 
         #endregion
 
         #region Properties
 
+        public ObservableCollection<Repository> SelectedRepositories { get; set; }
+
         public ObservableCollection<PackIconMaterialKind> Icons { get; set; }
 
-        public ObservableCollection<string> Repositories { get; set; }
+        public ObservableCollection<Repository> Repositories { get; set; }
 
-        public string SelectedRepository
+        public Repository SelectedRepository
         {
-            get => _action.RepositoryPath;
+            get => _selectedRepository;
             set
             {
-                _action.RepositoryPath = value;
+                _selectedRepository = value;
+                AddRepository(value);
                 NotifyOfPropertyChange();
             }
         }
@@ -121,8 +127,6 @@ namespace GitLurker.UI.ViewModels
             _action.Icon = _selectedIcon.ToString();
             var file = IoC.Get<CustomActionSettingsFile>();
 
-            IoC.Get<FlyoutService>().Close();
-
             if (_isNew)
             {
                 _isNew = false;
@@ -142,6 +146,23 @@ namespace GitLurker.UI.ViewModels
             }
 
             Modified = true;
+        }
+
+        public void AddRepository(Repository repo)
+        {
+            if (_action.AddRepository(repo))
+            {
+                SelectedRepositories.Add(repo);
+            }
+        }
+
+        public void RemoveRepository(Repository repo)
+        {
+            if (_action.RemoveRepository(repo))
+            {
+                Modified = true;
+                SelectedRepositories.Remove(repo);
+            }
         }
 
         #endregion
