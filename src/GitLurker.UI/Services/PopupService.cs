@@ -23,7 +23,7 @@ namespace GitLurker.UI.Services
         public void SetClosed()
         {
             JustClosed = true;
-            _debounce.Debounce(300, () => JustClosed = false);
+            _debounce.Debounce(150, () => JustClosed = false);
         }
 
         #endregion

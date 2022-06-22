@@ -137,7 +137,7 @@
         {
             _skipOpen = true;
 
-            if (IsBranchManagerOpen)
+            if (IsBranchManagerOpen ||  _popupService.JustClosed)
             {
                 IsBranchManagerOpen = false;
                 return;
