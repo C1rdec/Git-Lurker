@@ -25,7 +25,11 @@
               Background="{DynamicResource MahApps.Brushes.Accent4}"
               cal:Message.Attach="[Event MouseEnter] = [Action OnMouseEnter()]; [Event MouseLeave] = [Action OnMouseLeave()]"
               Cursor="Hand">
-            <Popup IsOpen="{Binding IsBranchManagerOpen}" Placement="MousePoint" AllowsTransparency="True" StaysOpen="False">
+            <Popup IsOpen="{Binding IsBranchManagerOpen}" 
+                   cal:Message.Attach="[Event Closed] = [Action OnBranchManagerClosed()]"
+                   Placement="MousePoint" 
+                   AllowsTransparency="True"
+                   StaysOpen="False">
                 <Border Background="#252525" CornerRadius="10">
                     <ContentControl cal:View.Model="{Binding Path=BranchManager,Mode=OneWay}" Margin="8"/>
                 </Border>

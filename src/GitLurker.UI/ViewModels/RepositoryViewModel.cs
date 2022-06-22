@@ -131,6 +131,8 @@
 
         #region Methods
 
+        public void OnBranchManagerClosed() => _popupService.SetClosed();
+
         public void ShowBranches()
         {
             _skipOpen = true;
@@ -187,7 +189,7 @@
                 _pullRequestTokenSource.Cancel();
             }
 
-            if (_skipOpen || _popupService.IsOpen)
+            if (_skipOpen || _popupService.JustClosed)
             {
                 _skipOpen = false;
                 return;
