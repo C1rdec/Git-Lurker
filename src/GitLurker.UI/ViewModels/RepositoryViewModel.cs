@@ -75,6 +75,15 @@
             set
             {
                 _isSelected = value;
+                if (value)
+                {
+                    BranchName = _repo.GetCurrentBranchName();
+                }
+                else
+                {
+                    BranchName = string.Empty;
+                }
+
                 NotifyOfPropertyChange();
             }
         }
@@ -242,7 +251,11 @@
 
         public void OnMouseLeave()
         {
-            BranchName = string.Empty;
+            if (!_isSelected)
+            {
+                BranchName = string.Empty;
+            }
+
             if (_nugetTokenSource != null && !_nugetTokenSource.IsCancellationRequested)
             {
                 _nugetTokenSource?.Cancel();
