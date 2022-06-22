@@ -30,6 +30,9 @@
             _repositoryService = repositoryService;
             _keyboardService.DownPressed += KeyboardService_DownPressed;
             _keyboardService.UpPressed += KeyboardService_UpPressed;
+            _keyboardService.NextTabPressed += KeyboardService_NextTabPressed;
+
+            _keyboardService.PreviousTabPressed += keyboardService_PreviousTabPressed;
         }
 
         #endregion
@@ -61,26 +64,10 @@
         public void Open() => Open(false);
 
         public void Open(bool skipModifier)
-        {
-            if (SelectedRepo != null)
-            {
-                SelectedRepo.Open(skipModifier);
-                return;
-            }
-
-            _repos.FirstOrDefault()?.Open(skipModifier);
-        }
+            => ExecuteOnRepo((r) => r.Open(skipModifier));
 
         public void OpenPullRequest()
-        {
-            if (SelectedRepo != null)
-            {
-                SelectedRepo.OpenPullRequest();
-                return;
-            }
-
-            _repos.FirstOrDefault()?.OpenPullRequest();
-        }
+            => ExecuteOnRepo((r) => r.OpenPullRequest());
 
         public void MoveUp()
         {
@@ -96,7 +83,7 @@
             }
 
             index--;
-            SelectedRepo.IsSelected = false;
+            SelectedRepo.UnSelect();
             SelectedRepo = Repos.ElementAt(index);
             SelectedRepo.Select();
         }
@@ -117,7 +104,7 @@
             }
 
             index++;
-            SelectedRepo.IsSelected = false;
+            SelectedRepo.UnSelect();
             SelectedRepo = Repos.ElementAt(index);
             SelectedRepo.Select();
         }
@@ -157,6 +144,18 @@
             _repos.Clear();
         }
 
+        public bool Close()
+        {
+            if (SelectedRepo != null && SelectedRepo.IsBranchManagerOpen)
+            {
+                SelectedRepo.IsBranchManagerOpen = false;
+                return false;
+            }
+
+            Clear();
+            return true;
+        }
+
         public void ShowRecent()
         {
             var file = new SettingsFile();
@@ -181,6 +180,38 @@
         private void KeyboardService_DownPressed(object sender, System.EventArgs e) => MoveDown();
 
         private void KeyboardService_UpPressed(object sender, System.EventArgs e) => MoveUp();
+
+        private void KeyboardService_NextTabPressed(object sender, System.EventArgs e) 
+        { 
+            ExecuteOnRepo((r) => 
+            {
+                SelectedRepo = r;
+                r.HandleNextTab();
+            }); 
+        }
+
+        private void keyboardService_PreviousTabPressed(object sender, System.EventArgs e)
+        {
+            ExecuteOnRepo((r) =>
+            {
+                r.HandlePreviousTab();
+            });
+        }
+
+        private void ExecuteOnRepo(System.Action<RepositoryViewModel> action)
+        {
+            if (SelectedRepo != null)
+            {
+                action(SelectedRepo);
+                return;
+            }
+
+            var firstRepo = _repos.FirstOrDefault();
+            if (firstRepo != null)
+            {
+                action(firstRepo);
+            }
+        }
 
         #endregion
     }

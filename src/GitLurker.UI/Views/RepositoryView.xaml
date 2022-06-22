@@ -27,7 +27,7 @@
               Cursor="Hand">
             <Popup IsOpen="{Binding IsBranchManagerOpen}" 
                    cal:Message.Attach="[Event Closed] = [Action OnBranchManagerClosed()]"
-                   Placement="MousePoint" 
+                   Placement="Center" 
                    AllowsTransparency="True"
                    StaysOpen="False">
                 <Border Background="#252525" CornerRadius="10">

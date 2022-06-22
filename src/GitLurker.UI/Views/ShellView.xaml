@@ -20,6 +20,7 @@
         Background="Transparent"
         xmlns:cal="http://www.caliburnproject.org"
         xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        Focusable="False"
         cal:Message.Attach="[Event Deactivated]=[Action HideWindow()]"
         Height="560" Width="800">
     <mah:MetroWindow.Flyouts>

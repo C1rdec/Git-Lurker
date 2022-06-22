@@ -26,7 +26,6 @@
         private ActionBarViewModel _actionBar;
         private SettingsFile _settingsFile;
         private CustomActionSettingsFile _actionsFile;
-        private bool _skipOpen;
 
         #endregion
 
@@ -128,7 +127,7 @@
         {
             get => _popupService.IsOpen;
             set
-            {
+            {   
                 _popupService.IsOpen = value;
                 NotifyOfPropertyChange();
             }
@@ -144,8 +143,6 @@
 
         public void ShowBranches()
         {
-            _skipOpen = true;
-
             if (IsBranchManagerOpen ||  _popupService.JustClosed)
             {
                 IsBranchManagerOpen = false;
@@ -198,9 +195,14 @@
                 _pullRequestTokenSource.Cancel();
             }
 
-            if (_skipOpen || _popupService.JustClosed)
+            if (_popupService.JustClosed)
             {
-                _skipOpen = false;
+                return;
+            }
+
+            if (IsBranchManagerOpen)
+            {
+                BranchManager.Select();
                 return;
             }
 
@@ -272,6 +274,34 @@
         public void Select()
         {
             IsSelected = true;
+        }
+
+        public void UnSelect()
+        {
+            IsSelected = false;
+            IsBranchManagerOpen = false;
+        }
+
+        public void HandleNextTab()
+        {
+            Select();
+
+            if (!IsBranchManagerOpen)
+            {
+                ShowBranches();
+            }
+            else
+            {
+                BranchManager.SelectNextBranch();
+            }
+        }
+
+        public void HandlePreviousTab()
+        {
+            if (IsBranchManagerOpen)
+            {
+                BranchManager.SelectPreviousBranch();
+            }
         }
 
         private string GetParentFolder()

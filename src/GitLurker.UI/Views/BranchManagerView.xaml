@@ -4,7 +4,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:cal="http://www.caliburnproject.org"
-             xmlns:busy="https://github.com/Peoky/BusyIndicator"
+             xmlns:busy="https://github.com/Peoky/BusyIndicator"    
              xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" 
@@ -14,9 +14,10 @@
             <RowDefinition></RowDefinition>
         </Grid.RowDefinitions>
         <ListView ItemsSource="{Binding BranchNames}"
+                  SelectedItem="{Binding SelectedBranchName}"
                   Grid.Row="1"
                   Cursor="Hand" 
-                  cal:Message.Attach="[Event SelectionChanged] = [Action OnSelectionChanged($eventArgs)]">
+                  cal:Message.Attach="[Event MouseUp] = [Action Select()]">
             <ListView.Style>
                 <Style TargetType="ListView" BasedOn="{StaticResource MahApps.Styles.ListView}">
                     <Style.Triggers>

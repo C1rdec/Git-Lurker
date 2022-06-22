@@ -261,10 +261,13 @@
 
         public void HideWindow()
         {
-            TopMost = false;
-            IsVisible = false;
-            SearchTerm = string.Empty;
-            WorkspaceViewModel?.Clear();
+            if (WorkspaceViewModel == null || WorkspaceViewModel.Close())
+            {
+                TopMost = false;
+                IsVisible = false;
+                SearchTerm = string.Empty;
+                WorkspaceViewModel?.Clear();
+            }            
         }
 
         public async void Close()

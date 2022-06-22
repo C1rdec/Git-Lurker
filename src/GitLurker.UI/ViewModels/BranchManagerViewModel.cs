@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Controls;
 using Caliburn.Micro;
 using GitLurker.Models;
@@ -11,6 +12,7 @@ namespace GitLurker.UI.ViewModels
         #region Fields
 
         private Repository _repo;
+        private string _selectedBranch;
         private Action<string> _onSelected;
         private bool _isLoading;
 
@@ -41,34 +43,97 @@ namespace GitLurker.UI.ViewModels
             }
         }
 
+        public string SelectedBranchName
+        {
+            get => _selectedBranch;
+            set
+            {
+                _selectedBranch = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
         #endregion
 
         #region Methods
 
-        public async void OnSelectionChanged(SelectionChangedEventArgs selection)
+        public async void Select()
         {
-            if (selection.AddedItems.Count <= 0)
+            if (string.IsNullOrEmpty(SelectedBranchName))
             {
                 return;
             }
 
             IsLoading = true;
-            var selectedBranch = selection.AddedItems[0] as string;
-            var result = await _repo.ExecuteCommandAsync($"git checkout {selectedBranch}");
+            var result = await _repo.ExecuteCommandAsync($"git checkout {SelectedBranchName}");
 
-            _onSelected(selectedBranch);
+            _onSelected(SelectedBranchName);
             IsLoading = false;
+        }
+
+        public void SelectPreviousBranch()
+        {
+            if (string.IsNullOrEmpty(SelectedBranchName))
+            {
+                SelectedBranchName = BranchNames.FirstOrDefault();
+                return;
+            }
+
+            var index = BranchNames.IndexOf(SelectedBranchName);
+            if (index == -1)
+            {
+                return;
+            }
+
+            if ((index - 1) < 0)
+            {
+                SelectedBranchName = BranchNames.LastOrDefault();
+                return;
+            }
+
+            index--;
+            SelectedBranchName = BranchNames.ElementAt(index);
+        }
+
+        public void SelectNextBranch()
+        {
+            if (string.IsNullOrEmpty(SelectedBranchName))
+            {
+                SelectedBranchName = BranchNames.FirstOrDefault();
+                return;
+            }
+
+            var index = BranchNames.IndexOf(SelectedBranchName);
+            if (index == -1)
+            {
+                return;
+            }
+
+            if ((index + 1) >= BranchNames.Count)
+            {
+                SelectedBranchName = BranchNames.FirstOrDefault();
+                return;
+            }
+
+            index++;
+            SelectedBranchName = BranchNames.ElementAt(index);
         }
 
         public void ShowBranches()
         {
-            BranchNames.Clear();
             var branches = _repo.GetBranchNames();
 
-            foreach (var branch in branches)
+            Execute.OnUIThread(() =>
             {
-                BranchNames.Add(branch);
-            }
+                BranchNames.Clear();
+
+                foreach (var branch in branches)
+                {
+                    BranchNames.Add(branch);
+                }
+
+                SelectedBranchName = BranchNames.FirstOrDefault();
+            });
         }
 
         public async void CleanBranches()
