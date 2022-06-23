@@ -384,7 +384,7 @@
 
             var text = File.ReadAllText(configFilePath);
             var url = text.GetLineAfter("url = ");
-            if (!string.IsNullOrEmpty(url) && url.StartsWith("git@ssh"))
+            if (!string.IsNullOrEmpty(url) && url.StartsWith("git@ssh") || url.Contains("@vs-ssh.visualstudio.com"))
             {
                 try
                 {
@@ -406,16 +406,30 @@
 
         private string FormatSshUrl(string url)
         {
-            url = url.Replace("git@ssh.", string.Empty);
+            var vsSsh = "vs-ssh.";
+            var vsSshIndex = url.IndexOf(vsSsh);
+            if (vsSshIndex >= 0)
+            {
+                url = url.Substring(vsSshIndex + vsSsh.Length);
+            }
+            else
+            {
+                url = url.Replace("git@ssh.", string.Empty);
+            }
+
             var segments = url.Split('/');
             var firstSegment = segments.First();
             var index = firstSegment.IndexOf(":v");
             var domainName = firstSegment.Substring(0, index);
+            domainName.Replace("visualstudio.com", "dev.azure.com");
+            domainName = domainName.Replace("visualstudio.com", "dev.azure.com");
+
             var newSegments = new List<string>();
             newSegments.Add($"https://{domainName}");
             newSegments.AddRange(segments.Skip(1).Take(segments.Length - 2));
             newSegments.Add("_git");
             newSegments.Add(segments.Last());
+
             return string.Join("/", newSegments);
         }
 
