@@ -26,6 +26,7 @@
         private ActionBarViewModel _actionBar;
         private SettingsFile _settingsFile;
         private CustomActionSettingsFile _actionsFile;
+        private bool _skipBranchSelection;
 
         #endregion
 
@@ -142,11 +143,19 @@
         public void OnBranchManagerClosed() => _popupService.SetClosed();
 
         public void ShowBranches()
+            => ShowBranches(true);
+
+        public void ShowBranches(bool skipBranchSelection)
         {
-            if (IsBranchManagerOpen ||  _popupService.JustClosed)
+            if (IsBranchManagerOpen || _popupService.JustClosed)
             {
                 IsBranchManagerOpen = false;
                 return;
+            }
+
+            if (skipBranchSelection)
+            {
+                _skipBranchSelection = true;
             }
 
             BranchManager.ShowBranches();
@@ -202,7 +211,12 @@
 
             if (IsBranchManagerOpen)
             {
-                BranchManager.Select();
+                if (!_skipBranchSelection)
+                {
+                    BranchManager.Select();
+                }
+
+                _skipBranchSelection = false;
                 return;
             }
 
@@ -302,7 +316,7 @@
             }
             else
             {
-                ShowBranches();
+                ShowBranches(false);
             }
         }
 

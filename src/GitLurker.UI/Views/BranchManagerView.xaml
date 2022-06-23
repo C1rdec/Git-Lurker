@@ -47,7 +47,7 @@
                 Style="{StaticResource MahApps.Styles.Button.Circle}">
             <Button.ContentTemplate>
                 <DataTemplate>
-                    <iconPacks:PackIconMaterial Kind="CloudRefresh" Height="25" Width="25"/>
+                    <iconPacks:PackIconMaterial Kind="CloudRefresh" Height="25" Width="25" Foreground="{DynamicResource Brushes.Secondary}"/>
                 </DataTemplate>
             </Button.ContentTemplate>
         </Button>
