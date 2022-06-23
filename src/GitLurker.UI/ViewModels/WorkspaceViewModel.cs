@@ -193,6 +193,11 @@
 
         private void KeyboardService_NextTabPressed(object sender, System.EventArgs e) 
         {
+            if (SelectedRepo != null && SelectedRepo.HandleTab())
+            {
+                return;
+            }
+
             MoveDown(true);
         }
 
@@ -201,7 +206,7 @@
             ExecuteOnRepo((r) =>
             {
                 SelectedRepo = r;
-                r.HandleNextTab();
+                r.ToggleBranches();
             });
         }
 

@@ -282,25 +282,27 @@
             IsBranchManagerOpen = false;
         }
 
-        public void HandleNextTab()
-        {
-            Select();
-
-            if (!IsBranchManagerOpen)
-            {
-                ShowBranches();
-            }
-            else
-            {
-                BranchManager.SelectNextBranch();
-            }
-        }
-
-        public void HandlePreviousTab()
+        public bool HandleTab()
         {
             if (IsBranchManagerOpen)
             {
-                BranchManager.SelectPreviousBranch();
+                BranchManager.SelectNextBranch();
+                return true;
+            }
+
+            return false;
+        }
+
+        public void ToggleBranches()
+        {
+            Select();
+            if (IsBranchManagerOpen)
+            {
+                IsBranchManagerOpen = false;
+            }
+            else
+            {
+                ShowBranches();
             }
         }
 
