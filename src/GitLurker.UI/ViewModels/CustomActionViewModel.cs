@@ -4,7 +4,6 @@ using System.Linq;
 using Caliburn.Micro;
 using GitLurker.Models;
 using GitLurker.Services;
-using GitLurker.UI.Services;
 using MahApps.Metro.IconPacks;
 
 namespace GitLurker.UI.ViewModels
@@ -116,6 +115,16 @@ namespace GitLurker.UI.ViewModels
             }
         }
 
+        public bool OpenConsole 
+        {
+            get => _action.OpenConsole;
+            set
+            {
+                _action.OpenConsole = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -138,15 +147,7 @@ namespace GitLurker.UI.ViewModels
             }
         }
 
-        private void CustomActionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(Modified))
-            {
-                return;
-            }
-
-            Modified = true;
-        }
+        public void ToggleConsole() => OpenConsole = !OpenConsole;
 
         public void AddRepository(Repository repo)
         {
@@ -163,6 +164,16 @@ namespace GitLurker.UI.ViewModels
                 Modified = true;
                 SelectedRepositories.Remove(repo);
             }
+        }
+
+        private void CustomActionViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Modified))
+            {
+                return;
+            }
+
+            Modified = true;
         }
 
         #endregion

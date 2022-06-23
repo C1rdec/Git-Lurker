@@ -47,7 +47,7 @@
                 if (Enum.TryParse<PackIconMaterialKind>(action.Icon, out var kind))
                 {
                     var icon = new PackIconMaterial() { Kind = kind };
-                    _actionBar.AddAction(() => _repo.ExecuteCommandAsync(action.Command, true), icon);
+                    _actionBar.AddAction(() => _repo.ExecuteCommandAsync(action.Command, true), icon, action.OpenConsole);
                 }
             }
 

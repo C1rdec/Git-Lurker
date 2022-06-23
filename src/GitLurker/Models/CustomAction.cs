@@ -23,6 +23,8 @@ namespace GitLurker.Models
 
         public List<string> Repositories { get; set; }
 
+        public bool OpenConsole { get; set; }
+
         #endregion
 
         #region Methods

@@ -68,7 +68,9 @@ namespace GitLurker.UI.ViewModels
             });
         }
 
-        public void AddAction(Func<Task> task, PackIconControlBase icon)
+        public void AddAction(Func<Task> task, PackIconControlBase icon) => AddAction(task, icon, false);
+
+        public void AddAction(Func<Task> task, PackIconControlBase icon, bool openConsole)
         {
             Func<Task> callback = async () =>
             {
@@ -80,7 +82,8 @@ namespace GitLurker.UI.ViewModels
                 Busy = true;
                 _ = IoC.Get<IEventAggregator>().PublishOnUIThreadAsync(new ConsoleMessage()
                 {
-                    Repository = _repo
+                    Repository = _repo,
+                    OpenConsole = openConsole,
                 });
 
                 await task();
