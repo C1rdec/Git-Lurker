@@ -26,7 +26,6 @@
     <mah:MetroWindow.Flyouts>
         <mah:FlyoutsControl Focusable="False" KeyboardNavigation.TabNavigation="None">
             <mah:Flyout Header="{Binding ConsoleHeader}"
-                        
                         x:Name="MyFlyout"
                         KeyboardNavigation.TabNavigation="None"
                         Focusable="False"

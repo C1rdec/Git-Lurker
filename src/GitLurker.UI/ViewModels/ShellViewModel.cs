@@ -263,6 +263,7 @@
         {
             if (WorkspaceViewModel == null || WorkspaceViewModel.Close())
             {
+                IsConsoleOpen = false;
                 TopMost = false;
                 IsVisible = false;
                 SearchTerm = string.Empty;
