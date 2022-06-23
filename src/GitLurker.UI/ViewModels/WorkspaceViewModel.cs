@@ -89,6 +89,9 @@
         }
 
         public void MoveDown()
+            => MoveDown(false);
+
+        public void MoveDown(bool selectFirst)
         {
             if (SelectedRepo == null)
             {
@@ -100,6 +103,13 @@
             var index = _repos.IndexOf(_selectedRepo);
             if (index == -1 || (index + 1) >= _repos.Count)
             {
+                if (selectFirst)
+                {
+                    SelectedRepo.UnSelect();
+                    SelectedRepo = _repos.FirstOrDefault();
+                    SelectedRepo.Select();
+                }
+
                 return;
             }
 
@@ -182,19 +192,16 @@
         private void KeyboardService_UpPressed(object sender, System.EventArgs e) => MoveUp();
 
         private void KeyboardService_NextTabPressed(object sender, System.EventArgs e) 
-        { 
-            ExecuteOnRepo((r) => 
-            {
-                SelectedRepo = r;
-                r.HandleNextTab();
-            }); 
+        {
+            MoveDown(true);
         }
 
         private void keyboardService_PreviousTabPressed(object sender, System.EventArgs e)
         {
             ExecuteOnRepo((r) =>
             {
-                r.HandlePreviousTab();
+                SelectedRepo = r;
+                r.HandleNextTab();
             });
         }
 
