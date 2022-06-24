@@ -30,8 +30,6 @@
             _keyboardService.DownPressed += KeyboardService_DownPressed;
             _keyboardService.UpPressed += KeyboardService_UpPressed;
             _keyboardService.NextTabPressed += KeyboardService_NextTabPressed;
-
-            _keyboardService.PreviousTabPressed += keyboardService_PreviousTabPressed;
         }
 
         #endregion
@@ -213,19 +211,23 @@
             if (SelectedRepo == null)
             {
                 SelectedRepo = _repos.FirstOrDefault();
-                SelectedRepo?.Select();
             }
 
-            SelectedRepo?.ToggleBranches();
-        }
-
-        private void keyboardService_PreviousTabPressed(object sender, System.EventArgs e)
-        {
-            ExecuteOnRepo((r) =>
+            if (SelectedRepo == null)
             {
-                SelectedRepo = r;
-                r.ToggleBranches();
-            });
+                return;
+            }
+
+            SelectedRepo.Select();
+
+            if (SelectedRepo.IsBranchManagerOpen)
+            {
+                SelectedRepo.SelectNextBranch();
+            }
+            else
+            {
+                SelectedRepo.ShowBranches(false);
+            }
         }
 
         private void ExecuteOnRepo(System.Action<RepositoryViewModel> action)
