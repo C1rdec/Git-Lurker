@@ -213,10 +213,10 @@
             if (SelectedRepo == null)
             {
                 SelectedRepo = _repos.FirstOrDefault();
-                SelectedRepo.Select();
+                SelectedRepo?.Select();
             }
 
-            SelectedRepo.ToggleBranches();
+            SelectedRepo?.ToggleBranches();
         }
 
         private void keyboardService_PreviousTabPressed(object sender, System.EventArgs e)
