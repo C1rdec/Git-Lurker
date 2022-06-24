@@ -296,15 +296,20 @@
             IsBranchManagerOpen = false;
         }
 
-        public bool HandleTab()
+        public void SelectNextBranch()
         {
             if (IsBranchManagerOpen)
             {
                 BranchManager.SelectNextBranch();
-                return true;
             }
+        }
 
-            return false;
+        public void SelectPreviousBranch()
+        {
+            if (IsBranchManagerOpen)
+            {
+                BranchManager.SelectPreviousBranch();
+            }
         }
 
         public void ToggleBranches()

@@ -28,14 +28,14 @@ namespace GitLurker.Services
 
         #region Methods
 
-        public async Task<IEnumerable<string>> AddNugetAsync(NugetInformation nuget)
+        public async Task<ExecutionResult> AddNugetAsync(NugetInformation nuget)
         {
             var settings = new SettingsFile();
             settings.Initialize();
 
             if (!settings.HasNugetSource())
             {
-                return Enumerable.Empty<string>();
+                return null;
             }
 
 

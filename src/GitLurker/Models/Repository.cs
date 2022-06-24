@@ -173,7 +173,7 @@
         public async Task<NugetInformation> GetNewNugetAsync(string nugetSource)
         {
             NugetInformation newNuget = null;
-            var existingNugets = await ExecuteCommandAsync($@"{NugetListCommand} -source {nugetSource} -prerelease");
+            var executionResult = await ExecuteCommandAsync($@"{NugetListCommand} -source {nugetSource} -prerelease");
 
             // To get out of the UI Thread
             await Task.Run(() => 
@@ -194,7 +194,7 @@
             if (newNuget != null)
             {
                 // If the package is installed
-                if (existingNugets.Contains(newNuget.Name))
+                if (executionResult.Output.Contains(newNuget.Name))
                 {
                     return null;
                 }

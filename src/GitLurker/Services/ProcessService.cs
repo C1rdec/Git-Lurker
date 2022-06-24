@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using GitLurker.Models;
 
 namespace GitLurker.Services
 {
@@ -30,15 +31,15 @@ namespace GitLurker.Services
 
         #region Methods
 
-        public Task<IEnumerable<string>> ExecuteCommandAsync(string command) => ExecuteCommandAsync(command, false);
+        public Task<ExecutionResult> ExecuteCommandAsync(string command) => ExecuteCommandAsync(command, false);
 
-        public Task<IEnumerable<string>> ExecuteCommandAsync(string command, string workingDirectory) => ExecuteCommandAsync(command, false, workingDirectory);
+        public Task<ExecutionResult> ExecuteCommandAsync(string command, string workingDirectory) => ExecuteCommandAsync(command, false, workingDirectory);
 
-        public Task<IEnumerable<string>> ExecuteCommandAsync(string command, bool listen) => ExecuteCommandAsync(command, listen, _folder);
+        public Task<ExecutionResult> ExecuteCommandAsync(string command, bool listen) => ExecuteCommandAsync(command, listen, _folder);
 
-        public Task<IEnumerable<string>> ExecuteCommandAsync(string command, bool listen, string workingDirectory)
+        public Task<ExecutionResult> ExecuteCommandAsync(string command, bool listen, string workingDirectory)
         {
-            var taskCompletionSource = new TaskCompletionSource<IEnumerable<string>>();
+            var taskCompletionSource = new TaskCompletionSource<ExecutionResult>();
             var data = new List<string>();
             var process = new Process()
             {
@@ -72,7 +73,11 @@ namespace GitLurker.Services
             Task.Run(() => process.WaitForExit()).ContinueWith(t => 
             {
                 process.OutputDataReceived -= handler;
-                taskCompletionSource.SetResult(data);
+                taskCompletionSource.SetResult(new ExecutionResult()
+                {
+                    Output = data,
+                    ExitCode = process.ExitCode,
+                });
             });
 
             return taskCompletionSource.Task;

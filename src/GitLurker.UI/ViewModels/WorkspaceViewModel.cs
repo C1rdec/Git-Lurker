@@ -186,18 +186,37 @@
             _repos.Clear();
         }
 
-        private void KeyboardService_DownPressed(object sender, System.EventArgs e) => MoveDown();
-
-        private void KeyboardService_UpPressed(object sender, System.EventArgs e) => MoveUp();
-
-        private void KeyboardService_NextTabPressed(object sender, System.EventArgs e) 
+        private void KeyboardService_DownPressed(object sender, System.EventArgs e)
         {
-            if (SelectedRepo != null && SelectedRepo.HandleTab())
+            if (SelectedRepo != null && SelectedRepo.IsBranchManagerOpen)
             {
+                SelectedRepo.SelectNextBranch();
                 return;
             }
 
-            MoveDown(true);
+            MoveDown();
+        }
+
+        private void KeyboardService_UpPressed(object sender, System.EventArgs e) 
+        {
+            if (SelectedRepo != null && SelectedRepo.IsBranchManagerOpen)
+            {
+                SelectedRepo.SelectPreviousBranch();
+                return;
+            }
+
+            MoveUp(); 
+        }
+
+        private void KeyboardService_NextTabPressed(object sender, System.EventArgs e) 
+        {
+            if (SelectedRepo == null)
+            {
+                SelectedRepo = _repos.FirstOrDefault();
+                SelectedRepo.Select();
+            }
+
+            SelectedRepo.ToggleBranches();
         }
 
         private void keyboardService_PreviousTabPressed(object sender, System.EventArgs e)
