@@ -135,6 +135,7 @@
 
             if (string.IsNullOrEmpty(term))
             {
+                ShowRecent();
                 return;
             }
 
