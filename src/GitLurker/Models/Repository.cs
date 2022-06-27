@@ -163,7 +163,7 @@
 
             AddToRecent();
             var path = Path.Combine(_folder, _configuration.FrontEndPath);
-            return ExecuteCommandAsync(OpenVsCodeCommand, path);
+            return ExecuteCommandAsync(OpenVsCodeCommand, true, path);
         }
 
         public string GetCurrentBranchName() => _gitConfigurationService.GetCurrentBranchName();
