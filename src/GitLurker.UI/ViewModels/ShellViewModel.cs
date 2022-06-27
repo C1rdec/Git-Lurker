@@ -17,7 +17,7 @@
     using NHotkey.Wpf;
     using WindowsUtilities;
 
-    public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<string>, IHandle<ConsoleMessage>, IDisposable
+    public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<string>, IDisposable
     {
         #region Fields
 
@@ -26,6 +26,7 @@
         private SettingsFile _settingsFile;
         private KeyboardService _keyboardService;
         private RepositoryService _repositoryService;
+        private ConsoleService _consoleService;
         private SurfaceDialService _surfaceDialService;
         private GithubUpdateManager _updateManager;
         private WindowsLink _startupService;
@@ -58,6 +59,7 @@
             RepositoryService repositoryService,
             SurfaceDialService surfaceDialService,
             ThemeService themeService,
+            ConsoleService consoleService,
             GithubUpdateManager updateManager,
             ConsoleViewModel console)
         {
@@ -71,11 +73,14 @@
             _startupService = startupService;
             _repositoryService = repositoryService;
             _surfaceDialService = surfaceDialService;
+            _consoleService = consoleService;
             _settingsFile = settings;
             _updateManager = updateManager;
 
             _updateManager.UpdateRequested += UpdateManager_UpdateRequested;
             _settingsFile.OnFileSaved += OnSettingsSave;
+
+            _consoleService.ShowRequested += ConsoleService_ShowRequested;
 
             ApplySettings(settings);
 
@@ -241,24 +246,6 @@
             FocusSearch();
         }
 
-        public Task HandleAsync(ConsoleMessage message, CancellationToken cancellationToken)
-        {
-            if (message.Invalid)
-            {
-                return Task.CompletedTask;
-            }
-
-            ConsoleHeader = message.ActionName;
-            _console.Initialize(message.Repository);
-
-            if (message.OpenConsole)
-            {
-                IsConsoleOpen = true;
-            }
-
-            return Task.CompletedTask;
-        }
-
         public void HideWindow()
         {
             if (WorkspaceViewModel == null || WorkspaceViewModel.Close())
@@ -375,7 +362,9 @@
 
         private void SurfaceDialService_RotatedRight(object sender, EventArgs e) => WorkspaceViewModel.MoveDown();
 
-        private void SurfaceDialService_ButtonClicked(object sender, EventArgs e) => WorkspaceViewModel.Open(); 
+        private void SurfaceDialService_ButtonClicked(object sender, EventArgs e) => WorkspaceViewModel.Open();
+
+        private void ConsoleService_ShowRequested(object sender, EventArgs e) => OpenConsole();
 
         private void ToggleWindow()
         {
@@ -482,15 +471,17 @@
 
         public void Dispose()
         {
-            _keyboardService?.Dispose();
-            _surfaceDialService?.Dispose();
-
+            _consoleService.ShowRequested -= ConsoleService_ShowRequested;
             _surfaceDialService.ButtonClicked -= SurfaceDialService_ButtonClicked;
             _surfaceDialService.RotatedRight -= SurfaceDialService_RotatedRight;
             _surfaceDialService.RotatedLeft -= SurfaceDialService_RotatedLeft;
             _surfaceDialService.ButtonHolding -= SurfaceDialService_ButtonHolding;
             _surfaceDialService.ControlAcquired -= SurfaceDialService_ControlAcquired;
             _surfaceDialService.ControlLost -= SurfaceDialService_ControlLost;
+
+            _console?.Dispose();
+            _keyboardService?.Dispose();
+            _surfaceDialService?.Dispose();
         }
 
         #endregion

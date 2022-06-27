@@ -59,6 +59,7 @@
 
             // Services
             _container.Singleton<PopupService, PopupService>();
+            _container.Singleton<ConsoleService, ConsoleService>();
             _container.Singleton<RepositoryService, RepositoryService>();
             _container.Singleton<SurfaceDialService, SurfaceDialService>();
             _container.Singleton<ThemeService, ThemeService>();

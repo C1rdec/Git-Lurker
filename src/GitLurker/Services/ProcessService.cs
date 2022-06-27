@@ -27,6 +27,8 @@ namespace GitLurker.Services
 
         public event EventHandler<string> NewProcessMessage;
 
+        public event EventHandler<int> NewExitCode;
+
         #endregion
 
         #region Methods
@@ -73,6 +75,11 @@ namespace GitLurker.Services
             Task.Run(() => process.WaitForExit()).ContinueWith(t => 
             {
                 process.OutputDataReceived -= handler;
+                if (listen)
+                {
+                    NewExitCode?.Invoke(this, process.ExitCode);
+                }
+
                 taskCompletionSource.SetResult(new ExecutionResult()
                 {
                     Output = data,

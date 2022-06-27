@@ -85,7 +85,7 @@
             _duplicate = true;
         }
 
-        public Task PullAsync() => ExecuteCommandAsync("git pull", true);
+        public Task<ExecutionResult> PullAsync() => ExecuteCommandAsync("git pull", true);
 
         public Task CleanBranches() => ExecuteCommandAsync("git fetch origin --prune");
 
@@ -154,11 +154,11 @@
             return $"{repoUrl}/compare/{GetCurrentBranchName()}?expand=1";
         }
 
-        public Task OpenFrontEnd()
+        public Task<ExecutionResult> OpenFrontEnd()
         {
             if (_configuration == null || string.IsNullOrEmpty(_configuration.FrontEndPath))
             {
-                return Task.CompletedTask;
+                return Task.FromResult<ExecutionResult>(null);
             }
 
             AddToRecent();

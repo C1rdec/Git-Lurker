@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Caliburn.Micro;
 using GitLurker.Models;
 using GitLurker.UI.Messages;
+using GitLurker.UI.Services;
 using MahApps.Metro.IconPacks;
 
 namespace GitLurker.UI.ViewModels
@@ -15,6 +16,7 @@ namespace GitLurker.UI.ViewModels
 
         private bool _busy;
         private Repository _repo;
+        private ConsoleService _consoleService;
 
         #endregion
 
@@ -23,6 +25,7 @@ namespace GitLurker.UI.ViewModels
         public ActionBarViewModel(Repository repo)
         {
             _repo = repo;
+            _consoleService = IoC.Get<ConsoleService>();
             Actions = new ObservableCollection<ActionViewModel>();
             AddAction(repo.PullAsync, new PackIconMaterial() { Kind = PackIconMaterialKind.ChevronDown });
 
@@ -68,9 +71,9 @@ namespace GitLurker.UI.ViewModels
             });
         }
 
-        public void AddAction(Func<Task> task, PackIconControlBase icon) => AddAction(task, icon, false);
+        public void AddAction(Func<Task<ExecutionResult>> task, PackIconControlBase icon) => AddAction(task, icon, false);
 
-        public void AddAction(Func<Task> task, PackIconControlBase icon, bool openConsole)
+        public void AddAction(Func<Task<ExecutionResult>> task, PackIconControlBase icon, bool openConsole)
         {
             Func<Task> callback = async () =>
             {
@@ -80,13 +83,15 @@ namespace GitLurker.UI.ViewModels
                 }
 
                 Busy = true;
-                _ = IoC.Get<IEventAggregator>().PublishOnUIThreadAsync(new ConsoleMessage()
-                {
-                    Repository = _repo,
-                    OpenConsole = openConsole,
-                });
+                _consoleService.Listen(_repo);
 
-                await task();
+                if (openConsole)
+                {
+                    _consoleService.Show();
+                }
+
+                var result = await task();
+
                 Busy = false;
             };
 
