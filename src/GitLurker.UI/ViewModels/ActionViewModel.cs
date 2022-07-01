@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using MahApps.Metro.IconPacks;
 
 namespace GitLurker.UI.ViewModels
@@ -11,6 +12,7 @@ namespace GitLurker.UI.ViewModels
         private Func<Task> _action;
         private PackIconControlBase _icon;
         private bool _permanent;
+        private Brush _brush;
 
         #endregion
 

@@ -25,7 +25,6 @@
         private bool _showParentFolder;
         private ActionBarViewModel _actionBar;
         private SettingsFile _settingsFile;
-        private CustomActionSettingsFile _actionsFile;
         private bool _skipBranchSelection;
 
         #endregion
@@ -36,21 +35,11 @@
         {
             _repo = repo;
             _settingsFile = IoC.Get<SettingsFile>();
-            _actionsFile = IoC.Get<CustomActionSettingsFile>();
             _popupService = IoC.Get<PopupService>();
             _actionBar = new ActionBarViewModel(repo);
             _showParentFolder = repo.Duplicate;
             _aggregator = IoC.Get<IEventAggregator>();
             _repo.NewProcessMessage += Repo_NewProcessMessage;
-
-            foreach (var action in _actionsFile.GetActions(repo.Folder))
-            {
-                if (Enum.TryParse<PackIconMaterialKind>(action.Icon, out var kind))
-                {
-                    var icon = new PackIconMaterial() { Kind = kind };
-                    _actionBar.AddAction(() => _repo.ExecuteCommandAsync(action.Command, true), icon, action.OpenConsole);
-                }
-            }
 
             BranchManager = new BranchManagerViewModel(repo, OnSelectionChanged);
         }

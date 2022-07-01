@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using Caliburn.Micro;
 using GitLurker.Models;
 using GitLurker.UI.Messages;
@@ -17,6 +18,7 @@ namespace GitLurker.UI.ViewModels
         private bool _busy;
         private Repository _repo;
         private ConsoleService _consoleService;
+        private CustomActionSettingsFile _actionsFile;
 
         #endregion
 
@@ -25,14 +27,10 @@ namespace GitLurker.UI.ViewModels
         public ActionBarViewModel(Repository repo)
         {
             _repo = repo;
+            _actionsFile = IoC.Get<CustomActionSettingsFile>();
             _consoleService = IoC.Get<ConsoleService>();
-            Actions = new ObservableCollection<ActionViewModel>();
-            AddAction(repo.PullAsync, new PackIconMaterial() { Kind = PackIconMaterialKind.ChevronDown });
 
-            if (repo.HasFrontEnd)
-            {
-                AddAction(repo.OpenFrontEnd, new PackIconSimpleIcons() { Kind = PackIconSimpleIconsKind.VisualStudioCode });
-            }
+            SetActions();
         }
 
         #endregion
@@ -96,6 +94,32 @@ namespace GitLurker.UI.ViewModels
             };
 
             Actions.Insert(0, new ActionViewModel(callback, icon));
+        }
+
+        private void SetActions()
+        {
+            Actions = new ObservableCollection<ActionViewModel>();
+            AddAction(_repo.PullAsync, new PackIconMaterial() { Kind = PackIconMaterialKind.ChevronDown });
+
+            foreach (var action in _actionsFile.GetActions(_repo.Folder))
+            {
+                if (Enum.TryParse<PackIconMaterialKind>(action.Icon, out var kind))
+                {
+                    var icon = new PackIconMaterial() { Kind = kind };
+                    AddAction(() => _repo.ExecuteCommandAsync(action.Command, true), icon, action.OpenConsole);
+                }
+            }
+
+            if (_repo.HasFrontEnd)
+            {
+                var icon = new PackIconSimpleIcons
+                {
+                    Kind = PackIconSimpleIconsKind.VisualStudioCode,
+                    Foreground = new SolidColorBrush(Color.FromArgb(255, (byte)37, (byte)175, (byte)243))
+                };
+
+                AddAction(_repo.OpenFrontEnd, icon);
+            }
         }
 
         #endregion
