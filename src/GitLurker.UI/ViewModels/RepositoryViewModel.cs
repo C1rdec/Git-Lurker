@@ -249,7 +249,8 @@
                         return;
                     }
 
-                    _actionBar.AddAction(() => _repo.AddNugetAsync(nuget), new PackIconSimpleIcons() { Kind = PackIconSimpleIconsKind.NuGet });
+                    var icon = new PackIconSimpleIcons() { Kind = PackIconSimpleIconsKind.NuGet };
+                    _actionBar.AddAction(() => _repo.AddNugetAsync(nuget), icon, openConsole: false, permanent: false);
                 }
             }
         }

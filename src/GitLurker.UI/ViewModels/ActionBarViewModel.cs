@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 using Caliburn.Micro;
 using GitLurker.Models;
-using GitLurker.UI.Messages;
 using GitLurker.UI.Services;
 using MahApps.Metro.IconPacks;
 
@@ -69,9 +68,13 @@ namespace GitLurker.UI.ViewModels
             });
         }
 
-        public void AddAction(Func<Task<ExecutionResult>> task, PackIconControlBase icon) => AddAction(task, icon, false);
+        public void AddAction(Func<Task<ExecutionResult>> task, PackIconControlBase icon) 
+            => AddAction(task, icon, openConsole: false, permanent: true);
 
         public void AddAction(Func<Task<ExecutionResult>> task, PackIconControlBase icon, bool openConsole)
+            => AddAction(task, icon, openConsole, permanent: true);
+
+        public void AddAction(Func<Task<ExecutionResult>> task, PackIconControlBase icon, bool openConsole, bool permanent)
         {
             Func<Task> callback = async () =>
             {
@@ -93,7 +96,7 @@ namespace GitLurker.UI.ViewModels
                 Busy = false;
             };
 
-            Actions.Insert(0, new ActionViewModel(callback, icon));
+            Actions.Insert(0, new ActionViewModel(callback, icon, permanent));
         }
 
         private void SetActions()
