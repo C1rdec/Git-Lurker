@@ -1,6 +1,5 @@
 ﻿namespace GitLurker.UI.ViewModels
 {
-    using System;
     using System.Threading;
     using System.Threading.Tasks;
     using Caliburn.Micro;
@@ -39,7 +38,6 @@
             _actionBar = new ActionBarViewModel(repo);
             _showParentFolder = repo.Duplicate;
             _aggregator = IoC.Get<IEventAggregator>();
-            _repo.NewProcessMessage += Repo_NewProcessMessage;
 
             BranchManager = new BranchManagerViewModel(repo, OnSelectionChanged);
         }
@@ -320,11 +318,6 @@
             var segments = _repo.Folder.Split('\\');
 
             return $"({segments[^1]})";
-        }
-
-        private void Repo_NewProcessMessage(object sender, string e)
-        {
-            _aggregator.PublishOnUIThreadAsync(e);
         }
 
         #endregion

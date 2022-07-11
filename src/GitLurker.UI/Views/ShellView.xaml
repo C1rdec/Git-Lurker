@@ -189,6 +189,10 @@
                                                    Width="36"
                                                    Foreground="{DynamicResource MahApps.Brushes.Accent}"/>
                 </Grid>
+                <ContentControl x:Name="Console" 
+                                MaxHeight="300"
+                                Visibility="{Binding ShowConsoleOverview, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                Margin="5"/>
             </Grid>
         </Border>
 

@@ -28,6 +28,12 @@ namespace GitLurker.UI.ViewModels
 
         #endregion
 
+        #region Events
+
+        public event EventHandler<bool> OnExecute;
+
+        #endregion
+
         #region Properties
 
         public ObservableCollection<string> Lines { get; set; }
@@ -65,6 +71,7 @@ namespace GitLurker.UI.ViewModels
             }
 
             IsLoading = true;
+            OnExecute?.Invoke(this, true);
             _repository = repository;
             _repository.NewProcessMessage += Repository_NewProcessMessage;
             _repository.NewExitCode += Repository_NewExitCode;
@@ -78,6 +85,7 @@ namespace GitLurker.UI.ViewModels
         private void Repository_NewExitCode(object sender, int code)
         {
             IsLoading = false;
+            OnExecute?.Invoke(this, false);
         }
 
         private void Repository_NewProcessMessage(object sender, string e) => Execute.OnUIThread(() => Lines.Add(e));

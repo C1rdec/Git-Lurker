@@ -17,7 +17,7 @@
     using NHotkey.Wpf;
     using WindowsUtilities;
 
-    public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<string>, IDisposable
+    public class ShellViewModel : Screen, IHandle<CloseMessage>, IDisposable
     {
         #region Fields
 
@@ -36,6 +36,7 @@
         private bool _isVisible;
         private bool _showInTaskBar;
         private bool _disable;
+        private bool _showConsoleOverview;
         private IEventAggregator _eventAggregator;
         private bool _topMost;
         private string _version;
@@ -81,6 +82,7 @@
             _settingsFile.OnFileSaved += OnSettingsSave;
 
             _consoleService.ShowRequested += ConsoleService_ShowRequested;
+            _console.OnExecute += Console_OnExecute;
 
             ApplySettings(settings);
 
@@ -103,6 +105,20 @@
         public WorkspaceViewModel WorkspaceViewModel { get; private set; }
 
         public ConsoleViewModel Console => _console;
+
+        public bool ShowConsoleOverview
+        {
+            get
+            {
+                return _showConsoleOverview;
+            }
+
+            set
+            {
+                _showConsoleOverview = value;
+                NotifyOfPropertyChange();
+            }
+        }
 
         public bool ShowConsoleOutput => _settingsFile.Entity.ConsoleOuput && UpToDate;
 
@@ -238,14 +254,6 @@
             return Task.CompletedTask;
         }
 
-        public async Task HandleAsync(string message, CancellationToken cancellationToken)
-        {
-            SearchWatermark = message;
-            await Task.Delay(1600);
-            SearchWatermark = DefaultWaterMark;
-            FocusSearch();
-        }
-
         public void HideWindow()
         {
             if (WorkspaceViewModel == null || WorkspaceViewModel.Close())
@@ -348,6 +356,16 @@
             // Needs to be done after Winook
             ShowInTaskBar = false;
             HideFromAltTab(View);
+        }
+
+        private async void Console_OnExecute(object sender, bool execute)
+        {
+            if (!execute)
+            {
+                await Task.Delay(1600);
+            }
+
+            ShowConsoleOverview = execute;
         }
 
         private void UpdateManager_UpdateRequested(object sender, EventArgs e) => NeedUpdate = true;
@@ -471,6 +489,7 @@
 
         public void Dispose()
         {
+            _console.OnExecute -= Console_OnExecute;
             _consoleService.ShowRequested -= ConsoleService_ShowRequested;
             _surfaceDialService.ButtonClicked -= SurfaceDialService_ButtonClicked;
             _surfaceDialService.RotatedRight -= SurfaceDialService_RotatedRight;
