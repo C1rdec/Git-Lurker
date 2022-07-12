@@ -21,6 +21,8 @@ namespace GitLurker.Services
 
         #endregion
 
+        public IEnumerable<Workspace> Workspaces => _workspaces;
+
         #region Methods
 
         public IEnumerable<Repository> Search(string term)

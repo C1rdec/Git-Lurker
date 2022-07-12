@@ -1,13 +1,17 @@
 ﻿namespace GitLurker.Models
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Threading.Tasks;
+    using GitLurker.Services;
 
-    public class Workspace
+    public class Workspace : ProcessService
     {
         #region Fields
 
+        private string _folder;
         private List<Repository> _repositories;
 
         #endregion
@@ -15,7 +19,9 @@
         #region Constructors
 
         public Workspace(string folderPath)
+            : base (folderPath)
         {
+            _folder = folderPath;
             _repositories = new List<Repository>();
             var option = new EnumerationOptions()
             {
@@ -24,7 +30,7 @@
                 RecurseSubdirectories = true,
             };
 
-            foreach (var folder in Directory.GetDirectories(folderPath, ".git", option))
+            foreach (var folder in Directory.GetDirectories(_folder, ".git", option))
             {
                 var parentFolderInformation = Directory.GetParent(folder);
                 var path = parentFolderInformation.ToString();
@@ -52,6 +58,8 @@
 
         #region Properties
 
+        public string Folder => _folder;
+
         public IEnumerable<Repository> Repositories => _repositories;
 
         #endregion
@@ -67,6 +75,28 @@
         }
 
         public Repository GetRepo(string folderPath) => _repositories.FirstOrDefault(r => r.Folder == folderPath);
+
+        public async Task<Repository> CloneAsync(Uri url)
+        {
+            await ExecuteCommandAsync($"git clone {url}", true);
+            var lastSegment = url.LocalPath.Split("/").LastOrDefault();
+
+            if (string.IsNullOrEmpty(lastSegment))
+            {
+                return null;
+            }
+
+            var folderName = lastSegment.Replace(".git", string.Empty);
+            var folderPath = Path.Combine(_folder, folderName);
+
+            return new Repository(folderPath, _repositories);
+        }
+
+        public void AddRepo(Repository repo)
+        {
+            _repositories.Add(repo);
+            repo.AddToRecent();
+        }
 
         #endregion
     }

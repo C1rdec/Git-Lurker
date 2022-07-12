@@ -35,7 +35,6 @@
                 </Style.Triggers>
             </Style>
         </Grid.Style>
-        <Button BorderThickness="0" x:Name="Open" IsDefault="true" Width="1" Height="1" Background="Transparent"/>
         <ItemsControl x:Name="Repos">
             <ItemsControl.ItemContainerStyle>
                 <Style>

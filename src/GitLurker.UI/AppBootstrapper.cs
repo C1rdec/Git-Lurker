@@ -74,6 +74,7 @@
             _container.PerRequest<ShellViewModel, ShellViewModel>();
             _container.Singleton<SettingsViewModel, SettingsViewModel>();
             _container.Singleton<ConsoleViewModel, ConsoleViewModel>();
+            _container.Singleton<CloneRepoViewModel, CloneRepoViewModel>();
 
             var settings = new SettingsFile();
             settings.Initialize();

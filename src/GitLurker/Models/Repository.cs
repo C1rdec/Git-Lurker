@@ -205,6 +205,13 @@
             return newNuget;
         }
 
+        public void AddToRecent()
+        {
+            var settings = new SettingsFile();
+            settings.Initialize();
+            settings.AddToRecent(_folder);
+        }
+
         private FileInfo[] GetFiles(string extention) => new DirectoryInfo(_folder).GetFiles($"*{extention}", SearchOption.AllDirectories);
 
         private static Configuration GetConfiguration(string folder)
@@ -254,13 +261,6 @@
             }
 
             _name = Path.GetFileName(_folder);
-        }
-
-        private void AddToRecent()
-        {
-            var settings = new SettingsFile();
-            settings.Initialize();
-            settings.AddToRecent(_folder);
         }
 
         private bool HandleSln()

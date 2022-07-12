@@ -1,11 +1,13 @@
 ﻿namespace GitLurker.UI.ViewModels
 {
+    using System;
     using System.Collections.ObjectModel;
     using System.Linq;
     using System.Threading.Tasks;
     using Caliburn.Micro;
     using GitLurker.Models;
     using GitLurker.Services;
+    using GitLurker.UI.Services;
 
     public class WorkspaceViewModel: PropertyChangedBase
     {
@@ -13,6 +15,7 @@
 
         private KeyboardService _keyboardService;
         private RepositoryService _repositoryService;
+        private ConsoleService _consoleService;
         private ObservableCollection<RepositoryViewModel> _repos;
         private RepositoryViewModel _selectedRepo;
         private string _lastSearchTerm;
@@ -22,11 +25,13 @@
 
         #region Constructors
 
-        public WorkspaceViewModel(KeyboardService keyboardService, RepositoryService repositoryService)
+        public WorkspaceViewModel(KeyboardService keyboardService, RepositoryService repositoryService, ConsoleService consoleService)
         {
             _repos = new ObservableCollection<RepositoryViewModel>();
             _keyboardService = keyboardService;
             _repositoryService = repositoryService;
+            _consoleService = consoleService;
+
             _keyboardService.DownPressed += KeyboardService_DownPressed;
             _keyboardService.UpPressed += KeyboardService_UpPressed;
             _keyboardService.NextTabPressed += KeyboardService_NextTabPressed;
@@ -58,10 +63,27 @@
 
         #region Methods
 
-        public void Open() => Open(false);
-
         public void Open(bool skipModifier)
             => ExecuteOnRepo((r) => r.Open(skipModifier));
+
+        public async Task CloneAsync(Uri url)
+        {
+            var workspace = _repositoryService.Workspaces.FirstOrDefault();
+            if (workspace == null)
+            {
+                return;
+            }
+
+            _consoleService.Listen(workspace);
+            var newRepo = await workspace.CloneAsync(url);
+            if (newRepo != null)
+            {
+                workspace.AddRepo(newRepo);
+                _repos.Insert(0, new RepositoryViewModel(newRepo));
+            }
+
+            return;
+        }
 
         public void OpenPullRequest()
             => ExecuteOnRepo((r) => r.OpenPullRequest());
@@ -166,6 +188,7 @@
 
         public void ShowRecent()
         {
+            Clear();
             var file = new SettingsFile();
             file.Initialize();
 

@@ -1,5 +1,5 @@
 ﻿using System;
-using GitLurker.Models;
+using GitLurker.Services;
 
 namespace GitLurker.UI.Services
 {
@@ -7,7 +7,7 @@ namespace GitLurker.UI.Services
     {
         #region Events
 
-        public event EventHandler<Repository> ExecutionRequested;
+        public event EventHandler<ProcessService> ExecutionRequested;
 
         public event EventHandler ShowRequested;
 
@@ -15,7 +15,7 @@ namespace GitLurker.UI.Services
 
         #region Methods
 
-        public void Listen(Repository repo) => ExecutionRequested?.Invoke(this, repo);
+        public void Listen(ProcessService process) => ExecutionRequested?.Invoke(this, process);
 
         public void Show() => ShowRequested?.Invoke(this, EventArgs.Empty);
 

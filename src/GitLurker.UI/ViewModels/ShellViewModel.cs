@@ -31,6 +31,7 @@
         private GithubUpdateManager _updateManager;
         private WindowsLink _startupService;
         private ConsoleViewModel _console;
+        private CloneRepoViewModel _cloneRepo;
         private string _searchTerm;
         private string _searchWatermark;
         private bool _isVisible;
@@ -44,6 +45,7 @@
         private double _dpiY = 1;
         private bool _hasSurfaceDial;
         private bool _isConsoleOpen;
+        private bool _isCloneRepoOpen;
         private bool _needUpdate;
         private bool _updating;
         private string _consoleHeader;
@@ -62,9 +64,11 @@
             ThemeService themeService,
             ConsoleService consoleService,
             GithubUpdateManager updateManager,
-            ConsoleViewModel console)
+            ConsoleViewModel console,
+            CloneRepoViewModel cloneRepo)
         {
             _console = console;
+            _cloneRepo = cloneRepo;
             _searchTerm = string.Empty;
             _searchWatermark = DefaultWaterMark;
             _isVisible = false;
@@ -105,6 +109,8 @@
         public WorkspaceViewModel WorkspaceViewModel { get; private set; }
 
         public ConsoleViewModel Console => _console;
+
+        public CloneRepoViewModel CloneRepo => _cloneRepo;
 
         public bool ShowConsoleOverview
         {
@@ -223,6 +229,16 @@
             }
         }
 
+        public bool IsCloneRepoOpen
+        {
+            get => _isCloneRepoOpen;
+            set
+            {
+                _isCloneRepoOpen = value;
+                NotifyOfPropertyChange();
+            }
+        }
+        
         public string ConsoleHeader
         {
             get => string.IsNullOrEmpty(_consoleHeader) ? "Console output" : _consoleHeader;
@@ -283,11 +299,24 @@
             IoC.Get<IWindowManager>().ShowWindowAsync(IoC.Get<SettingsViewModel>());
         }
 
+        public async void Open() 
+        {
+            if (Uri.TryCreate(_searchTerm, UriKind.Absolute, out var result))
+            {
+                await WorkspaceViewModel.CloneAsync(result);
+                SearchTerm = string.Empty;
+
+                return;
+            }
+
+            WorkspaceViewModel.Open(false);
+        }
+
         public async void RefreshWorkspace()
         {
             if (WorkspaceViewModel == null)
             {
-                WorkspaceViewModel = new WorkspaceViewModel(_keyboardService, _repositoryService);
+                WorkspaceViewModel = new WorkspaceViewModel(_keyboardService, _repositoryService, _consoleService);
             }
             else
             {
@@ -380,7 +409,7 @@
 
         private void SurfaceDialService_RotatedRight(object sender, EventArgs e) => WorkspaceViewModel.MoveDown();
 
-        private void SurfaceDialService_ButtonClicked(object sender, EventArgs e) => WorkspaceViewModel.Open();
+        private void SurfaceDialService_ButtonClicked(object sender, EventArgs e) => WorkspaceViewModel.Open(false);
 
         private void ConsoleService_ShowRequested(object sender, EventArgs e) => OpenConsole();
 

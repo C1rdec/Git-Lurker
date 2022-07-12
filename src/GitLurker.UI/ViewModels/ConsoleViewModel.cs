@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using Caliburn.Micro;
-using GitLurker.Models;
+using GitLurker.Services;
 using GitLurker.UI.Services;
 
 namespace GitLurker.UI.ViewModels
@@ -10,7 +10,7 @@ namespace GitLurker.UI.ViewModels
     {
         #region Fields
 
-        private Repository _repository;
+        private ProcessService _processService;
         private ConsoleService _consoleService;
         private int _exitCode;
         private bool _isLoading;
@@ -62,19 +62,19 @@ namespace GitLurker.UI.ViewModels
 
         #region Methods
 
-        public void Initialize(Repository repository)
+        public void Initialize(ProcessService processService)
         {
-            if (_repository != null)
+            if (_processService != null)
             {
                 Lines.Clear();
-                _repository.NewProcessMessage -= Repository_NewProcessMessage;
+                _processService.NewProcessMessage -= Repository_NewProcessMessage;
             }
 
             IsLoading = true;
             OnExecute?.Invoke(this, true);
-            _repository = repository;
-            _repository.NewProcessMessage += Repository_NewProcessMessage;
-            _repository.NewExitCode += Repository_NewExitCode;
+            _processService = processService;
+            _processService.NewProcessMessage += Repository_NewProcessMessage;
+            _processService.NewExitCode += Repository_NewExitCode;
         }
 
         public void Dispose()
@@ -90,14 +90,14 @@ namespace GitLurker.UI.ViewModels
 
         private void Repository_NewProcessMessage(object sender, string e) => Execute.OnUIThread(() => Lines.Add(e));
 
-        private void ConsoleService_ExecutionRequested(object sender, Repository repo)
+        private void ConsoleService_ExecutionRequested(object sender, ProcessService process)
         {
-            if (repo == null)
+            if (process == null)
             {
                 return;
             }
 
-            Initialize(repo);
+            Initialize(process);
         }
 
         #endregion
