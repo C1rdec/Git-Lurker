@@ -52,6 +52,8 @@
 
         public bool HasIcon => _repo.HasIcon;
 
+        public bool IsVsCode => !_repo.HasSln;
+
         public string IconSource => _repo.IconPath;
 
         public string RepoName => _repo.Name;

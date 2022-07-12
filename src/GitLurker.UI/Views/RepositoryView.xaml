@@ -51,6 +51,9 @@
                                         <DataTrigger Binding="{Binding HasIcon}" Value="true">
                                             <Setter Property="Source" Value="{Binding IconSource}"></Setter>
                                         </DataTrigger>
+                                        <DataTrigger Binding="{Binding IsVsCode}" Value="true">
+                                            <Setter Property="Source" Value="https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/Visual_Studio_Code_1.35_icon.svg/2048px-Visual_Studio_Code_1.35_icon.svg.png"></Setter>
+                                        </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
                             </Image.Style>

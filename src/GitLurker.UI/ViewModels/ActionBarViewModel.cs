@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Media;
 using Caliburn.Micro;
 using GitLurker.Models;
 using GitLurker.UI.Services;
@@ -76,6 +75,7 @@ namespace GitLurker.UI.ViewModels
 
         public void AddAction(Func<Task<ExecutionResult>> task, PackIconControlBase icon, bool openConsole, bool permanent)
         {
+            var id = Guid.NewGuid();
             Func<Task> callback = async () =>
             {
                 if (Busy)
@@ -83,7 +83,7 @@ namespace GitLurker.UI.ViewModels
                     return;
                 }
 
-                Busy = true;
+                SetDisable(true, id);
                 _consoleService.Listen(_repo);
 
                 if (openConsole)
@@ -93,10 +93,10 @@ namespace GitLurker.UI.ViewModels
 
                 var result = await task();
 
-                Busy = false;
+                SetDisable(false, id);
             };
 
-            Actions.Insert(0, new ActionViewModel(callback, icon, permanent));
+            Actions.Insert(0, new ActionViewModel(callback, icon, permanent, id));
         }
 
         private void SetActions()
@@ -118,10 +118,28 @@ namespace GitLurker.UI.ViewModels
                 var icon = new PackIconSimpleIcons
                 {
                     Kind = PackIconSimpleIconsKind.VisualStudioCode,
-                    Foreground = new SolidColorBrush(Color.FromArgb(255, (byte)37, (byte)175, (byte)243))
                 };
 
                 AddAction(_repo.OpenFrontEnd, icon);
+            }
+        }
+
+        public void SetDisable(bool value, Guid actionId)
+        {
+            foreach(var action in Actions)
+            {
+                if (action.Id == actionId)
+                {
+                    continue;
+                }
+
+                action.IsDisable = value;
+            }
+
+            var activeAction = Actions.FirstOrDefault(a => a.Id == actionId);
+            if (activeAction != null)
+            {
+                activeAction.IsActive = value;
             }
         }
 

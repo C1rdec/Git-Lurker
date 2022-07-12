@@ -54,6 +54,8 @@
 
         public string Name => _name;
 
+        public bool HasSln => _slnFiles.Any();
+
         public bool HasIcon => _configuration != null && !string.IsNullOrEmpty(_configuration.IconPath);
 
         public string IconPath => _configuration == null ? string.Empty : Path.Join(_folder, _configuration.IconPath);

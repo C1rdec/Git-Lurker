@@ -1,15 +1,15 @@
 ﻿<UserControl x:Class="GitLurker.UI.Views.ActionView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
              d:DesignHeight="80" d:DesignWidth="80">
     <Border cal:Message.Attach="[Event MouseUp] = [Action OnClick()]"
             CornerRadius="6" 
-            Grid.Column="1" 
+            Grid.Column="1"
+            IsEnabled="{Binding IsEnable}"
             Height="50" Width="50">
         <Border.Style>
             <Style TargetType="Border">
@@ -20,6 +20,15 @@
                 </Setter>
                 <Setter Property="Opacity" Value="0.6"/>
                 <Style.Triggers>
+                    <DataTrigger Binding="{Binding IsDisable}" Value="true">
+                        <Setter Property="Opacity" Value="0.2"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding IsActive}" Value="true">
+                        <Setter Property="BorderThickness" Value="1.5"/>
+                        <Setter Property="BorderBrush" Value="{DynamicResource Brushes.Secondary}"/>
+                        <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
+                        <Setter Property="Opacity" Value="1"/>
+                    </DataTrigger>
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="BorderThickness" Value="1.5"/>
                         <Setter Property="BorderBrush" Value="{DynamicResource Brushes.Secondary}"/>
