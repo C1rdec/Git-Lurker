@@ -62,21 +62,6 @@ namespace GitLurker.UI.ViewModels
 
         #region Methods
 
-        public void Initialize(ProcessService processService)
-        {
-            if (_processService != null)
-            {
-                Lines.Clear();
-                _processService.NewProcessMessage -= Repository_NewProcessMessage;
-            }
-
-            IsLoading = true;
-            OnExecute?.Invoke(this, true);
-            _processService = processService;
-            _processService.NewProcessMessage += Repository_NewProcessMessage;
-            _processService.NewExitCode += Repository_NewExitCode;
-        }
-
         public void Dispose()
         {
             _consoleService.ExecutionRequested -= ConsoleService_ExecutionRequested;
@@ -97,7 +82,17 @@ namespace GitLurker.UI.ViewModels
                 return;
             }
 
-            Initialize(process);
+            if (_processService != null)
+            {
+                Lines.Clear();
+                _processService.NewProcessMessage -= Repository_NewProcessMessage;
+            }
+
+            IsLoading = true;
+            OnExecute?.Invoke(this, true);
+            _processService = process;
+            _processService.NewProcessMessage += Repository_NewProcessMessage;
+            _processService.NewExitCode += Repository_NewExitCode;
         }
 
         #endregion

@@ -389,7 +389,7 @@
 
         private async void Console_OnExecute(object sender, bool execute)
         {
-            if (!execute)
+            if (!execute && _console.Lines.Any())
             {
                 await Task.Delay(1600);
             }
