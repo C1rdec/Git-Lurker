@@ -89,6 +89,11 @@
             var folderName = lastSegment.Replace(".git", string.Empty);
             var folderPath = Path.Combine(_folder, folderName);
 
+            if (!Directory.Exists(folderPath))
+            {
+                return null;
+            }
+
             return new Repository(folderPath, _repositories);
         }
 
