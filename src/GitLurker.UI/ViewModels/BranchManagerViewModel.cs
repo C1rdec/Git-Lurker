@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Windows.Controls;
 using Caliburn.Micro;
 using GitLurker.Models;
 
@@ -15,6 +14,8 @@ namespace GitLurker.UI.ViewModels
         private string _selectedBranch;
         private Action<string> _onSelected;
         private bool _isLoading;
+        private bool _isCreateBranch;
+        private string _newBranchName;
 
         #endregion
 
@@ -42,6 +43,29 @@ namespace GitLurker.UI.ViewModels
                 NotifyOfPropertyChange();
             }
         }
+
+        public string NewBranchName
+        {
+            get => _newBranchName;
+            set
+            {
+                _newBranchName = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
+        public bool IsCreateBranch
+        {
+            get => _isCreateBranch;
+            set
+            {
+                _isCreateBranch = value;
+                NotifyOfPropertyChange();
+                NotifyOfPropertyChange(() => IsNotCreateBranch);
+            }
+        }
+
+        public bool IsNotCreateBranch => !IsCreateBranch;
 
         public string SelectedBranchName
         {
@@ -121,6 +145,7 @@ namespace GitLurker.UI.ViewModels
 
         public void ShowBranches()
         {
+            IsCreateBranch = false;
             var branches = _repo.GetBranchNames();
 
             Execute.OnUIThread(() =>
@@ -148,6 +173,18 @@ namespace GitLurker.UI.ViewModels
 
             ShowBranches();
             IsLoading = false;
+        }
+
+        public void ShowCreateBranch()
+        {
+            IsCreateBranch = true;
+        }
+
+        public async void CreateBranch()
+        {
+            await _repo.ExecuteCommandAsync($"git checkout -b {NewBranchName}");
+            _onSelected(NewBranchName);
+            NewBranchName = string.Empty;
         }
 
         #endregion

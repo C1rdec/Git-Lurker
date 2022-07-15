@@ -1,55 +1,87 @@
 ﻿<UserControl x:Class="GitLurker.UI.Views.BranchManagerView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:cal="http://www.caliburnproject.org"
-             xmlns:busy="https://github.com/Peoky/BusyIndicator"    
-             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-             xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition></RowDefinition>
-        </Grid.RowDefinitions>
-        <ListView ItemsSource="{Binding BranchNames}"
-                  SelectedItem="{Binding SelectedBranchName}"
-                  Grid.Row="1"
-                  Cursor="Hand" 
-                  cal:Message.Attach="[Event MouseUp] = [Action Select()]">
-            <ListView.Style>
-                <Style TargetType="ListView" BasedOn="{StaticResource MahApps.Styles.ListView}">
+        <Grid x:Name="Selector" Visibility="{Binding IsNotCreateBranch, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <ListView ItemsSource="{Binding BranchNames}"
+                      SelectedItem="{Binding SelectedBranchName}"
+                      Grid.Row="1"
+                      Cursor="Hand" 
+                      cal:Message.Attach="[Event MouseUp] = [Action Select()]">
+                <ListView.Style>
+                    <Style TargetType="ListView" BasedOn="{StaticResource MahApps.Styles.ListView}">
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsLoading}" Value="True">
+                                <Setter Property = "Visibility" Value="Hidden"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ListView.Style>
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" Margin="15,5,30,5" VerticalAlignment="Center" FontSize="28" Background="Transparent"/>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <mah:ProgressRing Foreground="{DynamicResource MahApps.Brushes.Accent}"
+                              Grid.RowSpan="2"
+                              IsActive="{Binding IsLoading}" />
+            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-5,0,0">
+                <Button x:Name="CleanBranches"
+                    Width="30" Height="30"
+                    BorderThickness="0"
+                    Foreground="{DynamicResource MahApps.Brushes.Accent}"
+                    Cursor="Hand"
+                    Style="{StaticResource MahApps.Styles.Button.Circle}">
+                    <Button.ContentTemplate>
+                        <DataTemplate>
+                            <iconPacks:PackIconMaterial Kind="CloudRefresh" Height="25" Width="25" Foreground="{DynamicResource Brushes.Secondary}"/>
+                        </DataTemplate>
+                    </Button.ContentTemplate>
+                </Button>
+
+                <Button x:Name="ShowCreateBranch"
+                    Width="30" Height="30"
+                    BorderThickness="0"
+                    Foreground="{DynamicResource MahApps.Brushes.Accent}"
+                    Cursor="Hand"
+                    Style="{StaticResource MahApps.Styles.Button.Circle}">
+                    <Button.ContentTemplate>
+                        <DataTemplate>
+                            <iconPacks:PackIconMaterial Kind="SourceBranchPlus" Height="18" Width="18" Foreground="{DynamicResource Brushes.Secondary}"/>
+                        </DataTemplate>
+                    </Button.ContentTemplate>
+                </Button>
+            </StackPanel>
+        </Grid>
+        <Grid x:Name="Creator" 
+              Visibility="{Binding IsCreateBranch, Converter={StaticResource BooleanToVisibilityConverter}}">
+            <Grid.Style>
+                <Style>
                     <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsLoading}" Value="True">
-                            <Setter Property = "Visibility" Value="Hidden"/>
+                        <DataTrigger Binding="{Binding IsCreateBranch}" Value="True">
+                            <Setter Property="FocusManager.FocusedElement" Value="{Binding ElementName=NewBranchName}"/>
                         </DataTrigger>
                     </Style.Triggers>
                 </Style>
-            </ListView.Style>
-            <ListView.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding}" Margin="15,5,30,5" VerticalAlignment="Center" FontSize="28" Background="Transparent"/>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
-        <mah:ProgressRing Foreground="{DynamicResource MahApps.Brushes.Accent}"
-                          Grid.RowSpan="2"
-                          IsActive="{Binding IsLoading}" />
-        <Button x:Name="CleanBranches"
-                Width="40" Height="40"
-                BorderThickness="0"
-                HorizontalAlignment="Right" 
-                VerticalAlignment="Top" 
-                Foreground="{DynamicResource MahApps.Brushes.Accent}"
-                Cursor="Hand"
-                Margin="0,-5,-5,0"
-                Style="{StaticResource MahApps.Styles.Button.Circle}">
-            <Button.ContentTemplate>
-                <DataTemplate>
-                    <iconPacks:PackIconMaterial Kind="CloudRefresh" Height="25" Width="25" Foreground="{DynamicResource Brushes.Secondary}"/>
-                </DataTemplate>
-            </Button.ContentTemplate>
-        </Button>
+            </Grid.Style>
+            <Button BorderThickness="0" x:Name="CreateBranch" IsDefault="true" Width="1" Height="1" Background="Transparent"/>
+            <TextBox x:Name="NewBranchName"
+                     FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                     Text="{Binding NewBranchName, UpdateSourceTrigger=PropertyChanged}"
+                     BorderThickness="0,0,0,1" 
+                     mah:TextBoxHelper.Watermark="Branch Name"
+                     Width="200" FontSize="28"/>
+        </Grid>
     </Grid>
 </UserControl>
