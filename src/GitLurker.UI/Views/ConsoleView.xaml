@@ -21,7 +21,7 @@
                 <ItemsControl x:Name="Lines">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding}" FontSize="16" FontFamily="Consola"/>
+                            <TextBlock Text="{Binding}" FontSize="16" FontFamily="Consola" Foreground="{DynamicResource Brushes.Secondary}"/>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
