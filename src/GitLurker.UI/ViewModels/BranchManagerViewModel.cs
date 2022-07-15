@@ -90,6 +90,7 @@ namespace GitLurker.UI.ViewModels
 
             IsLoading = true;
             var result = await _repo.ExecuteCommandAsync($"git checkout {SelectedBranchName}");
+            _repo.AddToRecent();
 
             _onSelected(SelectedBranchName);
             IsLoading = false;
@@ -182,6 +183,7 @@ namespace GitLurker.UI.ViewModels
 
         public async void CreateBranch()
         {
+            _repo.AddToRecent();
             await _repo.ExecuteCommandAsync($"git checkout -b {NewBranchName}");
             _onSelected(NewBranchName);
             NewBranchName = string.Empty;
