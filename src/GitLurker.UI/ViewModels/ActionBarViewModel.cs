@@ -93,6 +93,7 @@ namespace GitLurker.UI.ViewModels
 
                 var result = await task();
 
+                _repo.AddToRecent();
                 SetDisable(false, id);
             };
 
