@@ -11,8 +11,35 @@
     <Grid>
         <Grid x:Name="Selector" Visibility="{Binding IsNotCreateBranch, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
+            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-8,0,0" Orientation="Horizontal">
+                <Button x:Name="ShowCreateBranch"
+                    Width="30" Height="30"
+                    BorderThickness="0"
+                    Foreground="{DynamicResource MahApps.Brushes.Accent}"
+                    Cursor="Hand"
+                    Style="{StaticResource MahApps.Styles.Button.Circle}">
+                    <Button.ContentTemplate>
+                        <DataTemplate>
+                            <iconPacks:PackIconMaterial Kind="SourceBranchPlus" Height="18" Width="18" Foreground="{DynamicResource Brushes.Secondary}"/>
+                        </DataTemplate>
+                    </Button.ContentTemplate>
+                </Button>
+                <Button x:Name="CleanBranches"
+                    Width="30" Height="30"
+                    BorderThickness="0"
+                    Foreground="{DynamicResource MahApps.Brushes.Accent}"
+                    Cursor="Hand"
+                    Style="{StaticResource MahApps.Styles.Button.Circle}">
+                    <Button.ContentTemplate>
+                        <DataTemplate>
+                            <iconPacks:PackIconMaterial Kind="CloudRefresh" Height="25" Width="25" Foreground="{DynamicResource Brushes.Secondary}"/>
+                        </DataTemplate>
+                    </Button.ContentTemplate>
+                </Button>
+            </StackPanel>
             <ListView ItemsSource="{Binding BranchNames}"
                       SelectedItem="{Binding SelectedBranchName}"
                       Grid.Row="1"
@@ -36,33 +63,6 @@
             <mah:ProgressRing Foreground="{DynamicResource MahApps.Brushes.Accent}"
                               Grid.RowSpan="2"
                               IsActive="{Binding IsLoading}" />
-            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-5,0,0">
-                <Button x:Name="CleanBranches"
-                    Width="30" Height="30"
-                    BorderThickness="0"
-                    Foreground="{DynamicResource MahApps.Brushes.Accent}"
-                    Cursor="Hand"
-                    Style="{StaticResource MahApps.Styles.Button.Circle}">
-                    <Button.ContentTemplate>
-                        <DataTemplate>
-                            <iconPacks:PackIconMaterial Kind="CloudRefresh" Height="25" Width="25" Foreground="{DynamicResource Brushes.Secondary}"/>
-                        </DataTemplate>
-                    </Button.ContentTemplate>
-                </Button>
-
-                <Button x:Name="ShowCreateBranch"
-                    Width="30" Height="30"
-                    BorderThickness="0"
-                    Foreground="{DynamicResource MahApps.Brushes.Accent}"
-                    Cursor="Hand"
-                    Style="{StaticResource MahApps.Styles.Button.Circle}">
-                    <Button.ContentTemplate>
-                        <DataTemplate>
-                            <iconPacks:PackIconMaterial Kind="SourceBranchPlus" Height="18" Width="18" Foreground="{DynamicResource Brushes.Secondary}"/>
-                        </DataTemplate>
-                    </Button.ContentTemplate>
-                </Button>
-            </StackPanel>
         </Grid>
         <Grid x:Name="Creator" 
               Visibility="{Binding IsCreateBranch, Converter={StaticResource BooleanToVisibilityConverter}}">
