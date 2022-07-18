@@ -149,16 +149,6 @@ namespace GitLurker.UI.ViewModels
             }
         }
 
-        public bool DoubleTabEnabled
-        {
-            get => _settingsFile.Entity.DoubleTabEnabled;
-            set
-            {
-                _settingsFile.Entity.DoubleTabEnabled = value;
-                NotifyOfPropertyChange();
-            }
-        }
-
         #endregion
 
         #region Methods

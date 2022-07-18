@@ -9,6 +9,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
+        <Button BorderThickness="0" x:Name="Close" IsCancel="true" Width="1" Height="1" Background="Transparent"/>
         <Grid x:Name="Selector" Visibility="{Binding IsNotCreateBranch, Converter={StaticResource BooleanToVisibilityConverter}}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"></RowDefinition>
@@ -76,12 +77,31 @@
                 </Style>
             </Grid.Style>
             <Button BorderThickness="0" x:Name="CreateBranch" IsDefault="true" Width="1" Height="1" Background="Transparent"/>
-            <TextBox x:Name="NewBranchName"
-                     FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
-                     Text="{Binding NewBranchName, UpdateSourceTrigger=PropertyChanged}"
-                     BorderThickness="0,0,0,1" 
-                     mah:TextBoxHelper.Watermark="Branch Name"
-                     Width="200" FontSize="28"/>
+            <StackPanel Orientation="Horizontal">
+                <TextBox x:Name="NewBranchName"
+                         FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                         VerticalAlignment="Center"
+                         Text="{Binding NewBranchName, UpdateSourceTrigger=PropertyChanged}"
+                         BorderThickness="0,0,0,1" 
+                         mah:TextBoxHelper.Watermark="Branch Name"
+                         Width="200" FontSize="28"/>
+                <Button x:Name="CreateBranch2"
+                    Width="30" Height="30"
+                    BorderThickness="0"
+                    Foreground="{DynamicResource MahApps.Brushes.Accent}"
+                    Cursor="Hand"
+                    Style="{StaticResource MahApps.Styles.Button.Circle}">
+                    <Button.ContentTemplate>
+                        <DataTemplate>
+                            <iconPacks:PackIconMaterial Kind="SourceBranchPlus" 
+                                            Height="24" Width="24" 
+                                            Margin="6,0,0,0"
+                                            Foreground="{DynamicResource Brushes.Secondary}" 
+                                            VerticalAlignment="Center"/>
+                        </DataTemplate>
+                    </Button.ContentTemplate>
+                </Button>
+            </StackPanel>
         </Grid>
     </Grid>
 </UserControl>

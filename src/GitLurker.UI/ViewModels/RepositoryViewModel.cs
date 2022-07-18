@@ -39,7 +39,7 @@
             _showParentFolder = repo.Duplicate;
             _aggregator = IoC.Get<IEventAggregator>();
 
-            BranchManager = new BranchManagerViewModel(repo, OnSelectionChanged);
+            BranchManager = new BranchManagerViewModel(repo, OnSelectionChanged, OnBranchManagerClose);
         }
 
         #endregion
@@ -155,6 +155,11 @@
         public void OnSelectionChanged(string branch)
         {
             BranchName = branch;
+            IsBranchManagerOpen = false;
+        }
+
+        public void OnBranchManagerClose()
+        {
             IsBranchManagerOpen = false;
         }
 
@@ -292,6 +297,11 @@
             {
                 BranchManager.SelectNextBranch();
             }
+        }
+
+        public void OpenNewBranch()
+        {
+            BranchManager.ShowCreateBranch();
         }
 
         public void SelectPreviousBranch()

@@ -65,20 +65,6 @@
                 <Label Style="{DynamicResource LabelHeaderStyle}">Hotkey</Label>
                 <StackPanel Grid.Row="1" VerticalAlignment="Center">
                     <ContentControl x:Name="Hotkey" Margin="20,0,20,0" Focusable="False"/>
-                    <ToggleButton Width="40"
-                                  Cursor="Hand"
-                                  BorderThickness="1.5"
-                                  ToolTip="Double Tap"
-                                  Height="40"
-                                  IsChecked="{Binding DoubleTabEnabled}"
-                                  Margin="0, 10, 0, 0"
-                                  Style="{DynamicResource MahApps.Styles.ToggleButton.Circle}">
-                        <iconPacks:PackIconMaterial Kind="GestureDoubleTap"
-                                                    Height="28"
-                                                    HorizontalAlignment="Center" 
-                                                    Opacity="0.7"
-                                                    VerticalAlignment="Center"/>
-                    </ToggleButton>
                 </StackPanel>
             </Grid>
         </TabItem>

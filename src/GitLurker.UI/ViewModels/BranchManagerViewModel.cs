@@ -3,16 +3,19 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using Caliburn.Micro;
 using GitLurker.Models;
+using GitLurker.UI.Views;
 
 namespace GitLurker.UI.ViewModels
 {
-    public class BranchManagerViewModel : PropertyChangedBase
+    public class BranchManagerViewModel : ViewAware
     {
         #region Fields
 
+        private BranchManagerView _view;
         private Repository _repo;
         private string _selectedBranch;
         private Action<string> _onSelected;
+        private System. Action _onClose;
         private bool _isLoading;
         private bool _isCreateBranch;
         private string _newBranchName;
@@ -21,10 +24,11 @@ namespace GitLurker.UI.ViewModels
 
         #region Constructors
 
-        public BranchManagerViewModel(Repository repo, Action<string> onSelected)
+        public BranchManagerViewModel(Repository repo, Action<string> onSelected, System.Action onClose)
         {
             _repo = repo;
             _onSelected = onSelected;
+            _onClose = onClose;
             BranchNames = new ObservableCollection<string>();
         }
 
@@ -80,6 +84,12 @@ namespace GitLurker.UI.ViewModels
         #endregion
 
         #region Methods
+
+        protected override void OnViewLoaded(object view)
+        {
+            _view = view as BranchManagerView;
+            base.OnViewLoaded(view);
+        }
 
         public async void Select()
         {
@@ -147,6 +157,7 @@ namespace GitLurker.UI.ViewModels
         public void ShowBranches()
         {
             IsCreateBranch = false;
+            NewBranchName = string.Empty;
             var branches = _repo.GetBranchNames();
 
             Execute.OnUIThread(() =>
@@ -176,16 +187,30 @@ namespace GitLurker.UI.ViewModels
             IsLoading = false;
         }
 
+        public void Close()
+        {
+            _onClose?.Invoke();
+        }
+
         public void ShowCreateBranch()
         {
             IsCreateBranch = true;
+            Execute.OnUIThread(() => _view.NewBranchName.Focus());
         }
+
+        public void CreateBranch2() => CreateBranch();
 
         public async void CreateBranch()
         {
+            var branchName = NewBranchName.Trim();
+            if (string.IsNullOrEmpty(branchName))
+            {
+                return;
+            }
+
             _repo.AddToRecent();
-            await _repo.ExecuteCommandAsync($"git checkout -b {NewBranchName}");
-            _onSelected(NewBranchName);
+            await _repo.ExecuteCommandAsync($"git checkout -b {branchName}");
+            _onSelected(branchName);
             NewBranchName = string.Empty;
         }
 

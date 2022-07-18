@@ -417,11 +417,6 @@
         {
             if (IsVisible)
             {
-                if (_settingsFile.Entity.DoubleTabEnabled)
-                {
-                    WorkspaceViewModel?.Open(skipModifier: true);
-                }
-
                 HideWindow();
                 return;
             }
@@ -471,15 +466,16 @@
             var hotkey = settings.Entity.HotKey;
             var modifier = Enum.Parse<ModifierKeys>(hotkey.Modifier.ToString());
 
-            Enum.TryParse(hotkey.KeyCode.ToString(), out Key key);
-
-            try
+            if (Enum.TryParse(hotkey.KeyCode.ToString(), out Key key))
             {
-                HotkeyManager.Current.AddOrReplace("Open", key, modifier , (s, e) => ToggleWindow());
-                HotkeyManager.Current.AddOrReplace("OpenDial", Key.F12, ModifierKeys.Control | ModifierKeys.Shift, (s, e) => ToggleWindow());
-            }
-            catch (NHotkey.HotkeyAlreadyRegisteredException)
-            {
+                try
+                {
+                    HotkeyManager.Current.AddOrReplace("Open", key, modifier, (s, e) => ToggleWindow());
+                    HotkeyManager.Current.AddOrReplace("OpenDial", Key.F12, ModifierKeys.Control | ModifierKeys.Shift, (s, e) => ToggleWindow());
+                }
+                catch (NHotkey.HotkeyAlreadyRegisteredException)
+                {
+                }
             }
         }
 

@@ -246,7 +246,7 @@
 
             if (SelectedRepo.IsBranchManagerOpen)
             {
-                SelectedRepo.SelectNextBranch();
+                SelectedRepo.OpenNewBranch();
             }
             else
             {
