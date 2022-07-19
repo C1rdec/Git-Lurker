@@ -37,7 +37,7 @@ namespace GitLurker.Services
 
         public IEnumerable<string> GetBranchNames()
         {
-            var headFilePath = Path.Combine(_gitFolderPath, "refs", "remotes", "origin");
+            var headFilePath = Path.Combine(_gitFolderPath, "logs", "refs", "remotes", "origin");
             if (!Directory.Exists(headFilePath))
             {
                 return new List<string>() { GetCurrentBranchName() };
