@@ -15,6 +15,11 @@ namespace GitLurker.Models
                 Modifier = Winook.Modifiers.Control,
                 KeyCode = Winook.KeyCode.G,
             };
+            DevToysHotKey = new Hotkey()
+            {
+                Modifier = Winook.Modifiers.Control,
+                KeyCode = Winook.KeyCode.D,
+            };
 
             StartWithWindows = true;
             AddToStartMenu = true;
@@ -29,6 +34,8 @@ namespace GitLurker.Models
         public List<string> RecentRepos { get; set; }
 
         public Hotkey HotKey { get; set; }
+
+        public Hotkey DevToysHotKey { get; set; }
 
         public bool ConsoleOuput { get; set; }
 

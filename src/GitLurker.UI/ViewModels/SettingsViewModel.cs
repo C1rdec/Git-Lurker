@@ -38,6 +38,7 @@ namespace GitLurker.UI.ViewModels
 
             RepoManager = new RepoManagerViewModel(_settingsFile);
             Hotkey = new HotkeyViewModel(_settingsFile.Entity.HotKey, Save);
+            DevToysHotkey = new HotkeyViewModel(_settingsFile.Entity.DevToysHotKey, Save, "DevToys");
             ActionManager = new CustomActionManagerViewModel();
             dialogService.Register(this);
 
@@ -52,6 +53,8 @@ namespace GitLurker.UI.ViewModels
         public RepoManagerViewModel RepoManager { get; set; }
 
         public HotkeyViewModel Hotkey { get; set; }
+
+        public HotkeyViewModel DevToysHotkey { get; set; }
 
         public CustomActionManagerViewModel ActionManager { get; set; }
 

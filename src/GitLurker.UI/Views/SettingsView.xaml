@@ -65,6 +65,7 @@
                 <Label Style="{DynamicResource LabelHeaderStyle}">Hotkey</Label>
                 <StackPanel Grid.Row="1" VerticalAlignment="Center">
                     <ContentControl x:Name="Hotkey" Margin="20,0,20,0" Focusable="False"/>
+                    <ContentControl x:Name="DevToysHotkey" Margin="20,8,20,0" Focusable="False"/>
                 </StackPanel>
             </Grid>
         </TabItem>

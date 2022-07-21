@@ -413,6 +413,11 @@
 
         private void ConsoleService_ShowRequested(object sender, EventArgs e) => OpenConsole();
 
+        private async void OpenDevtoys()
+        {
+            await new ProcessService("").ExecuteCommandAsync("start devtoys:");
+        }
+
         private void ToggleWindow()
         {
             if (IsVisible)
@@ -463,15 +468,21 @@
         {
             var settings = new SettingsFile();
             settings.Initialize();
-            var hotkey = settings.Entity.HotKey;
+
+            SetHotkey(settings.Entity.HotKey, ToggleWindow, "Open");
+            SetHotkey(settings.Entity.DevToysHotKey, OpenDevtoys, "OpenDevToys");
+            HotkeyManager.Current.AddOrReplace("OpenDial", Key.F12, ModifierKeys.Control | ModifierKeys.Shift, (s, e) => ToggleWindow());
+        }
+
+        private void SetHotkey(Hotkey hotkey, System.Action callback, string name)
+        {
             var modifier = Enum.Parse<ModifierKeys>(hotkey.Modifier.ToString());
 
             if (Enum.TryParse(hotkey.KeyCode.ToString(), out Key key))
             {
                 try
                 {
-                    HotkeyManager.Current.AddOrReplace("Open", key, modifier, (s, e) => ToggleWindow());
-                    HotkeyManager.Current.AddOrReplace("OpenDial", Key.F12, ModifierKeys.Control | ModifierKeys.Shift, (s, e) => ToggleWindow());
+                    HotkeyManager.Current.AddOrReplace(name, key, modifier, (s, e) => callback());
                 }
                 catch (NHotkey.HotkeyAlreadyRegisteredException)
                 {
