@@ -26,13 +26,11 @@
                    FontWeight="Light"
                    Foreground="{DynamicResource MahApps.Brushes.Accent}"
                    FontSize="25"/>
-
             <Grid Width="180" HorizontalAlignment="Center">
                 <Grid.RowDefinitions>
                     <RowDefinition ></RowDefinition>
                     <RowDefinition Height="2*"></RowDefinition>
                 </Grid.RowDefinitions>
-
                 <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
 
                     <Border BorderThickness="3" 
