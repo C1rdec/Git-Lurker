@@ -476,6 +476,11 @@
 
         private void SetHotkey(Hotkey hotkey, System.Action callback, string name)
         {
+            if (!hotkey.IsDefined())
+            {
+                return;
+            }
+
             var modifier = Enum.Parse<ModifierKeys>(hotkey.Modifier.ToString());
 
             if (Enum.TryParse(hotkey.KeyCode.ToString(), out Key key))

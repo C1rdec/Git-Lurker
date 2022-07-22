@@ -17,8 +17,8 @@ namespace GitLurker.Models
             };
             DevToysHotKey = new Hotkey()
             {
-                Modifier = Winook.Modifiers.Control,
-                KeyCode = Winook.KeyCode.D,
+                Modifier = Winook.Modifiers.None,
+                KeyCode = Winook.KeyCode.None,
             };
 
             StartWithWindows = true;
