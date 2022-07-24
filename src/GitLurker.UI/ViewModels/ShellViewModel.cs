@@ -483,7 +483,7 @@
 
             var modifier = Enum.Parse<ModifierKeys>(hotkey.Modifier.ToString());
 
-            if (Enum.TryParse(hotkey.KeyCode.ToString(), out Key key))
+            if (Enum.TryParse(hotkey.KeyCode.ToString(), ignoreCase: true, out Key key))
             {
                 try
                 {
