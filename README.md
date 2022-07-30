@@ -1,7 +1,7 @@
 # Git-Lurker
 GitLurker is an overlay to ease the navigation between Git Repositories
 
-## Hotkey
+## Hotkeys
 
 `CTRL + G` : Is the Default Hotkey to open the overlay.
 
