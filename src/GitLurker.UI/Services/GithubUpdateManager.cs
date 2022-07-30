@@ -59,11 +59,7 @@ namespace GitLurker.UI.Services
         {
             await _repo.ExecuteCommandAsync("git fetch");
 
-            var refsFolder = Path.Combine(_repo.Folder, ".git", "refs");
-            var localCommitId = File.ReadAllText(Path.Combine(refsFolder, "heads", "main"));
-            var originCommitId = File.ReadAllText(Path.Combine(refsFolder, "remotes", "origin", "main"));
-
-            var needUpdate = localCommitId != originCommitId;
+            var needUpdate = _repo.IsBehind();
             if (needUpdate)
             {
                 UpdateRequested?.Invoke(this, EventArgs.Empty);

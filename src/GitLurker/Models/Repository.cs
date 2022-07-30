@@ -23,7 +23,7 @@
         private string _folder;
         private bool _duplicate;
         private Configuration _configuration;
-        private GitConfigurationService _gitConfigurationService;
+        private GitService _gitService;
 
         #endregion
 
@@ -35,7 +35,7 @@
             _folder = folder;
             _slnFiles = GetFiles(".sln");
             _configuration = GetConfiguration(folder);
-            _gitConfigurationService = new GitConfigurationService(folder);
+            _gitService = new GitService(folder);
 
             SetName();
 
@@ -81,6 +81,9 @@
 
             return true;
         }
+
+        public bool IsBehind()
+            => _gitService.IsBehind();
 
         public void SetDuplicate()
         {
@@ -167,9 +170,9 @@
             return ExecuteCommandAsync(OpenVsCodeCommand, true, path);
         }
 
-        public string GetCurrentBranchName() => _gitConfigurationService.GetCurrentBranchName();
+        public string GetCurrentBranchName() => _gitService.GetCurrentBranchName();
 
-        public IEnumerable<string> GetBranchNames() => _gitConfigurationService.GetBranchNames(); 
+        public IEnumerable<string> GetBranchNames() => _gitService.GetBranchNames(); 
 
         public async Task<NugetInformation> GetNewNugetAsync(string nugetSource)
         {

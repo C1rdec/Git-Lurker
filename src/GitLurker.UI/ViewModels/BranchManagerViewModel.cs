@@ -11,6 +11,7 @@ namespace GitLurker.UI.ViewModels
     {
         #region Fields
 
+        private static readonly string Origin = "origin/";
         private BranchManagerView _view;
         private Repository _repo;
         private string _selectedBranch;
@@ -99,10 +100,16 @@ namespace GitLurker.UI.ViewModels
             }
 
             IsLoading = true;
-            var result = await _repo.ExecuteCommandAsync($"git checkout {SelectedBranchName}");
+            var branchName = SelectedBranchName;
+            if (branchName.StartsWith(Origin))
+            {
+                branchName = branchName.Replace(Origin, string.Empty);
+            }
+
+            var result = await _repo.ExecuteCommandAsync($"git checkout {branchName}");
             _repo.AddToRecent();
 
-            _onSelected(SelectedBranchName);
+            _onSelected(branchName);
             IsLoading = false;
         }
 
