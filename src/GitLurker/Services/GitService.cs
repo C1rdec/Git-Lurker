@@ -31,16 +31,14 @@ namespace GitLurker.Services
 
         public IEnumerable<string> GetBranchNames()
         {
-            var branchNames = new List<string>();
-            var branches = Execute(r => r.Branches.Where(b => b.FriendlyName != "origin/HEAD"));
-            
-            foreach (var branch in branches.Where(b => !b.IsRemote))
+            var branchNames = new List<string>()
             {
-                branchNames.Add(branch.FriendlyName);
-            }
+                GetCurrentBranchName().Replace("origin/", string.Empty)
+            };
+            var branches = Execute(r => r.Branches.Where(b => b.FriendlyName != "origin/HEAD").ToArray());
 
-            foreach (var remoteBrach in branches.Where(b => b.IsRemote))
-            {
+           foreach (var remoteBrach in branches.Where(b => b.IsRemote).OrderBy(b => b.FriendlyName))
+           {
                 var branchName = remoteBrach.FriendlyName.Replace("origin/", string.Empty);
                 if (branchNames.Contains(branchName))
                 {
@@ -52,11 +50,11 @@ namespace GitLurker.Services
 
             return branchNames;
         }
-            
+
 
         private T Execute<T>(System.Func<LibGit2Sharp.Repository, T> action)
         {
-            var repo = new LibGit2Sharp.Repository(_gitFolderPath);
+            using var repo = new LibGit2Sharp.Repository(_gitFolderPath);
             return action(repo);
         }
 
