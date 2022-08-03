@@ -404,7 +404,19 @@
             if (url.Contains("dev.azure.com"))
             {
                 var uri = new Uri(url);
-                url = $"{uri.Scheme}://{uri.Authority}{uri.AbsolutePath}";
+                var absolutePath = uri.AbsolutePath;
+
+                var branchName = GetCurrentBranchName();
+                var segments = branchName.Split("/");
+                var lastSegment = segments.Last();
+
+                if (lastSegment.All(char.IsDigit))
+                {
+                    var index = absolutePath.IndexOf("_git");
+                    absolutePath = $"{absolutePath.Substring(0, index)}_workitems/edit/{lastSegment}/";
+                }
+
+                url = $"{uri.Scheme}://{uri.Authority}{absolutePath}";
             }
 
             return url;
