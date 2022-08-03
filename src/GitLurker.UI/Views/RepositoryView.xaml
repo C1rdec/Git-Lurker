@@ -117,7 +117,9 @@
             <ContentControl x:Name="ActionBar" HorizontalAlignment="Right"/>
             <Grid HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,4,0" Width="25">
                 <Border Visibility="{Binding HasFilesChanged, Converter={StaticResource BooleanToVisibilityConverter}}" 
-                        Background="{DynamicResource IndicatorForeground}" 
+                        BorderThickness="1.5"
+                        Opacity="0.8"
+                        BorderBrush="{DynamicResource Brushes.Secondary}"
                         Padding="4,2,4,2" 
                         HorizontalAlignment="Center"
                         CornerRadius="4">
