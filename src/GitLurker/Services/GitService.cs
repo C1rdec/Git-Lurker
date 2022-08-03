@@ -24,6 +24,9 @@ namespace GitLurker.Services
 
         #region Methods
 
+        public void Fetch()
+            => Execute(r => Commands.Fetch(r, "origin", new string[0], null, null));
+
         public bool IsBehind()
             => Execute(r => r.Head.TrackingDetails.BehindBy > 0);
 
@@ -72,6 +75,13 @@ namespace GitLurker.Services
             using var repo = new Repository(_gitFolderPath);
 
             return action(repo);
+        }
+
+        private void Execute(System.Action<Repository> action)
+        {
+            using var repo = new Repository(_gitFolderPath);
+
+            action(repo);
         }
 
         #endregion

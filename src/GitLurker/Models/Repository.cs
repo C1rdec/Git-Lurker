@@ -216,6 +216,9 @@
             settings.AddToRecent(_folder);
         }
 
+        public void Fetch()
+            => _gitService.Fetch();
+
         private FileInfo[] GetFiles(string extention) => new DirectoryInfo(_folder).GetFiles($"*{extention}", SearchOption.AllDirectories);
 
         private static Configuration GetConfiguration(string folder)

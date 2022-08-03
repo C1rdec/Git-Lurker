@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
 using System.Threading.Tasks;
 using System.Timers;
 using GitLurker.Models;
@@ -31,11 +30,11 @@ namespace GitLurker.UI.Services
             Process.GetCurrentProcess().Kill();
         }
 
-        public async void WatchAsync(Repository repo)
+        public void WatchAsync(Repository repo)
         {
             _repo = repo;
 
-            if (await CheckForUpdateAsync())
+            if (CheckForUpdateAsync())
             {
                 return;
             }
@@ -50,15 +49,14 @@ namespace GitLurker.UI.Services
             _timer.Start();
         }
 
-        private async void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            await CheckForUpdateAsync();
+            CheckForUpdateAsync();
         }
 
-        private async Task<bool> CheckForUpdateAsync()
+        private bool CheckForUpdateAsync()
         {
-            await _repo.ExecuteCommandAsync("git fetch");
-
+            _repo.Fetch();
             var needUpdate = _repo.IsBehind();
             if (needUpdate)
             {
