@@ -56,7 +56,15 @@ namespace GitLurker.UI.Services
 
         private bool CheckForUpdate()
         {
-            _repo.Fetch();
+            try
+            {
+                _repo.Fetch();
+            }
+            catch (Exception ex)
+            {
+
+            }
+
             var needUpdate = _repo.IsBehind();
             if (needUpdate)
             {
