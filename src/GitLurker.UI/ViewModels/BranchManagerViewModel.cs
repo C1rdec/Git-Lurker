@@ -166,6 +166,7 @@ namespace GitLurker.UI.ViewModels
             IsCreateBranch = false;
             NewBranchName = string.Empty;
             var branches = _repo.GetBranchNames();
+            var changes = _repo.GetFilesChanged();
 
             Execute.OnUIThread(() =>
             {

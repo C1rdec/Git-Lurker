@@ -172,7 +172,9 @@
 
         public string GetCurrentBranchName() => _gitService.GetCurrentBranchName();
 
-        public IEnumerable<string> GetBranchNames() => _gitService.GetBranchNames(); 
+        public IEnumerable<string> GetBranchNames() => _gitService.GetBranchNames();
+
+        public IEnumerable<string> GetFilesChanged() => _gitService.GetFilesChanged();
 
         public async Task<NugetInformation> GetNewNugetAsync(string nugetSource)
         {
@@ -197,7 +199,7 @@
 
             if (newNuget != null)
             {
-                // If the package is installed
+                // If the package is installedd
                 if (executionResult.Output.Contains(newNuget.Name))
                 {
                     return null;

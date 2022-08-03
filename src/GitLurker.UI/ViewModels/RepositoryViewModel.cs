@@ -1,5 +1,9 @@
 ﻿namespace GitLurker.UI.ViewModels
 {
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
     using Caliburn.Micro;
@@ -39,12 +43,16 @@
             _showParentFolder = repo.Duplicate;
             _aggregator = IoC.Get<IEventAggregator>();
 
+            FileChanges = new ObservableCollection<string>();
             BranchManager = new BranchManagerViewModel(repo, OnSelectionChanged, OnBranchManagerClose);
+            GetChanges();
         }
 
         #endregion
 
         #region Properties
+
+        public ObservableCollection<string> FileChanges { get; set; }
 
         public BranchManagerViewModel BranchManager { get; private set; }
 
@@ -124,6 +132,10 @@
         }
 
         public string ParentFolderName => GetParentFolder();
+
+        public bool HasFilesChanged => FileChanges.Any();
+
+        public int FileChangeCount => FileChanges.Count();
 
         #endregion
 
@@ -331,6 +343,22 @@
 
             return $"({segments[^1]})";
         }
+
+        private Task GetChanges()
+            => Task.Run(() =>
+            {
+                var changes = _repo.GetFilesChanged();
+                Execute.OnUIThread(() => 
+                {
+                    foreach (var change in changes)
+                    {
+                        Execute.OnUIThread(() => FileChanges.Add(change));
+                    }
+
+                    NotifyOfPropertyChange(() => FileChangeCount);
+                    NotifyOfPropertyChange(() => HasFilesChanged);
+                });
+            });
 
         #endregion
     }

@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using LibGit2Sharp;
 
 namespace GitLurker.Services
 {
@@ -51,10 +52,25 @@ namespace GitLurker.Services
             return branchNames;
         }
 
-
-        private T Execute<T>(System.Func<LibGit2Sharp.Repository, T> action)
+        public IEnumerable<string> GetFilesChanged()
         {
-            using var repo = new LibGit2Sharp.Repository(_gitFolderPath);
+            return Execute(repo => 
+            {
+                var filePaths = new List<string>();
+                foreach (var change in repo.Diff.Compare<TreeChanges>().Where(c => c.Status == ChangeKind.Modified))
+                {
+                    filePaths.Add(change.Path);
+                }
+
+                return filePaths;
+            });
+        }
+
+
+        private T Execute<T>(System.Func<Repository, T> action)
+        {
+            using var repo = new Repository(_gitFolderPath);
+
             return action(repo);
         }
 

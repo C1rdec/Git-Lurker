@@ -115,6 +115,15 @@
                 </Border>
             </Grid>
             <ContentControl x:Name="ActionBar" HorizontalAlignment="Right"/>
+            <Grid HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,4,0" Width="25">
+                <Border Visibility="{Binding HasFilesChanged, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                        Background="{DynamicResource IndicatorForeground}" 
+                        Padding="4,2,4,2" 
+                        HorizontalAlignment="Center"
+                        CornerRadius="4">
+                    <TextBlock x:Name="FileChangeCount" FontSize="14"/>
+                </Border>
+            </Grid>
         </Grid>
     </Border>
 </UserControl>
