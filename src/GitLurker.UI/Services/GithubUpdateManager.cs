@@ -60,9 +60,8 @@ namespace GitLurker.UI.Services
             {
                 _repo.Fetch();
             }
-            catch (Exception ex)
+            catch
             {
-
             }
 
             var needUpdate = _repo.IsBehind();
