@@ -404,7 +404,7 @@
                 }
             }
 
-            if (url.Contains("dev.azure.com"))
+            if (url.Contains("dev.azure.com") || url.Contains("visualstudio.com"))
             {
                 var uri = new Uri(url);
                 var absolutePath = uri.AbsolutePath;
