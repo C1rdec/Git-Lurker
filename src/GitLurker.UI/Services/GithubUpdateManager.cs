@@ -62,6 +62,7 @@ namespace GitLurker.UI.Services
             }
             catch
             {
+                return false;
             }
 
             var needUpdate = _repo.IsBehind();
