@@ -30,11 +30,11 @@ namespace GitLurker.UI.Services
             Process.GetCurrentProcess().Kill();
         }
 
-        public void WatchAsync(Repository repo)
+        public void Watch(Repository repo)
         {
             _repo = repo;
 
-            if (CheckForUpdateAsync())
+            if (CheckForUpdate())
             {
                 return;
             }
@@ -51,10 +51,10 @@ namespace GitLurker.UI.Services
 
         private void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            CheckForUpdateAsync();
+            CheckForUpdate();
         }
 
-        private bool CheckForUpdateAsync()
+        private bool CheckForUpdate()
         {
             _repo.Fetch();
             var needUpdate = _repo.IsBehind();

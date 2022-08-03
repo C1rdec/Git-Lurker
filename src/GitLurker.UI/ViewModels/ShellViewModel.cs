@@ -335,7 +335,7 @@
                 var gitLurkerRepo = _repositoryService.GetAllRepo().FirstOrDefault(r => r.Name == "GitLurker");
                 if (gitLurkerRepo != null)
                 {
-                    _updateManager.WatchAsync(gitLurkerRepo);
+                    _updateManager.Watch(gitLurkerRepo);
                 }
 
                 Disable = false;
