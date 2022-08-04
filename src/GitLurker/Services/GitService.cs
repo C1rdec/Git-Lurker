@@ -9,6 +9,13 @@ namespace GitLurker.Services
     {
         #region Fields
 
+        private static readonly List<ChangeKind> ChangedStatus = new List<ChangeKind>
+        {
+            ChangeKind.Deleted,
+            ChangeKind.Added,
+            ChangeKind.Modified,
+        };
+
         private string _gitFolderPath;
 
         #endregion
@@ -60,9 +67,27 @@ namespace GitLurker.Services
             return Execute(repo => 
             {
                 var filePaths = new List<string>();
-                foreach (var change in repo.Diff.Compare<TreeChanges>().Where(c => c.Status == ChangeKind.Modified))
+                var status = repo.RetrieveStatus();
+
+                foreach (var change in status.Modified)
                 {
-                    filePaths.Add(change.Path);
+                    filePaths.Add(change.FilePath);
+                }
+
+                foreach (var change in status.Missing)
+                {
+                    if (change.State == FileStatus.DeletedFromWorkdir)
+                    {
+                        filePaths.Add(change.FilePath);
+                    }
+                }
+
+                foreach (var change in status.Untracked)
+                {
+                    if (change.State == FileStatus.NewInWorkdir)
+                    {
+                        filePaths.Add(change.FilePath);
+                    }
                 }
 
                 return filePaths;
