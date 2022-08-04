@@ -25,7 +25,7 @@
             </Border.Style>
             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                 <Viewbox>
-                    <TextBlock x:Name="ActionName" FontSize="28"/>
+                    <TextBlock x:Name="ActionName" FontSize="26" Margin="0,-2,0,4"/>
                 </Viewbox>
                 <ContentControl Content="{Binding Icon}"
                             Margin="10,0,0,0"
