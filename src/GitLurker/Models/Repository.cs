@@ -314,7 +314,7 @@
                 // Alt
                 if (Native.IsKeyPressed(Native.VirtualKeyStates.VK_MENU))
                 {
-                    var repoUrl = GetRepoUrl();
+                    var repoUrl = GetRepoUrl(handleWorkItem: true);
                     if (string.IsNullOrEmpty(repoUrl))
                     {
                         return true;
@@ -384,6 +384,9 @@
         }
 
         private string GetRepoUrl()
+            => GetRepoUrl(false);
+
+        private string GetRepoUrl(bool handleWorkItem)
         {
             var configFilePath = Path.Join(_folder, ".git", "config");
             if (!File.Exists(configFilePath))
@@ -409,14 +412,17 @@
                 var uri = new Uri(url);
                 var absolutePath = uri.AbsolutePath;
 
-                var branchName = GetCurrentBranchName();
-                var segments = branchName.Split("/");
-                var lastSegment = segments.Last();
-
-                if (lastSegment.All(char.IsDigit))
+                if (handleWorkItem)
                 {
-                    var index = absolutePath.IndexOf("_git");
-                    absolutePath = $"{absolutePath.Substring(0, index)}_workitems/edit/{lastSegment}/";
+                    var branchName = GetCurrentBranchName();
+                    var segments = branchName.Split("/");
+                    var lastSegment = segments.Last();
+
+                    if (lastSegment.All(char.IsDigit))
+                    {
+                        var index = absolutePath.IndexOf("_git");
+                        absolutePath = $"{absolutePath.Substring(0, index)}_workitems/edit/{lastSegment}/";
+                    }
                 }
 
                 url = $"{uri.Scheme}://{uri.Authority}{absolutePath}";
