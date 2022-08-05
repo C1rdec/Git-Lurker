@@ -1,17 +1,15 @@
 ﻿<mah:MetroWindow x:Class="GitLurker.UI.Views.SettingsView"
                  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-                 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
-                 Topmost="True"
+                 xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                  xmlns:cal="http://www.caliburnproject.org"
+                 xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+                 Topmost="True"
                  WindowStartupLocation="CenterScreen"
                  Title="Settings"
                  Icon="pack://application:,,,/Resources/GitLurker.ico"
-                 xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
-                 Dialog:DialogParticipation.Register="{Binding}" 
-                 xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+                 Dialog:DialogParticipation.Register="{Binding}"
                  MinWidth="350" MinHeight="300" Width="500" Height="300">
     <mah:MetroWindow.IconTemplate>
         <DataTemplate>
