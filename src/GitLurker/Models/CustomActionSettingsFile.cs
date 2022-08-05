@@ -28,7 +28,7 @@ namespace GitLurker.Models
             Save();
         }
 
-        public IEnumerable<CustomAction> GetActions(string path) => Entity.Actions.Where(a => a.Repositories.Contains(path));
+        public IEnumerable<CustomAction> GetActions(string path) => Entity.Actions.Where(a => a.ApplyToAll || a.Repositories.Contains(path));
 
         #endregion
     }

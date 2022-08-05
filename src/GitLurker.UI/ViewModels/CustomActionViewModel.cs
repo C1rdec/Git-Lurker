@@ -125,6 +125,16 @@ namespace GitLurker.UI.ViewModels
             }
         }
 
+        public bool ApplyToAll
+        {
+            get => _action.ApplyToAll;
+            set
+            {
+                _action.ApplyToAll = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -146,6 +156,8 @@ namespace GitLurker.UI.ViewModels
                 file.Save();
             }
         }
+
+        public void ToggleApplyToAll() => ApplyToAll = !ApplyToAll;
 
         public void ToggleConsole() => OpenConsole = !OpenConsole;
 

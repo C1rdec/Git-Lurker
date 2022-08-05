@@ -25,6 +25,8 @@ namespace GitLurker.Models
 
         public bool OpenConsole { get; set; }
 
+        public bool ApplyToAll { get; set; }
+
         #endregion
 
         #region Methods
