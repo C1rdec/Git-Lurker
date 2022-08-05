@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace GitLurker.Models
 {
@@ -25,7 +26,7 @@ namespace GitLurker.Models
 
         public bool OpenConsole { get; set; }
 
-        public bool ApplyToAll { get; set; }
+        public bool ExcludeRepositories { get; set; }
 
         #endregion
 
@@ -45,6 +46,12 @@ namespace GitLurker.Models
         public bool RemoveRepository(Repository repo)
         {
             return Repositories.Remove(repo.Folder);
+        }
+
+        public bool IsIncluded(string repoPath)
+        {
+            var contains = Repositories.Contains(repoPath);
+            return ExcludeRepositories ? !contains : contains;
         }
 
         #endregion

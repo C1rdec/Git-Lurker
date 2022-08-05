@@ -125,12 +125,12 @@ namespace GitLurker.UI.ViewModels
             }
         }
 
-        public bool ApplyToAll
+        public bool ExcludeRepositories
         {
-            get => _action.ApplyToAll;
+            get => _action.ExcludeRepositories;
             set
             {
-                _action.ApplyToAll = value;
+                _action.ExcludeRepositories = value;
                 NotifyOfPropertyChange();
             }
         }
@@ -157,7 +157,7 @@ namespace GitLurker.UI.ViewModels
             }
         }
 
-        public void ToggleApplyToAll() => ApplyToAll = !ApplyToAll;
+        public void ToggleExcludeRepositories() => ExcludeRepositories = !ExcludeRepositories;
 
         public void ToggleConsole() => OpenConsole = !OpenConsole;
 
