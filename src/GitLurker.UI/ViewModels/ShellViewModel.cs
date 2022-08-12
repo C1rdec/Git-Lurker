@@ -521,8 +521,11 @@
             Execute.OnUIThread(() =>
             {
                 var primaryScreen = System.Windows.Forms.Screen.PrimaryScreen;
-                var top = (primaryScreen.Bounds.Height / 2) - (View.Height / 2);
-                var left = (primaryScreen.Bounds.Width / 2) - (View.Width / 2);
+                var gitLurkerHeight = View.Height * _dpiY;
+                var gitLurkerWidth = View.Width * _dpiX;
+
+                var top = (primaryScreen.Bounds.Height / 2) - (gitLurkerHeight / 2);
+                var left = (primaryScreen.Bounds.Width / 2) - (gitLurkerWidth / 2);
                 View.Top = top / _dpiY;
                 View.Left = left / _dpiX;
             });
