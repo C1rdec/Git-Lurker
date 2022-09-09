@@ -28,7 +28,6 @@
         private bool _showParentFolder;
         private ActionBarViewModel _actionBar;
         private SettingsFile _settingsFile;
-        private bool _skipBranchSelection;
 
         #endregion
 
@@ -154,14 +153,8 @@
                 return;
             }
 
-            if (skipBranchSelection)
-            {
-                _skipBranchSelection = true;
-            }
-
-            BranchManager.ShowBranches();
-
             IsBranchManagerOpen = true;
+            BranchManager.ShowBranches();
         }
 
         public void OnSelectionChanged(string branch)
@@ -212,17 +205,6 @@
 
             if (_popupService.JustClosed)
             {
-                return;
-            }
-
-            if (IsBranchManagerOpen)
-            {
-                if (!_skipBranchSelection)
-                {
-                    BranchManager.Select();
-                }
-
-                _skipBranchSelection = false;
                 return;
             }
 

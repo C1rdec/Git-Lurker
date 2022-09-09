@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Caliburn.Micro;
@@ -20,6 +21,8 @@ namespace GitLurker.UI.ViewModels
         private bool _isLoading;
         private bool _isCreateBranch;
         private string _newBranchName;
+        private string _searchTerm;
+        private List<string> _branchNames;
 
         #endregion
 
@@ -55,6 +58,17 @@ namespace GitLurker.UI.ViewModels
             set
             {
                 _newBranchName = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
+        public string SearchTerm
+        {
+            get => _searchTerm;
+            set
+            {
+                _searchTerm = value;
+                Search(value);
                 NotifyOfPropertyChange();
             }
         }
@@ -99,6 +113,7 @@ namespace GitLurker.UI.ViewModels
                 return;
             }
 
+            SearchTerm = string.Empty;
             IsLoading = true;
             var branchName = SelectedBranchName;
             if (branchName.StartsWith(Origin))
@@ -165,20 +180,31 @@ namespace GitLurker.UI.ViewModels
         {
             IsCreateBranch = false;
             NewBranchName = string.Empty;
-            var branches = _repo.GetBranchNames();
-            var changes = _repo.GetFilesChanged();
+            _branchNames = _repo.GetBranchNames().ToList();
 
             Execute.OnUIThread(() =>
             {
                 BranchNames.Clear();
 
-                foreach (var branch in branches)
+                foreach (var branch in _branchNames)
                 {
                     BranchNames.Add(branch);
                 }
 
                 SelectedBranchName = BranchNames.FirstOrDefault();
+                _view.SearchTerm.Focus();
             });
+        }
+
+        public void Search(string term)
+        {
+            BranchNames.Clear();
+            foreach (var branch in _branchNames.Where(b => b.Contains(term)))
+            {
+                BranchNames.Add(branch);
+            }
+
+            SelectedBranchName = BranchNames.FirstOrDefault();
         }
 
         public async void CleanBranches()

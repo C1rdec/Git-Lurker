@@ -7,7 +7,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="400">
     <Grid>
         <Button BorderThickness="0" x:Name="Close" IsCancel="true" Width="1" Height="1" Background="Transparent"/>
         <Grid x:Name="Selector" Visibility="{Binding IsNotCreateBranch, Converter={StaticResource BooleanToVisibilityConverter}}">
@@ -15,32 +15,46 @@
                 <RowDefinition Height="auto"></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
-            <StackPanel HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-8,0,0" Orientation="Horizontal">
-                <Button x:Name="ShowCreateBranch"
+            <Button BorderThickness="0" x:Name="Select" IsDefault="true" Width="1" Height="1" Background="Transparent"/>
+            <Grid VerticalAlignment="Top" Margin="0,-8,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <TextBox x:Name="SearchTerm"
+                         FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
+                         VerticalAlignment="Center"
+                         Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"
+                         BorderThickness="0" 
+                         mah:TextBoxHelper.Watermark="Search"
+                         Width="250" FontSize="24"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Grid.Column="1">
+                    <Button x:Name="ShowCreateBranch"
                     Width="30" Height="30"
                     BorderThickness="0"
                     Foreground="{DynamicResource MahApps.Brushes.Accent}"
                     Cursor="Hand"
                     Style="{StaticResource MahApps.Styles.Button.Circle}">
-                    <Button.ContentTemplate>
-                        <DataTemplate>
-                            <iconPacks:PackIconMaterial Kind="SourceBranchPlus" Height="18" Width="18" Foreground="{DynamicResource Brushes.Secondary}"/>
-                        </DataTemplate>
-                    </Button.ContentTemplate>
-                </Button>
-                <Button x:Name="CleanBranches"
+                        <Button.ContentTemplate>
+                            <DataTemplate>
+                                <iconPacks:PackIconMaterial Kind="SourceBranchPlus" Height="18" Width="18" Foreground="{DynamicResource Brushes.Secondary}"/>
+                            </DataTemplate>
+                        </Button.ContentTemplate>
+                    </Button>
+                    <Button x:Name="CleanBranches"
                     Width="30" Height="30"
                     BorderThickness="0"
                     Foreground="{DynamicResource MahApps.Brushes.Accent}"
                     Cursor="Hand"
                     Style="{StaticResource MahApps.Styles.Button.Circle}">
-                    <Button.ContentTemplate>
-                        <DataTemplate>
-                            <iconPacks:PackIconMaterial Kind="CloudRefresh" Height="25" Width="25" Foreground="{DynamicResource Brushes.Secondary}"/>
-                        </DataTemplate>
-                    </Button.ContentTemplate>
-                </Button>
-            </StackPanel>
+                        <Button.ContentTemplate>
+                            <DataTemplate>
+                                <iconPacks:PackIconMaterial Kind="CloudRefresh" Height="25" Width="25" Foreground="{DynamicResource Brushes.Secondary}"/>
+                            </DataTemplate>
+                        </Button.ContentTemplate>
+                    </Button>
+                </StackPanel>
+            </Grid>
             <ListView ItemsSource="{Binding BranchNames}"
                       SelectedItem="{Binding SelectedBranchName}"
                       Grid.Row="1"
@@ -67,24 +81,14 @@
         </Grid>
         <Grid x:Name="Creator" 
               Visibility="{Binding IsCreateBranch, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <Grid.Style>
-                <Style>
-                    <Style.Triggers>
-                        <DataTrigger Binding="{Binding IsCreateBranch}" Value="True">
-                            <Setter Property="FocusManager.FocusedElement" Value="{Binding ElementName=NewBranchName}"/>
-                        </DataTrigger>
-                    </Style.Triggers>
-                </Style>
-            </Grid.Style>
             <Button BorderThickness="0" x:Name="CreateBranch" IsDefault="true" Width="1" Height="1" Background="Transparent"/>
             <StackPanel Orientation="Horizontal">
                 <TextBox x:Name="NewBranchName"
-                         FocusManager.FocusedElement="{Binding RelativeSource={RelativeSource Self}}"
                          VerticalAlignment="Center"
                          Text="{Binding NewBranchName, UpdateSourceTrigger=PropertyChanged}"
                          BorderThickness="0,0,0,1" 
                          mah:TextBoxHelper.Watermark="Branch Name"
-                         Width="200" FontSize="28"/>
+                         Width="250" FontSize="24"/>
                 <Button x:Name="CreateBranch2"
                     Width="30" Height="30"
                     BorderThickness="0"
