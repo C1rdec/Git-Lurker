@@ -180,7 +180,9 @@ namespace GitLurker.UI.ViewModels
         {
             IsCreateBranch = false;
             NewBranchName = string.Empty;
+
             _branchNames = _repo.GetBranchNames().ToList();
+            SearchTerm = string.Empty;
 
             Execute.OnUIThread(() =>
             {
@@ -198,13 +200,16 @@ namespace GitLurker.UI.ViewModels
 
         public void Search(string term)
         {
-            BranchNames.Clear();
-            foreach (var branch in _branchNames.Where(b => b.Contains(term)))
+            Execute.OnUIThread(() =>
             {
-                BranchNames.Add(branch);
-            }
+                BranchNames.Clear();
+                foreach (var branch in _branchNames.Where(b => b.Contains(term)))
+                {
+                    BranchNames.Add(branch);
+                }
 
-            SelectedBranchName = BranchNames.FirstOrDefault();
+                SelectedBranchName = BranchNames.FirstOrDefault();
+            });
         }
 
         public async void CleanBranches()
