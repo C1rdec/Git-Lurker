@@ -113,7 +113,6 @@ namespace GitLurker.UI.ViewModels
                 return;
             }
 
-            SearchTerm = string.Empty;
             IsLoading = true;
             var branchName = SelectedBranchName;
             if (branchName.StartsWith(Origin))
