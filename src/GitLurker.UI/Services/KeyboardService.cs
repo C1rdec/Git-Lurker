@@ -78,9 +78,6 @@ namespace GitLurker.Services
             });
 
             // Left
-            _hook.AddHandler(KeyCode.Enter, (o, e) => LeftPressed?.Invoke(this, EventArgs.Empty));
-
-            // Left
             _hook.AddHandler(KeyCode.Left, (o, e) => LeftPressed?.Invoke(this, EventArgs.Empty));
 
             // Right
