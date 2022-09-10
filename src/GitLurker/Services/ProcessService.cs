@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using GitLurker.Models;
 
@@ -41,6 +42,16 @@ namespace GitLurker.Services
 
         public Task<ExecutionResult> ExecuteCommandAsync(string command, bool listen, string workingDirectory)
         {
+            if (!Directory.Exists(_folder))
+            {
+                if (listen)
+                {
+                    NewExitCode?.Invoke(this, -1);
+                }
+
+                return Task.FromResult(new ExecutionResult());
+            }
+
             var taskCompletionSource = new TaskCompletionSource<ExecutionResult>();
             var data = new List<string>();
             var process = new Process()

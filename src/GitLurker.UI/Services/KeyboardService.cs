@@ -64,13 +64,14 @@ namespace GitLurker.Services
             _hook = new KeyboardHook(process.Id);
 
             // Enter
-            _hook.AddHandler(KeyCode.Enter, Modifiers.AltControl, KeyDirection.Down, (o, e) => 
+            _hook.AddHandler(KeyCode.Enter, Modifiers.None, KeyDirection.Down, (o, e) => 
             {
                 Execute.OnUIThread(() => 
                 { 
                     _debounceService.Debounce(666, () => EnterLongPressed?.Invoke(this, EventArgs.Empty));
                 });
             });
+
             _hook.AddHandler(KeyCode.Enter, (o, e) => 
             {
                 if (_debounceService.Stop())

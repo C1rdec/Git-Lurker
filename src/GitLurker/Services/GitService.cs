@@ -94,9 +94,13 @@ namespace GitLurker.Services
             });
         }
 
-
         private T Execute<T>(System.Func<Repository, T> action)
         {
+            if (!Directory.Exists(_gitFolderPath))
+            {
+                return default;
+            }
+
             using var repo = new Repository(_gitFolderPath);
 
             return action(repo);
@@ -104,6 +108,11 @@ namespace GitLurker.Services
 
         private void Execute(System.Action<Repository> action)
         {
+            if (!Directory.Exists(_gitFolderPath))
+            {
+                return;
+            }
+
             using var repo = new Repository(_gitFolderPath);
 
             action(repo);

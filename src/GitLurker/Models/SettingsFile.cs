@@ -21,11 +21,11 @@ namespace GitLurker.Models
 
         #region Methods
 
-        public void AddToRecent(string folder)
+        public void AddRecent(string folder)
         {
             var recentRepos = Entity.RecentRepos;
             var index = recentRepos.IndexOf(folder);
-            if (recentRepos.IndexOf(folder) == -1)
+            if (index == -1)
             {
                 if (recentRepos.Count >= MaxRecentCount)
                 {
@@ -38,6 +38,19 @@ namespace GitLurker.Models
             }
 
             Entity.RecentRepos.Insert(0, folder);
+            Save();
+        }
+
+        public void RemoveRecent(string folder)
+        {
+            var recentRepos = Entity.RecentRepos;
+            var index = recentRepos.IndexOf(folder);
+            if (index == -1)
+            {
+                return;
+            }
+
+            recentRepos.RemoveAt(index);
             Save();
         }
 

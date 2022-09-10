@@ -103,7 +103,7 @@ namespace GitLurker.UI.ViewModels
         private void SetActions()
         {
             Actions = new ObservableCollection<ActionViewModel>();
-            AddAction(_repo.PullAsync, new PackIconMaterial() { Kind = PackIconMaterialKind.ChevronDown });
+            Execute.OnUIThread(() => AddAction(_repo.PullAsync, new PackIconMaterial() { Kind = PackIconMaterialKind.ChevronDown }));
 
             foreach (var action in _actionsFile.GetActions(_repo.Folder))
             {

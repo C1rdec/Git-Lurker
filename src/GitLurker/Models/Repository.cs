@@ -98,6 +98,11 @@
 
         public void Open(bool skipModifier)
         {
+            if (!Directory.Exists(_folder))
+            {
+                return;
+            }
+
             AddToRecent();
 
             if (!skipModifier && HandleModifiers())
@@ -213,7 +218,7 @@
         {
             var settings = new SettingsFile();
             settings.Initialize();
-            settings.AddToRecent(_folder);
+            settings.AddRecent(_folder);
         }
 
         public void Fetch()

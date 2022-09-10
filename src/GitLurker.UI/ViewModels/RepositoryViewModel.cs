@@ -345,6 +345,11 @@
             => Task.Run(() =>
             {
                 var changes = _repo.GetFilesChanged();
+                if (changes == null)
+                {
+                    return;
+                }
+
                 Execute.OnUIThread(() => 
                 {
                     foreach (var change in changes)

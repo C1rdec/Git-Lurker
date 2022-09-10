@@ -1,7 +1,9 @@
 ﻿namespace GitLurker.UI.ViewModels
 {
     using System;
+    using System.Collections.Generic;
     using System.Collections.ObjectModel;
+    using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
     using Caliburn.Micro;
@@ -90,7 +92,7 @@
             if (newRepo != null)
             {
                 workspace.AddRepo(newRepo);
-                _repos.Insert(0, new RepositoryViewModel(newRepo));
+                Execute.OnUIThread(() => _repos.Insert(0, new RepositoryViewModel(newRepo)));
             }
 
             return;
@@ -202,14 +204,26 @@
             Clear();
             var file = new SettingsFile();
             file.Initialize();
+            var invalidFolders = new List<string>();
 
             foreach (var folder in file.Entity.RecentRepos)
             {
+                if (!Directory.Exists(folder))
+                {
+                    invalidFolders.Add(folder);
+                    continue;
+                }
+
                 var repo = _repositoryService.GetReposiotry(folder);
                 if (repo != null)
                 {
                     Repos.Add(new RepositoryViewModel(repo));
                 }
+            }
+
+            foreach(var folder in invalidFolders)
+            {
+                file.RemoveRecent(folder);
             }
         }
 
