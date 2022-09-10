@@ -64,7 +64,7 @@ namespace GitLurker.Services
             _hook = new KeyboardHook(process.Id);
 
             // Enter
-            _hook.AddHandler(KeyCode.Enter, Modifiers.None, KeyDirection.Down, (o, e) => 
+            _hook.AddHandler(KeyCode.Enter, Modifiers.AltControl, KeyDirection.Down, (o, e) => 
             {
                 Execute.OnUIThread(() => 
                 { 
@@ -77,6 +77,21 @@ namespace GitLurker.Services
                 {
                     EnterPressed?.Invoke(this, EventArgs.Empty);
                 }
+            });
+
+            _hook.AddHandler(KeyCode.Enter, Modifiers.Control, (o, e) =>
+            {
+                EnterPressed?.Invoke(this, EventArgs.Empty);
+            });
+
+            _hook.AddHandler(KeyCode.Enter, Modifiers.ControlShift, (o, e) =>
+            {
+                EnterPressed?.Invoke(this, EventArgs.Empty);
+            });
+
+            _hook.AddHandler(KeyCode.Enter, Modifiers.AltControl, (o, e) =>
+            {
+                EnterPressed?.Invoke(this, EventArgs.Empty);
             });
 
             // Left
