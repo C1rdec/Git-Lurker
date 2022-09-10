@@ -73,8 +73,10 @@ namespace GitLurker.Services
             });
             _hook.AddHandler(KeyCode.Enter, (o, e) => 
             {
-                _debounceService.Stop();
-                EnterPressed?.Invoke(this, EventArgs.Empty); 
+                if (_debounceService.Stop())
+                {
+                    EnterPressed?.Invoke(this, EventArgs.Empty);
+                }
             });
 
             // Left

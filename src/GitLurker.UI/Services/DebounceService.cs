@@ -54,10 +54,17 @@ namespace GitLurker.Services
             _timer.Start();
         }
 
-        public void Stop()
+        public bool Stop()
         {
+            if (_timer == null)
+            {
+                return false;
+            }
+
             _timer?.Stop();
             _timer = null;
+
+            return true;
         }
 
         #endregion
