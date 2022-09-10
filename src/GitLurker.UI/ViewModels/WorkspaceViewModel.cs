@@ -35,6 +35,8 @@
             _keyboardService.DownPressed += KeyboardService_DownPressed;
             _keyboardService.UpPressed += KeyboardService_UpPressed;
             _keyboardService.NextTabPressed += KeyboardService_NextTabPressed;
+            _keyboardService.EnterLongPressed += KeyboardService_EnterLongPressed;
+            _keyboardService.EnterPressed += KeyboardService_EnterPressed;
         }
 
         #endregion
@@ -63,8 +65,17 @@
 
         #region Methods
 
-        public void Open(bool skipModifier)
-            => ExecuteOnRepo((r) => r.Open(skipModifier));
+        public async Task Open(bool skipModifier)
+        {
+            if (Uri.TryCreate(_lastSearchTerm, UriKind.Absolute, out var result))
+            {
+                await CloneAsync(result);
+
+                return;
+            }
+
+            ExecuteOnRepo((r) => r.Open(skipModifier));
+        }
 
         public async Task CloneAsync(Uri url)
         {
@@ -253,6 +264,12 @@
                 SelectedRepo.ShowBranches(false);
             }
         }
+
+        private async void KeyboardService_EnterPressed(object sender, EventArgs e)
+            => await Open(false);
+
+        private void KeyboardService_EnterLongPressed(object sender, EventArgs e)
+            => OpenPullRequest();
 
         private void ExecuteOnRepo(System.Action<RepositoryViewModel> action)
         {

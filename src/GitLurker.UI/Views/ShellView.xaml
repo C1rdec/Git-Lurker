@@ -76,7 +76,6 @@
                 CornerRadius="10" 
                 BorderThickness="0,0,0,1.6">
             <Grid>
-                <Button BorderThickness="0" x:Name="Open" IsDefault="true" Width="1" Height="1" Background="Transparent"/>
                 <TextBox x:Name="SearchTerm"
                      Margin="10,5,0,5"
                      Grid.Column="1"

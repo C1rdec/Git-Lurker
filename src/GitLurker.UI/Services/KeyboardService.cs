@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Caliburn.Micro;
 using Winook;
 
 namespace GitLurker.Services
@@ -9,12 +10,17 @@ namespace GitLurker.Services
     {
         #region Fields
 
+        private DebounceService _debounceService;
         private KeyboardHook _hook;
         private bool _enableWASD;
 
         #endregion
 
         #region Events
+
+        public event EventHandler EnterPressed;
+
+        public event EventHandler EnterLongPressed;
 
         public event EventHandler OnePressed;
 
@@ -39,6 +45,7 @@ namespace GitLurker.Services
         public KeyboardService(bool enableWASD)
         {
             _enableWASD = enableWASD;
+            _debounceService = new DebounceService(false);
         }
 
         #endregion
@@ -55,6 +62,23 @@ namespace GitLurker.Services
         {
             var process = Process.GetCurrentProcess();
             _hook = new KeyboardHook(process.Id);
+
+            // Enter
+            _hook.AddHandler(KeyCode.Enter, Modifiers.None, KeyDirection.Down, (o, e) => 
+            {
+                Execute.OnUIThread(() => 
+                { 
+                    _debounceService.Debounce(666, () => EnterLongPressed.Invoke(this, EventArgs.Empty));
+                });
+            });
+            _hook.AddHandler(KeyCode.Enter, (o, e) => 
+            {
+                _debounceService.Stop();
+                EnterPressed?.Invoke(this, EventArgs.Empty); 
+            });
+
+            // Left
+            _hook.AddHandler(KeyCode.Enter, (o, e) => LeftPressed?.Invoke(this, EventArgs.Empty));
 
             // Left
             _hook.AddHandler(KeyCode.Left, (o, e) => LeftPressed?.Invoke(this, EventArgs.Empty));

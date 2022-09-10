@@ -299,19 +299,6 @@
             IoC.Get<IWindowManager>().ShowWindowAsync(IoC.Get<SettingsViewModel>());
         }
 
-        public async void Open() 
-        {
-            if (Uri.TryCreate(_searchTerm, UriKind.Absolute, out var result))
-            {
-                await WorkspaceViewModel.CloneAsync(result);
-                SearchTerm = string.Empty;
-
-                return;
-            }
-
-            WorkspaceViewModel.Open(false);
-        }
-
         public async void RefreshWorkspace()
         {
             if (WorkspaceViewModel == null)
@@ -409,7 +396,7 @@
 
         private void SurfaceDialService_RotatedRight(object sender, EventArgs e) => WorkspaceViewModel.MoveDown();
 
-        private void SurfaceDialService_ButtonClicked(object sender, EventArgs e) => WorkspaceViewModel.Open(false);
+        private async void SurfaceDialService_ButtonClicked(object sender, EventArgs e) => await WorkspaceViewModel.Open(false);
 
         private void ConsoleService_ShowRequested(object sender, EventArgs e) => OpenConsole();
 
