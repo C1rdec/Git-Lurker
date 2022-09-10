@@ -106,8 +106,14 @@ namespace GitLurker.UI.ViewModels
             base.OnViewLoaded(view);
         }
 
-        public async void Select()
+        public async void Execute()
         {
+            if (IsCreateBranch)
+            {
+                CreateBranch();
+                return;
+            }
+
             if (string.IsNullOrEmpty(SelectedBranchName))
             {
                 return;
@@ -183,7 +189,7 @@ namespace GitLurker.UI.ViewModels
             _branchNames = _repo.GetBranchNames().ToList();
             SearchTerm = string.Empty;
 
-            Execute.OnUIThread(() =>
+            Caliburn.Micro.Execute.OnUIThread(() =>
             {
                 BranchNames.Clear();
 
@@ -199,7 +205,7 @@ namespace GitLurker.UI.ViewModels
 
         public void Search(string term)
         {
-            Execute.OnUIThread(() =>
+            Caliburn.Micro.Execute.OnUIThread(() =>
             {
                 BranchNames.Clear();
                 foreach (var branch in _branchNames.Where(b => b.Contains(term)))
@@ -233,7 +239,7 @@ namespace GitLurker.UI.ViewModels
         public void ShowCreateBranch()
         {
             IsCreateBranch = true;
-            Execute.OnUIThread(() => _view.NewBranchName.Focus());
+            Caliburn.Micro.Execute.OnUIThread(() => _view.NewBranchName.Focus());
         }
 
         public void CreateBranch2() => CreateBranch();

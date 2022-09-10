@@ -94,8 +94,6 @@
 
         public Task CleanBranches() => ExecuteCommandAsync("git fetch origin --prune");
 
-        public void Open() => Open(false);
-
         public void Open(bool skipModifier)
         {
             if (!Directory.Exists(_folder))

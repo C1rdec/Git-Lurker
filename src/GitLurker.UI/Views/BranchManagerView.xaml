@@ -15,7 +15,6 @@
                 <RowDefinition Height="auto"></RowDefinition>
                 <RowDefinition></RowDefinition>
             </Grid.RowDefinitions>
-            <Button BorderThickness="0" x:Name="Select" IsDefault="true" Width="1" Height="1" Background="Transparent"/>
             <Grid VerticalAlignment="Top" Margin="0,-8,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition></ColumnDefinition>
@@ -59,7 +58,7 @@
                       SelectedItem="{Binding SelectedBranchName}"
                       Grid.Row="1"
                       Cursor="Hand" 
-                      cal:Message.Attach="[Event MouseUp] = [Action Select()]">
+                      cal:Message.Attach="[Event MouseUp] = [Action Execute()]">
                 <ListView.Style>
                     <Style TargetType="ListView" BasedOn="{StaticResource MahApps.Styles.ListView}">
                         <Style.Triggers>
@@ -81,7 +80,6 @@
         </Grid>
         <Grid x:Name="Creator" 
               Visibility="{Binding IsCreateBranch, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <Button BorderThickness="0" x:Name="CreateBranch" IsDefault="true" Width="1" Height="1" Background="Transparent"/>
             <StackPanel Orientation="Horizontal">
                 <TextBox x:Name="NewBranchName"
                          VerticalAlignment="Center"

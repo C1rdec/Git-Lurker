@@ -216,7 +216,7 @@
             {
                 if (!_skipBranchSelection)
                 {
-                    BranchManager.Select();
+                    BranchManager.Execute();
                 }
 
                 _skipBranchSelection = false;
