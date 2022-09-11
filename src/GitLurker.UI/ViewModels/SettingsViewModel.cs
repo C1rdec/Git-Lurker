@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using Caliburn.Micro;
 using GitLurker.Models;
 using GitLurker.Services;
@@ -18,6 +22,7 @@ namespace GitLurker.UI.ViewModels
         private SettingsFile _settingsFile;
         private WindowsLink _windowsStartupService;
         private FlyoutService _flyoutService;
+        private RepositoryService _repositoryService;
         private PropertyChangedBase _flyoutContent;
         private ThemeService _themeService;
         private bool _flyoutOpen;
@@ -28,9 +33,16 @@ namespace GitLurker.UI.ViewModels
 
         #region Constructors
 
-        public SettingsViewModel(FlyoutService flyoutService, SettingsFile settingsFile, ThemeService themeService, WindowsLink windowsLink, DialogService dialogService)
+        public SettingsViewModel(
+            FlyoutService flyoutService, 
+            SettingsFile settingsFile, 
+            ThemeService themeService,
+            WindowsLink windowsLink, 
+            DialogService dialogService, 
+            RepositoryService repositoryService)
         {
             _flyoutService = flyoutService;
+            _repositoryService = repositoryService;
             _themeService = themeService;
             _windowsStartupService = windowsLink;
             _settingsFile = settingsFile;
@@ -59,6 +71,8 @@ namespace GitLurker.UI.ViewModels
         public CustomActionManagerViewModel ActionManager { get; set; }
 
         public bool HasNugetSource => _settingsFile.HasNugetSource();
+
+        public bool IsAdmin => _settingsFile.Entity.IsAdmin;
 
         public IEnumerable<Scheme> Schemes => _themeService.GetSchemes();
 
@@ -231,6 +245,46 @@ namespace GitLurker.UI.ViewModels
             _settingsFile.Entity.NugetSource = path;
             NotifyOfPropertyChange(() => HasNugetSource);
             Save();
+        }
+
+        public void ToggleAdmin()
+        {
+            var isAdmin = !_settingsFile.Entity.IsAdmin;
+            
+
+            var gitLurker = _repositoryService.GetRepo("GitLurker");
+            if (gitLurker == null)
+            {
+                return;
+            }
+
+            var manifestPath = Path.Combine(gitLurker.Folder, @"src\GitLurker.UI\app.manifest");
+            if (File.Exists(manifestPath))
+            {
+                var xml = XDocument.Parse(File.ReadAllText(manifestPath));
+                XNamespace ns = "urn:schemas-microsoft-com:asm.v3";
+                var executionLevel = xml.Root.Descendants(ns + "requestedExecutionLevel").FirstOrDefault();
+                var level = "asInvoker";
+                if (isAdmin)
+                {
+                    level = "highestAvailable";
+                }
+
+                var levelAttribute = executionLevel.Attribute("level");
+                if (levelAttribute != null)
+                {
+                    levelAttribute.SetValue(level);
+                }
+
+                File.WriteAllText(manifestPath, xml.ToString());
+            }
+
+            _settingsFile.Entity.IsAdmin = isAdmin;
+            NotifyOfPropertyChange(() => IsAdmin);
+            Save();
+
+            _ = gitLurker.ExecuteCommandAsync("dotnet run --project .\\src\\GitLurker.UI\\GitLurker.UI.csproj -c release");
+            Process.GetCurrentProcess().Kill();
         }
 
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)

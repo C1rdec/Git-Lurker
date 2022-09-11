@@ -58,6 +58,17 @@
             DoubleClickCommand="{Binding ShowSettings}">
             <tb:TaskbarIcon.ContextMenu>
                 <ContextMenu>
+                    <MenuItem cal:Message.Attach="[Event Click] = [Action OpenSettings]">
+                        <MenuItem.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition></ColumnDefinition>
+                                    <ColumnDefinition></ColumnDefinition>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock>Settings</TextBlock>
+                            </Grid>
+                        </MenuItem.Header>
+                    </MenuItem>
                     <MenuItem cal:Message.Attach="[Event Click] = [Action Close]">
                         <MenuItem.Header>
                             <Grid>

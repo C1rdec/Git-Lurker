@@ -47,6 +47,11 @@ namespace GitLurker.Services
             return allRepos;
         }
 
+        public Repository GetRepo(string name)
+        {
+            return GetAllRepo().FirstOrDefault(r => r.Name == name);
+        }
+
         public IEnumerable<Workspace> GetWorkspaces()
         {
             var settingsFile = new SettingsFile();
