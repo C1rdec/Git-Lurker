@@ -66,15 +66,19 @@ namespace GitLurker.Services
             // Enter
             _hook.AddHandler(KeyCode.Enter, Modifiers.None, KeyDirection.Down, (o, e) => 
             {
-                Execute.OnUIThread(() => 
-                { 
-                    _debounceService.Debounce(666, () => EnterLongPressed?.Invoke(this, EventArgs.Empty));
+                Execute.OnUIThread(() =>
+                {
+                    _debounceService.Debounce(666, () => 
+                    { 
+                        EnterLongPressed?.Invoke(this, EventArgs.Empty);
+                        _debounceService.Reset();
+                    });
                 });
             });
 
             _hook.AddHandler(KeyCode.Enter, (o, e) => 
             {
-                if (_debounceService.Stop())
+                if (_debounceService.Reset())
                 {
                     EnterPressed?.Invoke(this, EventArgs.Empty);
                 }

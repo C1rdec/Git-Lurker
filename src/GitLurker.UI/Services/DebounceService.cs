@@ -9,6 +9,7 @@ namespace GitLurker.Services
 
         private DispatcherTimer _timer;
         private bool _cancelAction;
+        private bool _executed;
 
         #endregion
 
@@ -41,9 +42,14 @@ namespace GitLurker.Services
 
             _timer = new DispatcherTimer(TimeSpan.FromMilliseconds(interval), DispatcherPriority.ApplicationIdle, (s, e) =>
             {
-                if (_timer == null)
+                if (_timer == null || _executed)
                 {
                     return;
+                }
+
+                if (_cancelAction)
+                {
+                    _executed = true;
                 }
 
                 _timer?.Stop();
@@ -54,8 +60,9 @@ namespace GitLurker.Services
             _timer.Start();
         }
 
-        public bool Stop()
+        public bool Reset()
         {
+            _executed = false;
             if (_timer == null)
             {
                 return false;
