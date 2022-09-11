@@ -253,7 +253,12 @@ namespace GitLurker.UI.ViewModels
             }
 
             _repo.AddToRecent();
-            await _repo.ExecuteCommandAsync($"git checkout -b {branchName}");
+            var result = await _repo.ExecuteCommandAsync($"git checkout -b {branchName}");
+            if (result.ExitCode > 0)
+            {
+                await _repo.ExecuteCommandAsync($"git checkout {branchName}");
+            }
+
             _onSelected(branchName);
             NewBranchName = string.Empty;
         }
