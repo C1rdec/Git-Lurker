@@ -16,6 +16,7 @@
 
         private static readonly CloseMessage CloseMessage = new CloseMessage();
         private CancellationTokenSource _nugetTokenSource;
+        private CancellationTokenSource _secretTokenSource;
         private CancellationTokenSource _pullRequestTokenSource;
         private PopupService _popupService;
         private Repository _repo;
@@ -245,28 +246,8 @@
         {
             BranchName = _repo.GetCurrentBranchName();
 
-            if (_nugetTokenSource != null)
-            {
-                _nugetTokenSource.Cancel();
-                _nugetTokenSource.Dispose();
-            }
-
-            if (_settingsFile.HasNugetSource() && _repo.Exist)
-            {
-                _nugetTokenSource = new CancellationTokenSource();
-                var token = _nugetTokenSource.Token;
-                var nuget = await _repo.GetNewNugetAsync(_settingsFile.Entity.NugetSource);
-                if (nuget != null)
-                {
-                    if (token.IsCancellationRequested)
-                    {
-                        return;
-                    }
-
-                    var icon = new PackIconSimpleIcons() { Kind = PackIconSimpleIconsKind.NuGet };
-                    _actionBar.AddAction(() => _repo.AddNugetAsync(nuget), icon, openConsole: false, permanent: false);
-                }
-            }
+            await HandleUserSecret();
+            await HandleNuget();
         }
 
         public void OnMouseLeave()
@@ -279,6 +260,11 @@
             if (_nugetTokenSource != null && !_nugetTokenSource.IsCancellationRequested)
             {
                 _nugetTokenSource?.Cancel();
+            }
+
+            if (_secretTokenSource != null && !_secretTokenSource.IsCancellationRequested)
+            {
+                _secretTokenSource?.Cancel();
             }
 
             if (_pullRequestTokenSource != null && !_pullRequestTokenSource.IsCancellationRequested)
@@ -339,6 +325,66 @@
             var segments = _repo.Folder.Split('\\');
 
             return $"({segments[^1]})";
+        }
+
+        private async Task HandleNuget()
+        {
+            if (_nugetTokenSource != null)
+            {
+                _nugetTokenSource.Cancel();
+                _nugetTokenSource.Dispose();
+            }
+
+            if (_settingsFile.HasNugetSource() && _repo.Exist)
+            {
+                _nugetTokenSource = new CancellationTokenSource();
+                var token = _nugetTokenSource.Token;
+                var nuget = await _repo.GetNewNugetAsync(_settingsFile.Entity.NugetSource);
+                if (nuget != null)
+                {
+                    if (token.IsCancellationRequested)
+                    {
+                        return;
+                    }
+
+                    var icon = new PackIconSimpleIcons() { Kind = PackIconSimpleIconsKind.NuGet };
+                    _actionBar.AddAction(() => _repo.AddNugetAsync(nuget), icon, openConsole: false, permanent: false);
+                }
+            }
+        }
+
+        private Task HandleUserSecret()
+        {
+            if (_secretTokenSource != null)
+            {
+                _secretTokenSource.Cancel();
+                _secretTokenSource.Dispose();
+            }
+
+            return Task.Run(() => 
+            {
+                _secretTokenSource = new CancellationTokenSource();
+                var token = _secretTokenSource.Token;
+
+                var secretId = _repo.GetUserSecretId();
+                if (!string.IsNullOrEmpty(secretId))
+                {
+                    if (token.IsCancellationRequested)
+                    {
+                        return;
+                    }
+
+                    Execute.OnUIThread(() =>
+                    {
+                        var icon = new PackIconFontisto() { Kind = PackIconFontistoKind.UserSecret };
+                        _actionBar.AddAction(() => 
+                        {
+                            _repo.OpenUserSecret(secretId);
+                            return Task.FromResult(new ExecutionResult());
+                        }, icon, openConsole: false, permanent: false);
+                    });
+                }
+            });
         }
 
         private Task GetChanges()

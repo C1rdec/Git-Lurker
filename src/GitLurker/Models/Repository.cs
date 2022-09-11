@@ -7,6 +7,7 @@
     using System.Linq;
     using System.Text.Json;
     using System.Threading.Tasks;
+    using System.Xml.Linq;
     using GitLurker.Extensions;
     using GitLurker.Services;
     using WindowsInput;
@@ -212,6 +213,29 @@
             return newNuget;
         }
 
+        public string GetUserSecretId()
+        {
+            foreach (var csproj in GetFiles(".csproj"))
+            {
+                var fileContent = File.ReadAllText(csproj.FullName);
+                try
+                {
+                    var xml = XDocument.Parse(fileContent);
+                    var userSecretId = xml.Root.Descendants("UserSecretsId").FirstOrDefault();
+                    if (userSecretId != null)
+                    {
+                        return userSecretId.Value;
+                    }
+                }
+                catch
+                {
+                    continue;
+                }
+            }
+
+            return null;
+        }
+
         public void AddToRecent()
         {
             var settings = new SettingsFile();
@@ -290,13 +314,7 @@
             }
             else
             {
-                new Process()
-                {
-                    StartInfo = new ProcessStartInfo(slnFile.FullName)
-                    {
-                        UseShellExecute = true,
-                    }
-                }.Start();
+                OpenFile(slnFile.FullName);
             }
 
             return true;
