@@ -75,6 +75,13 @@ namespace GitLurker.UI.ViewModels
 
         public void AddAction(Func<Task<ExecutionResult>> task, PackIconControlBase icon, bool openConsole, bool permanent)
         {
+            // Block the ability to insert the same action
+            var existingAction = Actions.FirstOrDefault(a => a.Icon.Data == icon.Data);
+            if (existingAction != null)
+            {
+                return;
+            }
+
             var id = Guid.NewGuid();
             Func<Task> callback = async () =>
             {

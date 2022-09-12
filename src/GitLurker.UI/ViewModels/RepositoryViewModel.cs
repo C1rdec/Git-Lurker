@@ -329,7 +329,7 @@
 
         private async Task HandleNuget()
         {
-            if (_nugetTokenSource != null)
+            if (_nugetTokenSource != null && !_nugetTokenSource.IsCancellationRequested)
             {
                 _nugetTokenSource.Cancel();
                 _nugetTokenSource.Dispose();
@@ -355,7 +355,7 @@
 
         private Task HandleUserSecret()
         {
-            if (_secretTokenSource != null)
+            if (_secretTokenSource != null && !_secretTokenSource.IsCancellationRequested)
             {
                 _secretTokenSource.Cancel();
                 _secretTokenSource.Dispose();
