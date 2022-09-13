@@ -328,7 +328,7 @@
                 // Shift
                 if (Native.IsKeyPressed(Native.VirtualKeyStates.VK_SHIFT))
                 {
-                    Process.Start("explorer.exe", _folder);
+                    _ = ExecuteCommandAsync($"start {_folder}");
                     return true;
                 }
 
