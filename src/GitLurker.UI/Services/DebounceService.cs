@@ -8,21 +8,21 @@ namespace GitLurker.Services
         #region Fields
 
         private DispatcherTimer _timer;
-        private bool _cancelAction;
+        private bool _manual;
 
         #endregion
 
         #region Constructors
 
         public DebounceService()
-            : this(true)
+            : this(false)
         {
 
         }
 
-        public DebounceService(bool cancelAction)
+        public DebounceService(bool manual)
         {
-            _cancelAction = cancelAction;
+            _manual = manual;
         }
 
         #endregion
@@ -31,7 +31,7 @@ namespace GitLurker.Services
 
         public void Debounce(int interval, Action action)
         {
-            if (_timer != null && !_cancelAction)
+            if (_timer != null)
             {
                 return;
             }
@@ -46,8 +46,12 @@ namespace GitLurker.Services
                     return;
                 }
 
-                _timer?.Stop();
-                _timer = null;
+                if (!_manual)
+                {
+                    _timer?.Stop();
+                    _timer = null;
+                }
+
                 action.Invoke();
             }, Dispatcher.CurrentDispatcher);
 
