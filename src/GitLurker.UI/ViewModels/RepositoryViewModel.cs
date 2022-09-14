@@ -228,7 +228,11 @@
             _repo.Open(skipModifier);
         }
 
-        public void OpenPullRequest() => _repo.OpenPullRequest();
+        public void OpenPullRequest()
+        {
+            _aggregator.PublishOnCurrentThreadAsync(CloseMessage);
+            _repo.OpenPullRequest();
+        }
 
         public async void Pull() 
         {
