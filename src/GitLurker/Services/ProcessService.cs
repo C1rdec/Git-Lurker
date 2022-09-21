@@ -42,7 +42,7 @@ namespace GitLurker.Services
 
         public Task<ExecutionResult> ExecuteCommandAsync(string command, bool listen, string workingDirectory)
         {
-            if (!Directory.Exists(_folder))
+            if (!string.IsNullOrEmpty(_folder) && !Directory.Exists(_folder))
             {
                 if (listen)
                 {
