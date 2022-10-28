@@ -1,9 +1,11 @@
 ﻿namespace GitLurker.UI.ViewModels
 {
     using System.Collections.ObjectModel;
+    using System.IO;
     using System.Linq;
     using System.Threading;
     using System.Threading.Tasks;
+    using System.Windows.Media.Imaging;
     using Caliburn.Micro;
     using GitLurker.Models;
     using GitLurker.UI.Messages;
@@ -61,7 +63,14 @@
 
         public bool IsVsCode => !_repo.HasSln;
 
-        public string IconSource => _repo.IconPath;
+        public BitmapFrame IconSource 
+        {   get 
+            {
+                using var stream = new FileStream(_repo.IconPath, FileMode.Open, FileAccess.Read);
+
+                return BitmapFrame.Create(stream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+            } 
+        }
 
         public string RepoName => _repo.Name;
 
