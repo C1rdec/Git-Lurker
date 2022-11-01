@@ -84,7 +84,10 @@ namespace GitLurker.UI.ViewModels
 
             if (_processService != null)
             {
-                Lines.Clear();
+                Execute.OnUIThread(() => 
+                { 
+                    Lines.Clear();
+                });
                 _processService.NewProcessMessage -= Repository_NewProcessMessage;
             }
 
