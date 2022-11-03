@@ -87,7 +87,66 @@
                                     <Setter Property="Margin" Value="20,0,0,0"/>
                                     <Style.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
-                                            <Setter Property="Margin" Value="18.5,-1.5,-1.5,-.5"/>
+                                            <Setter Property="Margin" Value="18.5,-.5,-1.5,-.5"/>
+                                            <Setter Property="BorderThickness" Value="1.5"/>
+                                            <Setter Property="BorderBrush" Value="{DynamicResource Brushes.Secondary}"/>
+                                            <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
+                                            <Setter Property="Opacity" Value="1"/>
+                                        </Trigger>
+                                        <DataTrigger Binding="{Binding OperationInProgress}" Value="true">
+                                            <Setter Property="BorderBrush" Value="Red"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
+                            <Grid>
+                                <iconPacks:PackIconMaterial VerticalAlignment="Center" 
+                                                        Margin="4"
+                                                        Kind="SourceBranch" 
+                                                        Height="30"
+                                                        Width="30"
+                                                        Foreground="{DynamicResource Brushes.Secondary}" />
+                                <iconPacks:PackIconMaterial VerticalAlignment="Center" 
+                                                        Visibility="{Binding OperationInProgress, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                                                        Margin="4"
+                                                        Kind="SourceBranch" 
+                                                        Height="30"
+                                                        Width="30"
+                                                        Foreground="Red" />
+                            </Grid>
+                        </Border>
+                        <TextBlock x:Name="BranchName" 
+                                   Opacity="0.8"
+                                   MaxWidth="350"
+                                   VerticalAlignment="Center"
+                                   FontSize="22" 
+                                   Margin="5,0,0,0"
+                                   FontWeight="Light">
+                            <TextBlock.Style>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="Foreground" Value="{DynamicResource Brushes.Secondary}"></Setter>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding OperationInProgress}" Value="true">
+                                            <Setter Property="Foreground" Value="Red"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <Border VerticalAlignment="Center" CornerRadius="6" 
+                                cal:Message.Attach="[Event MouseUp] = [Action ContinueOperation()]">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <SolidColorBrush Color="White" Opacity="0.0003"/>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter Property="Opacity" Value="0.6"/>
+                                    <Setter Property="Margin" Value="20,0,0,0"/>
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Margin" Value="18.5,-.5,-1.5,-.5"/>
                                             <Setter Property="BorderThickness" Value="1.5"/>
                                             <Setter Property="BorderBrush" Value="{DynamicResource Brushes.Secondary}"/>
                                             <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
@@ -97,20 +156,15 @@
                                 </Style>
                             </Border.Style>
                             <iconPacks:PackIconMaterial VerticalAlignment="Center" 
-                                                        Margin="4"
-                                                        Kind="SourceBranch" 
-                                                        Height="30"
-                                                        Width="30"
-                                                        Foreground="{DynamicResource Brushes.Secondary}" />
+                                                        ToolTip="Abort"
+                                                    Visibility="{Binding CancelOperationVisisble, Converter={StaticResource BooleanToVisibilityConverter}}"
+                                                    Margin="4,4,4,4"
+                                                    Kind="Check" 
+                                                    Height="20"
+                                                    Width="20"
+                                                    Foreground="{DynamicResource Brushes.Secondary}" />
                         </Border>
-                        <TextBlock x:Name="BranchName" 
-                                   Opacity="0.8"
-                                   MaxWidth="350"
-                                   VerticalAlignment="Center"
-                                   FontSize="22" 
-                                   Margin="5,0,0,0"
-                                   Foreground="{DynamicResource Brushes.Secondary}" 
-                                   FontWeight="Light"/>
+                        
                     </DockPanel>
                 </Border>
             </Grid>

@@ -152,6 +152,29 @@
             Process.Start(psi);
         }
 
+        public Task CancelOperationAsync() => HandleOperation("abort");
+
+        public Task ContinueOperationAsync() => HandleOperation("continue");
+
+        private async Task HandleOperation(string operation)
+        {
+            var currentOperation = _gitService.GetCurrentOperation();
+            if (currentOperation == LibGit2Sharp.CurrentOperation.None)
+            {
+                return;
+            }
+
+            if (currentOperation == LibGit2Sharp.CurrentOperation.Rebase)
+            {
+                await ExecuteCommandAsync($"git rebase --{operation}", true);
+            }
+
+            if (currentOperation == LibGit2Sharp.CurrentOperation.Merge)
+            {
+                await ExecuteCommandAsync($"git merge --{operation}", true);
+            }
+        }
+
         private string AzurePullRequestUrl(string repoUrl)
         {
             return $"{repoUrl}/pullrequestcreate?sourceRef={GetCurrentBranchName()}";
@@ -245,6 +268,8 @@
 
         public void Fetch()
             => _gitService.Fetch();
+
+        public bool HasOperationInProgress() => _gitService.HasOperationInProgress();
 
         private FileInfo[] GetFiles(string extention) => new DirectoryInfo(_folder).GetFiles($"*{extention}", SearchOption.AllDirectories);
 

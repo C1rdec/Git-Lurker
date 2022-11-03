@@ -16,6 +16,18 @@ namespace GitLurker.Services
             ChangeKind.Modified,
         };
 
+        private static readonly List<CurrentOperation> RebaseOperations = new List<CurrentOperation>
+        {
+            CurrentOperation.Rebase,
+            CurrentOperation.RebaseMerge,
+            CurrentOperation.RebaseInteractive,
+        };
+
+        private static readonly List<CurrentOperation> MergeOperations = new List<CurrentOperation>
+        {
+            CurrentOperation.Merge,
+        };
+
         private string _gitFolderPath;
 
         #endregion
@@ -30,6 +42,26 @@ namespace GitLurker.Services
         #endregion
 
         #region Methods
+
+        public CurrentOperation GetCurrentOperation()
+        {
+            return Execute(r => 
+            { 
+                var currentOperation = r.Info.CurrentOperation;
+
+                if (RebaseOperations.Contains(currentOperation))
+                {
+                    return CurrentOperation.Rebase;
+                }
+
+                if (MergeOperations.Contains(currentOperation))
+                {
+                    return CurrentOperation.Merge;
+                }
+
+                return currentOperation;
+            });
+        }
 
         public void Fetch()
             => Execute(r => Commands.Fetch(r, "origin", new string[0], null, null));
@@ -61,6 +93,8 @@ namespace GitLurker.Services
 
             return branchNames;
         }
+
+        public bool HasOperationInProgress() => Execute(r => r.Info.CurrentOperation != CurrentOperation.None);
 
         public IEnumerable<string> GetFilesChanged()
         {

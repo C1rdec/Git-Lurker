@@ -30,6 +30,9 @@
         private ActionBarViewModel _actionBar;
         private SettingsFile _settingsFile;
         private bool _skipBranchSelection;
+        private bool _operationInProgress;
+        private bool _cancelOperationVisible;
+        private bool _skipOpen;
 
         #endregion
 
@@ -46,7 +49,7 @@
 
             FileChanges = new ObservableCollection<string>();
             BranchManager = new BranchManagerViewModel(repo, OnSelectionChanged, OnBranchManagerClose);
-            GetChanges();
+            GetStatus();
         }
 
         #endregion
@@ -66,6 +69,11 @@
         public BitmapFrame IconSource 
         {   get 
             {
+                if (!File.Exists(_repo.IconPath))
+                {
+                    return null;
+                }
+
                 using var stream = new FileStream(_repo.IconPath, FileMode.Open, FileAccess.Read);
 
                 return BitmapFrame.Create(stream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
@@ -73,6 +81,16 @@
         }
 
         public string RepoName => _repo.Name;
+
+        public bool OperationInProgress
+        {
+            get => _operationInProgress;
+            set
+            {
+                _operationInProgress = value;
+                NotifyOfPropertyChange();
+            }
+        }
 
         public bool IsSelected
         {
@@ -101,10 +119,21 @@
                 _branchName = value;
                 NotifyOfPropertyChange();
                 NotifyOfPropertyChange(() => BranchNameVisible);
+                NotifyOfPropertyChange(() => CancelOperationVisisble);
             }
         }
 
-        public bool BranchNameVisible => !string.IsNullOrEmpty(_branchName);
+        public bool BranchNameVisible => !string.IsNullOrEmpty(_branchName) || OperationInProgress;
+
+        public bool CancelOperationVisisble 
+        {
+            get => _cancelOperationVisible;
+            set
+            {
+                _cancelOperationVisible = value;
+                NotifyOfPropertyChange();
+            }
+        }
 
         public bool Busy
         {
@@ -167,6 +196,12 @@
                 _skipBranchSelection = true;
             }
 
+            if (OperationInProgress)
+            {
+                CancelOperation();
+                return;
+            }
+
             IsBranchManagerOpen = true;
             BranchManager.ShowBranches();
         }
@@ -217,8 +252,10 @@
                 _pullRequestTokenSource.Cancel();
             }
 
-            if (_popupService.JustClosed)
+            if (_popupService.JustClosed || _skipOpen)
             {
+                _skipOpen = false;
+
                 return;
             }
 
@@ -257,7 +294,8 @@
 
         public async void OnMouseEnter()
         {
-            BranchName = _repo.GetCurrentBranchName();
+            BranchName = _operationInProgress ? "Conflicts" : _repo.GetCurrentBranchName();
+            CancelOperationVisisble = _operationInProgress;
 
             await HandleUserSecret();
             await HandleNuget();
@@ -286,6 +324,7 @@
             }
 
             _actionBar.RemoveActions();
+            CancelOperationVisisble = false;
         }
 
         public void Select()
@@ -331,6 +370,36 @@
             {
                 ShowBranches(false);
             }
+        }
+
+        public async void ContinueOperation()
+        {
+            _skipOpen = true;
+            await _repo.ContinueOperationAsync();
+            await GetStatus();
+
+            if (OperationInProgress)
+            {
+                return;
+            }
+
+            CancelOperationVisisble = false;
+            BranchName = _repo.GetCurrentBranchName();
+        }
+
+        private async void CancelOperation()
+        {
+            _skipOpen = true;
+            await _repo.CancelOperationAsync();
+            await GetStatus();
+
+            if (OperationInProgress)
+            {
+                return;
+            }
+
+            CancelOperationVisisble = false;
+            BranchName = _repo.GetCurrentBranchName();
         }
 
         private string GetParentFolder()
@@ -400,9 +469,11 @@
             });
         }
 
-        private Task GetChanges()
+        private Task GetStatus()
             => Task.Run(() =>
             {
+                OperationInProgress = _repo.HasOperationInProgress();
+
                 var changes = _repo.GetFilesChanged();
                 if (changes == null)
                 {
