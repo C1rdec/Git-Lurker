@@ -166,12 +166,12 @@
 
             if (currentOperation == LibGit2Sharp.CurrentOperation.Rebase)
             {
-                await ExecuteCommandAsync($"git rebase --{operation}", true);
+                await ExecuteCommandAsync($"git -c core.editor=true rebase --{operation}", true);
             }
 
             if (currentOperation == LibGit2Sharp.CurrentOperation.Merge)
             {
-                await ExecuteCommandAsync($"git merge --{operation}", true);
+                await ExecuteCommandAsync($"git -c core.editor=true merge --{operation}", true);
             }
         }
 
