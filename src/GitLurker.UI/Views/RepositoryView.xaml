@@ -156,7 +156,7 @@
                                 </Style>
                             </Border.Style>
                             <iconPacks:PackIconMaterial VerticalAlignment="Center" 
-                                                        ToolTip="Abort"
+                                                        ToolTip="Continue"
                                                     Visibility="{Binding CancelOperationVisisble, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                     Margin="4,4,4,4"
                                                     Kind="TransferRight" 
