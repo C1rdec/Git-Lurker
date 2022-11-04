@@ -21,6 +21,7 @@
         private CancellationTokenSource _secretTokenSource;
         private CancellationTokenSource _pullRequestTokenSource;
         private PopupService _popupService;
+        private ConsoleService _consoleService;
         private Repository _repo;
         private bool _isSelected;
         private IEventAggregator _aggregator;
@@ -43,6 +44,7 @@
             _repo = repo;
             _settingsFile = IoC.Get<SettingsFile>();
             _popupService = IoC.Get<PopupService>();
+            _consoleService = IoC.Get<ConsoleService>();
             _actionBar = new ActionBarViewModel(repo);
             _showParentFolder = repo.Duplicate;
             _aggregator = IoC.Get<IEventAggregator>();
@@ -375,6 +377,8 @@
         public async void ContinueOperation()
         {
             _skipOpen = true;
+            _consoleService.Listen(_repo);
+
             await _repo.ContinueOperationAsync();
             await GetStatus();
 
@@ -390,6 +394,8 @@
         private async void CancelOperation()
         {
             _skipOpen = true;
+            _consoleService.Listen(_repo);
+
             await _repo.CancelOperationAsync();
             await GetStatus();
 

@@ -378,7 +378,7 @@
         {
             if (!execute && _console.Lines.Any())
             {
-                await Task.Delay(1600);
+                await Task.Delay(1800);
             }
 
             ShowConsoleOverview = execute;

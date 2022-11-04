@@ -159,7 +159,7 @@
                                                         ToolTip="Abort"
                                                     Visibility="{Binding CancelOperationVisisble, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                     Margin="4,4,4,4"
-                                                    Kind="Check" 
+                                                    Kind="TransferRight" 
                                                     Height="20"
                                                     Width="20"
                                                     Foreground="{DynamicResource Brushes.Secondary}" />
