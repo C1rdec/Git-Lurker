@@ -70,7 +70,12 @@
                 </ListView.Style>
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" Margin="15,5,30,5" VerticalAlignment="Center" FontSize="28" Background="Transparent"/>
+                        <Grid>
+                            <TextBlock Text="{Binding}" Margin="15,5,30,5" VerticalAlignment="Center" FontSize="28" Background="Transparent"/>
+                            <Border x:Name="Rebase" cal:Message.Attach="[Event MouseUp] = [Action Rebase($dataContext)]" VerticalAlignment="Center" HorizontalAlignment="Right">
+                                <TextBlock>Rebase</TextBlock>
+                            </Border>
+                        </Grid>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

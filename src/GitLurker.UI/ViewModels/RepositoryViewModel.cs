@@ -50,7 +50,7 @@
             _aggregator = IoC.Get<IEventAggregator>();
 
             FileChanges = new ObservableCollection<string>();
-            BranchManager = new BranchManagerViewModel(repo, OnSelectionChanged, OnBranchManagerClose);
+            BranchManager = new BranchManagerViewModel(repo, OnSelectionChanged, OnBranchManagerClose, Rebase);
             GetStatus();
         }
 
@@ -497,6 +497,20 @@
                     NotifyOfPropertyChange(() => HasFilesChanged);
                 });
             });
+
+        private async void Rebase(string branchName)
+        {
+            IsBranchManagerOpen = false;
+            var currentBranch = _repo.GetCurrentBranchName();
+            if (currentBranch == branchName)
+            {
+                return;
+            }
+
+            _consoleService.Listen(_repo);
+            await _repo.RebaseAsync($"origin/{branchName}");
+            await GetStatus();
+        }
 
         #endregion
     }

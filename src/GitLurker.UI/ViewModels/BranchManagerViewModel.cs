@@ -17,7 +17,9 @@ namespace GitLurker.UI.ViewModels
         private Repository _repo;
         private string _selectedBranch;
         private Action<string> _onSelected;
-        private System. Action _onClose;
+        private System.Action _onClose;
+        private System.Action<string> _onRebase;
+        private bool _skipMainAction;
         private bool _isLoading;
         private bool _isCreateBranch;
         private string _newBranchName;
@@ -28,11 +30,12 @@ namespace GitLurker.UI.ViewModels
 
         #region Constructors
 
-        public BranchManagerViewModel(Repository repo, Action<string> onSelected, System.Action onClose)
+        public BranchManagerViewModel(Repository repo, Action<string> onSelected, System.Action onClose , System.Action<string> onRebase)
         {
             _repo = repo;
             _onSelected = onSelected;
             _onClose = onClose;
+            _onRebase = onRebase;
             BranchNames = new ObservableCollection<string>();
         }
 
@@ -108,6 +111,12 @@ namespace GitLurker.UI.ViewModels
 
         public async void Execute()
         {
+            if (_skipMainAction)
+            {
+                _skipMainAction = false;
+                return;
+            }
+
             if (IsCreateBranch)
             {
                 CreateBranch();
@@ -261,6 +270,12 @@ namespace GitLurker.UI.ViewModels
 
             _onSelected(branchName);
             NewBranchName = string.Empty;
+        }
+
+        public void Rebase(string branchName)
+        {
+            _skipMainAction = true;
+             _onRebase?.Invoke(branchName);
         }
 
         #endregion

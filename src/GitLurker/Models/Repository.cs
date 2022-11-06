@@ -93,6 +93,8 @@
 
         public Task<ExecutionResult> PullAsync() => ExecuteCommandAsync("git pull", true);
 
+        public Task RebaseAsync(string branchName) => ExecuteCommandAsync($"git rebase {branchName}", true);
+
         public Task CleanBranches() => ExecuteCommandAsync("git fetch origin --prune");
 
         public void Open(bool skipModifier)
