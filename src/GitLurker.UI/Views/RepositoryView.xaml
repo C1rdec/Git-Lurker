@@ -95,6 +95,7 @@
                                         </Trigger>
                                         <DataTrigger Binding="{Binding OperationInProgress}" Value="true">
                                             <Setter Property="BorderBrush" Value="Red"/>
+                                            <Setter Property="ToolTip" Value="Abort"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -133,7 +134,9 @@
                                 </Style>
                             </TextBlock.Style>
                         </TextBlock>
-                        <Border VerticalAlignment="Center" CornerRadius="6" 
+                        <Border VerticalAlignment="Center" 
+                                CornerRadius="6" 
+                                ToolTip="Continue"
                                 cal:Message.Attach="[Event MouseUp] = [Action ContinueOperation()]">
                             <Border.Style>
                                 <Style TargetType="Border">
@@ -156,7 +159,6 @@
                                 </Style>
                             </Border.Style>
                             <iconPacks:PackIconMaterial VerticalAlignment="Center" 
-                                                        ToolTip="Continue"
                                                     Visibility="{Binding CancelOperationVisisble, Converter={StaticResource BooleanToVisibilityConverter}}"
                                                     Margin="4,4,4,4"
                                                     Kind="TransferRight" 
