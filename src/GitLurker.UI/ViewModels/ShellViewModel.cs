@@ -288,7 +288,7 @@
             await TryCloseAsync();
         }
 
-        public void OpenSettings()
+        public void OpenSettings(object parameter)
         {
             var viewModel = IoC.Get<SettingsViewModel>();
             if (viewModel.IsActive)

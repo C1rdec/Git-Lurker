@@ -11,6 +11,7 @@ using GitLurker.Models;
 using GitLurker.Services;
 using GitLurker.UI.Models;
 using GitLurker.UI.Services;
+using LibGit2Sharp;
 using WindowsUtilities;
 
 namespace GitLurker.UI.ViewModels
@@ -19,6 +20,13 @@ namespace GitLurker.UI.ViewModels
     {
         #region Fields
 
+        private List<CurrentOperation> _operations = new List<CurrentOperation>
+        {
+            CurrentOperation.Merge,
+            CurrentOperation.Rebase
+        };
+
+        private CurrentOperation _selectedOperation;
         private SettingsFile _settingsFile;
         private WindowsLink _windowsStartupService;
         private FlyoutService _flyoutService;
@@ -56,11 +64,14 @@ namespace GitLurker.UI.ViewModels
 
             _flyoutService.ShowFlyoutRequested += FlyoutService_ShowFlyout;
             _flyoutService.CloseFlyoutRequested += FlyoutService_CloseFlyout;
+            _selectedOperation = _settingsFile.Entity.RebaseOperation;
         }
 
         #endregion
 
         #region Properties
+
+        public IEnumerable<CurrentOperation> Operations => _operations;
 
         public RepoManagerViewModel RepoManager { get; set; }
 
@@ -75,6 +86,16 @@ namespace GitLurker.UI.ViewModels
         public bool IsAdmin => _settingsFile.Entity.IsAdmin;
 
         public IEnumerable<Scheme> Schemes => _themeService.GetSchemes();
+
+        public CurrentOperation SelectedOperation
+        {
+            get => _selectedOperation;
+            set
+            {
+                _selectedOperation = value;
+                NotifyOfPropertyChange();
+            }
+        }
 
         public string FlyoutHeader
         {
@@ -169,6 +190,18 @@ namespace GitLurker.UI.ViewModels
         #endregion
 
         #region Methods
+
+        public DoubleClickCommand RebaseOperationCommand => new DoubleClickCommand((operation) => OnRebaseOperationChanged(operation));
+
+        public void OnRebaseOperationChanged(object operation)
+        {
+            if(operation is CurrentOperation currentOperation)
+            {
+                SelectedOperation = currentOperation;
+                _settingsFile.Entity.RebaseOperation = currentOperation;
+                _settingsFile.Save();
+            }
+        }
 
         public void ShowFlyout(string header, PropertyChangedBase content)
         {

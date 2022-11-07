@@ -7,13 +7,13 @@ namespace GitLurker.UI.ViewModels
     {
         #region Fields
 
-        private Action _action;
+        private Action<object> _action;
 
         #endregion
 
         #region Constructors
 
-        public DoubleClickCommand(Action action)
+        public DoubleClickCommand(Action<object> action)
         {
             _action = action;
         }
@@ -30,13 +30,12 @@ namespace GitLurker.UI.ViewModels
 
         public bool CanExecute(object parameter)
         {
-            CanExecuteChanged?.Invoke(this, EventArgs.Empty);
             return true;
         }
 
         public void Execute(object parameter)
         {
-            _action?.Invoke();
+            _action?.Invoke(parameter);
         }
 
         #endregion

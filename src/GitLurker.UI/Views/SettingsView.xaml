@@ -83,10 +83,29 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
                     <RowDefinition></RowDefinition>
                 </Grid.RowDefinitions>
                 <Label Style="{DynamicResource LabelHeaderStyle}">Advanced</Label>
-                <WrapPanel Grid.Row="1" HorizontalAlignment="Center" Margin="0,-10,0,0" VerticalAlignment="Center">
+                <mah:DropDownButton Height="45" 
+                                    Content="{Binding SelectedOperation}"
+                                    ItemsSource="{Binding Operations}"
+                                    Grid.Row="1"
+                                    Cursor="Hand"
+                                    Margin="10,20,10,20"
+                                    MaxWidth="250">
+                    <mah:DropDownButton.Icon>
+                        <iconPacks:PackIconMaterial Margin="6" Kind="Merge" />
+                    </mah:DropDownButton.Icon>
+                    <mah:DropDownButton.ItemContainerStyle>
+                        <Style BasedOn="{StaticResource {x:Type MenuItem}}" TargetType="{x:Type MenuItem}">
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Setter Property="Command" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type mah:DropDownButton}}, Path=DataContext.RebaseOperationCommand}" />
+                            <Setter Property="CommandParameter" Value="{Binding}" />
+                        </Style>
+                    </mah:DropDownButton.ItemContainerStyle>
+                </mah:DropDownButton>
+                <WrapPanel Grid.Row="2" HorizontalAlignment="Center" Margin="0,-10,0,0" VerticalAlignment="Center" Cursor="Hand">
                     <Border x:Name="Nuget"
                             CornerRadius="15"
                             Height="45"

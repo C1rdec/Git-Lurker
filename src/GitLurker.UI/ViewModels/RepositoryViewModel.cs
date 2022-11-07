@@ -296,7 +296,7 @@
 
         public async void OnMouseEnter()
         {
-            BranchName = _operationInProgress ? "Conflicts" : _repo.GetCurrentBranchName();
+            BranchName = _operationInProgress ? "Conflict(s)" : _repo.GetCurrentBranchName();
             CancelOperationVisisble = _operationInProgress;
 
             await HandleUserSecret();
@@ -509,7 +509,15 @@
             }
 
             _consoleService.Listen(_repo);
-            await _repo.RebaseAsync($"origin/{branchName}");
+            if (_settingsFile.Entity.RebaseOperation == LibGit2Sharp.CurrentOperation.Rebase)
+            {
+                await _repo.RebaseAsync($"origin/{branchName}");
+            }
+            else
+            {
+                await _repo.MergeAsync($"origin/{branchName}");
+            }
+
             await GetStatus();
         }
 

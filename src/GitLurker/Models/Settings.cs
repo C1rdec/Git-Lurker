@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using LibGit2Sharp;
 
 namespace GitLurker.Models
 {
@@ -23,6 +24,7 @@ namespace GitLurker.Models
 
             StartWithWindows = true;
             AddToStartMenu = true;
+            RebaseOperation = CurrentOperation.Rebase;
         }
 
         #endregion
@@ -48,6 +50,8 @@ namespace GitLurker.Models
         public bool IsAdmin { get; set; }
 
         public Scheme Scheme { get; set; }
+
+        public CurrentOperation RebaseOperation { get; set; }
 
         #endregion
     }

@@ -121,14 +121,15 @@
                                    MaxWidth="350"
                                    VerticalAlignment="Center"
                                    FontSize="22" 
-                                   Margin="5,0,0,0"
-                                   FontWeight="Light">
+                                   Margin="5,0,0,0">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock">
+                                    <Setter Property="FontWeight" Value="Light"/>
                                     <Setter Property="Foreground" Value="{DynamicResource Brushes.Secondary}"></Setter>
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding OperationInProgress}" Value="true">
                                             <Setter Property="Foreground" Value="Red"/>
+                                            <Setter Property="FontWeight" Value="SemiBold"/>
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
