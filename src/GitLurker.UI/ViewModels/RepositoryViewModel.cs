@@ -495,6 +495,7 @@
 
                     NotifyOfPropertyChange(() => FileChangeCount);
                     NotifyOfPropertyChange(() => HasFilesChanged);
+                    NotifyOfPropertyChange(() => BranchNameVisible);
                 });
             });
 

@@ -21,7 +21,20 @@
                 <ItemsControl x:Name="Lines">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <TextBlock Text="{Binding}" FontSize="16" FontFamily="Consola" Foreground="{DynamicResource Brushes.Secondary}"/>
+                            <TextBlock Text="{Binding Line}"  FontFamily="Consola">
+                                <TextBlock.Style>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="FontSize" Value="16"/>
+                                        <Setter Property="Foreground" Value="{DynamicResource Brushes.Secondary}"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsError}" Value="true">
+                                                <Setter Property="Foreground" Value="Red" />
+                                                <Setter Property="FontSize" Value="18" />
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </TextBlock.Style>
+                            </TextBlock>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>

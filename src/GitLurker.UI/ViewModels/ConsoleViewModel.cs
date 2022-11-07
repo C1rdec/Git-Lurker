@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using Caliburn.Micro;
 using GitLurker.Services;
+using GitLurker.UI.Models;
 using GitLurker.UI.Services;
 
 namespace GitLurker.UI.ViewModels
@@ -21,7 +22,7 @@ namespace GitLurker.UI.ViewModels
 
         public ConsoleViewModel(ConsoleService service)
         {
-            Lines = new ObservableCollection<string>();
+            Lines = new ObservableCollection<ConsoleLine>();
             _consoleService = service;
             _consoleService.ExecutionRequested += ConsoleService_ExecutionRequested;
         }
@@ -36,7 +37,7 @@ namespace GitLurker.UI.ViewModels
 
         #region Properties
 
-        public ObservableCollection<string> Lines { get; set; }
+        public ObservableCollection<ConsoleLine> Lines { get; set; }
 
         public int ExitCode
         {
@@ -67,13 +68,46 @@ namespace GitLurker.UI.ViewModels
             _consoleService.ExecutionRequested -= ConsoleService_ExecutionRequested;
         }
 
+        private static bool IsLineInError(string line)
+        {
+            if (line.StartsWith("conflict", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return true;
+            }
+
+            if (line.EndsWith("needs merge", StringComparison.InvariantCultureIgnoreCase))
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         private void Repository_NewExitCode(object sender, int code)
         {
             IsLoading = false;
             OnExecute?.Invoke(this, false);
         }
 
-        private void Repository_NewProcessMessage(object sender, string e) => Execute.OnUIThread(() => Lines.Add(e));
+        private void Repository_NewProcessMessage(object sender, string e)
+        {
+            if (string.IsNullOrEmpty(e))
+            {
+                return;
+            }
+
+            var consoleLine = new ConsoleLine
+            {
+                Line = e,
+            };
+
+            if (IsLineInError(e))
+            {
+                consoleLine.IsError = true;
+            }
+
+            Execute.OnUIThread(() => Lines.Add(consoleLine));
+        }
 
         private void ConsoleService_ExecutionRequested(object sender, ProcessService process)
         {

@@ -70,10 +70,28 @@
                 </ListView.Style>
                 <ListView.ItemTemplate>
                     <DataTemplate>
-                        <Grid>
+                        <Grid x:Name="Main" Background="Transparent">
                             <TextBlock Text="{Binding}" Margin="15,5,30,5" VerticalAlignment="Center" FontSize="28" Background="Transparent"/>
-                            <Border x:Name="Rebase" cal:Message.Attach="[Event MouseUp] = [Action Rebase($dataContext)]" VerticalAlignment="Center" HorizontalAlignment="Right">
-                                <TextBlock>Rebase</TextBlock>
+                            <Border x:Name="Rebase" 
+                                    cal:Message.Attach="[Event MouseUp] = [Action Rebase($dataContext)]" 
+                                    VerticalAlignment="Center" 
+                                    HorizontalAlignment="Right"
+                                    Background="Transparent"
+                                    Padding="5">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Visibility" Value="Collapsed"></Setter>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding ElementName=Main, Path=IsMouseOver}" Value="True">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </DataTrigger>
+                                            <Trigger Property="IsMouseOver" Value="True">
+                                                <Setter Property="Visibility" Value="Visible" />
+                                            </Trigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+                                <iconPacks:PackIconMaterial Kind="Merge" Height="18" Width="18" Foreground="{DynamicResource Brushes.Secondary}"/>
                             </Border>
                         </Grid>
                     </DataTemplate>
