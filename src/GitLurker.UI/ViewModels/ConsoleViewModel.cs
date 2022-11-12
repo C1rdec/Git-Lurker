@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using Caliburn.Micro;
+using GitLurker.Models;
 using GitLurker.Services;
 using GitLurker.UI.Models;
 using GitLurker.UI.Services;
@@ -89,19 +90,20 @@ namespace GitLurker.UI.ViewModels
             OnExecute?.Invoke(this, false);
         }
 
-        private void Repository_NewProcessMessage(object sender, string e)
+        private void Repository_NewProcessMessage(object sender, CLIEvent e)
         {
-            if (string.IsNullOrEmpty(e))
+            if (string.IsNullOrEmpty(e.Text))
             {
                 return;
             }
 
             var consoleLine = new ConsoleLine
             {
-                Line = e,
+                Line = e.Text,
+                IsError = e.IsError,
             };
 
-            if (IsLineInError(e))
+            if (IsLineInError(e.Text))
             {
                 consoleLine.IsError = true;
             }

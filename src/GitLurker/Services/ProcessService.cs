@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
+using CliWrap.EventStream;
 using GitLurker.Models;
 
 namespace GitLurker.Services
@@ -26,7 +27,7 @@ namespace GitLurker.Services
 
         #region Events
 
-        public event EventHandler<string> NewProcessMessage;
+        public event EventHandler<CLIEvent> NewProcessMessage;
 
         public event EventHandler<int> NewExitCode;
 
@@ -34,13 +35,14 @@ namespace GitLurker.Services
 
         #region Methods
 
-        public Task<ExecutionResult> ExecuteCommandAsync(string command) => ExecuteCommandAsync(command, false);
+        public Task<ExecutionResult> ExecuteCommandAsync(string arguments) => ExecuteCommandAsync(arguments, false);
 
-        public Task<ExecutionResult> ExecuteCommandAsync(string command, string workingDirectory) => ExecuteCommandAsync(command, false, workingDirectory);
+        public Task<ExecutionResult> ExecuteCommandAsync(string arguments, string workingDirectory) => ExecuteCommandAsync(arguments, false, workingDirectory);
 
-        public Task<ExecutionResult> ExecuteCommandAsync(string command, bool listen) => ExecuteCommandAsync(command, listen, _folder);
+        public Task<ExecutionResult> ExecuteCommandAsync(string arguments, bool listen) => ExecuteCommandAsync(arguments, listen, _folder);
 
-        public Task<ExecutionResult> ExecuteCommandAsync(string command, bool listen, string workingDirectory)
+
+        public Task<ExecutionResult> ExecuteCommandAsync(string arguments, bool listen, string workingDirectory)
         {
             if (!string.IsNullOrEmpty(_folder) && !Directory.Exists(_folder))
             {
@@ -54,49 +56,41 @@ namespace GitLurker.Services
 
             var taskCompletionSource = new TaskCompletionSource<ExecutionResult>();
             var data = new List<string>();
-            var process = new Process()
-            {
-                StartInfo = new ProcessStartInfo()
-                {
-                    WorkingDirectory = workingDirectory,
-                    WindowStyle = ProcessWindowStyle.Hidden,
-                    CreateNoWindow = true,
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    FileName = "cmd.exe",
-                    Arguments = $"/C {command}",
-                },
-            };
 
-            DataReceivedEventHandler handler = default;
-            handler = (s, a) =>
-            {
-                data.Add(a.Data);
+            var command = CliWrap.Cli
+                .Wrap("cmd.exe")
+                .WithWorkingDirectory(workingDirectory)
+                .WithArguments($"/C {arguments}");
 
-                if (listen && a.Data != null)
+
+            _ = Task.Run(async () =>
+            {
+                await foreach (var cmdEvent in command.ListenAsync())
                 {
-                    NewProcessMessage?.Invoke(this, a.Data);
+                    switch (cmdEvent)
+                    {
+                        case StandardErrorCommandEvent error:
+                            HandleProcessMessage(error.Text, true, data, listen);
+                            break;
+                        case StandardOutputCommandEvent standard:
+                            HandleProcessMessage(standard.Text, false, data, listen);
+                            break;
+                        case ExitedCommandEvent exit:
+                            if (listen)
+                            {
+                                NewExitCode?.Invoke(this, exit.ExitCode);
+                            }
+
+                            taskCompletionSource.SetResult(new ExecutionResult()
+                            {
+                                Output = data,
+                                ExitCode = exit.ExitCode,
+                            });
+                            break;
+                    }
                 }
-            };
-
-            process.OutputDataReceived += handler;
-
-            process.Start();
-            process.BeginOutputReadLine();
-            Task.Run(() => process.WaitForExit()).ContinueWith(t => 
-            {
-                process.OutputDataReceived -= handler;
-                if (listen)
-                {
-                    NewExitCode?.Invoke(this, process.ExitCode);
-                }
-
-                taskCompletionSource.SetResult(new ExecutionResult()
-                {
-                    Output = data,
-                    ExitCode = process.ExitCode,
-                });
             });
+            
 
             return taskCompletionSource.Task;
         }
@@ -130,6 +124,20 @@ namespace GitLurker.Services
                     UseShellExecute = true,
                 }
             }.Start();
+        }
+
+        private void HandleProcessMessage(string text, bool isError, List<string> data, bool listen)
+        {
+            data.Add(text);
+
+            if (listen && text != null)
+            {
+                NewProcessMessage?.Invoke(this, new CLIEvent()
+                {
+                    Text = text,
+                    IsError = isError,
+                });
+            }
         }
 
         #endregion
