@@ -70,7 +70,7 @@ namespace GitLurker.Services
                     switch (cmdEvent)
                     {
                         case StandardErrorCommandEvent error:
-                            HandleProcessMessage(error.Text, true, data, listen);
+                            HandleProcessMessage(error.Text, false, data, listen);
                             break;
                         case StandardOutputCommandEvent standard:
                             HandleProcessMessage(standard.Text, false, data, listen);
