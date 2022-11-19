@@ -25,6 +25,7 @@
         private static readonly string DefaultWaterMark = "Search";
         private Window _parent;
         private SettingsFile _settingsFile;
+        private ThemeService _themeService;
         private KeyboardService _keyboardService;
         private RepositoryService _repositoryService;
         private ConsoleService _consoleService;
@@ -83,6 +84,7 @@
             _settingsFile = settings;
             _updateManager = updateManager;
             _debouncer = new DebounceService(false);
+            _themeService = themeService;
 
             _updateManager.UpdateRequested += UpdateManager_UpdateRequested;
             _settingsFile.OnFileSaved += OnSettingsSave;
@@ -111,7 +113,7 @@
 
             SetGlobalHotkey();
             _eventAggregator.SubscribeOnPublishedThread(this);
-            themeService.Apply();
+            _themeService.Apply();
         }
 
         #endregion
@@ -395,10 +397,14 @@
 
                 if (ItemListViewModel is WorkspaceViewModel)
                 {
+                    var steamSettings = new SteamSettingsFile();
+                    steamSettings.Initialize();
+                    _themeService.Apply(steamSettings.Entity.Scheme);
                     ItemListViewModel = _steamLibraryViewModel;
                 }
                 else
                 {
+                    _themeService.Apply();
                     ItemListViewModel = _workspaceViewModel;
                 }
 
