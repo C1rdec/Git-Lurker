@@ -49,6 +49,8 @@ namespace GitLurker.Models
 
         public bool IsAdmin { get; set; }
 
+        public bool SteamEnabled { get; set; }
+
         public Scheme Scheme { get; set; }
 
         public CurrentOperation RebaseOperation { get; set; }

@@ -393,6 +393,11 @@
         {
             if (_debouncer.HasTimer)
             {
+                if (!_settingsFile.Entity.SteamEnabled)
+                {
+                    return;
+                }
+
                 _debouncer.Reset();
 
                 if (ItemListViewModel is WorkspaceViewModel)
