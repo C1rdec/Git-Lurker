@@ -20,6 +20,8 @@ namespace GitLurker.UI.ViewModels
 
         Task Open(bool skipModifier);
 
-        void OpenPullRequest();
+        void EnterLongPressed();
+
+        void NextTabPressed();
     }
 }

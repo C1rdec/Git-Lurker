@@ -96,7 +96,12 @@
             _version = $"{assemblyVersion.Major}.{assemblyVersion.Minor}.{assemblyVersion.Build}";
 
             _keyboardService.EnterPressed += KeyboardService_EnterPressed;
-            _workspaceViewModel = new WorkspaceViewModel(_keyboardService, _repositoryService, _consoleService);
+            _keyboardService.DownPressed += KeyboardService_DownPressed;
+            _keyboardService.UpPressed += KeyboardService_UpPressed;
+            _keyboardService.NextTabPressed += KeyboardService_NextTabPressed;
+            _keyboardService.EnterLongPressed += KeyboardService_EnterLongPressed;
+
+            _workspaceViewModel = new WorkspaceViewModel(_repositoryService, _consoleService);
             _steamLibraryViewModel = new SteamLibraryViewModel();
 
             // Remember last mode in settings
@@ -113,7 +118,7 @@
 
         #region Properties
 
-        public DoubleClickCommand ShowSettings => new DoubleClickCommand(OpenSettings);
+        public DoubleClickCommand ShowSettings => new (OpenSettings);
 
         public IItemListViewModel ItemListViewModel { get; private set; }
 
@@ -388,11 +393,6 @@
             {
                 _debouncer.Reset();
 
-                if (!_isVisible)
-                {
-                    return;
-                }
-
                 if (ItemListViewModel is WorkspaceViewModel)
                 {
                     ItemListViewModel = _steamLibraryViewModel;
@@ -404,6 +404,11 @@
 
                 ItemListViewModel.ShowRecent();
                 NotifyOfPropertyChange(() => ItemListViewModel);
+
+                if (!_isVisible)
+                {
+                    ShowWindow();
+                }
             }
             else
             {
@@ -416,14 +421,19 @@
                         return;
                     }
 
-                    HandleScreenPosition();
-                    ItemListViewModel?.ShowRecent();
-
-                    TopMost = true;
-                    IsVisible = true;
-                    FocusSearch();
+                    ShowWindow();
                 });
             }
+        }
+
+        private void ShowWindow()
+        {
+            HandleScreenPosition();
+            ItemListViewModel?.ShowRecent();
+
+            TopMost = true;
+            IsVisible = true;
+            FocusSearch();
         }
 
         private void FocusSearch() => DockingHelper.SetForeground(View, () =>
@@ -529,6 +539,18 @@
             HideWindow();
         }
 
+        private void KeyboardService_DownPressed(object sender, EventArgs e)
+            => ItemListViewModel.MoveDown();
+
+        private void KeyboardService_UpPressed(object sender, EventArgs e)
+            => ItemListViewModel.MoveUp();
+
+        private void KeyboardService_NextTabPressed(object sender, EventArgs e)
+            => ItemListViewModel.NextTabPressed();
+
+        private void KeyboardService_EnterLongPressed(object sender, EventArgs e)
+            => ItemListViewModel.EnterLongPressed();
+        
         public void Dispose()
         {
             _console.OnExecute -= Console_OnExecute;
@@ -537,6 +559,10 @@
             _console?.Dispose();
 
             _keyboardService.EnterPressed -= KeyboardService_EnterPressed;
+            _keyboardService.DownPressed -= KeyboardService_DownPressed;
+            _keyboardService.UpPressed -= KeyboardService_UpPressed;
+            _keyboardService.NextTabPressed -= KeyboardService_NextTabPressed;
+            _keyboardService.EnterLongPressed -= KeyboardService_EnterLongPressed;
             _keyboardService?.Dispose();
         }
 

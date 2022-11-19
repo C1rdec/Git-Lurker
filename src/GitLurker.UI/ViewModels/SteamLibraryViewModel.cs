@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Caliburn.Micro;
+using GitLurker.Models;
 using SteamLurker.Models;
 using SteamLurker.Services;
 
@@ -38,17 +39,22 @@ namespace GitLurker.UI.ViewModels
             private set
             {
                 _selectedGameViewModel = value;
-                NotifyOfPropertyChange(() => HasSelectedRepo);
+                NotifyOfPropertyChange(() => HasSelectedGame);
             }
         }
 
-        public bool HasSelectedRepo => SelectedGameViewModel != null || _mouseOver;
+        public bool HasSelectedGame => SelectedGameViewModel != null || _mouseOver;
 
 
         #endregion
 
-        public void Clear()
-            => Execute.OnUIThread(() => GameViewModels.Clear());
+        #region Methods
+
+        public void Clear() 
+        {
+            SelectedGameViewModel = null;
+            Execute.OnUIThread(() => GameViewModels.Clear());
+        }
 
         public bool Close()
         {
@@ -56,26 +62,67 @@ namespace GitLurker.UI.ViewModels
             return true;
         }
 
-        public void MoveDown()
+        public void EnterLongPressed()
         {
             return;
-
         }
 
         public void MoveUp()
         {
-            return;
+            if (SelectedGameViewModel == null)
+            {
+                return;
+            }
 
+            SelectedGameViewModel = _gameViewModels.FirstOrDefault(g => g.Id == SelectedGameViewModel.Id);
+            var index = _gameViewModels.IndexOf(SelectedGameViewModel);
+            if (index <= 0)
+            {
+                return;
+            }
+
+            index--;
+            SelectedGameViewModel.IsSelected = false;
+            SelectedGameViewModel = _gameViewModels.ElementAt(index);
+            SelectedGameViewModel.IsSelected = true;
         }
 
-        public async Task Open(bool skipModifier)
+        public void MoveDown()
+        {
+            if (SelectedGameViewModel == null)
+            {
+                SelectedGameViewModel = _gameViewModels.FirstOrDefault();
+                if (SelectedGameViewModel != null)
+                {
+                    SelectedGameViewModel.IsSelected = true;
+                }
+
+                return;
+            }
+
+            SelectedGameViewModel = _gameViewModels.FirstOrDefault(g => g.Id == SelectedGameViewModel.Id);
+
+            var index = _gameViewModels.IndexOf(SelectedGameViewModel);
+            if (index == -1 || (index + 1) >= _gameViewModels.Count)
+            {
+                return;
+            }
+
+            index++;
+            SelectedGameViewModel.IsSelected = false;
+            SelectedGameViewModel = _gameViewModels.ElementAt(index);
+            SelectedGameViewModel.IsSelected = true;
+        }
+
+        public void NextTabPressed()
+        {
+            return;
+        }
+
+        public Task Open(bool skipModifier)
         {
             ExecuteOnGame((g) => g.Open());
-        }
-
-        public void OpenPullRequest()
-        {
-            return;
+            return Task.CompletedTask;
         }
 
         public Task RefreshItems()
@@ -107,6 +154,8 @@ namespace GitLurker.UI.ViewModels
 
         public async void ShowRecent()
         {
+            Clear();
+
             if (!_initialize)
             {
                 await _steamService.InitializeAsync();
@@ -114,6 +163,32 @@ namespace GitLurker.UI.ViewModels
             }
 
             _games = _steamService.FindGames();
+
+            var settings = new SteamSettingsFile();
+            settings.Initialize();
+
+            foreach (var gameId in settings.Entity.RecentGameIds)
+            {
+                var game = _games.FirstOrDefault(g => g.Id == gameId);
+                if (game == null)
+                {
+                    continue;
+                }
+
+                Execute.OnUIThread(() => _gameViewModels.Add(new SteamGameViewModel(game)));
+            }
+        }
+
+        public void OnMouseEnter()
+        {
+            _mouseOver = true;
+            NotifyOfPropertyChange(() => HasSelectedGame);
+        }
+
+        public void OnMouseLeave()
+        {
+            _mouseOver = false;
+            NotifyOfPropertyChange(() => HasSelectedGame);
         }
 
         private void ExecuteOnGame(System.Action<SteamGameViewModel> action)
@@ -130,5 +205,7 @@ namespace GitLurker.UI.ViewModels
                 action(firstGame);
             }
         }
+
+        #endregion
     }
 }

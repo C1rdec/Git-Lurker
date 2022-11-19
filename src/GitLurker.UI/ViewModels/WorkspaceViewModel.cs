@@ -15,7 +15,6 @@
     {
         #region Fields
 
-        private KeyboardService _keyboardService;
         private RepositoryService _repositoryService;
         private ConsoleService _consoleService;
         private ObservableCollection<RepositoryViewModel> _repos;
@@ -27,17 +26,11 @@
 
         #region Constructors
 
-        public WorkspaceViewModel(KeyboardService keyboardService, RepositoryService repositoryService, ConsoleService consoleService)
+        public WorkspaceViewModel(RepositoryService repositoryService, ConsoleService consoleService)
         {
             _repos = new ObservableCollection<RepositoryViewModel>();
-            _keyboardService = keyboardService;
             _repositoryService = repositoryService;
             _consoleService = consoleService;
-
-            _keyboardService.DownPressed += KeyboardService_DownPressed;
-            _keyboardService.UpPressed += KeyboardService_UpPressed;
-            _keyboardService.NextTabPressed += KeyboardService_NextTabPressed;
-            _keyboardService.EnterLongPressed += KeyboardService_EnterLongPressed;
         }
 
         #endregion
@@ -97,13 +90,16 @@
             return;
         }
 
-        public void OpenPullRequest()
-            => ExecuteOnRepo((r) => r.OpenPullRequest());
-
         public void MoveUp()
         {
             if (SelectedRepo == null)
             {
+                return;
+            }
+
+            if (SelectedRepo.IsBranchManagerOpen)
+            {
+                SelectedRepo.SelectPreviousBranch();
                 return;
             }
 
@@ -120,9 +116,6 @@
         }
 
         public void MoveDown()
-            => MoveDown(false);
-
-        public void MoveDown(bool selectFirst)
         {
             if (SelectedRepo == null)
             {
@@ -131,16 +124,15 @@
                 return;
             }
 
+            if (SelectedRepo.IsBranchManagerOpen)
+            {
+                SelectedRepo.SelectNextBranch();
+                return;
+            }
+
             var index = _repos.IndexOf(_selectedRepo);
             if (index == -1 || (index + 1) >= _repos.Count)
             {
-                if (selectFirst)
-                {
-                    SelectedRepo.UnSelect();
-                    SelectedRepo = _repos.FirstOrDefault();
-                    SelectedRepo.Select();
-                }
-
                 return;
             }
 
@@ -234,32 +226,14 @@
 
         private void KeyboardService_DownPressed(object sender, System.EventArgs e)
         {
-            if (SelectedRepo != null && SelectedRepo.IsBranchManagerOpen)
-            {
-                SelectedRepo.SelectNextBranch();
-                return;
-            }
+            
 
             MoveDown();
         }
 
-        private void KeyboardService_UpPressed(object sender, System.EventArgs e) 
+        public void NextTabPressed() 
         {
-            if (SelectedRepo != null && SelectedRepo.IsBranchManagerOpen)
-            {
-                SelectedRepo.SelectPreviousBranch();
-                return;
-            }
-
-            MoveUp(); 
-        }
-
-        private void KeyboardService_NextTabPressed(object sender, System.EventArgs e) 
-        {
-            if (SelectedRepo == null)
-            {
-                SelectedRepo = _repos.FirstOrDefault();
-            }
+            SelectedRepo ??= _repos.FirstOrDefault();
 
             if (SelectedRepo == null)
             {
@@ -278,9 +252,6 @@
             }
         }
 
-        private void KeyboardService_EnterLongPressed(object sender, EventArgs e)
-            => OpenPullRequest();
-
         private void ExecuteOnRepo(System.Action<RepositoryViewModel> action)
         {
             if (SelectedRepo != null)
@@ -295,6 +266,9 @@
                 action(firstRepo);
             }
         }
+
+        public void EnterLongPressed()
+            => ExecuteOnRepo((r) => r.OpenPullRequest());
 
         #endregion
     }

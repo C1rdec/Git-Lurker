@@ -4,9 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:GitLurker.UI.Views"
+             xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+    <Grid cal:Message.Attach="[Event MouseEnter] = [Action OnMouseEnter()]; [Event MouseLeave] = [Action OnMouseLeave()]">
         <Grid.Style>
             <Style TargetType="Grid">
                 <Setter Property="OpacityMask">
@@ -20,7 +21,7 @@
                     </Setter.Value>
                 </Setter>
                 <Style.Triggers>
-                    <DataTrigger Binding="{Binding HasSelectedRepo}" Value="true">
+                    <DataTrigger Binding="{Binding HasSelectedGame}" Value="true">
                         <Setter Property="OpacityMask">
                             <Setter.Value>
                                 <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">

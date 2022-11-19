@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Windows.Media.Imaging;
 using Caliburn.Micro;
+using GitLurker.Models;
 using SteamLurker.Models;
 
 namespace GitLurker.UI.ViewModels
@@ -10,6 +11,7 @@ namespace GitLurker.UI.ViewModels
         #region Fields
 
         private SteamGame _game;
+        private bool _isSelected;
 
         #endregion
 
@@ -23,6 +25,8 @@ namespace GitLurker.UI.ViewModels
         #endregion
 
         #region Properties
+
+        public string Id => _game.Id;
 
         public BitmapImage IconSource
         {
@@ -45,11 +49,28 @@ namespace GitLurker.UI.ViewModels
 
         public string GameName => _game.Name;
 
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set
+            {
+                _isSelected = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
         #endregion
 
         #region Methods
 
-        public void Open() => _game.Open();
+        public void Open()
+        {
+            var settings = new SteamSettingsFile();
+            settings.Initialize();
+            settings.AddRecent(_game.Id);
+
+            _game.Open();
+        }
 
         #endregion
     }
