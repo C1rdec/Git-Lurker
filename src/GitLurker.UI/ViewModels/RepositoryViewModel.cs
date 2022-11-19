@@ -12,7 +12,7 @@
     using GitLurker.UI.Services;
     using MahApps.Metro.IconPacks;
 
-    public class RepositoryViewModel : Screen
+    public class RepositoryViewModel : ItemViewModelBase
     {
         #region Fields
 
@@ -23,7 +23,6 @@
         private PopupService _popupService;
         private ConsoleService _consoleService;
         private Repository _repo;
-        private bool _isSelected;
         private IEventAggregator _aggregator;
         private string _branchName;
         private bool _busy;
@@ -90,25 +89,6 @@
             set
             {
                 _operationInProgress = value;
-                NotifyOfPropertyChange();
-            }
-        }
-
-        public bool IsSelected
-        {
-            get => _isSelected;
-            set
-            {
-                _isSelected = value;
-                if (value)
-                {
-                    BranchName = _repo.GetCurrentBranchName();
-                }
-                else
-                {
-                    BranchName = string.Empty;
-                }
-
                 NotifyOfPropertyChange();
             }
         }
@@ -305,7 +285,7 @@
 
         public void OnMouseLeave()
         {
-            if (!_isSelected)
+            if (!IsSelected)
             {
                 BranchName = string.Empty;
             }
@@ -332,12 +312,14 @@
         public void Select()
         {
             IsSelected = true;
+            BranchName = _repo.GetCurrentBranchName();
         }
 
         public void UnSelect()
         {
             IsSelected = false;
             IsBranchManagerOpen = false;
+            BranchName = string.Empty;
         }
 
         public void SelectNextBranch()

@@ -34,15 +34,18 @@ namespace GitLurker.UI.Services
         #region Methods
 
         public void Apply()
+            => Apply(_settingsService.Entity.Scheme);
+
+        public void Apply(Scheme scheme)
         {
-            ControlzEx.Theming.ThemeManager.Current.ChangeTheme(_application, $"{Theme.Dark}.{_settingsService.Entity.Scheme}");
+            ControlzEx.Theming.ThemeManager.Current.ChangeTheme(_application, $"{Theme.Dark}.{scheme}");
         }
 
         public void Change(Theme theme, Scheme scheme)
         {
             _settingsService.Entity.Scheme = scheme;
             _settingsService.Save();
-            ControlzEx.Theming.ThemeManager.Current.ChangeTheme(_application, $"{Theme.Dark}.{scheme}");
+            ControlzEx.Theming.ThemeManager.Current.ChangeTheme(_application, $"{theme}.{scheme}");
         }
 
         public IEnumerable<Scheme> GetSchemes() => GetEnumValues<Scheme>();

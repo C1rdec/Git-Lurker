@@ -177,6 +177,16 @@ namespace GitLurker.UI.ViewModels
             }
         }
 
+        public bool IsSteamEnabled
+        {
+            get => _settingsFile.Entity.SteamEnabled;
+            set
+            {
+                _settingsFile.Entity.SteamEnabled = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
         public bool AddToStartMenu
         {
             get => _settingsFile.Entity.AddToStartMenu;
@@ -250,6 +260,14 @@ namespace GitLurker.UI.ViewModels
                 _windowsStartupService.RemoveStartWithWindows();
             }
 
+            Save();
+        }
+
+        public void ToggleSteam()
+        {
+            IsSteamEnabled = !IsSteamEnabled;
+
+            _settingsFile.Entity.SteamEnabled = IsSteamEnabled;
             Save();
         }
 

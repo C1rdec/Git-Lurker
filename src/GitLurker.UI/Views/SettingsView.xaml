@@ -10,7 +10,7 @@
                  Title="Settings"
                  Icon="pack://application:,,,/Resources/GitLurker.ico"
                  Dialog:DialogParticipation.Register="{Binding}"
-                 MinWidth="350" MinHeight="300" Width="500" Height="300">
+                 MinWidth="550" MinHeight="300" Width="550" Height="300">
     <mah:MetroWindow.IconTemplate>
         <DataTemplate>
             <Image Margin="4"
@@ -296,6 +296,42 @@
                                                 HorizontalAlignment="Center" 
                                                 VerticalAlignment="Center"/>
                             <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0">Admin</TextBlock>
+                        </StackPanel>
+                    </Border>
+                    <Border x:Name="Steam"
+                            CornerRadius="15"
+                            Height="45"
+                            Margin="0,10,10,0"
+                            HorizontalAlignment="Center"
+                            cal:Message.Attach="[Event MouseDown] = [Action ToggleSteam]"
+                            Cursor="Hand">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Opacity" Value="0.25"></Setter>
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <SolidColorBrush Color="White" Opacity="0.05"></SolidColorBrush>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <SolidColorBrush Color="White" Opacity="0.15"></SolidColorBrush>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                    <DataTrigger Binding="{Binding IsSteamEnabled}" Value="True">
+                                        <Setter Property="Opacity" Value="1"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="10,0,10,0">
+                            <iconPacks:PackIconSimpleIcons Kind="Steam"
+                                                HorizontalAlignment="Center" 
+                                                VerticalAlignment="Center"/>
+                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,0,0">Steam</TextBlock>
                         </StackPanel>
                     </Border>
                 </WrapPanel>

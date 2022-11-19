@@ -45,7 +45,7 @@ namespace GitLurker.Services
         public KeyboardService(bool enableWASD)
         {
             _enableWASD = enableWASD;
-            _debounceService = new DebounceService(false);
+            _debounceService = new DebounceService();
         }
 
         #endregion
