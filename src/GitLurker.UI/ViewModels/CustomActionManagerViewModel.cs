@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Linq;
 using Caliburn.Micro;
 using GitLurker.Models;
 using GitLurker.UI.Services;
