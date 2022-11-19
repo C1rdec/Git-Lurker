@@ -154,17 +154,18 @@ namespace GitLurker.UI.ViewModels
         public async void ShowRecent()
         {
             Clear();
+            var settings = new SteamSettingsFile();
+            settings.Initialize();
 
             if (!_initialize)
             {
-                await _steamService.InitializeAsync();
+                var path = await _steamService.InitializeAsync(settings.Entity.SteamExePath);
+
+                settings.SetSteamExePath(path);
                 _initialize = true;
             }
 
             _games = _steamService.FindGames();
-
-            var settings = new SteamSettingsFile();
-            settings.Initialize();
 
             foreach (var gameId in settings.Entity.RecentGameIds)
             {

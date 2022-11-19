@@ -53,6 +53,12 @@ namespace GitLurker.Models
             Save();
         }
 
+        public void SetSteamExePath(string path)
+        {
+            Entity.SteamExePath = path;
+            Save();
+        }
+
         #endregion
     }
 }

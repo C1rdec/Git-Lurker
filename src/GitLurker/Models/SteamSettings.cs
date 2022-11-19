@@ -20,6 +20,8 @@ namespace GitLurker.Models
 
         public Scheme Scheme { get; set; }
 
+        public string SteamExePath { get; set; }
+
         #endregion
     }
 }
