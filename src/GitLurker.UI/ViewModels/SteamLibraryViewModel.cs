@@ -45,7 +45,6 @@ namespace GitLurker.UI.ViewModels
 
         public bool HasSelectedGame => SelectedGameViewModel != null || _mouseOver;
 
-
         #endregion
 
         #region Methods

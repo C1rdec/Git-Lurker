@@ -1,17 +1,15 @@
 ﻿using System.IO;
 using System.Windows.Media.Imaging;
-using Caliburn.Micro;
 using GitLurker.Models;
 using SteamLurker.Models;
 
 namespace GitLurker.UI.ViewModels
 {
-    public class SteamGameViewModel : PropertyChangedBase
+    public class SteamGameViewModel : ItemViewModelBase
     {
         #region Fields
 
         private SteamGame _game;
-        private bool _isSelected;
 
         #endregion
 
@@ -48,16 +46,6 @@ namespace GitLurker.UI.ViewModels
         }
 
         public string GameName => _game.Name;
-
-        public bool IsSelected
-        {
-            get => _isSelected;
-            set
-            {
-                _isSelected = value;
-                NotifyOfPropertyChange();
-            }
-        }
 
         #endregion
 
