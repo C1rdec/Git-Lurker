@@ -27,15 +27,16 @@ namespace GitLurker.Services
 
         #endregion
 
+        #region Properties
+
+        public bool HasTimer => _timer != null;
+
+        #endregion
+
         #region Methods
 
         public void Debounce(int interval, Action action)
         {
-            if (_timer != null)
-            {
-                return;
-            }
-
             _timer?.Stop();
             _timer = null;
 

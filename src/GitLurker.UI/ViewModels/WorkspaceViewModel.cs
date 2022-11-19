@@ -11,7 +11,7 @@
     using GitLurker.Services;
     using GitLurker.UI.Services;
 
-    public class WorkspaceViewModel: PropertyChangedBase
+    public class WorkspaceViewModel: PropertyChangedBase, IItemListViewModel
     {
         #region Fields
 
@@ -38,7 +38,6 @@
             _keyboardService.UpPressed += KeyboardService_UpPressed;
             _keyboardService.NextTabPressed += KeyboardService_NextTabPressed;
             _keyboardService.EnterLongPressed += KeyboardService_EnterLongPressed;
-            _keyboardService.EnterPressed += KeyboardService_EnterPressed;
         }
 
         #endregion
@@ -184,7 +183,7 @@
         public void Clear()
         {
             SelectedRepo = null;
-            _repos.Clear();
+            Execute.OnUIThread(() => _repos.Clear());
         }
 
         public bool Close()
@@ -227,7 +226,7 @@
             }
         }
 
-        public async Task RefreshRepositories()
+        public async Task RefreshItems()
         {
             await Task.Run(() => _repositoryService.GetWorkspaces());
             _repos.Clear();
@@ -278,9 +277,6 @@
                 SelectedRepo.ShowBranches(false);
             }
         }
-
-        private async void KeyboardService_EnterPressed(object sender, EventArgs e)
-            => await Open(false);
 
         private void KeyboardService_EnterLongPressed(object sender, EventArgs e)
             => OpenPullRequest();

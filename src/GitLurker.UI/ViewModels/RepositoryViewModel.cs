@@ -12,7 +12,7 @@
     using GitLurker.UI.Services;
     using MahApps.Metro.IconPacks;
 
-    public class RepositoryViewModel : Screen
+    public class RepositoryViewModel : PropertyChangedBase
     {
         #region Fields
 
