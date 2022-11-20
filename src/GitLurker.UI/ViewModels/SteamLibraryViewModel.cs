@@ -126,6 +126,8 @@ namespace GitLurker.UI.ViewModels
 
         public Task RefreshItems()
         {
+            _games = _steamService.FindGames();
+
             return Task.CompletedTask;
         }
 
@@ -162,10 +164,9 @@ namespace GitLurker.UI.ViewModels
                 var path = await _steamService.InitializeAsync(settings.Entity.SteamExePath);
 
                 settings.SetSteamExePath(path);
+                _games = _steamService.FindGames();
                 _initialize = true;
             }
-
-            _games = _steamService.FindGames();
 
             foreach (var gameId in settings.Entity.RecentGameIds)
             {
