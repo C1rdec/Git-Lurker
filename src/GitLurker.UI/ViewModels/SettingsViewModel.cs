@@ -28,6 +28,7 @@ namespace GitLurker.UI.ViewModels
 
         private CurrentOperation _selectedOperation;
         private SettingsFile _settingsFile;
+        private SteamSettingsFile _steamSettingsFile;
         private WindowsLink _windowsStartupService;
         private FlyoutService _flyoutService;
         private RepositoryService _repositoryService;
@@ -55,6 +56,9 @@ namespace GitLurker.UI.ViewModels
             _windowsStartupService = windowsLink;
             _settingsFile = settingsFile;
             _settingsFile.Initialize();
+
+            _steamSettingsFile = new SteamSettingsFile();
+            _steamSettingsFile.Initialize();
 
             RepoManager = new RepoManagerViewModel(_settingsFile);
             Hotkey = new HotkeyViewModel(_settingsFile.Entity.HotKey, Save);
@@ -87,6 +91,8 @@ namespace GitLurker.UI.ViewModels
 
         public IEnumerable<Scheme> Schemes => _themeService.GetSchemes();
 
+        public IEnumerable<Scheme> SteamSchemes => _themeService.GetSchemes();
+
         public CurrentOperation SelectedOperation
         {
             get => _selectedOperation;
@@ -116,6 +122,20 @@ namespace GitLurker.UI.ViewModels
                 {
                     _themeService.Change(Theme.Dark, value);
                     _settingsFile.Entity.Scheme = value;
+                    NotifyOfPropertyChange();
+                }
+            }
+        }
+
+        public Scheme SelectedSteamScheme
+        {
+            get => _steamSettingsFile.Entity.Scheme;
+            set
+            {
+                if (_steamSettingsFile.Entity.Scheme != value)
+                {
+                    _steamSettingsFile.Entity.Scheme = value;
+                    _steamSettingsFile.Save();
                     NotifyOfPropertyChange();
                 }
             }

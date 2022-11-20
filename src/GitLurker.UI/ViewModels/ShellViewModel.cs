@@ -423,7 +423,7 @@
             }
             else
             {
-                _debouncer.Debounce(150, () =>
+                _debouncer.Debounce(175, () =>
                 {
                     Debug.WriteLine("Toggle");
                     if (IsVisible)
