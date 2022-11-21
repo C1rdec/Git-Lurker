@@ -208,7 +208,7 @@
                 var repo = _repositoryService.GetReposiotry(folder);
                 if (repo != null)
                 {
-                    Repos.Add(new RepositoryViewModel(repo));
+                    Execute.OnUIThread(() => Repos.Add(new RepositoryViewModel(repo)));
                 }
             }
 
