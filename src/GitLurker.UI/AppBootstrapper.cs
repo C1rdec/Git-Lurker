@@ -15,6 +15,7 @@
     {
         #region Fields
 
+        private static readonly NLog.Logger Logger = NLog.LogManager.GetCurrentClassLogger();
         private SimpleContainer _container;
 
         #endregion
@@ -26,6 +27,7 @@
         /// </summary>
         public AppBootstrapper()
         {
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
             Initialize();
         }
 
@@ -140,6 +142,12 @@
             }
 
             return null;
+        }
+
+        private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            var exception = e.ExceptionObject as Exception;
+            Logger.Error(exception, exception.Message);
         }
 
         #endregion

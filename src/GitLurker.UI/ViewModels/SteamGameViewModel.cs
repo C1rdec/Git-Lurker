@@ -30,17 +30,24 @@ namespace GitLurker.UI.ViewModels
         {
             get
             {
-                using (MemoryStream memory = new MemoryStream())
+                try
                 {
-                    _game.GetIcon().Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
-                    memory.Position = 0;
-                    BitmapImage bitmapimage = new BitmapImage();
-                    bitmapimage.BeginInit();
-                    bitmapimage.StreamSource = memory;
-                    bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
-                    bitmapimage.EndInit();
+                    using (MemoryStream memory = new MemoryStream())
+                    {
+                        _game.GetIcon().Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
+                        memory.Position = 0;
+                        BitmapImage bitmapimage = new BitmapImage();
+                        bitmapimage.BeginInit();
+                        bitmapimage.StreamSource = memory;
+                        bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
+                        bitmapimage.EndInit();
 
-                    return bitmapimage;
+                        return bitmapimage;
+                    }
+                }
+                catch
+                {
+                    return null;
                 }
             }
         }
