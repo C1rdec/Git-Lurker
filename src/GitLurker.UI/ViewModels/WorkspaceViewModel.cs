@@ -224,13 +224,6 @@
             _repos.Clear();
         }
 
-        private void KeyboardService_DownPressed(object sender, System.EventArgs e)
-        {
-            
-
-            MoveDown();
-        }
-
         public void NextTabPressed() 
         {
             SelectedRepo ??= _repos.FirstOrDefault();
@@ -252,6 +245,9 @@
             }
         }
 
+        public void EnterLongPressed()
+            => ExecuteOnRepo((r) => r.OpenPullRequest());
+
         private void ExecuteOnRepo(System.Action<RepositoryViewModel> action)
         {
             if (SelectedRepo != null)
@@ -266,9 +262,6 @@
                 action(firstRepo);
             }
         }
-
-        public void EnterLongPressed()
-            => ExecuteOnRepo((r) => r.OpenPullRequest());
 
         #endregion
     }

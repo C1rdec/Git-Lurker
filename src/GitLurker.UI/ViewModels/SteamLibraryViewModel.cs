@@ -125,11 +125,7 @@ namespace GitLurker.UI.ViewModels
         }
 
         public Task RefreshItems()
-        {
-            _games = _steamService.FindGames();
-
-            return Task.CompletedTask;
-        }
+            => Task.Run(() => _games = _steamService.FindGames());
 
         public void Search(string term)
         {
