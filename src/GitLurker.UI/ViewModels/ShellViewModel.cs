@@ -401,6 +401,7 @@
                 }
 
                 _debouncer.Reset();
+                SearchTerm = string.Empty;
 
                 if (ItemListViewModel is WorkspaceViewModel)
                 {
