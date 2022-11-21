@@ -41,7 +41,6 @@ namespace GitLurker.Services
 
         public Task<ExecutionResult> ExecuteCommandAsync(string arguments, bool listen) => ExecuteCommandAsync(arguments, listen, _folder);
 
-
         public Task<ExecutionResult> ExecuteCommandAsync(string arguments, bool listen, string workingDirectory)
         {
             if (!string.IsNullOrEmpty(_folder) && !Directory.Exists(_folder))

@@ -27,6 +27,7 @@ namespace GitLurker.UI.Services
         {
             await _repo.PullAsync();
             _ = _repo.ExecuteCommandAsync("dotnet run --project .\\src\\GitLurker.UI\\GitLurker.UI.csproj -c release");
+            await Task.Delay(800);
             Process.GetCurrentProcess().Kill();
         }
 

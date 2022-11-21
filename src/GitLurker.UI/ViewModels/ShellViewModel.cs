@@ -486,7 +486,6 @@
 
             SetHotkey(settings.Entity.HotKey, ToggleWindow, "Open");
             SetHotkey(settings.Entity.DevToysHotKey, OpenDevtoys, "OpenDevToys");
-            HotkeyManager.Current.AddOrReplace("OpenDial", Key.F12, ModifierKeys.Control | ModifierKeys.Shift, (s, e) => ToggleWindow());
         }
 
         private void SetHotkey(Hotkey hotkey, System.Action callback, string name)
