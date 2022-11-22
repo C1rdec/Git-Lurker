@@ -3,11 +3,11 @@
 namespace GitLurker.UI.Views
 {
     /// <summary>
-    /// Interaction logic for SteamLibraryView.xaml
+    /// Interaction logic for SteamGameView.xaml
     /// </summary>
-    public partial class SteamLibraryView : UserControl
+    public partial class GameView : UserControl
     {
-        public SteamLibraryView()
+        public GameView()
         {
             InitializeComponent();
         }

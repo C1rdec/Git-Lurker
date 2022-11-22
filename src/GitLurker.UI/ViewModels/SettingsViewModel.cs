@@ -28,7 +28,7 @@ namespace GitLurker.UI.ViewModels
 
         private CurrentOperation _selectedOperation;
         private SettingsFile _settingsFile;
-        private SteamSettingsFile _steamSettingsFile;
+        private GameSettingsFile _steamSettingsFile;
         private WindowsLink _windowsStartupService;
         private FlyoutService _flyoutService;
         private RepositoryService _repositoryService;
@@ -57,7 +57,7 @@ namespace GitLurker.UI.ViewModels
             _settingsFile = settingsFile;
             _settingsFile.Initialize();
 
-            _steamSettingsFile = new SteamSettingsFile();
+            _steamSettingsFile = new GameSettingsFile();
             _steamSettingsFile.Initialize();
 
             RepoManager = new RepoManagerViewModel(_settingsFile);

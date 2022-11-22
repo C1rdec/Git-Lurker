@@ -2,11 +2,11 @@
 
 namespace GitLurker.Models
 {
-    public class SteamSettings
+    public class GameSettings
     {
         #region Constructors
 
-        public SteamSettings()
+        public GameSettings()
         {
             RecentGameIds = new List<string>();
             Scheme = Scheme.Crimson;
@@ -21,6 +21,8 @@ namespace GitLurker.Models
         public Scheme Scheme { get; set; }
 
         public string SteamExePath { get; set; }
+
+        public string EpicExePath { get; set; }
 
         #endregion
     }

@@ -52,7 +52,7 @@
         private string _consoleHeader;
         private DebounceService _debouncer;
         private WorkspaceViewModel _workspaceViewModel;
-        private SteamLibraryViewModel _steamLibraryViewModel;
+        private GameLibraryViewModel _gameLibraryViewModel;
 
         #endregion
 
@@ -104,7 +104,7 @@
             _keyboardService.EnterLongPressed += KeyboardService_EnterLongPressed;
 
             _workspaceViewModel = new WorkspaceViewModel(_repositoryService, _consoleService);
-            _steamLibraryViewModel = new SteamLibraryViewModel();
+            _gameLibraryViewModel = new GameLibraryViewModel();
 
             // Remember last mode in settings
             ItemListViewModel = _workspaceViewModel;
@@ -405,10 +405,10 @@
 
                 if (ItemListViewModel is WorkspaceViewModel)
                 {
-                    var steamSettings = new SteamSettingsFile();
+                    var steamSettings = new GameSettingsFile();
                     steamSettings.Initialize();
                     _themeService.Apply(steamSettings.Entity.Scheme);
-                    ItemListViewModel = _steamLibraryViewModel;
+                    ItemListViewModel = _gameLibraryViewModel;
                 }
                 else
                 {

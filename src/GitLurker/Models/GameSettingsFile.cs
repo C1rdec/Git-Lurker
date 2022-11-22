@@ -2,7 +2,7 @@
 
 namespace GitLurker.Models
 {
-    public class SteamSettingsFile : AppDataFileBase<SteamSettings>
+    public class GameSettingsFile : AppDataFileBase<GameSettings>
     {
         #region Fields
 
@@ -12,7 +12,7 @@ namespace GitLurker.Models
 
         #region Properties
 
-        protected override string FileName => "Steam.json";
+        protected override string FileName => "Games.json";
 
         protected override string FolderName => "GitLurker";
 
@@ -56,6 +56,12 @@ namespace GitLurker.Models
         public void SetSteamExePath(string path)
         {
             Entity.SteamExePath = path;
+            Save();
+        }
+
+        public void SetEpicExePath(string path)
+        {
+            Entity.EpicExePath = path;
             Save();
         }
 

@@ -1,21 +1,21 @@
 ﻿using System.IO;
 using System.Windows.Media.Imaging;
 using GitLurker.Models;
-using Lurker.Steam.Models;
+using Lurker.Common.Models;
 
 namespace GitLurker.UI.ViewModels
 {
-    public class SteamGameViewModel : ItemViewModelBase
+    public class GameViewModel : ItemViewModelBase
     {
         #region Fields
 
-        private SteamGame _game;
+        private GameBase _game;
 
         #endregion
 
         #region Constructors
 
-        public SteamGameViewModel(SteamGame game)
+        public GameViewModel(GameBase game)
         {
             _game = game;
         }
@@ -54,13 +54,17 @@ namespace GitLurker.UI.ViewModels
 
         public string GameName => _game.Name;
 
+        public bool IsSteam => _game.Launcher == LauncherType.Steam;
+
+        public bool IsEpic => _game.Launcher == LauncherType.Epic;
+
         #endregion
 
         #region Methods
 
         public void Open()
         {
-            var settings = new SteamSettingsFile();
+            var settings = new GameSettingsFile();
             settings.Initialize();
             settings.AddRecent(_game.Id);
 
