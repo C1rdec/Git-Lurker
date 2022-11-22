@@ -39,6 +39,7 @@
             <iconPacks:PackIconSimpleIcons Visibility="{Binding IsEpic, Converter={StaticResource BooleanToVisibilityConverter}}"
                                            Margin="0,0,20,0" 
                                            VerticalAlignment="Center" 
+                                           Opacity="0.4"
                                            Kind="EpicGames" 
                                            Grid.Column="1" 
                                            Height="50" 
@@ -47,6 +48,7 @@
                                            Margin="0,0,20,0" 
                                            VerticalAlignment="Center" 
                                            Kind="Steam" 
+                                           Opacity="0.4"
                                            Grid.Column="1" 
                                            Height="50" 
                                            Width="50"/>
