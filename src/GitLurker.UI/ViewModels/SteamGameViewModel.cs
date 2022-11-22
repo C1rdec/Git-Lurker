@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Windows.Media.Imaging;
 using GitLurker.Models;
-using SteamLurker.Models;
+using Lurker.Steam.Models;
 
 namespace GitLurker.UI.ViewModels
 {

@@ -4,8 +4,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using GitLurker.Models;
-using SteamLurker.Models;
-using SteamLurker.Services;
+using Lurker.Steam.Models;
+using Lurker.Steam.Services;
 
 namespace GitLurker.UI.ViewModels
 {
