@@ -170,7 +170,7 @@ namespace GitLurker.UI.ViewModels
 
             if (!_initialize)
             {
-                var epicPath = await _epicService.InitializeAsync();
+                var epicPath = await _epicService.InitializeAsync(settings.Entity.EpicExePath);
                 settings.SetEpicExePath(epicPath);
 
                 var steamPath = await _steamService.InitializeAsync(settings.Entity.SteamExePath);
