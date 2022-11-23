@@ -171,13 +171,19 @@ namespace GitLurker.UI.ViewModels
             if (!_initialize)
             {
                 var epicPath = await _epicService.InitializeAsync(settings.Entity.EpicExePath);
-                settings.SetEpicExePath(epicPath);
+                if (!string.IsNullOrEmpty(epicPath))
+                {
+                    settings.SetEpicExePath(epicPath);
+                    _epicGames = _epicService.FindGames();
+                }
 
                 var steamPath = await _steamService.InitializeAsync(settings.Entity.SteamExePath);
-                settings.SetSteamExePath(steamPath);
+                if (!string.IsNullOrEmpty(steamPath))
+                {
+                    settings.SetSteamExePath(steamPath);
+                    _steamGames = _steamService.FindGames();
+                }
 
-                _epicGames = _epicService.FindGames();
-                _steamGames = _steamService.FindGames();
                 _initialize = true;
             }
 
