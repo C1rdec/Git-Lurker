@@ -546,10 +546,12 @@
             });
         }
 
-        private void KeyboardService_EnterPressed(object sender, EventArgs e)
+        private async void KeyboardService_EnterPressed(object sender, EventArgs e)
         {
-            ItemListViewModel.Open(false);
-            HideWindow();
+            if (await ItemListViewModel.Open(false))
+            {
+                HideWindow();
+            }
         }
 
         private void KeyboardService_DownPressed(object sender, EventArgs e)

@@ -59,16 +59,18 @@
 
         #region Methods
 
-        public async Task Open(bool skipModifier)
+        public async Task<bool> Open(bool skipModifier)
         {
             if (Uri.TryCreate(_lastSearchTerm, UriKind.Absolute, out var result))
             {
                 await CloneAsync(result);
 
-                return;
+                return false;
             }
 
             ExecuteOnRepo((r) => r.Open(skipModifier));
+
+            return true;
         }
 
         public async Task CloneAsync(Uri url)

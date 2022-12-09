@@ -127,10 +127,11 @@ namespace GitLurker.UI.ViewModels
             return;
         }
 
-        public Task Open(bool skipModifier)
+        public Task<bool> Open(bool skipModifier)
         {
             ExecuteOnGame((g) => g.Open());
-            return Task.CompletedTask;
+
+            return Task.FromResult(true);
         }
 
         public Task RefreshItems()

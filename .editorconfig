@@ -8,3 +8,6 @@ dotnet_diagnostic.IDE0022.severity = none
 
 # IDE0044: Add readonly modifier
 dotnet_diagnostic.IDE0044.severity = none
+
+# CS0067: The event 'DoubleClickCommand.CanExecuteChanged' is never used
+dotnet_diagnostic.CS0067.severity = silent

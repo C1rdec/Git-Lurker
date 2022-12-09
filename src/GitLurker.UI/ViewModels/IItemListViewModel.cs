@@ -18,7 +18,7 @@ namespace GitLurker.UI.ViewModels
 
         void MoveDown();
 
-        Task Open(bool skipModifier);
+        Task<bool> Open(bool skipModifier);
 
         void EnterLongPressed();
 
