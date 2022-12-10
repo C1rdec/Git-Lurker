@@ -172,17 +172,66 @@
                 </Border>
             </Grid>
             <ContentControl x:Name="ActionBar" HorizontalAlignment="Right"/>
+            <Border HorizontalAlignment="Right" 
+                    CornerRadius="4"
+                    VerticalAlignment="Top" 
+                    cal:Message.Attach="[Event MouseUp] = [Action GitStashPop()]"
+                    Visibility="{Binding HasStashes, Converter={StaticResource BooleanToVisibilityConverter}}" >
+                <Border.Style>
+                    <Style TargetType="Border">
+                        <Setter Property="Opacity" Value="0.5"></Setter>
+                        <Setter Property="Margin" Value="0,6,6,0"></Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Margin" Value="0,4.5,4.5,0"></Setter>
+                                <Setter Property="BorderThickness" Value="1.5"/>
+                                <Setter Property="BorderBrush" Value="{DynamicResource Brushes.Secondary}"/>
+                                <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
+                                <Setter Property="Opacity" Value="1"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Border.Style>
+                <iconPacks:PackIconMaterial VerticalAlignment="Center" 
+                                            Kind="PackageDown" 
+                                            Height="12"
+                                            Width="12"
+                                            Margin="4"
+                                            Foreground="{DynamicResource Brushes.Secondary}" />
+            </Border>
             <Grid HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,4,0" Width="25">
-                <Border Visibility="{Binding HasFilesChanged, Converter={StaticResource BooleanToVisibilityConverter}}" 
+                <Border Visibility="{Binding HasFilesChanged, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        x:Name="FileChangeBorder"
                         BorderThickness="1.5"
                         Opacity="0.9"
                         BorderBrush="{DynamicResource Brushes.Secondary}"
                         Padding="4,2,4,2" 
+                        cal:Message.Attach="[Event MouseUp] = [Action GitStash()]"
                         HorizontalAlignment="Center"
                         CornerRadius="4">
+                    <Border.Style>
+                        <Style TargetType="Border">
+                            <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent3}"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="{DynamicResource Brushes.Secondary}"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Border.Style>
                     <TextBlock x:Name="FileChangeCount"
-                               Foreground="{DynamicResource Brushes.Secondary}"
-                               FontSize="13"/>
+                               FontSize="13">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Foreground" Value="{DynamicResource Brushes.Secondary}"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding ElementName=FileChangeBorder, Path=IsMouseOver}" Value="True">
+                                        <Setter Property="Foreground" Value="White"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
                 </Border>
             </Grid>
         </Grid>

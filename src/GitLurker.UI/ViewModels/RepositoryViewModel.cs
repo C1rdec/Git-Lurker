@@ -33,6 +33,7 @@
         private bool _operationInProgress;
         private bool _cancelOperationVisible;
         private bool _skipOpen;
+        private bool _hasStashes;
 
         #endregion
 
@@ -146,6 +147,16 @@
             set
             {   
                 _popupService.IsOpen = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
+        public bool HasStashes
+        {
+            get => _hasStashes;
+            set
+            {
+                _hasStashes = value;
                 NotifyOfPropertyChange();
             }
         }
@@ -373,6 +384,18 @@
             BranchName = _repo.GetCurrentBranchName();
         }
 
+        public void GitStash()
+        {
+            _repo.Stash();
+            GetStatus();
+        }
+
+        public void GitStashPop()
+        {
+            _repo.Pop();
+            GetStatus();
+        }
+
         private async void CancelOperation()
         {
             _skipOpen = true;
@@ -461,6 +484,7 @@
             => Task.Run(() =>
             {
                 OperationInProgress = _repo.HasOperationInProgress();
+                HasStashes = _repo.GetStashes().Any();
 
                 var changes = _repo.GetFilesChanged();
                 if (changes == null)
@@ -470,6 +494,8 @@
 
                 Execute.OnUIThread(() => 
                 {
+                    FileChanges.Clear();
+
                     foreach (var change in changes)
                     {
                         Execute.OnUIThread(() => FileChanges.Add(change));

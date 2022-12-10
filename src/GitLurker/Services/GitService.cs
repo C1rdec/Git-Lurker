@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using LibGit2Sharp;
@@ -95,6 +96,15 @@ namespace GitLurker.Services
         }
 
         public bool HasOperationInProgress() => Execute(r => r.Info.CurrentOperation != CurrentOperation.None);
+
+        public IEnumerable<Stash> GetStashes()
+            => Execute(r => r.Stashes.ToArray());
+
+        public void Stash()
+            => Execute(r => r.Stashes.Add(new Signature("GitLurker", "git_lurker@gmail.com", DateTime.Now)));
+
+        public void Pop()
+            => Execute(r => r.Stashes.Pop(r.Stashes.Count() - 1));
 
         public IEnumerable<string> GetFilesChanged()
         {

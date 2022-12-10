@@ -10,6 +10,7 @@
     using System.Xml.Linq;
     using GitLurker.Extensions;
     using GitLurker.Services;
+    using LibGit2Sharp;
     using WindowsInput;
     using WindowsInput.Native;
 
@@ -206,6 +207,12 @@
         public IEnumerable<string> GetBranchNames() => _gitService.GetBranchNames();
 
         public IEnumerable<string> GetFilesChanged() => _gitService.GetFilesChanged();
+
+        public IEnumerable<Stash> GetStashes() => _gitService.GetStashes();
+
+        public void Pop() => _gitService.Pop();
+
+        public void Stash() => _gitService.Stash();
 
         public async Task<NugetInformation> GetNewNugetAsync(string nugetSource)
         {
