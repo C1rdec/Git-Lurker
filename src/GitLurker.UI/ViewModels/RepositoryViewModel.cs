@@ -384,10 +384,10 @@
             BranchName = _repo.GetCurrentBranchName();
         }
 
-        public void GitStash()
+        public async void GitStash()
         {
-            _repo.Stash();
-            GetStatus();
+            await Task.Run(() => _repo.Stash());
+            await GetStatus();
         }
 
         public void GitStashPop()
