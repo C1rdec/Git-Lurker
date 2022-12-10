@@ -87,7 +87,7 @@
                 CornerRadius="6" 
                 BorderBrush="{DynamicResource MahApps.Brushes.Gray9}"
                 BorderThickness="1.5">
-            <Grid Background="Red">
+            <Grid>
                 <TextBox x:Name="SearchTerm"
                      Margin="10,5,0,5"
                      Grid.Column="1"
