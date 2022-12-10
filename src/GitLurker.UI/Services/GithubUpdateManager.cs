@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 using System.Timers;
 using GitLurker.Models;
@@ -10,6 +11,7 @@ namespace GitLurker.UI.Services
     {
         #region Fields
 
+        private Action _closeAction;
         private Repository _repo;
         private Timer _timer;
 
@@ -26,14 +28,22 @@ namespace GitLurker.UI.Services
         public async Task Update()
         {
             await _repo.PullAsync();
-            _ = _repo.ExecuteCommandAsync("dotnet run --project .\\src\\GitLurker.UI\\GitLurker.UI.csproj -c release");
-            await Task.Delay(800);
-            Process.GetCurrentProcess().Kill();
+            var updateScript = Path.Combine(_repo.Folder, "update.bat");
+            var startInfo = new ProcessStartInfo()
+            {
+                WorkingDirectory = _repo.Folder,
+                CreateNoWindow = true,
+                FileName = updateScript
+            };
+
+            Process.Start(startInfo);
+            _closeAction();
         }
 
-        public void Watch(Repository repo)
+        public void Watch(Repository repo, Action closeAction)
         {
             _repo = repo;
+            _closeAction = closeAction;
 
             if (CheckForUpdate())
             {

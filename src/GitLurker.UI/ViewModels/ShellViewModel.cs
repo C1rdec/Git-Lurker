@@ -298,15 +298,20 @@
             }            
         }
 
-        public async void Close()
+        public void Close()
         {
-            _parent.Close();
-            await TryCloseAsync();
+            Execute.OnUIThread(async () => 
+            { 
+                _parent.Close();
+                await TryCloseAsync();
+
+                Process.GetCurrentProcess().Close();
+            });
         }
 
         public void OpenSettings() => OpenSettings(null);
 
-        public void OpenSettings(object parameter)
+        public async void OpenSettings(object parameter)
         {
             var viewModel = IoC.Get<SettingsViewModel>();
             if (viewModel.IsActive)
@@ -314,7 +319,7 @@
                 return;
             }
 
-            IoC.Get<IWindowManager>().ShowWindowAsync(IoC.Get<SettingsViewModel>());
+            await IoC.Get<IWindowManager>().ShowWindowAsync(IoC.Get<SettingsViewModel>());
         }
 
         public async void RefreshItems()
@@ -328,7 +333,7 @@
             var gitLurkerRepo = _repositoryService.GetAllRepo().FirstOrDefault(r => r.Name == "GitLurker");
             if (gitLurkerRepo != null)
             {
-                _updateManager.Watch(gitLurkerRepo);
+                _updateManager.Watch(gitLurkerRepo, Close);
             }
 
             Disable = false;
