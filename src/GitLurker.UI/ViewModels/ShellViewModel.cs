@@ -447,11 +447,11 @@
 
         private void ShowWindow()
         {
-            HandleScreenPosition();
             ItemListViewModel?.ShowRecent();
 
             TopMost = true;
             IsVisible = true;
+            HandleScreenPosition();
             FocusSearch();
         }
 
@@ -546,8 +546,26 @@
 
                 var top = (primaryScreen.Bounds.Height / 2) - (gitLurkerHeight / 2);
                 var left = (primaryScreen.Bounds.Width / 2) - (gitLurkerWidth / 2);
-                View.Top = top / _dpiY;
-                View.Left = left / _dpiX;
+
+                top /= _dpiY;
+                left /= _dpiX;
+
+                try
+                {
+                    if (View.Top != top)
+                    {
+                        View.Top = top;
+                    }
+
+                    if (View.Left != left)
+                    {
+                        View.Left = left;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Thread failure! Cannot move window!: {ex.Message}");
+                }
             });
         }
 
