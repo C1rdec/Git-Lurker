@@ -34,6 +34,7 @@
         private bool _cancelOperationVisible;
         private bool _skipOpen;
         private bool _hasStashes;
+        private bool _stashLoading;
 
         #endregion
 
@@ -160,6 +161,19 @@
                 NotifyOfPropertyChange();
             }
         }
+
+        public bool IsStashLoading
+        {
+            get => _stashLoading;
+            set
+            {
+                _stashLoading = value;
+                NotifyOfPropertyChange();
+                NotifyOfPropertyChange(() => IsNotStashLoading);
+            }
+        }
+
+        public bool IsNotStashLoading => !IsStashLoading;
 
         public string ParentFolderName => GetParentFolder();
 
@@ -386,8 +400,11 @@
 
         public async void GitStash()
         {
+            IsStashLoading = true;
             await Task.Run(() => _repo.Stash());
             await GetStatus();
+
+            IsStashLoading = false;
         }
 
         public void GitStashPop()

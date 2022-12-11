@@ -5,6 +5,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:cal="http://www.caliburnproject.org"
+             xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
              mc:Ignorable="d" 
              d:DesignHeight="100" d:DesignWidth="400">
     <Border CornerRadius="6">
@@ -199,7 +200,17 @@
                                             Margin="4"
                                             Foreground="{DynamicResource Brushes.Secondary}" />
             </Border>
-            <Grid HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,4,0" Width="25">
+            <mah:ProgressRing Foreground="{DynamicResource Brushes.Secondary}"
+                              Height="20"
+                              Width="20"
+                              Margin="0,0,4,0"
+                              HorizontalAlignment="Right"
+                              IsActive="{Binding IsStashLoading}" />
+            <Grid HorizontalAlignment="Right" 
+                  VerticalAlignment="Center"
+                  Margin="0,0,4,0" 
+                  Width="25"
+                  Visibility="{Binding IsNotStashLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Border Visibility="{Binding HasFilesChanged, Converter={StaticResource BooleanToVisibilityConverter}}"
                         x:Name="FileChangeBorder"
                         BorderThickness="1.5"
