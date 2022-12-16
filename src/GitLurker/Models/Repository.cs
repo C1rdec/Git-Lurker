@@ -119,10 +119,7 @@
                 return;
             }
 
-            if (HandleVsCode())
-            {
-                return;
-            }
+            OpenVsCode();
         }
 
         public void OpenPullRequest()
@@ -394,23 +391,8 @@
             return false;
         }
 
-        private bool HandleVsCode()
-        {
-            var directoryInformation = new DirectoryInfo(_folder);
-
-            // TODO: Parse file to check project type
-            var packageFile = directoryInformation.GetFiles("package.json").FirstOrDefault();
-
-            // Flutter
-            var pubspecFile = directoryInformation.GetFiles("pubspec.yaml").FirstOrDefault();
-            if (packageFile != null || pubspecFile != null)
-            {
-                _ = ExecuteCommandAsync(OpenVsCodeCommand);
-                return true;
-            }
-
-            return false;
-        }
+        private void OpenVsCode()
+            => ExecuteCommandAsync(OpenVsCodeCommand);
 
         private Process GetActiveSlnProcess(FileInfo slnFile)
         {
