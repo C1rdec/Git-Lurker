@@ -1,6 +1,8 @@
 ﻿using System.IO;
 using System.Windows.Media.Imaging;
+using Caliburn.Micro;
 using GitLurker.Models;
+using GitLurker.UI.Messages;
 using Lurker.Common.Models;
 
 namespace GitLurker.UI.ViewModels
@@ -9,7 +11,9 @@ namespace GitLurker.UI.ViewModels
     {
         #region Fields
 
+        private static readonly CloseMessage CloseMessage = new CloseMessage();
         private GameBase _game;
+        private IEventAggregator _eventAggregator;
 
         #endregion
 
@@ -18,6 +22,7 @@ namespace GitLurker.UI.ViewModels
         public GameViewModel(GameBase game)
         {
             _game = game;
+            _eventAggregator = IoC.Get<IEventAggregator>();
         }
 
         #endregion
@@ -67,6 +72,7 @@ namespace GitLurker.UI.ViewModels
             var settings = new GameSettingsFile();
             settings.Initialize();
             settings.AddRecent(_game.Id);
+            _eventAggregator.PublishOnCurrentThreadAsync(CloseMessage);
 
             _game.Open();
         }

@@ -23,7 +23,7 @@
         private PopupService _popupService;
         private ConsoleService _consoleService;
         private Repository _repo;
-        private IEventAggregator _aggregator;
+        private IEventAggregator _eventAggregator;
         private string _branchName;
         private bool _busy;
         private bool _showParentFolder;
@@ -48,7 +48,7 @@
             _consoleService = IoC.Get<ConsoleService>();
             _actionBar = new ActionBarViewModel(repo);
             _showParentFolder = repo.Duplicate;
-            _aggregator = IoC.Get<IEventAggregator>();
+            _eventAggregator = IoC.Get<IEventAggregator>();
 
             FileChanges = new ObservableCollection<string>();
             BranchManager = new BranchManagerViewModel(repo, OnSelectionChanged, OnBranchManagerClose, Rebase);
@@ -240,7 +240,7 @@
                     return;
                 }
 
-                await _aggregator.PublishOnCurrentThreadAsync(CloseMessage);
+                await _eventAggregator.PublishOnCurrentThreadAsync(CloseMessage);
                 _repo.OpenPullRequest();
             }
             finally
@@ -277,13 +277,13 @@
                 return;
             }
 
-            _aggregator.PublishOnCurrentThreadAsync(CloseMessage);
+            _eventAggregator.PublishOnCurrentThreadAsync(CloseMessage);
             _repo.Open(skipModifier);
         }
 
         public void OpenPullRequest()
         {
-            _aggregator.PublishOnCurrentThreadAsync(CloseMessage);
+            _eventAggregator.PublishOnCurrentThreadAsync(CloseMessage);
             _repo.OpenPullRequest();
         }
 
