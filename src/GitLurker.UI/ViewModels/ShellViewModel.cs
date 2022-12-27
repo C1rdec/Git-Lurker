@@ -32,7 +32,6 @@
         private GithubUpdateManager _updateManager;
         private WindowsLink _startupService;
         private ConsoleViewModel _console;
-        private CloneRepoViewModel _cloneRepo;
         private string _searchTerm;
         private string _searchWatermark;
         private bool _isVisible;
@@ -46,7 +45,6 @@
         private double _dpiY = 1;
         private bool _hasSurfaceDial;
         private bool _isConsoleOpen;
-        private bool _isCloneRepoOpen;
         private bool _needUpdate;
         private bool _updating;
         private string _consoleHeader;
@@ -67,11 +65,9 @@
             ThemeService themeService,
             ConsoleService consoleService,
             GithubUpdateManager updateManager,
-            ConsoleViewModel console,
-            CloneRepoViewModel cloneRepo)
+            ConsoleViewModel console)
         {
             _console = console;
-            _cloneRepo = cloneRepo;
             _searchTerm = string.Empty;
             _searchWatermark = DefaultWaterMark;
             _isVisible = false;
@@ -125,8 +121,6 @@
         public IItemListViewModel ItemListViewModel { get; private set; }
 
         public ConsoleViewModel Console => _console;
-
-        public CloneRepoViewModel CloneRepo => _cloneRepo;
 
         public bool ShowConsoleOverview
         {
@@ -241,16 +235,6 @@
             set
             {
                 _isConsoleOpen = value;
-                NotifyOfPropertyChange();
-            }
-        }
-
-        public bool IsCloneRepoOpen
-        {
-            get => _isCloneRepoOpen;
-            set
-            {
-                _isCloneRepoOpen = value;
                 NotifyOfPropertyChange();
             }
         }
