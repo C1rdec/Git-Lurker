@@ -433,7 +433,6 @@
             {
                 _debouncer.Debounce(175, () =>
                 {
-                    Debug.WriteLine("Toggle");
                     if (IsVisible)
                     {
                         HideWindow();

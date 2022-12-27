@@ -23,14 +23,15 @@
         {
             _folder = folderPath;
             _repositories = new List<Repository>();
-            var option = new EnumerationOptions()
+            var options = new EnumerationOptions()
             {
                 IgnoreInaccessible = true,
                 AttributesToSkip = FileAttributes.ReparsePoint,
                 RecurseSubdirectories = true,
+                MaxRecursionDepth = 2,
             };
 
-            foreach (var folder in Directory.GetDirectories(_folder, ".git", option))
+            foreach (var folder in Directory.GetDirectories(_folder, ".git", options))
             {
                 var parentFolderInformation = Directory.GetParent(folder);
                 var path = parentFolderInformation.ToString();

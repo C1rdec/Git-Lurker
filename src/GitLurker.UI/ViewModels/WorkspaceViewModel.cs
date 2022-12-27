@@ -207,7 +207,7 @@
                     continue;
                 }
 
-                var repo = _repositoryService.GetReposiotry(folder);
+                var repo = _repositoryService.GetRepository(folder);
                 if (repo != null)
                 {
                     Execute.OnUIThread(() => Repos.Add(new RepositoryViewModel(repo)));

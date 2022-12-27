@@ -61,7 +61,7 @@ namespace GitLurker.Services
             return _workspaces; 
         }
 
-        public Repository GetReposiotry(string folderPath)
+        public Repository GetRepository(string folderPath)
         {
             foreach (var workspace in _workspaces)
             {
