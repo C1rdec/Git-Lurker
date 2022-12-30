@@ -112,6 +112,7 @@
             }
 
             _tokenSource = new CancellationTokenSource();
+            AddToRecent();
 
             return ExecuteCommandAsync($"dotnet run -c Debug --project {defaultProject.RelativePath}", false, _folder, _tokenSource.Token);
         }
