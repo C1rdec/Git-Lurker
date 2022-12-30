@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using CliWrap.EventStream;
 using GitLurker.Models;
@@ -35,13 +36,13 @@ namespace GitLurker.Services
 
         #region Methods
 
-        public Task<ExecutionResult> ExecuteCommandAsync(string arguments) => ExecuteCommandAsync(arguments, false);
+        public Task<ExecutionResult> ExecuteCommandAsync(string arguments) => ExecuteCommandAsync(arguments, false, _folder, CancellationToken.None);
 
-        public Task<ExecutionResult> ExecuteCommandAsync(string arguments, string workingDirectory) => ExecuteCommandAsync(arguments, false, workingDirectory);
+        public Task<ExecutionResult> ExecuteCommandAsync(string arguments, string workingDirectory) => ExecuteCommandAsync(arguments, false, workingDirectory, CancellationToken.None);
 
-        public Task<ExecutionResult> ExecuteCommandAsync(string arguments, bool listen) => ExecuteCommandAsync(arguments, listen, _folder);
+        public Task<ExecutionResult> ExecuteCommandAsync(string arguments, bool listen) => ExecuteCommandAsync(arguments, listen, _folder, CancellationToken.None);
 
-        public Task<ExecutionResult> ExecuteCommandAsync(string arguments, bool listen, string workingDirectory)
+        public Task<ExecutionResult> ExecuteCommandAsync(string arguments, bool listen, string workingDirectory, CancellationToken token)
         {
             if (!string.IsNullOrEmpty(_folder) && !Directory.Exists(_folder))
             {
@@ -64,29 +65,45 @@ namespace GitLurker.Services
 
             _ = Task.Run(async () =>
             {
-                await foreach (var cmdEvent in command.ListenAsync())
+                try
                 {
-                    switch (cmdEvent)
+                    await foreach (var cmdEvent in command.ListenAsync(token))
                     {
-                        case StandardErrorCommandEvent error:
-                            HandleProcessMessage(error.Text, false, data, listen);
-                            break;
-                        case StandardOutputCommandEvent standard:
-                            HandleProcessMessage(standard.Text, false, data, listen);
-                            break;
-                        case ExitedCommandEvent exit:
-                            if (listen)
-                            {
-                                NewExitCode?.Invoke(this, exit.ExitCode);
-                            }
+                        switch (cmdEvent)
+                        {
+                            case StandardErrorCommandEvent error:
+                                HandleProcessMessage(error.Text, false, data, listen);
+                                break;
+                            case StandardOutputCommandEvent standard:
+                                HandleProcessMessage(standard.Text, false, data, listen);
+                                break;
+                            case ExitedCommandEvent exit:
+                                if (listen)
+                                {
+                                    NewExitCode?.Invoke(this, exit.ExitCode);
+                                }
 
-                            taskCompletionSource.SetResult(new ExecutionResult()
-                            {
-                                Output = data,
-                                ExitCode = exit.ExitCode,
-                            });
-                            break;
+                                taskCompletionSource.SetResult(new ExecutionResult()
+                                {
+                                    Output = data,
+                                    ExitCode = exit.ExitCode,
+                                });
+                                return;
+                        }
                     }
+                }
+                catch (Exception)
+                {
+                    if (listen)
+                    {
+                        NewExitCode?.Invoke(this, -1);
+                    }
+
+                    taskCompletionSource.SetResult(new ExecutionResult()
+                    {
+                        Output = data,
+                        ExitCode = -1,
+                    });
                 }
             });
             

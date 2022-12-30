@@ -6,11 +6,13 @@
     using System.IO;
     using System.Linq;
     using System.Text.Json;
+    using System.Threading;
     using System.Threading.Tasks;
     using System.Xml.Linq;
     using GitLurker.Extensions;
     using GitLurker.Services;
     using LibGit2Sharp;
+    using SetStartupProjects;
     using WindowsInput;
     using WindowsInput.Native;
 
@@ -26,6 +28,7 @@
         private bool _duplicate;
         private Configuration _configuration;
         private GitService _gitService;
+        private CancellationTokenSource _tokenSource;
 
         #endregion
 
@@ -54,6 +57,8 @@
 
         #region Properties
 
+        public bool IsRunning => _tokenSource != null;
+
         public string Name => _name;
 
         public bool HasSln => _slnFiles.Any();
@@ -75,13 +80,40 @@
         #region Methods
 
         public static bool IsValid(string folder)
+            => !Path.GetFileName(folder).StartsWith(".");
+
+        public Task StartDefaultProject()
         {
-            if (Path.GetFileName(folder).StartsWith("."))
+            if (_tokenSource != null)
             {
-                return false;
+                _tokenSource.Cancel();
+                _tokenSource.Dispose();
+                _tokenSource = null;
+
+                return Task.CompletedTask;
             }
 
-            return true;
+            var solutionFile = _slnFiles.FirstOrDefault();
+            if (solutionFile == null)
+            {
+                return Task.CompletedTask;
+            }
+
+            var startupProjectGuid = new StartProjectFinder().GetStartProjects(solutionFile.FullName).FirstOrDefault();
+            if (startupProjectGuid == null)
+            {
+                return Task.CompletedTask;
+            }
+
+            var defaultProject = SolutionProjectExtractor.GetAllProjectFiles(solutionFile.FullName).FirstOrDefault(p => p.Guid == startupProjectGuid);
+            if (defaultProject == null)
+            {
+                return Task.CompletedTask;
+            }
+
+            _tokenSource = new CancellationTokenSource();
+
+            return ExecuteCommandAsync($"dotnet run -c Debug --project {defaultProject.RelativePath}", false, _folder, _tokenSource.Token);
         }
 
         public bool IsBehind()
@@ -196,7 +228,8 @@
             }
 
             var path = Path.Combine(_folder, _configuration.FrontEndPath);
-            return ExecuteCommandAsync(OpenVsCodeCommand, true, path);
+
+            return ExecuteCommandAsync(OpenVsCodeCommand, true, path, CancellationToken.None);
         }
 
         public string GetCurrentBranchName() => _gitService.GetCurrentBranchName();

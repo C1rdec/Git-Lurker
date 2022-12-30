@@ -65,6 +65,8 @@
 
         public ActionBarViewModel ActionBar => _actionBar;
 
+        public bool IsRunning => _repo.IsRunning;
+
         public bool HasIcon => _repo.HasIcon;
 
         public bool IsVsCode => !_repo.HasSln;
@@ -184,6 +186,13 @@
         #endregion
 
         #region Methods
+
+        public void StartDefaultProject()
+        {
+            _skipOpen = true;
+            _repo.StartDefaultProject();
+            NotifyOfPropertyChange(() => IsRunning);
+        }
 
         public void OnBranchManagerClosed() => _popupService.SetClosed();
 
