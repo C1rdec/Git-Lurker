@@ -72,9 +72,6 @@
                                     </Image.Style>
                                 </Image>
                                 <mah:ProgressRing IsActive="{Binding IsRunning}"
-                                                  HorizontalAlignment="Right" 
-                                                  Width="20" Height="20" 
-                                                  VerticalAlignment="Bottom"
                                                   Foreground="{DynamicResource Brushes.Secondary}" 
                                                   Margin="0,0,4,4"/>
                             </Grid>
