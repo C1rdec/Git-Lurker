@@ -84,6 +84,7 @@
 
             _updateManager.UpdateRequested += UpdateManager_UpdateRequested;
             _settingsFile.OnFileSaved += OnSettingsSave;
+            _settingsFile.Initialize();
 
             _consoleService.ShowRequested += ConsoleService_ShowRequested;
             _console.OnExecute += Console_OnExecute;
@@ -102,7 +103,11 @@
             _workspaceViewModel = new WorkspaceViewModel(_repositoryService, _consoleService);
             _gameLibraryViewModel = new GameLibraryViewModel();
 
-            // Remember last mode in settings
+            if (_settingsFile.Entity.SteamEnabled)
+            {
+                _gameLibraryViewModel.ShowRecent();
+            }
+
             ItemListViewModel = _workspaceViewModel;
 
             RefreshItems();
@@ -325,8 +330,6 @@
 
             FocusSearch();
             ItemListViewModel.ShowRecent();
-
-            _settingsFile.Initialize();
         }
 
         public async void Update()
