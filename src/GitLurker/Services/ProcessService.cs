@@ -111,26 +111,6 @@ namespace GitLurker.Services
             return taskCompletionSource.Task;
         }
 
-        public void OpenUserSecret(string secretId)
-        {
-            var appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            var folderPath = Path.Combine(appdata, "Microsoft", "UserSecrets", secretId);
-
-            if (!Directory.Exists(folderPath))
-            {
-                return;
-            }
-
-            var filePath = Path.Combine(folderPath, "secrets.json");
-            if (!File.Exists(filePath))
-            {
-                return;
-            }
-
-            OpenFile(filePath);
-            NewExitCode?.Invoke(this, -1);
-        }
-
         protected void OpenFile(string filePath)
         {
             new Process()
@@ -141,6 +121,9 @@ namespace GitLurker.Services
                 }
             }.Start();
         }
+
+        protected void SetExitCode(int code)
+            => NewExitCode?.Invoke(this, code);
 
         private void HandleProcessMessage(string text, bool isError, List<string> data, bool listen)
         {

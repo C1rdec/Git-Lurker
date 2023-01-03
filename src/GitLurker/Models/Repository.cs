@@ -191,6 +191,26 @@
 
         public Task ContinueOperationAsync() => HandleOperation("continue");
 
+        public void OpenUserSecret(string secretId)
+        {
+            var appdata = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            var folderPath = Path.Combine(appdata, "Microsoft", "UserSecrets", secretId);
+
+            if (!Directory.Exists(folderPath))
+            {
+                return;
+            }
+
+            var filePath = Path.Combine(folderPath, "secrets.json");
+            if (!File.Exists(filePath))
+            {
+                return;
+            }
+
+            OpenFile(filePath);
+            SetExitCode(-1);
+        }
+
         private async Task HandleOperation(string operation)
         {
             var currentOperation = _gitService.GetCurrentOperation();

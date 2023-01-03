@@ -1,5 +1,5 @@
-﻿using MahApps.Metro.Controls.Dialogs;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace GitLurker.Services
 {
