@@ -114,7 +114,7 @@
             _tokenSource = new CancellationTokenSource();
             AddToRecent();
 
-            _= OpenProject(defaultProject);
+            _= Task.Delay(3333).ContinueWith(t => OpenProject(defaultProject));
             await ExecuteCommandAsync($"dotnet run -c Debug --project {defaultProject.RelativePath}", false, _folder, _tokenSource.Token);
 
             _tokenSource?.Dispose();
@@ -217,8 +217,6 @@
 
         private async Task OpenProject(Project project)
         {
-            await WaitForStarted();
-
             var folder = Path.GetDirectoryName(project.FullPath);
 
             var launchSettingsPath = Path.Combine(folder, "Properties", "launchSettings.json");

@@ -134,6 +134,7 @@ namespace GitLurker.Services
             }
 
             _startedTaskCompletionSource = new TaskCompletionSource();
+            Task.Delay(6000).ContinueWith(t => _startedTaskCompletionSource.SetResult());
 
             return _startedTaskCompletionSource.Task;
         }
