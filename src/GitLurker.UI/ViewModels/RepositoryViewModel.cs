@@ -35,6 +35,7 @@
         private bool _skipOpen;
         private bool _hasStashes;
         private bool _stashLoading;
+        private bool _isRunning;
 
         #endregion
 
@@ -43,6 +44,7 @@
         public RepositoryViewModel(Repository repo)
         {
             _repo = repo;
+            _isRunning = repo.IsRunning;
             _settingsFile = IoC.Get<SettingsFile>();
             _popupService = IoC.Get<PopupService>();
             _consoleService = IoC.Get<ConsoleService>();
@@ -65,7 +67,15 @@
 
         public ActionBarViewModel ActionBar => _actionBar;
 
-        public bool IsRunning => _repo.IsRunning;
+        public bool IsRunning
+        {
+            get => _isRunning;
+            set
+            {
+                _isRunning = value;
+                NotifyOfPropertyChange();
+            }
+        }
 
         public bool HasIcon => _repo.HasIcon;
 
@@ -187,11 +197,13 @@
 
         #region Methods
 
-        public void StartDefaultProject()
+        public async void StartDefaultProject()
         {
             _skipOpen = true;
-            _repo.StartDefaultProject();
-            NotifyOfPropertyChange(() => IsRunning);
+
+            IsRunning = true;
+            await _repo.StartDefaultProject();
+            IsRunning = false;
         }
 
         public void OnBranchManagerClosed() => _popupService.SetClosed();

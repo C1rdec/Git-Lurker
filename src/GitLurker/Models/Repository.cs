@@ -82,7 +82,7 @@
         public static bool IsValid(string folder)
             => !Path.GetFileName(folder).StartsWith(".");
 
-        public Task StartDefaultProject()
+        public async Task StartDefaultProject()
         {
             if (_tokenSource != null)
             {
@@ -90,31 +90,35 @@
                 _tokenSource.Dispose();
                 _tokenSource = null;
 
-                return Task.CompletedTask;
+                return;
             }
 
             var solutionFile = _slnFiles.FirstOrDefault();
             if (solutionFile == null)
             {
-                return Task.CompletedTask;
+                return;
             }
 
             var startupProjectGuid = new StartProjectFinder().GetStartProjects(solutionFile.FullName).FirstOrDefault();
             if (startupProjectGuid == null)
             {
-                return Task.CompletedTask;
+                return;
             }
 
             var defaultProject = SolutionProjectExtractor.GetAllProjectFiles(solutionFile.FullName).FirstOrDefault(p => p.Guid == startupProjectGuid);
             if (defaultProject == null)
             {
-                return Task.CompletedTask;
+                return;
             }
 
             _tokenSource = new CancellationTokenSource();
             AddToRecent();
 
-            return ExecuteCommandAsync($"dotnet run -c Debug --project {defaultProject.RelativePath}", false, _folder, _tokenSource.Token);
+            _= Task.Delay(2222).ContinueWith(t => OpenProject(defaultProject));
+            await ExecuteCommandAsync($"dotnet run -c Debug --project {defaultProject.RelativePath}", false, _folder, _tokenSource.Token);
+
+            _tokenSource?.Dispose();
+            _tokenSource = null;
         }
 
         public bool IsBehind()
@@ -209,6 +213,34 @@
 
             OpenFile(filePath);
             SetExitCode(-1);
+        }
+
+        private Task OpenProject(Project project)
+        {
+            var folder = Path.GetDirectoryName(project.FullPath);
+
+            var launchSettingsPath = Path.Combine(folder, "Properties", "launchSettings.json");
+            if (!File.Exists(launchSettingsPath))
+            {
+                return Task.CompletedTask;
+            }
+
+            var text = File.ReadAllText(launchSettingsPath);
+            var document = JsonDocument.Parse(text);
+
+            var profiles = document.RootElement.GetProperty("profiles");
+            var firstProfile = profiles.EnumerateObject().FirstOrDefault();
+
+            var value = firstProfile.Value.GetProperty("applicationUrl").GetString();
+            var urls = value.Split(";");
+            var applicationUrl = urls.FirstOrDefault(u => u.StartsWith("https"));
+
+            if (firstProfile.Value.TryGetProperty("launchUrl", out var launchUrl))
+            {
+                applicationUrl = $"{applicationUrl}/{launchUrl.GetString()}";
+            }
+
+            return ExecuteCommandAsync($"start {applicationUrl}");
         }
 
         private async Task HandleOperation(string operation)
