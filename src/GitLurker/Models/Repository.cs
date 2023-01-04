@@ -229,18 +229,24 @@
             var document = JsonDocument.Parse(text);
 
             var profiles = document.RootElement.GetProperty("profiles");
-            var firstProfile = profiles.EnumerateObject().FirstOrDefault();
 
-            var value = firstProfile.Value.GetProperty("applicationUrl").GetString();
-            var urls = value.Split(";");
-            var applicationUrl = urls.FirstOrDefault(u => u.StartsWith("https"));
-
-            if (firstProfile.Value.TryGetProperty("launchUrl", out var launchUrl))
+            foreach (var profile in profiles.EnumerateObject()) 
             {
-                applicationUrl = $"{applicationUrl}/{launchUrl.GetString()}";
+                if (profile.Value.TryGetProperty("applicationUrl", out var applicationUrl))
+                {
+                    var urls = applicationUrl.GetString().Split(";");
+                    var url = urls.FirstOrDefault(u => u.StartsWith("https"));
+
+                    if (profile.Value.TryGetProperty("launchUrl", out var launchUrl))
+                    {
+                        url = $"{url}/{launchUrl.GetString()}";
+                    }
+
+                    return ExecuteCommandAsync($"start {url}");
+                }
             }
 
-            return ExecuteCommandAsync($"start {applicationUrl}");
+            return Task.CompletedTask;
         }
 
         private async Task HandleOperation(string operation)
