@@ -313,7 +313,7 @@
             // To get out of the UI Thread
             await Task.Run(() => 
             {
-                var filePaths = GetFiles($"*.nupkg").Where(n => n.FullName.Contains("\\bin\\"));
+                var filePaths = GetFiles($"*.nupkg", int.MaxValue).Where(n => n.FullName.Contains("\\bin\\"));
                 if (filePaths.Any())
                 {
                     var nugetsInRepo = filePaths.Select(p => NugetInformation.Parse(p.FullName));
@@ -373,12 +373,12 @@
 
         public bool HasOperationInProgress() => _gitService.HasOperationInProgress();
 
-        private FileInfo[] GetFiles(string extention) => new DirectoryInfo(_folder).GetFiles($"*{extention}", new EnumerationOptions()
+        private FileInfo[] GetFiles(string extention, int maxRecursionDepth = 2) => new DirectoryInfo(_folder).GetFiles($"*{extention}", new EnumerationOptions()
         {
             IgnoreInaccessible = true,
             AttributesToSkip = FileAttributes.ReparsePoint,
             RecurseSubdirectories = true,
-            MaxRecursionDepth = 2,
+            MaxRecursionDepth = maxRecursionDepth,
         });
 
         private static Configuration GetConfiguration(string folder)
