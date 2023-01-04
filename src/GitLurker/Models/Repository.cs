@@ -86,8 +86,8 @@
         {
             if (_tokenSource != null)
             {
-                _tokenSource.Cancel();
-                _tokenSource.Dispose();
+                _tokenSource?.Cancel();
+                _tokenSource?.Dispose();
                 _tokenSource = null;
 
                 return;
