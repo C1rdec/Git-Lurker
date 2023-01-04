@@ -14,6 +14,7 @@ namespace GitLurker.Services
         #region Fields
 
         private string _folder;
+        private TaskCompletionSource _startedTaskCompletionSource;
 
         #endregion
 
@@ -125,8 +126,25 @@ namespace GitLurker.Services
         protected void SetExitCode(int code)
             => NewExitCode?.Invoke(this, code);
 
+        protected Task WaitForStarted()
+        {
+            if (_startedTaskCompletionSource != null)
+            {
+                _startedTaskCompletionSource.SetResult();
+            }
+
+            _startedTaskCompletionSource = new TaskCompletionSource();
+
+            return _startedTaskCompletionSource.Task;
+        }
+
         private void HandleProcessMessage(string text, bool isError, List<string> data, bool listen)
         {
+            if (text.EndsWith("started."))
+            {
+                _startedTaskCompletionSource?.SetResult();
+            }
+
             data.Add(text);
 
             if (listen && text != null)

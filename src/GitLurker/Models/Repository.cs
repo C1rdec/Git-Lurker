@@ -114,7 +114,7 @@
             _tokenSource = new CancellationTokenSource();
             AddToRecent();
 
-            _= Task.Delay(2222).ContinueWith(t => OpenProject(defaultProject));
+            _= OpenProject(defaultProject);
             await ExecuteCommandAsync($"dotnet run -c Debug --project {defaultProject.RelativePath}", false, _folder, _tokenSource.Token);
 
             _tokenSource?.Dispose();
@@ -215,14 +215,16 @@
             SetExitCode(-1);
         }
 
-        private Task OpenProject(Project project)
+        private async Task OpenProject(Project project)
         {
+            await WaitForStarted();
+
             var folder = Path.GetDirectoryName(project.FullPath);
 
             var launchSettingsPath = Path.Combine(folder, "Properties", "launchSettings.json");
             if (!File.Exists(launchSettingsPath))
             {
-                return Task.CompletedTask;
+                return;
             }
 
             var text = File.ReadAllText(launchSettingsPath);
@@ -242,11 +244,13 @@
                         url = $"{url}/{launchUrl.GetString()}";
                     }
 
-                    return ExecuteCommandAsync($"start {url}");
+                    await ExecuteCommandAsync($"start {url}");
+
+                    return;
                 }
             }
 
-            return Task.CompletedTask;
+            return;
         }
 
         private async Task HandleOperation(string operation)
