@@ -12,6 +12,8 @@ using GitLurker.Services;
 using GitLurker.UI.Models;
 using GitLurker.UI.Services;
 using LibGit2Sharp;
+using Lurker.Epic.Services;
+using Lurker.Steam.Services;
 using WindowsUtilities;
 
 namespace GitLurker.UI.ViewModels
@@ -28,12 +30,14 @@ namespace GitLurker.UI.ViewModels
 
         private CurrentOperation _selectedOperation;
         private SettingsFile _settingsFile;
-        private GameSettingsFile _steamSettingsFile;
+        private GameSettingsFile _gameSettingsFile;
         private WindowsLink _windowsStartupService;
         private FlyoutService _flyoutService;
         private RepositoryService _repositoryService;
         private PropertyChangedBase _flyoutContent;
         private ThemeService _themeService;
+        private bool _steamLoading;
+        private bool _epicLoading;
         private bool _flyoutOpen;
         private string _flyoutHeader;
         private int _selectedTabIndex;
@@ -57,8 +61,8 @@ namespace GitLurker.UI.ViewModels
             _settingsFile = settingsFile;
             _settingsFile.Initialize();
 
-            _steamSettingsFile = new GameSettingsFile();
-            _steamSettingsFile.Initialize();
+            _gameSettingsFile = new GameSettingsFile();
+            _gameSettingsFile.Initialize();
 
             RepoManager = new RepoManagerViewModel(_settingsFile);
             Hotkey = new HotkeyViewModel(_settingsFile.Entity.HotKey, Save);
@@ -92,6 +96,26 @@ namespace GitLurker.UI.ViewModels
         public IEnumerable<Scheme> Schemes => _themeService.GetSchemes();
 
         public IEnumerable<Scheme> SteamSchemes => _themeService.GetSchemes();
+
+        public bool SteamLoading
+        {
+            get => _steamLoading;
+            set
+            {
+                _steamLoading = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
+        public bool EpicLoading
+        {
+            get => _epicLoading;
+            set
+            {
+                _epicLoading = value;
+                NotifyOfPropertyChange();
+            }
+        }
 
         public CurrentOperation SelectedOperation
         {
@@ -129,17 +153,21 @@ namespace GitLurker.UI.ViewModels
 
         public Scheme SelectedSteamScheme
         {
-            get => _steamSettingsFile.Entity.Scheme;
+            get => _gameSettingsFile.Entity.Scheme;
             set
             {
-                if (_steamSettingsFile.Entity.Scheme != value)
+                if (_gameSettingsFile.Entity.Scheme != value)
                 {
-                    _steamSettingsFile.Entity.Scheme = value;
-                    _steamSettingsFile.Save();
+                    _gameSettingsFile.Entity.Scheme = value;
+                    _gameSettingsFile.Save();
                     NotifyOfPropertyChange();
                 }
             }
         }
+
+        public bool IsSteamInitialized => !string.IsNullOrEmpty(_gameSettingsFile.Entity.SteamExePath);
+
+        public bool IsEpicInitialized => !string.IsNullOrEmpty(_gameSettingsFile.Entity.EpicExePath);
 
         public bool FlyoutOpen
         {
@@ -240,6 +268,32 @@ namespace GitLurker.UI.ViewModels
             FlyoutOpen = true;
         }
 
+        public async Task InitializeGames()
+        {
+            SteamLoading = true;
+
+            var steamService = new SteamService();
+            var steamPath = await steamService.InitializeAsync(_gameSettingsFile.Entity.SteamExePath);
+            if (!string.IsNullOrEmpty(steamPath))
+            {
+                _gameSettingsFile.SetSteamExePath(steamPath);
+                NotifyOfPropertyChange(() => IsSteamInitialized);
+            }
+
+            SteamLoading = false;
+            EpicLoading = true;
+
+            var epicService = new EpicService();
+            var epicPath = await epicService.InitializeAsync(_gameSettingsFile.Entity.EpicExePath);
+            if (!string.IsNullOrEmpty(epicPath))
+            {
+                _gameSettingsFile.SetEpicExePath(epicPath);
+                NotifyOfPropertyChange(() => IsEpicInitialized);
+            }
+
+            EpicLoading = false;
+        }
+
         public void CloseFlyout()
         {
             FlyoutOpen = false;
@@ -283,11 +337,16 @@ namespace GitLurker.UI.ViewModels
             Save();
         }
 
-        public void ToggleSteam()
+        public async void ToggleSteam()
         {
             IsSteamEnabled = !IsSteamEnabled;
 
             _settingsFile.Entity.SteamEnabled = IsSteamEnabled;
+            if (IsSteamEnabled)
+            {
+                await Task.Run(async () => await InitializeGames());
+            }
+
             Save();
         }
 

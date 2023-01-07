@@ -114,7 +114,7 @@
             _tokenSource = new CancellationTokenSource();
             AddToRecent();
 
-            _= Task.Delay(3333).ContinueWith(t => OpenProject(defaultProject));
+            _= OpenProject(defaultProject);
             await ExecuteCommandAsync($"dotnet run -c Debug --project {defaultProject.RelativePath}", false, _folder, _tokenSource.Token);
 
             _tokenSource?.Dispose();
