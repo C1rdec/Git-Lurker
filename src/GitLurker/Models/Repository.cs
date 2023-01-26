@@ -215,6 +215,8 @@
             SetExitCode(-1);
         }
 
+        public Task CheckoutLastBranchAsync() => ExecuteCommandAsync($"git checkout -", true);
+
         private async Task OpenProject(Project project)
         {
             var folder = Path.GetDirectoryName(project.FullPath);
@@ -254,17 +256,17 @@
         private async Task HandleOperation(string operation)
         {
             var currentOperation = _gitService.GetCurrentOperation();
-            if (currentOperation == LibGit2Sharp.CurrentOperation.None)
+            if (currentOperation == CurrentOperation.None)
             {
                 return;
             }
 
-            if (currentOperation == LibGit2Sharp.CurrentOperation.Rebase)
+            if (currentOperation == CurrentOperation.Rebase)
             {
                 await ExecuteCommandAsync($"git -c core.editor=true rebase --{operation}", true);
             }
 
-            if (currentOperation == LibGit2Sharp.CurrentOperation.Merge)
+            if (currentOperation == CurrentOperation.Merge)
             {
                 await ExecuteCommandAsync($"git -c core.editor=true merge --{operation}", true);
             }

@@ -197,6 +197,13 @@
 
         #region Methods
 
+        public async void CheckoutLastBranch()
+        {
+            _skipOpen = true;
+            await _repo.CheckoutLastBranchAsync();
+            BranchName = _repo.GetCurrentBranchName();
+        }
+
         public async void StartDefaultProject()
         {
             _skipOpen = true;
