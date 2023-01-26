@@ -11,6 +11,11 @@
 
   <ItemGroup>
     <None Remove="Resources\GitLurker.ico" />
+    <None Remove="Resources\SystemTray.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\SystemTray.png" />
   </ItemGroup>
 
   <ItemGroup>

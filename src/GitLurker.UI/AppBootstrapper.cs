@@ -46,6 +46,7 @@
             {
                 System.Windows.MessageBox.Show("Another instance is running");
                 System.Windows.Application.Current.Shutdown();
+
                 return;
             }
 
@@ -74,6 +75,7 @@
             // ViewModels
             _container.PerRequest<ShellViewModel, ShellViewModel>();
             _container.Singleton<SettingsViewModel, SettingsViewModel>();
+            _container.Singleton<WelcomeViewModel, WelcomeViewModel>();
             _container.Singleton<ConsoleViewModel, ConsoleViewModel>();
 
             var settings = new SettingsFile();

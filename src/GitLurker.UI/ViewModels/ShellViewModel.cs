@@ -1,6 +1,7 @@
 ﻿namespace GitLurker.UI.ViewModels
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics;
     using System.Linq;
     using System.Reflection;
@@ -108,7 +109,7 @@
                 _gameLibraryViewModel.ShowRecent();
             }
 
-            ItemListViewModel = _workspaceViewModel;
+            ItemListViewModel = _settingsFile.Entity.Workspaces.Any() ? _workspaceViewModel : _gameLibraryViewModel;
 
             RefreshItems();
 
@@ -258,6 +259,8 @@
 
         protected ShellView View { get; private set; }
 
+        private bool GameMode => ItemListViewModel is GameLibraryViewModel;
+
         #endregion
 
         #region Methods
@@ -387,7 +390,7 @@
         {
             if (_debouncer.HasTimer)
             {
-                if (!_settingsFile.Entity.SteamEnabled)
+                if (!_settingsFile.Entity.SteamEnabled || !_settingsFile.Entity.Workspaces.Any())
                 {
                     return;
                 }
@@ -465,10 +468,30 @@
             _parent.Hide();
         }
 
-        private void OnSettingsSave(object sender, EventArgs e)
+        private async void OnSettingsSave(object sender, EventArgs e)
         {
             SetGlobalHotkey();
+            await Task.WhenAll(new List<Task>() { _workspaceViewModel.RefreshItems(), _gameLibraryViewModel.RefreshItems() });
+
+            if (!GameMode && !_settingsFile.Entity.Workspaces.Any())
+            {
+                ShowGame();
+            }
+
             NotifyOfPropertyChange(() => ShowConsoleOutput);
+        }
+
+        private void ShowGit()
+            => Show(_workspaceViewModel);
+
+        private void ShowGame()
+            => Show(_gameLibraryViewModel);
+
+        private void Show(IItemListViewModel itemList)
+        {
+            ItemListViewModel = itemList;
+            ItemListViewModel.ShowRecent();
+            NotifyOfPropertyChange(() => ItemListViewModel);
         }
 
         private void SetGlobalHotkey()

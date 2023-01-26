@@ -1,0 +1,23 @@
+﻿<mah:MetroWindow x:Class="GitLurker.UI.Views.WelcomeView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
+        xmlns:local="clr-namespace:GitLurker.UI.Views"
+        mc:Ignorable="d"
+        Title="WelcomeView" Height="450" Width="800">
+    <mah:FlipView MouseHoverBorderEnabled="False"
+                  IsBannerEnabled="False"
+                  IndexPlacement="BottomOverItem"
+                  ShowIndex="True">
+        <mah:FlipViewItem>
+            <Grid>
+                <Image Source="https://raw.githubusercontent.com/C1rdec/Poe-Lurker/master/assets/SystemTray.png" Height="140" Margin="0,10,0,0"/>
+            </Grid>
+        </mah:FlipViewItem>
+        <mah:FlipViewItem>
+            <Button x:Name="Start" HorizontalAlignment="Center" VerticalAlignment="Center">Start</Button>
+        </mah:FlipViewItem>
+    </mah:FlipView>
+</mah:MetroWindow>

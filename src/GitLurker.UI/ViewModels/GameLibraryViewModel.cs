@@ -135,8 +135,12 @@ namespace GitLurker.UI.ViewModels
         }
 
         public Task RefreshItems()
-            => Task.Run(() => 
-            { 
+            => Task.Run(async () => 
+            {
+                var settings = new GameSettingsFile();
+                settings.Initialize();
+
+                await CheckInitialize(settings);
                 _steamGames = _steamService.FindGames();
                 _epicGames = _epicService.FindGames();
             });
@@ -169,24 +173,7 @@ namespace GitLurker.UI.ViewModels
             var settings = new GameSettingsFile();
             settings.Initialize();
 
-            if (!_initialize)
-            {
-                var epicPath = await _epicService.InitializeAsync(settings.Entity.EpicExePath);
-                if (!string.IsNullOrEmpty(epicPath))
-                {
-                    settings.SetEpicExePath(epicPath);
-                    _epicGames = _epicService.FindGames();
-                }
-
-                var steamPath = await _steamService.InitializeAsync(settings.Entity.SteamExePath);
-                if (!string.IsNullOrEmpty(steamPath))
-                {
-                    settings.SetSteamExePath(steamPath);
-                    _steamGames = _steamService.FindGames();
-                }
-
-                _initialize = true;
-            }
+            await CheckInitialize(settings);
 
             foreach (var gameId in settings.Entity.RecentGameIds)
             {
@@ -224,6 +211,28 @@ namespace GitLurker.UI.ViewModels
             if (firstGame != null)
             {
                 action(firstGame);
+            }
+        }
+
+        private async Task CheckInitialize(GameSettingsFile settings)
+        {
+            if (!_initialize)
+            {
+                var epicPath = await _epicService.InitializeAsync(settings.Entity.EpicExePath);
+                if (!string.IsNullOrEmpty(epicPath))
+                {
+                    settings.SetEpicExePath(epicPath);
+                    _epicGames = _epicService.FindGames();
+                }
+
+                var steamPath = await _steamService.InitializeAsync(settings.Entity.SteamExePath);
+                if (!string.IsNullOrEmpty(steamPath))
+                {
+                    settings.SetSteamExePath(steamPath);
+                    _steamGames = _steamService.FindGames();
+                }
+
+                _initialize = true;
             }
         }
 

@@ -34,16 +34,6 @@
                         Position="Right">
                 <ContentControl cal:View.Model="{Binding Path=Console,Mode=OneWay}" Margin="10" MaxWidth="800"/>
             </mah:Flyout>
-
-            <mah:Flyout Header="Clone"
-                        x:Name="Clone"
-                        KeyboardNavigation.TabNavigation="None"
-                        Focusable="False"
-                        Width="800"
-                        IsOpen="{Binding IsCloneRepoOpen}" 
-                        Position="Right">
-                <ContentControl cal:View.Model="{Binding Path=CloneRepo,Mode=OneWay}" Margin="10" MaxWidth="800"/>
-            </mah:Flyout>
         </mah:FlyoutsControl>
     </mah:MetroWindow.Flyouts>
     <Grid Visibility="{Binding IsVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
