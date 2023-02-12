@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,7 +13,7 @@ using Lurker.Steam.Services;
 
 namespace GitLurker.UI.ViewModels
 {
-    public class GameLibraryViewModel : PropertyChangedBase, IItemListViewModel
+    public class GameLibraryViewModel : PropertyChangedBase, IItemListViewModel, IDisposable
     {
         private SteamService _steamService;
         private EpicService _epicService;
@@ -30,9 +31,12 @@ namespace GitLurker.UI.ViewModels
             _steamService = new SteamService();
             _epicService = new EpicService();
             _gameViewModels = new ObservableCollection<GameViewModel>();
+            _gameViewModels.CollectionChanged += GameViewModels_CollectionChanged;
         }
 
         #region Properties
+
+        public bool NoGamesDisplayed => !_gameViewModels.Any();
 
         public ObservableCollection<GameViewModel> GameViewModels => _gameViewModels;
 
@@ -218,22 +222,34 @@ namespace GitLurker.UI.ViewModels
         {
             if (!_initialize)
             {
-                var epicPath = await _epicService.InitializeAsync(settings.Entity.EpicExePath);
-                if (!string.IsNullOrEmpty(epicPath))
+                var steamPath = settings.Entity.SteamExePath;
+                if (!settings.Entity.SteamAsked || !string.IsNullOrEmpty(steamPath))
                 {
-                    settings.SetEpicExePath(epicPath);
-                    _epicGames = _epicService.FindGames();
-                }
-
-                var steamPath = await _steamService.InitializeAsync(settings.Entity.SteamExePath);
-                if (!string.IsNullOrEmpty(steamPath))
-                {
+                    steamPath = await _steamService.InitializeAsync(steamPath);
                     settings.SetSteamExePath(steamPath);
                     _steamGames = _steamService.FindGames();
                 }
 
+                var epicPath = settings.Entity.EpicExePath;
+                if (!settings.Entity.EpicAsked || !string.IsNullOrEmpty(epicPath))
+                {
+                    epicPath = await _epicService.InitializeAsync(settings.Entity.EpicExePath);
+                    settings.SetEpicExePath(epicPath);
+                    _epicGames = _epicService.FindGames();
+                }
+
                 _initialize = true;
             }
+        }
+
+        private void GameViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            NotifyOfPropertyChange(nameof(NoGamesDisplayed));
+        }
+
+        public void Dispose()
+        {
+            _gameViewModels.CollectionChanged -= GameViewModels_CollectionChanged;
         }
 
         #endregion

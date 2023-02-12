@@ -109,7 +109,7 @@
                 _gameLibraryViewModel.ShowRecent();
             }
 
-            ItemListViewModel = _settingsFile.Entity.Workspaces.Any() ? _workspaceViewModel : _gameLibraryViewModel;
+            ItemListViewModel = _workspaceViewModel;
 
             RefreshItems();
 
@@ -471,7 +471,8 @@
         private async void OnSettingsSave(object sender, EventArgs e)
         {
             SetGlobalHotkey();
-            await Task.WhenAll(new List<Task>() { _workspaceViewModel.RefreshItems(), _gameLibraryViewModel.RefreshItems() });
+            var gameTask = _settingsFile.Entity.SteamEnabled ? _gameLibraryViewModel.RefreshItems() : Task.CompletedTask;
+            await Task.WhenAll(new List<Task>() { _workspaceViewModel.RefreshItems(), gameTask });
 
             if (!GameMode && !_settingsFile.Entity.Workspaces.Any())
             {
@@ -611,6 +612,7 @@
             _keyboardService.NextTabPressed -= KeyboardService_NextTabPressed;
             _keyboardService.EnterLongPressed -= KeyboardService_EnterLongPressed;
             _keyboardService?.Dispose();
+            _gameLibraryViewModel?.Dispose();
         }
 
         #endregion

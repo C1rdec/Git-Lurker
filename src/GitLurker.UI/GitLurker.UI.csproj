@@ -26,8 +26,9 @@
     <PackageReference Include="BusyIndicator" Version="2.0.0.1" />
     <PackageReference Include="Caliburn.Micro" Version="4.0.173" />
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
-    <PackageReference Include="Lurker.Epic" Version="1.0.8" />
-    <PackageReference Include="Lurker.Steam" Version="1.0.16" />
+    <PackageReference Include="Lurker.Common" Version="1.1.0" />
+    <PackageReference Include="Lurker.Epic" Version="1.1.0" />
+    <PackageReference Include="Lurker.Steam" Version="1.1.0" />
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
     <PackageReference Include="NHotkey.Wpf" Version="2.1.0" />

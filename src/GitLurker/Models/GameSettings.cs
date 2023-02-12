@@ -24,6 +24,10 @@ namespace GitLurker.Models
 
         public string EpicExePath { get; set; }
 
+        public bool SteamAsked { get; set; }
+
+        public bool EpicAsked { get; set; }
+
         #endregion
     }
 }

@@ -56,12 +56,14 @@ namespace GitLurker.Models
         public void SetSteamExePath(string path)
         {
             Entity.SteamExePath = path;
+            Entity.SteamAsked = true;
             Save();
         }
 
         public void SetEpicExePath(string path)
         {
             Entity.EpicExePath = path;
+            Entity.EpicAsked = true;
             Save();
         }
 
