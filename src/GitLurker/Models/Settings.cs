@@ -25,6 +25,7 @@ namespace GitLurker.Models
             StartWithWindows = true;
             AddToStartMenu = true;
             RebaseOperation = CurrentOperation.Rebase;
+            Mode = Mode.Git;
         }
 
         #endregion
@@ -54,6 +55,8 @@ namespace GitLurker.Models
         public Scheme Scheme { get; set; }
 
         public CurrentOperation RebaseOperation { get; set; }
+
+        public Mode Mode { get; set; }
 
         #endregion
     }

@@ -104,18 +104,14 @@
             _workspaceViewModel = new WorkspaceViewModel(_repositoryService, _consoleService);
             _gameLibraryViewModel = new GameLibraryViewModel();
 
-            if (_settingsFile.Entity.SteamEnabled)
-            {
-                _gameLibraryViewModel.ShowRecent();
-            }
+            _workspaceViewModel.ShowRecent();
+            _gameLibraryViewModel.ShowRecent();
 
-            ItemListViewModel = _workspaceViewModel;
-
+            SetMode();
             RefreshItems();
 
             SetGlobalHotkey();
             _eventAggregator.SubscribeOnPublishedThread(this);
-            _themeService.Apply();
         }
 
         #endregion
@@ -367,6 +363,22 @@
             HideFromAltTab(View);
         }
 
+        private void SetMode()
+        {
+            if (_settingsFile.Entity.Mode == Mode.Git)
+            {
+                ItemListViewModel = _workspaceViewModel;
+                _themeService.Apply();
+            }
+            else
+            {
+                var steamSettings = new GameSettingsFile();
+                steamSettings.Initialize();
+                _themeService.Apply(steamSettings.Entity.Scheme);
+                ItemListViewModel = _gameLibraryViewModel;
+            }
+        }
+
         private async void Console_OnExecute(object sender, bool execute)
         {
             if (!execute && _console.Lines.Any())
@@ -404,13 +416,16 @@
                     steamSettings.Initialize();
                     _themeService.Apply(steamSettings.Entity.Scheme);
                     ItemListViewModel = _gameLibraryViewModel;
+                    _settingsFile.Entity.Mode = Mode.Game;
                 }
                 else
                 {
                     _themeService.Apply();
                     ItemListViewModel = _workspaceViewModel;
+                    _settingsFile.Entity.Mode = Mode.Git;
                 }
 
+                _settingsFile.Save();
                 ItemListViewModel.ShowRecent();
                 NotifyOfPropertyChange(() => ItemListViewModel);
 
@@ -474,9 +489,13 @@
             var gameTask = _settingsFile.Entity.SteamEnabled ? _gameLibraryViewModel.RefreshItems() : Task.CompletedTask;
             await Task.WhenAll(new List<Task>() { _workspaceViewModel.RefreshItems(), gameTask });
 
-            if (!GameMode && !_settingsFile.Entity.Workspaces.Any())
+            if (GameMode)
             {
                 ShowGame();
+            }
+            else
+            {
+                ShowGit();
             }
 
             NotifyOfPropertyChange(() => ShowConsoleOutput);
