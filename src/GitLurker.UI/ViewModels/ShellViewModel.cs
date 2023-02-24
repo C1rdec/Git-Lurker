@@ -105,7 +105,10 @@
             _gameLibraryViewModel = new GameLibraryViewModel();
 
             _workspaceViewModel.ShowRecent();
-            _gameLibraryViewModel.ShowRecent();
+            if (settings.Entity.SteamEnabled)
+            {
+                _gameLibraryViewModel.ShowRecent();
+            }
 
             SetMode();
             RefreshItems();
@@ -365,17 +368,18 @@
 
         private void SetMode()
         {
-            if (_settingsFile.Entity.Mode == Mode.Git)
-            {
-                ItemListViewModel = _workspaceViewModel;
-                _themeService.Apply();
-            }
-            else
+            if (_settingsFile.Entity.Mode == Mode.Game && _settingsFile.Entity.SteamEnabled)
             {
                 var steamSettings = new GameSettingsFile();
                 steamSettings.Initialize();
                 _themeService.Apply(steamSettings.Entity.Scheme);
                 ItemListViewModel = _gameLibraryViewModel;
+                
+            }
+            else
+            {
+                ItemListViewModel = _workspaceViewModel;
+                _themeService.Apply();
             }
         }
 
@@ -603,6 +607,10 @@
             if (await ItemListViewModel.Open(false))
             {
                 HideWindow();
+            }
+            else
+            {
+                SearchTerm = string.Empty;
             }
         }
 

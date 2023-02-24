@@ -17,6 +17,7 @@ namespace GitLurker.Services
         public RepositoryService()
         {
             _workspaces = new List<Workspace>();
+            GetWorkspaces();
         }
 
         #endregion
