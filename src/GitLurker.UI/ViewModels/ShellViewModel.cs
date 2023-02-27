@@ -49,7 +49,7 @@
         private bool _needUpdate;
         private bool _updating;
         private string _consoleHeader;
-        private DebounceService _debouncer;
+        private IDebounceService _debouncer;
         private WorkspaceViewModel _workspaceViewModel;
         private GameLibraryViewModel _gameLibraryViewModel;
 
@@ -59,6 +59,7 @@
 
         public ShellViewModel(
             IEventAggregator aggregator,
+            IDebounceService debounceService,
             SettingsFile settings,
             KeyboardService keyboardService,
             WindowsLink startupService,
@@ -80,7 +81,7 @@
             _consoleService = consoleService;
             _settingsFile = settings;
             _updateManager = updateManager;
-            _debouncer = new DebounceService(false);
+            _debouncer = debounceService;
             _themeService = themeService;
 
             _updateManager.UpdateRequested += UpdateManager_UpdateRequested;

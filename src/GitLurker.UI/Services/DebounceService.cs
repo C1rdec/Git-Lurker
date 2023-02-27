@@ -3,27 +3,11 @@ using System.Windows.Threading;
 
 namespace GitLurker.Services
 {
-    public class DebounceService
+    public class DebounceService : IDebounceService
     {
         #region Fields
 
         private DispatcherTimer _timer;
-        private bool _manual;
-
-        #endregion
-
-        #region Constructors
-
-        public DebounceService()
-            : this(false)
-        {
-
-        }
-
-        public DebounceService(bool manual)
-        {
-            _manual = manual;
-        }
 
         #endregion
 
@@ -47,11 +31,8 @@ namespace GitLurker.Services
                     return;
                 }
 
-                if (!_manual)
-                {
-                    _timer?.Stop();
-                    _timer = null;
-                }
+                _timer?.Stop();
+                _timer = null;
 
                 action.Invoke();
             }, Dispatcher.CurrentDispatcher);

@@ -6,7 +6,16 @@ namespace GitLurker.UI.Services
     {
         #region Fields
 
-        private readonly DebounceService _debounce = new DebounceService();
+        private readonly IDebounceService _debounce;
+
+        #endregion
+
+        #region Constructors
+
+        public PopupService(IDebounceService debounceService)
+        {
+            _debounce = debounceService;
+        }
 
         #endregion
 
