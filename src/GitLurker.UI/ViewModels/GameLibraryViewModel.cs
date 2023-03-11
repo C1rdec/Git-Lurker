@@ -43,7 +43,7 @@ namespace GitLurker.UI.ViewModels
         public GameViewModel SelectedGameViewModel
         {
             get
-            {
+            {   
                 return _selectedGameViewModel;
             }
 
