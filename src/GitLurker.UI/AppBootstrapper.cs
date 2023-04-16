@@ -50,7 +50,7 @@
                 return;
             }
 
-            DisplayRootViewFor<ShellViewModel>();
+            DisplayRootViewForAsync<ShellViewModel>();
         }
 
         /// <summary>
