@@ -28,10 +28,9 @@
               Cursor="Hand">
             <Popup IsOpen="{Binding IsBranchManagerOpen}" 
                    cal:Message.Attach="[Event Closed] = [Action OnBranchManagerClosed()]"
-                   Placement="Center" 
-                   AllowsTransparency="True"
+                   Placement="Center"
                    StaysOpen="False">
-                <Border Background="#252525" CornerRadius="10">
+                <Border Background="#252525">
                     <ContentControl cal:View.Model="{Binding Path=BranchManager,Mode=OneWay}" Margin="8"/>
                 </Border>
             </Popup>
