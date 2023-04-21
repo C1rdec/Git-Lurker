@@ -529,7 +529,8 @@
             => Task.Run(() =>
             {
                 OperationInProgress = _repo.HasOperationInProgress();
-                HasStashes = _repo.GetStashes().Any();
+                var stashes = _repo.GetStashes();
+                HasStashes = stashes != null && stashes.Any();
 
                 var changes = _repo.GetFilesChanged();
                 if (changes == null)
