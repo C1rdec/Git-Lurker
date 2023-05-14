@@ -14,7 +14,7 @@ using GitLurker.UI.Services;
 using LibGit2Sharp;
 using Lurker.Epic.Services;
 using Lurker.Steam.Services;
-using WindowsUtilities;
+using Lurker.Windows;
 
 namespace GitLurker.UI.ViewModels
 {

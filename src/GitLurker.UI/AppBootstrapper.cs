@@ -9,7 +9,7 @@
     using GitLurker.UI.Extensions;
     using GitLurker.UI.Services;
     using GitLurker.UI.ViewModels;
-    using WindowsUtilities;
+    using Lurker.Windows;
 
     public class AppBootstrapper: BootstrapperBase
     {

@@ -16,8 +16,8 @@
     using GitLurker.UI.Messages;
     using GitLurker.UI.Services;
     using GitLurker.UI.Views;
+    using Lurker.Windows;
     using NHotkey.Wpf;
-    using WindowsUtilities;
 
     public class ShellViewModel : Screen, IHandle<CloseMessage>, IDisposable
     {
