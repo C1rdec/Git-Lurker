@@ -430,7 +430,7 @@
                     _settingsFile.Entity.Mode = Mode.Git;
                 }
 
-                _settingsFile.Save();
+                _settingsFile.Save(false);
                 ItemListViewModel.ShowRecent();
                 NotifyOfPropertyChange(() => ItemListViewModel);
 
@@ -488,7 +488,7 @@
             _parent.Hide();
         }
 
-        private async void OnSettingsSave(object sender, EventArgs e)
+        private async void OnSettingsSave(object sender, Settings e)
         {
             SetGlobalHotkey();
             var gameTask = _settingsFile.Entity.SteamEnabled ? _gameLibraryViewModel.RefreshItems() : Task.CompletedTask;

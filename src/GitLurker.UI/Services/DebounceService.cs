@@ -24,7 +24,7 @@ namespace GitLurker.Services
             _timer?.Stop();
             _timer = null;
 
-            _timer = new DispatcherTimer(TimeSpan.FromMilliseconds(interval), DispatcherPriority.ApplicationIdle, (s, e) =>
+            _timer = new DispatcherTimer(TimeSpan.FromMilliseconds(interval), DispatcherPriority.Normal, (s, e) =>
             {
                 if (_timer == null)
                 {

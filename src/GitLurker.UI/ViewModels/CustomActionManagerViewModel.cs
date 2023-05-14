@@ -23,7 +23,7 @@ namespace GitLurker.UI.ViewModels
             AddActions();
         }
 
-        private void File_OnFileSaved(object sender, System.EventArgs e)
+        private void File_OnFileSaved(object sender, CustomActionSettings e)
         {
             foreach (var action in Actions)
             {
