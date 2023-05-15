@@ -93,10 +93,10 @@
                                 cal:Message.Attach="[Event MouseUp] = [Action CheckoutLastBranch()]"
                                 Visibility="{Binding BranchNameVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
                                 BorderThickness="1.5" 
-                                Width="12" 
-                                Height="50" 
+                                Width="20" 
+                                Height="12" 
                                 VerticalAlignment="Center" 
-                                CornerRadius="3" 
+                                CornerRadius="8,0,0,8" 
                                 Margin="8,0,0,0">
                             <Border.Style>
                                 <Style TargetType="Border">
