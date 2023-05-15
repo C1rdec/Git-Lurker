@@ -14,3 +14,6 @@ dotnet_diagnostic.CS0067.severity = silent
 
 # CA1822: Mark members as static
 dotnet_diagnostic.CA1822.severity = none
+
+# IDE0057: Use range operator
+dotnet_diagnostic.IDE0057.severity = none

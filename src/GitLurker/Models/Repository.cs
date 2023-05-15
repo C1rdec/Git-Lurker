@@ -21,7 +21,7 @@
         #region Fields
 
         private static readonly string OpenVsCodeCommand = "code .";
-        private static readonly InputSimulator InputSimulator = new InputSimulator();
+        private static readonly InputSimulator InputSimulator = new();
         private string _name;
         private FileInfo[] _slnFiles;
         private string _folder;
@@ -320,8 +320,6 @@
                 {
                     var nugetsInRepo = filePaths.Select(p => NugetInformation.Parse(p.FullName));
 
-                    nugetsInRepo.GroupBy(n => n.PackageName).OrderBy(g => g.Count()).First();
-
                     var list = nugetsInRepo.ToList();
                     list.Sort((n1, n2) => n2.CompareTo(n1));
                     newNuget = list.FirstOrDefault();
@@ -415,7 +413,7 @@
                 return;
             }
 
-            if (_slnFiles.Count() == 1)
+            if (_slnFiles.Length == 1)
             {
                 var sln = _slnFiles.FirstOrDefault();
                 var name = Path.GetFileNameWithoutExtension(sln.Name);
@@ -444,7 +442,7 @@
             var process = GetActiveSlnProcess(slnFile);
             if (process != null)
             {
-                Native.SetForegroundWindow(process.MainWindowHandle);
+                _ = Native.SetForegroundWindow(process.MainWindowHandle);
                 InputSimulator.Keyboard.KeyPress(VirtualKeyCode.LMENU);
             }
             else
@@ -589,11 +587,12 @@
             var firstSegment = segments.First();
             var index = firstSegment.IndexOf(":v");
             var domainName = firstSegment.Substring(0, index);
-            domainName.Replace("visualstudio.com", "dev.azure.com");
             domainName = domainName.Replace("visualstudio.com", "dev.azure.com");
 
-            var newSegments = new List<string>();
-            newSegments.Add($"https://{domainName}");
+            var newSegments = new List<string>
+            {
+                $"https://{domainName}"
+            };
             newSegments.AddRange(segments.Skip(1).Take(segments.Length - 2));
             newSegments.Add("_git");
             newSegments.Add(segments.Last());
