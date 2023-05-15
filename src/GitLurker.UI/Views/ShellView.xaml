@@ -79,17 +79,17 @@
                 BorderThickness="1.5">
             <Grid>
                 <TextBox x:Name="SearchTerm"
-                     Margin="10,5,0,5"
-                     Grid.Column="1"
-                     Background="Transparent"
-                     IsReadOnly="{Binding Disable}"
-                     VerticalAlignment="Bottom"
-                     Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"
-                     FontSize="30" 
-                     BorderThickness="0"
-                     Controls:TextBoxHelper.SelectAllOnFocus="True"
-                     Controls:TextBoxHelper.Watermark="{Binding SearchWatermark}"
-                     BorderBrush="{DynamicResource MahApps.Brushes.Accent}"/>
+                         Margin="10,5,0,5"
+                         Grid.Column="1"
+                         Background="Transparent"
+                         IsReadOnly="{Binding Disable}"
+                         VerticalAlignment="Bottom"
+                         Text="{Binding SearchTerm, UpdateSourceTrigger=PropertyChanged}"
+                         FontSize="30" 
+                         BorderThickness="0"
+                         Controls:TextBoxHelper.SelectAllOnFocus="True"
+                         Controls:TextBoxHelper.Watermark="{Binding SearchWatermark}"
+                         BorderBrush="{DynamicResource MahApps.Brushes.Accent}"/>
                 <StackPanel Orientation="Horizontal" 
                             VerticalAlignment="Bottom"
                             HorizontalAlignment="Right"
