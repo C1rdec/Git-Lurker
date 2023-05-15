@@ -54,8 +54,8 @@ namespace GitLurker.Services
 
         public void Dispose()
         {
-            _hook.RemoveAllHandlers();
-            _hook.Dispose();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         public async Task InstallAsync()
@@ -132,8 +132,7 @@ namespace GitLurker.Services
         {
             var taskCompletionSource = new TaskCompletionSource<(KeyCode key, Modifiers modifier)>();
 
-            EventHandler<KeyboardMessageEventArgs> handler = default;
-            handler = (object s, KeyboardMessageEventArgs e) =>
+            void handler(object s, KeyboardMessageEventArgs e)
             {
                 if (e.Direction == KeyDirection.Up)
                 {
@@ -161,11 +160,20 @@ namespace GitLurker.Services
                     _hook.MessageReceived -= handler;
                     taskCompletionSource.SetResult((keyCode, modifier));
                 }
-            };
+            }
 
             _hook.MessageReceived += handler;
 
             return taskCompletionSource.Task;
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _hook.RemoveAllHandlers();
+                _hook.Dispose();
+            }
         }
 
         #endregion
