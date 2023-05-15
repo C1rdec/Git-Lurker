@@ -265,6 +265,17 @@
 
         #region Methods
 
+        public static async void OpenSettings(object parameter)
+        {
+            var viewModel = IoC.Get<SettingsViewModel>();
+            if (viewModel.IsActive)
+            {
+                return;
+            }
+
+            await IoC.Get<IWindowManager>().ShowWindowAsync(IoC.Get<SettingsViewModel>());
+        }
+
         public void Search(string term)
         {
             ItemListViewModel?.Search(term);
@@ -302,17 +313,6 @@
         }
 
         public void OpenSettings() => OpenSettings(null);
-
-        public async void OpenSettings(object parameter)
-        {
-            var viewModel = IoC.Get<SettingsViewModel>();
-            if (viewModel.IsActive)
-            {
-                return;
-            }
-
-            await IoC.Get<IWindowManager>().ShowWindowAsync(IoC.Get<SettingsViewModel>());
-        }
 
         public async void RefreshItems()
         {
@@ -365,6 +365,27 @@
             // Needs to be done after Winook
             ShowInTaskBar = false;
             HideFromAltTab(View);
+        }
+
+        private static void SetHotkey(Hotkey hotkey, System.Action callback, string name)
+        {
+            if (!hotkey.IsDefined())
+            {
+                return;
+            }
+
+            var modifier = Enum.Parse<ModifierKeys>(hotkey.Modifier.ToString());
+
+            if (Enum.TryParse(hotkey.KeyCode.ToString(), ignoreCase: true, out Key key))
+            {
+                try
+                {
+                    HotkeyManager.Current.AddOrReplace(name, key, modifier, (s, e) => callback());
+                }
+                catch (NHotkey.HotkeyAlreadyRegisteredException)
+                {
+                }
+            }
         }
 
         private void SetMode()
@@ -528,27 +549,6 @@
             SetHotkey(settings.Entity.DevToysHotKey, OpenDevtoys, "OpenDevToys");
         }
 
-        private void SetHotkey(Hotkey hotkey, System.Action callback, string name)
-        {
-            if (!hotkey.IsDefined())
-            {
-                return;
-            }
-
-            var modifier = Enum.Parse<ModifierKeys>(hotkey.Modifier.ToString());
-
-            if (Enum.TryParse(hotkey.KeyCode.ToString(), ignoreCase: true, out Key key))
-            {
-                try
-                {
-                    HotkeyManager.Current.AddOrReplace(name, key, modifier, (s, e) => callback());
-                }
-                catch (NHotkey.HotkeyAlreadyRegisteredException)
-                {
-                }
-            }
-        }
-
         private void ApplySettings(SettingsFile settings)
         {
             if (settings.Entity.StartWithWindows)
@@ -629,18 +629,27 @@
         
         public void Dispose()
         {
-            _console.OnExecute -= Console_OnExecute;
-            _consoleService.ShowRequested -= ConsoleService_ShowRequested;
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
-            _console?.Dispose();
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _console.OnExecute -= Console_OnExecute;
+                _consoleService.ShowRequested -= ConsoleService_ShowRequested;
 
-            _keyboardService.EnterPressed -= KeyboardService_EnterPressed;
-            _keyboardService.DownPressed -= KeyboardService_DownPressed;
-            _keyboardService.UpPressed -= KeyboardService_UpPressed;
-            _keyboardService.NextTabPressed -= KeyboardService_NextTabPressed;
-            _keyboardService.EnterLongPressed -= KeyboardService_EnterLongPressed;
-            _keyboardService?.Dispose();
-            _gameLibraryViewModel?.Dispose();
+                _console?.Dispose();
+
+                _keyboardService.EnterPressed -= KeyboardService_EnterPressed;
+                _keyboardService.DownPressed -= KeyboardService_DownPressed;
+                _keyboardService.UpPressed -= KeyboardService_UpPressed;
+                _keyboardService.NextTabPressed -= KeyboardService_NextTabPressed;
+                _keyboardService.EnterLongPressed -= KeyboardService_EnterLongPressed;
+                _keyboardService?.Dispose();
+                _gameLibraryViewModel?.Dispose();
+            }
         }
 
         #endregion
