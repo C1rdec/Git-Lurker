@@ -1,4 +1,4 @@
-﻿using AppDataFileManager;
+﻿using Lurker.AppData;
 
 namespace GitLurker.Models
 {
