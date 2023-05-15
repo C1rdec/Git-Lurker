@@ -301,17 +301,6 @@
             }            
         }
 
-        public void Close()
-        {
-            Execute.OnUIThread(async () => 
-            { 
-                _parent.Close();
-                await TryCloseAsync();
-
-                Process.GetCurrentProcess().Close();
-            });
-        }
-
         public void OpenSettings() => OpenSettings(null);
 
         public async void RefreshItems()
@@ -325,7 +314,7 @@
             var gitLurkerRepo = _repositoryService.GetAllRepo().FirstOrDefault(r => r.Name == "GitLurker");
             if (gitLurkerRepo != null)
             {
-                _updateManager.Watch(gitLurkerRepo, Close);
+                _updateManager.Watch(gitLurkerRepo);
             }
 
             Disable = false;
@@ -345,7 +334,14 @@
             _updating = true;
 
             await _updateManager.Update();
-            Dispose();
+
+            Execute.OnUIThread(async () =>
+            {
+                _parent.Close();
+                await TryCloseAsync();
+
+                Process.GetCurrentProcess().Close();
+            });
         }
 
         protected override async void OnViewLoaded(object view)

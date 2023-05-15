@@ -11,7 +11,6 @@ namespace GitLurker.UI.Services
     {
         #region Fields
 
-        private Action _closeAction;
         private Repository _repo;
         private Timer _timer;
 
@@ -37,13 +36,11 @@ namespace GitLurker.UI.Services
             };
 
             Process.Start(startInfo);
-            _closeAction();
         }
 
-        public void Watch(Repository repo, Action closeAction)
+        public void Watch(Repository repo)
         {
             _repo = repo;
-            _closeAction = closeAction;
 
             if (CheckForUpdate())
             {
