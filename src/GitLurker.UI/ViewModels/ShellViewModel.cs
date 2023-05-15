@@ -344,8 +344,8 @@
 
             _updating = true;
 
-            Dispose();
             await _updateManager.Update();
+            Dispose();
         }
 
         protected override async void OnViewLoaded(object view)
