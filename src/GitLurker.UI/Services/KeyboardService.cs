@@ -136,13 +136,7 @@ namespace GitLurker.Services
             {
                 if (e.Direction == KeyDirection.Up)
                 {
-                    var code = (KeyCode)e.KeyValue;
-                    if (code == KeyCode.Escape)
-                    {
-                        return;
-                    }
-
-                    var keyCode = code;
+                    var keyCode = (KeyCode)e.KeyValue;
                     var modifier = Modifiers.None;
                     if (e.Control)
                     {

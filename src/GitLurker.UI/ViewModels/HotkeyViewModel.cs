@@ -97,6 +97,11 @@ namespace GitLurker.UI.ViewModels
             await dialog.ShowProgressAsync("Waiting...", "Press any keys", task);
             var result = await task;
 
+            if (result.Key == KeyCode.Escape)
+            {
+                return;
+            }
+
             Modifier = result.Modifier;
             KeyCode = result.Key;
 
