@@ -39,8 +39,6 @@ namespace GitLurker.Services
 
         public Task<ExecutionResult> ExecuteCommandAsync(string arguments) => ExecuteCommandAsync(arguments, false, _folder, CancellationToken.None);
 
-        public Task<ExecutionResult> ExecuteCommandAsync(string arguments, string workingDirectory) => ExecuteCommandAsync(arguments, false, workingDirectory, CancellationToken.None);
-
         public Task<ExecutionResult> ExecuteCommandAsync(string arguments, bool listen) => ExecuteCommandAsync(arguments, listen, _folder, CancellationToken.None);
 
         public Task<ExecutionResult> ExecuteCommandAsync(string arguments, bool listen, string workingDirectory, CancellationToken token)
@@ -125,19 +123,6 @@ namespace GitLurker.Services
 
         protected void SetExitCode(int code)
             => NewExitCode?.Invoke(this, code);
-
-        protected Task WaitForStarted()
-        {
-            if (_startedTaskCompletionSource != null)
-            {
-                _startedTaskCompletionSource.SetResult();
-            }
-
-            _startedTaskCompletionSource = new TaskCompletionSource();
-            Task.Delay(6000).ContinueWith(t => _startedTaskCompletionSource.SetResult());
-
-            return _startedTaskCompletionSource.Task;
-        }
 
         private void HandleProcessMessage(string text, bool isError, List<string> data, bool listen)
         {
