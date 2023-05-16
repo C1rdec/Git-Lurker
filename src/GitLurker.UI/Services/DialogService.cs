@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using MahApps.Metro.Controls.Dialogs;
 
-namespace GitLurker.Services
+namespace GitLurker.UI.Services
 {
     public class DialogService
     {

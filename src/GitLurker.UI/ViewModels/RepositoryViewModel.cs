@@ -7,7 +7,7 @@
     using System.Threading.Tasks;
     using System.Windows.Media.Imaging;
     using Caliburn.Micro;
-    using GitLurker.Models;
+    using GitLurker.Core.Models;
     using GitLurker.UI.Messages;
     using GitLurker.UI.Services;
     using MahApps.Metro.IconPacks;
@@ -16,7 +16,7 @@
     {
         #region Fields
 
-        private static readonly CloseMessage CloseMessage = new CloseMessage();
+        private static readonly CloseMessage CloseMessage = new();
         private CancellationTokenSource _nugetTokenSource;
         private CancellationTokenSource _secretTokenSource;
         private CancellationTokenSource _pullRequestTokenSource;
@@ -191,7 +191,7 @@
 
         public bool HasFilesChanged => FileChanges.Any();
 
-        public int FileChangeCount => FileChanges.Count();
+        public int FileChangeCount => FileChanges.Count;
 
         #endregion
 
@@ -282,10 +282,7 @@
 
         public void Open(bool skipModifier)
         {
-            if (_pullRequestTokenSource != null)
-            {
-                _pullRequestTokenSource.Cancel();
-            }
+            _pullRequestTokenSource?.Cancel();
 
             if (_popupService.JustClosed || _skipOpen)
             {

@@ -5,16 +5,15 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using CliWrap.EventStream;
-using GitLurker.Models;
+using GitLurker.Core.Models;
 
-namespace GitLurker.Services
+namespace GitLurker.Core.Services
 {
     public class ProcessService
     {
         #region Fields
 
         private string _folder;
-        private TaskCompletionSource _startedTaskCompletionSource;
 
         #endregion
 
@@ -104,7 +103,7 @@ namespace GitLurker.Services
                         ExitCode = -1,
                     });
                 }
-            });
+            }, token);
             
 
             return taskCompletionSource.Task;
@@ -126,11 +125,6 @@ namespace GitLurker.Services
 
         private void HandleProcessMessage(string text, bool isError, List<string> data, bool listen)
         {
-            if (text.EndsWith("started."))
-            {
-                _startedTaskCompletionSource?.SetResult();
-            }
-
             data.Add(text);
 
             if (listen && text != null)

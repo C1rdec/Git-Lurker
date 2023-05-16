@@ -1,6 +1,6 @@
 ﻿using Lurker.AppData;
 
-namespace GitLurker.Models
+namespace GitLurker.Core.Models
 {
     public class GameSettingsFile : AppDataFileBase<GameSettings>
     {

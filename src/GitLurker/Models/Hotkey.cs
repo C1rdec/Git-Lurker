@@ -1,6 +1,6 @@
 ﻿using Winook;
 
-namespace GitLurker.Models
+namespace GitLurker.Core.Models
 {
     public sealed class Hotkey
     {

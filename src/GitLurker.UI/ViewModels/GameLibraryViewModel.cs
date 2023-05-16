@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Caliburn.Micro;
-using GitLurker.Models;
+using GitLurker.Core.Models;
 using Lurker.Common.Models;
 using Lurker.Epic.Models;
 using Lurker.Epic.Services;

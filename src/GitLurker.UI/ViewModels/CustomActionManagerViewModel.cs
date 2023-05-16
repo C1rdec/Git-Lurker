@@ -1,6 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using Caliburn.Micro;
-using GitLurker.Models;
+using GitLurker.Core.Models;
 using GitLurker.UI.Services;
 
 namespace GitLurker.UI.ViewModels
@@ -54,8 +54,7 @@ namespace GitLurker.UI.ViewModels
 
         private void CustomActionManagerViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            var viewModel = sender as CustomActionTileViewModel;
-            if (viewModel == null)
+            if (sender is not CustomActionTileViewModel viewModel)
             {
                 return;
             }

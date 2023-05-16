@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Windows.Interop;
+using GitLurker.Core;
 
 namespace GitLurker.UI.Helpers
 {
@@ -14,7 +15,7 @@ namespace GitLurker.UI.Helpers
             }
 
             var handle = new WindowInteropHelper(window).Handle;
-            Native.SetForegroundWindow(handle);
+            _ = Native.SetForegroundWindow(handle);
 
             callback();
         }

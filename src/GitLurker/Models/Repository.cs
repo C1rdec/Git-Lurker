@@ -1,4 +1,4 @@
-﻿namespace GitLurker.Models
+﻿namespace GitLurker.Core.Models
 {
     using System;
     using System.Collections.Generic;
@@ -9,8 +9,8 @@
     using System.Threading;
     using System.Threading.Tasks;
     using System.Xml.Linq;
-    using GitLurker.Extensions;
-    using GitLurker.Services;
+    using GitLurker.Core.Extensions;
+    using GitLurker.Core.Services;
     using LibGit2Sharp;
     using SetStartupProjects;
     using WindowsInput;

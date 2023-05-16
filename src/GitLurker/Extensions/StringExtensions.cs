@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace GitLurker.Extensions
+namespace GitLurker.Core.Extensions
 {
     public static class StringExtension
     {

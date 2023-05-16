@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Threading;
 
-namespace GitLurker.Services
+namespace GitLurker.UI.Services
 {
     public class DebounceService : IDebounceService
     {

@@ -1,11 +1,11 @@
-﻿namespace GitLurker.Models
+﻿namespace GitLurker.Core.Models
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
     using System.Threading.Tasks;
-    using GitLurker.Services;
+    using GitLurker.Core.Services;
 
     public class Workspace : ProcessService
     {

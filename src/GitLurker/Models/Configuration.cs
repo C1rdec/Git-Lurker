@@ -1,4 +1,4 @@
-﻿namespace GitLurker.Models
+﻿namespace GitLurker.Core.Models
 {
     public class Configuration
     {

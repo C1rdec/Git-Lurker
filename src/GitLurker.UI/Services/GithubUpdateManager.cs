@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Timers;
-using GitLurker.Models;
+using GitLurker.Core.Models;
 
 namespace GitLurker.UI.Services
 {

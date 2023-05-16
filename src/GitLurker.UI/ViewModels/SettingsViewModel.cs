@@ -7,8 +7,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Caliburn.Micro;
-using GitLurker.Models;
-using GitLurker.Services;
+using GitLurker.Core.Models;
+using GitLurker.Core.Services;
 using GitLurker.UI.Models;
 using GitLurker.UI.Services;
 using LibGit2Sharp;
@@ -22,7 +22,7 @@ namespace GitLurker.UI.ViewModels
     {
         #region Fields
 
-        private List<CurrentOperation> _operations = new List<CurrentOperation>
+        private List<CurrentOperation> _operations = new()
         {
             CurrentOperation.Merge,
             CurrentOperation.Rebase
@@ -249,7 +249,7 @@ namespace GitLurker.UI.ViewModels
 
         #region Methods
 
-        public DoubleClickCommand RebaseOperationCommand => new DoubleClickCommand((operation) => OnRebaseOperationChanged(operation));
+        public DoubleClickCommand RebaseOperationCommand => new((operation) => OnRebaseOperationChanged(operation));
 
         public void OnRebaseOperationChanged(object operation)
         {
@@ -401,10 +401,7 @@ namespace GitLurker.UI.ViewModels
                 }
 
                 var levelAttribute = executionLevel.Attribute("level");
-                if (levelAttribute != null)
-                {
-                    levelAttribute.SetValue(level);
-                }
+                levelAttribute?.SetValue(level);
 
                 File.WriteAllText(manifestPath, xml.ToString());
             }

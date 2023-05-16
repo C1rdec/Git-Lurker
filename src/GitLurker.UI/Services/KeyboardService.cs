@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Caliburn.Micro;
 using Winook;
 
-namespace GitLurker.Services
+namespace GitLurker.UI.Services
 {
     public class KeyboardService : IDisposable
     {

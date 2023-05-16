@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using GitLurker.Models;
+using GitLurker.Core.Models;
 
 namespace GitLurker.UI.Services
 {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace GitLurker.Models
+namespace GitLurker.Core.Models
 {
     public class ExecutionResult
     {

@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using NuGet.Versioning;
 
-namespace GitLurker.Models
+namespace GitLurker.Core.Models
 {
     public class NugetInformation
     {

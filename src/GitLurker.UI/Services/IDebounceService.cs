@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GitLurker.Services
+namespace GitLurker.UI.Services
 {
     public interface IDebounceService
     {

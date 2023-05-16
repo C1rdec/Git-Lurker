@@ -4,8 +4,8 @@
     using System.Collections.Generic;
     using System.Diagnostics;
     using Caliburn.Micro;
-    using GitLurker.Models;
-    using GitLurker.Services;
+    using GitLurker.Core.Models;
+    using GitLurker.Core.Services;
     using GitLurker.UI.Extensions;
     using GitLurker.UI.Services;
     using GitLurker.UI.ViewModels;

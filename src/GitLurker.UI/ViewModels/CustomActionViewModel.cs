@@ -2,8 +2,8 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using Caliburn.Micro;
-using GitLurker.Models;
-using GitLurker.Services;
+using GitLurker.Core.Models;
+using GitLurker.Core.Services;
 using MahApps.Metro.IconPacks;
 
 namespace GitLurker.UI.ViewModels

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using Caliburn.Micro;
-using GitLurker.Models;
-using GitLurker.Services;
+using GitLurker.Core.Models;
+using GitLurker.Core.Services;
 using GitLurker.UI.Models;
 using GitLurker.UI.Services;
 

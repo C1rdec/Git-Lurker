@@ -1,6 +1,6 @@
 ﻿using Caliburn.Micro;
-using GitLurker.Models;
-using GitLurker.Services;
+using GitLurker.Core.Models;
+using GitLurker.UI.Services;
 using MahApps.Metro.IconPacks;
 using Winook;
 

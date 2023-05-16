@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Windows.Media.Imaging;
 using Caliburn.Micro;
-using GitLurker.Models;
+using GitLurker.Core.Models;
 using GitLurker.UI.Messages;
 using Lurker.Common.Models;
 
@@ -11,7 +11,7 @@ namespace GitLurker.UI.ViewModels
     {
         #region Fields
 
-        private static readonly CloseMessage CloseMessage = new CloseMessage();
+        private static readonly CloseMessage CloseMessage = new();
         private GameBase _game;
         private IEventAggregator _eventAggregator;
 
@@ -37,18 +37,16 @@ namespace GitLurker.UI.ViewModels
             {
                 try
                 {
-                    using (MemoryStream memory = new MemoryStream())
-                    {
-                        _game.GetIcon().Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
-                        memory.Position = 0;
-                        BitmapImage bitmapimage = new BitmapImage();
-                        bitmapimage.BeginInit();
-                        bitmapimage.StreamSource = memory;
-                        bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
-                        bitmapimage.EndInit();
+                    using var memory = new MemoryStream();
+                    _game.GetIcon().Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
+                    memory.Position = 0;
+                    var bitmapimage = new BitmapImage();
+                    bitmapimage.BeginInit();
+                    bitmapimage.StreamSource = memory;
+                    bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmapimage.EndInit();
 
-                        return bitmapimage;
-                    }
+                    return bitmapimage;
                 }
                 catch
                 {

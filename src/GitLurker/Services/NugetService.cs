@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using GitLurker.Models;
+using GitLurker.Core.Models;
 
-namespace GitLurker.Services
+namespace GitLurker.Core.Services
 {
     public class NugetService : ProcessService
     {

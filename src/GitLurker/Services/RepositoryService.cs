@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using GitLurker.Models;
+using GitLurker.Core.Models;
 
-namespace GitLurker.Services
+namespace GitLurker.Core.Services
 {
     public class RepositoryService
     {

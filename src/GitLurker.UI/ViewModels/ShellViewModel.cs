@@ -10,8 +10,8 @@
     using System.Windows;
     using System.Windows.Input;
     using Caliburn.Micro;
-    using GitLurker.Models;
-    using GitLurker.Services;
+    using GitLurker.Core.Models;
+    using GitLurker.Core.Services;
     using GitLurker.UI.Helpers;
     using GitLurker.UI.Messages;
     using GitLurker.UI.Services;
@@ -116,7 +116,6 @@
 
             SetGlobalHotkey();
             _eventAggregator.SubscribeOnPublishedThread(this);
-            NeedUpdate = true;
         }
 
         #endregion

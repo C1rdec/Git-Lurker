@@ -4,7 +4,7 @@
 // </copyright>
 //-----------------------------------------------------------------------
 
-namespace GitLurker
+namespace GitLurker.Core
 {
     using System;
     using System.Runtime.InteropServices;

@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Forms;
-using GitLurker.Models;
+using GitLurker.Core.Models;
 
 namespace GitLurker.UI.ViewModels
 {

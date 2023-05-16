@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using Caliburn.Micro;
-using GitLurker.Models;
+using GitLurker.Core.Models;
 using GitLurker.UI.Views;
 
 namespace GitLurker.UI.ViewModels

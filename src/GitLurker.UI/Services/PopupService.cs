@@ -1,4 +1,4 @@
-﻿using GitLurker.Services;
+﻿using GitLurker.Core.Services;
 
 namespace GitLurker.UI.Services
 {

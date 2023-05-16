@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Caliburn.Micro;
-using GitLurker.Models;
+using GitLurker.Core.Models;
 using GitLurker.UI.Services;
 using MahApps.Metro.IconPacks;
 
@@ -83,7 +83,7 @@ namespace GitLurker.UI.ViewModels
             }
 
             var id = Guid.NewGuid();
-            Func<Task> callback = async () =>
+            async Task callback()
             {
                 if (Busy)
                 {
@@ -102,7 +102,7 @@ namespace GitLurker.UI.ViewModels
 
                 _repo.AddToRecent();
                 SetDisable(false, id);
-            };
+            }
 
             Actions.Insert(0, new ActionViewModel(callback, icon, permanent, id));
         }

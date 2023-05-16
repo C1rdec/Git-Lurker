@@ -2,7 +2,7 @@
 using System.Linq;
 using Lurker.AppData;
 
-namespace GitLurker.Models
+namespace GitLurker.Core.Models
 {
     public class CustomActionSettingsFile : AppDataFileBase<CustomActionSettings>
     {

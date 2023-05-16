@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text;
+using GitLurker.Core;
 
 namespace GitLurker.UI.Extensions
 {

@@ -4,27 +4,20 @@ using System.IO;
 using System.Linq;
 using LibGit2Sharp;
 
-namespace GitLurker.Services
+namespace GitLurker.Core.Services
 {
     public class GitService
     {
         #region Fields
 
-        private static readonly List<ChangeKind> ChangedStatus = new List<ChangeKind>
-        {
-            ChangeKind.Deleted,
-            ChangeKind.Added,
-            ChangeKind.Modified,
-        };
-
-        private static readonly List<CurrentOperation> RebaseOperations = new List<CurrentOperation>
+        private static readonly List<CurrentOperation> RebaseOperations = new()
         {
             CurrentOperation.Rebase,
             CurrentOperation.RebaseMerge,
             CurrentOperation.RebaseInteractive,
         };
 
-        private static readonly List<CurrentOperation> MergeOperations = new List<CurrentOperation>
+        private static readonly List<CurrentOperation> MergeOperations = new()
         {
             CurrentOperation.Merge,
         };
@@ -65,7 +58,7 @@ namespace GitLurker.Services
         }
 
         public void Fetch()
-            => Execute(r => Commands.Fetch(r, "origin", new string[0], null, null));
+            => Execute(r => Commands.Fetch(r, "origin", Array.Empty<string>(), null, null));
 
         public bool IsBehind()
             => Execute(r => r.Head.TrackingDetails.BehindBy > 0);

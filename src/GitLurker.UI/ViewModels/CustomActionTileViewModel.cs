@@ -1,5 +1,5 @@
 ﻿using Caliburn.Micro;
-using GitLurker.Models;
+using GitLurker.Core.Models;
 using GitLurker.UI.Services;
 using MahApps.Metro.IconPacks;
 

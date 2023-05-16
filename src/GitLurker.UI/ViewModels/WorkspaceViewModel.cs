@@ -7,8 +7,8 @@
     using System.Linq;
     using System.Threading.Tasks;
     using Caliburn.Micro;
-    using GitLurker.Models;
-    using GitLurker.Services;
+    using GitLurker.Core.Models;
+    using GitLurker.Core.Services;
     using GitLurker.UI.Services;
 
     public class WorkspaceViewModel: PropertyChangedBase, IItemListViewModel
