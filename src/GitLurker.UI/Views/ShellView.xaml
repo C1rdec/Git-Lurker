@@ -149,32 +149,6 @@
                         </Button.ContentTemplate>
                     </Button>
                 </StackPanel>
-                <Border Visibility="{Binding NeedUpdate, Converter={StaticResource BooleanToVisibilityConverter}}"
-                        Cursor="Hand"
-                        HorizontalAlignment="Right"
-                        Margin="0,2,15,0"
-                        cal:Message.Attach="[Event MouseUp] = [Action Update()]"
-                        VerticalAlignment="Center">
-                    <Border.Style>
-                        <Style TargetType="Border">
-                            <Setter Property="Background">
-                                <Setter.Value>
-                                    <SolidColorBrush Color="White" Opacity="0.003"/>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </Border.Style>
-                    <StackPanel Orientation="Horizontal">
-                        <iconPacks:PackIconMaterialDesign Kind="Update" 
-                                                   Height="22"
-                                                   Width="22"
-                                                   Foreground="{DynamicResource MahApps.Brushes.Accent}"/>
-                        <TextBlock VerticalAlignment="Center" 
-                                   FontSize="18"
-                                   Foreground="{DynamicResource MahApps.Brushes.Accent}"
-                                   Margin="8,0,0,0">Update</TextBlock>
-                    </StackPanel>
-                </Border>
                 <Grid Visibility="{Binding ShowConsoleOutput, Converter={StaticResource BooleanToVisibilityConverter}}"
                     VerticalAlignment="Center" 
                       HorizontalAlignment="Right" 
@@ -205,6 +179,32 @@
                                 MaxHeight="300"
                                 Visibility="{Binding ShowConsoleOverview, Converter={StaticResource BooleanToVisibilityConverter}}"
                                 Margin="3,4,3,4"/>
+                <Grid HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,2,15,0">
+                    <mah:ProgressRing Width="15" Height="20" IsActive="{Binding Updating}" Margin="0,5,0,0"></mah:ProgressRing>
+                    <Border Visibility="{Binding NeedUpdate, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        Cursor="Hand"
+                        cal:Message.Attach="[Event MouseUp] = [Action Update()]">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <SolidColorBrush Color="White" Opacity="0.003"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Border.Style>
+                        <StackPanel Orientation="Horizontal">
+                            <iconPacks:PackIconMaterialDesign Kind="Update" 
+                                                   Height="22"
+                                                   Width="22"
+                                                   Foreground="{DynamicResource MahApps.Brushes.Accent}"/>
+                            <TextBlock VerticalAlignment="Center" 
+                                   FontSize="18"
+                                   Foreground="{DynamicResource MahApps.Brushes.Accent}"
+                                   Margin="8,0,0,0">Update</TextBlock>
+                        </StackPanel>
+                    </Border>
+                </Grid>
             </Grid>
         </Border>
 

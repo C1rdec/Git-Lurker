@@ -116,6 +116,7 @@
 
             SetGlobalHotkey();
             _eventAggregator.SubscribeOnPublishedThread(this);
+            NeedUpdate = true;
         }
 
         #endregion
@@ -127,6 +128,20 @@
         public IItemListViewModel ItemListViewModel { get; private set; }
 
         public ConsoleViewModel Console => _console;
+
+        public bool Updating
+        {
+            get
+            {
+                return _updating;
+            }
+
+            set
+            {
+                _updating = value;
+                NotifyOfPropertyChange();
+            }
+        }
 
         public bool ShowConsoleOverview
         {
@@ -326,12 +341,13 @@
 
         public async void Update()
         {
-            if (_updating)
+            if (Updating)
             {
                 return;
             }
 
-            _updating = true;
+            NeedUpdate = false;
+            Updating = true;
 
             await _updateManager.Update();
 
