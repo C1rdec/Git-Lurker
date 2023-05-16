@@ -39,7 +39,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\GitLurker\GitLurker.Core.csproj" />
+    <ProjectReference Include="..\GitLurker.Core\GitLurker.Core.csproj" />
   </ItemGroup>
 
   <ItemGroup>

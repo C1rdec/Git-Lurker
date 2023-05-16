@@ -5,7 +5,7 @@ VisualStudioVersion = 17.0.32126.317
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitLurker.UI", "src\GitLurker.UI\GitLurker.UI.csproj", "{308A97B8-F14D-482E-ACC3-E81AB3D5C8AE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitLurker.Core", "src\GitLurker\GitLurker.Core.csproj", "{A1C0CC3F-B407-4EE5-B596-CFFF24D2430E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GitLurker.Core", "src\GitLurker.Core\GitLurker.Core.csproj", "{A1C0CC3F-B407-4EE5-B596-CFFF24D2430E}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{30BEBF55-70F3-4345-ACD3-11278AE82580}"
 	ProjectSection(SolutionItems) = preProject
