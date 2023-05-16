@@ -128,6 +128,12 @@
 
         public ConsoleViewModel Console => _console;
 
+        public bool ShowConsoleOutput => _settingsFile.Entity.ConsoleOuput && UpToDate;
+
+        public bool UpToDate => !NeedUpdate;
+
+        public string Version => _version;
+
         public bool Updating
         {
             get
@@ -155,8 +161,6 @@
                 NotifyOfPropertyChange();
             }
         }
-
-        public bool ShowConsoleOutput => _settingsFile.Entity.ConsoleOuput && UpToDate;
 
         public string SearchTerm
         {
@@ -186,8 +190,6 @@
                 NotifyOfPropertyChange(() => ShowConsoleOutput);
             }
         }
-
-        public bool UpToDate => !NeedUpdate;
 
         public bool HasSurfaceDial
         {
@@ -268,8 +270,6 @@
                 NotifyOfPropertyChange();
             }
         }
-
-        public string Version => _version;
 
         protected ShellView View { get; private set; }
 
