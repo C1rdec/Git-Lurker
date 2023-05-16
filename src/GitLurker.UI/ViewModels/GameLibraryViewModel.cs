@@ -43,7 +43,7 @@ namespace GitLurker.UI.ViewModels
         public GameViewModel SelectedGameViewModel
         {
             get
-            {   
+            {
                 return _selectedGameViewModel;
             }
 
@@ -62,7 +62,7 @@ namespace GitLurker.UI.ViewModels
 
         #region Methods
 
-        public void Clear() 
+        public void Clear()
         {
             SelectedGameViewModel = null;
             Execute.OnUIThread(() => GameViewModels.Clear());
@@ -139,7 +139,7 @@ namespace GitLurker.UI.ViewModels
         }
 
         public Task RefreshItems()
-            => Task.Run(async () => 
+            => Task.Run(async () =>
             {
                 var settings = new GameSettingsFile();
                 settings.Initialize();

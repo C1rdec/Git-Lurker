@@ -47,11 +47,11 @@ namespace GitLurker.UI.ViewModels
         #region Constructors
 
         public SettingsViewModel(
-            FlyoutService flyoutService, 
-            SettingsFile settingsFile, 
+            FlyoutService flyoutService,
+            SettingsFile settingsFile,
             ThemeService themeService,
-            WindowsLink windowsLink, 
-            DialogService dialogService, 
+            WindowsLink windowsLink,
+            DialogService dialogService,
             RepositoryService repositoryService)
         {
             _flyoutService = flyoutService;
@@ -171,7 +171,7 @@ namespace GitLurker.UI.ViewModels
 
         public bool FlyoutOpen
         {
-            get =>_flyoutOpen;
+            get => _flyoutOpen;
             set
             {
                 if (!value)
@@ -253,7 +253,7 @@ namespace GitLurker.UI.ViewModels
 
         public void OnRebaseOperationChanged(object operation)
         {
-            if(operation is CurrentOperation currentOperation)
+            if (operation is CurrentOperation currentOperation)
             {
                 SelectedOperation = currentOperation;
                 _settingsFile.Entity.RebaseOperation = currentOperation;
@@ -380,7 +380,7 @@ namespace GitLurker.UI.ViewModels
         public void ToggleAdmin()
         {
             var isAdmin = !_settingsFile.Entity.IsAdmin;
-            
+
 
             var gitLurker = _repositoryService.GetRepo("GitLurker");
             if (gitLurker == null)

@@ -67,7 +67,7 @@ namespace GitLurker.UI.ViewModels
             });
         }
 
-        public void AddAction(Func<Task<ExecutionResult>> task, PackIconControlBase icon) 
+        public void AddAction(Func<Task<ExecutionResult>> task, PackIconControlBase icon)
             => AddAction(task, icon, openConsole: false, permanent: true);
 
         public void AddAction(Func<Task<ExecutionResult>> task, PackIconControlBase icon, bool openConsole)
@@ -134,7 +134,7 @@ namespace GitLurker.UI.ViewModels
 
         public void SetDisable(bool value, Guid actionId)
         {
-            foreach(var action in Actions)
+            foreach (var action in Actions)
             {
                 if (action.Id == actionId)
                 {

@@ -47,7 +47,7 @@
             var repos = existingRepos.Where(r => r.Name == _name);
             _duplicate = repos.Any();
 
-            foreach(var repo in repos)
+            foreach (var repo in repos)
             {
                 repo.SetDuplicate();
             }
@@ -232,7 +232,7 @@
 
             var profiles = document.RootElement.GetProperty("profiles");
 
-            foreach (var profile in profiles.EnumerateObject()) 
+            foreach (var profile in profiles.EnumerateObject())
             {
                 if (profile.Value.TryGetProperty("applicationUrl", out var applicationUrl))
                 {
@@ -313,7 +313,7 @@
             var executionResult = await ExecuteCommandAsync($@"{NugetListCommand} -source {nugetSource} -prerelease");
 
             // To get out of the UI Thread
-            await Task.Run(() => 
+            await Task.Run(() =>
             {
                 var filePaths = GetFiles($"*.nupkg", int.MaxValue).Where(n => n.FullName.Contains("\\bin\\"));
                 if (filePaths.Any())
@@ -510,7 +510,7 @@
                 $"{solutionName} (Debugging) - Microsoft Visual Studio",
             };
 
-            foreach(var title in expectedTitles)
+            foreach (var title in expectedTitles)
             {
                 var process = runningVS.FirstOrDefault(p => p.MainWindowTitle.StartsWith(title));
                 if (process != null)

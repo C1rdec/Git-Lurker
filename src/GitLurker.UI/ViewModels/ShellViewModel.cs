@@ -122,7 +122,7 @@
 
         #region Properties
 
-        public DoubleClickCommand ShowSettings => new (OpenSettings);
+        public DoubleClickCommand ShowSettings => new(OpenSettings);
 
         public IItemListViewModel ItemListViewModel { get; private set; }
 
@@ -258,7 +258,7 @@
                 NotifyOfPropertyChange();
             }
         }
-        
+
         public string ConsoleHeader
         {
             get => string.IsNullOrEmpty(_consoleHeader) ? "Console output" : _consoleHeader;
@@ -312,7 +312,7 @@
                 IsVisible = false;
                 SearchTerm = string.Empty;
                 ItemListViewModel?.Clear();
-            }            
+            }
         }
 
         public void OpenSettings() => OpenSettings(null);
@@ -407,7 +407,7 @@
                 steamSettings.Initialize();
                 _themeService.Apply(steamSettings.Entity.Scheme);
                 ItemListViewModel = _gameLibraryViewModel;
-                
+
             }
             else
             {
@@ -499,7 +499,7 @@
         private void FocusSearch() => DockingHelper.SetForeground(View, () =>
         {
             View.SearchTerm.Focus();
-        }); 
+        });
 
         private void HideFromAltTab(Window view)
         {
@@ -511,7 +511,7 @@
                 Height = 1,
 
                 // Set window style as ToolWindow to avoid its icon in AltTab
-                WindowStyle = WindowStyle.ToolWindow, 
+                WindowStyle = WindowStyle.ToolWindow,
                 ShowInTaskbar = false,
             };
 
@@ -637,7 +637,7 @@
 
         private void KeyboardService_EnterLongPressed(object sender, EventArgs e)
             => ItemListViewModel.EnterLongPressed();
-        
+
         public void Dispose()
         {
             Dispose(true);

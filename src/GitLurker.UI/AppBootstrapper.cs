@@ -11,7 +11,7 @@
     using GitLurker.UI.ViewModels;
     using Lurker.Windows;
 
-    public class AppBootstrapper: BootstrapperBase
+    public class AppBootstrapper : BootstrapperBase
     {
         #region Fields
 
@@ -67,7 +67,7 @@
             _container.Singleton<ThemeService, ThemeService>();
             _container.Singleton<FlyoutService, FlyoutService>();
             _container.Singleton<DialogService, DialogService>();
-            _container.Singleton<KeyboardService, KeyboardService>(); 
+            _container.Singleton<KeyboardService, KeyboardService>();
             _container.Singleton<GithubUpdateManager, GithubUpdateManager>();
             _container.Singleton<IDebounceService, DebounceService>();
             _container.Singleton<IWindowManager, WindowManager>();

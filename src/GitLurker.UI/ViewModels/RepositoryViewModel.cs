@@ -81,8 +81,9 @@
 
         public bool IsVsCode => !_repo.HasSln;
 
-        public BitmapFrame IconSource 
-        {   get 
+        public BitmapFrame IconSource
+        {
+            get
             {
                 if (!File.Exists(_repo.IconPath))
                 {
@@ -92,7 +93,7 @@
                 using var stream = new FileStream(_repo.IconPath, FileMode.Open, FileAccess.Read);
 
                 return BitmapFrame.Create(stream, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
-            } 
+            }
         }
 
         public string RepoName => _repo.Name;
@@ -121,7 +122,7 @@
 
         public bool BranchNameVisible => !string.IsNullOrEmpty(_branchName) || OperationInProgress;
 
-        public bool CancelOperationVisisble 
+        public bool CancelOperationVisisble
         {
             get => _cancelOperationVisible;
             set
@@ -158,7 +159,7 @@
         {
             get => _popupService.IsOpen;
             set
-            {   
+            {
                 _popupService.IsOpen = value;
                 NotifyOfPropertyChange();
             }
@@ -312,7 +313,7 @@
             _repo.OpenPullRequest();
         }
 
-        public async void Pull() 
+        public async void Pull()
         {
             if (Busy)
             {
@@ -496,7 +497,7 @@
                 _secretTokenSource.Dispose();
             }
 
-            return Task.Run(() => 
+            return Task.Run(() =>
             {
                 _secretTokenSource = new CancellationTokenSource();
                 var token = _secretTokenSource.Token;
@@ -512,7 +513,7 @@
                     Execute.OnUIThread(() =>
                     {
                         var icon = new PackIconFontisto() { Kind = PackIconFontistoKind.UserSecret };
-                        _actionBar.AddAction(() => 
+                        _actionBar.AddAction(() =>
                         {
                             _repo.OpenUserSecret(secretId);
                             return Task.FromResult(new ExecutionResult());
@@ -535,7 +536,7 @@
                     return;
                 }
 
-                Execute.OnUIThread(() => 
+                Execute.OnUIThread(() =>
                 {
                     FileChanges.Clear();
 

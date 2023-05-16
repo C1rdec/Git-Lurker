@@ -66,7 +66,16 @@ namespace GitLurker.UI.ViewModels
 
         public void Dispose()
         {
-            _consoleService.ExecutionRequested -= ConsoleService_ExecutionRequested;
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _consoleService.ExecutionRequested -= ConsoleService_ExecutionRequested;
+            }
         }
 
         private static bool IsLineInError(string line)
@@ -120,8 +129,8 @@ namespace GitLurker.UI.ViewModels
 
             if (_processService != null)
             {
-                Execute.OnUIThread(() => 
-                { 
+                Execute.OnUIThread(() =>
+                {
                     Lines.Clear();
                 });
                 _processService.NewProcessMessage -= Repository_NewProcessMessage;

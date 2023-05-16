@@ -11,7 +11,7 @@
     using GitLurker.Core.Services;
     using GitLurker.UI.Services;
 
-    public class WorkspaceViewModel: PropertyChangedBase, IItemListViewModel
+    public class WorkspaceViewModel : PropertyChangedBase, IItemListViewModel
     {
         #region Fields
 
@@ -214,7 +214,7 @@
                 }
             }
 
-            foreach(var folder in invalidFolders)
+            foreach (var folder in invalidFolders)
             {
                 file.RemoveRecent(folder);
             }
@@ -226,7 +226,7 @@
             _repos.Clear();
         }
 
-        public void NextTabPressed() 
+        public void NextTabPressed()
         {
             SelectedRepo ??= _repos.FirstOrDefault();
 

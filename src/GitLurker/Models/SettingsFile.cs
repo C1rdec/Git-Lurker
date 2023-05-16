@@ -30,7 +30,7 @@ namespace GitLurker.Core.Models
                 if (recentRepos.Count >= MaxRecentCount)
                 {
                     recentRepos.RemoveAt(MaxRecentCount - 1);
-                }                
+                }
             }
             else
             {

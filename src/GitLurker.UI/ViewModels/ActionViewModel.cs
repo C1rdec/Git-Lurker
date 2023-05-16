@@ -68,7 +68,7 @@ namespace GitLurker.UI.ViewModels
 
         #region Methods
 
-        public async void OnClick() 
+        public async void OnClick()
         {
             await _action();
         }

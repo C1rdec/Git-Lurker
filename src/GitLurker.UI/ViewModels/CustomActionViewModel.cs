@@ -84,7 +84,7 @@ namespace GitLurker.UI.ViewModels
                 NotifyOfPropertyChange();
             }
         }
-        
+
         public string ActionName
         {
             get => _action.Name;
@@ -115,7 +115,7 @@ namespace GitLurker.UI.ViewModels
             }
         }
 
-        public bool OpenConsole 
+        public bool OpenConsole
         {
             get => _action.OpenConsole;
             set

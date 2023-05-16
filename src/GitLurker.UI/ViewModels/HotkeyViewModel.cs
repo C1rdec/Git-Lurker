@@ -20,7 +20,7 @@ namespace GitLurker.UI.ViewModels
         #region Constructors
 
         public HotkeyViewModel(Hotkey hotkey, System.Action callback, string name)
-        { 
+        {
             _name = name;
             _hotkey = hotkey;
             _save = callback;
@@ -50,7 +50,7 @@ namespace GitLurker.UI.ViewModels
 
         public Modifiers Modifier
         {
-            get =>_hotkey.Modifier;
+            get => _hotkey.Modifier;
             private set
             {
                 _hotkey.Modifier = value;
@@ -61,7 +61,7 @@ namespace GitLurker.UI.ViewModels
 
         public KeyCode KeyCode
         {
-            get =>_hotkey.KeyCode;
+            get => _hotkey.KeyCode;
             private set
             {
                 _hotkey.KeyCode = value;

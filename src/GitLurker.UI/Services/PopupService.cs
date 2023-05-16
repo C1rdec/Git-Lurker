@@ -1,6 +1,4 @@
-﻿using GitLurker.Core.Services;
-
-namespace GitLurker.UI.Services
+﻿namespace GitLurker.UI.Services
 {
     public class PopupService
     {

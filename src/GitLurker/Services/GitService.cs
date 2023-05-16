@@ -39,8 +39,8 @@ namespace GitLurker.Core.Services
 
         public CurrentOperation GetCurrentOperation()
         {
-            return Execute(r => 
-            { 
+            return Execute(r =>
+            {
                 var currentOperation = r.Info.CurrentOperation;
 
                 if (RebaseOperations.Contains(currentOperation))
@@ -74,8 +74,8 @@ namespace GitLurker.Core.Services
             };
             var branches = Execute(r => r.Branches.Where(b => b.FriendlyName != "origin/HEAD").ToArray());
 
-           foreach (var remoteBrach in branches.Where(b => b.IsRemote).OrderBy(b => b.FriendlyName))
-           {
+            foreach (var remoteBrach in branches.Where(b => b.IsRemote).OrderBy(b => b.FriendlyName))
+            {
                 var branchName = remoteBrach.FriendlyName.Replace("origin/", string.Empty);
                 if (branchNames.Contains(branchName))
                 {
@@ -101,7 +101,7 @@ namespace GitLurker.Core.Services
 
         public IEnumerable<string> GetFilesChanged()
         {
-            return Execute(repo => 
+            return Execute(repo =>
             {
                 var filePaths = new List<string>();
                 var status = repo.RetrieveStatus();

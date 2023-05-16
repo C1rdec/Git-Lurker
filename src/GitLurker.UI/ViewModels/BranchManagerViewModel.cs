@@ -30,7 +30,7 @@ namespace GitLurker.UI.ViewModels
 
         #region Constructors
 
-        public BranchManagerViewModel(Repository repo, Action<string> onSelected, System.Action onClose , System.Action<string> onRebase)
+        public BranchManagerViewModel(Repository repo, Action<string> onSelected, System.Action onClose, System.Action<string> onRebase)
         {
             _repo = repo;
             _onSelected = onSelected;
@@ -275,7 +275,7 @@ namespace GitLurker.UI.ViewModels
         public void Rebase(string branchName)
         {
             _skipMainAction = true;
-             _onRebase?.Invoke(branchName);
+            _onRebase?.Invoke(branchName);
         }
 
         #endregion

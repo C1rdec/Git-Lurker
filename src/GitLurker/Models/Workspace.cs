@@ -19,7 +19,7 @@
         #region Constructors
 
         public Workspace(string folderPath)
-            : base (folderPath)
+            : base(folderPath)
         {
             _folder = folderPath;
             _repositories = new List<Repository>();

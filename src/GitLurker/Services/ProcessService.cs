@@ -104,7 +104,7 @@ namespace GitLurker.Core.Services
                     });
                 }
             }, token);
-            
+
 
             return taskCompletionSource.Task;
         }

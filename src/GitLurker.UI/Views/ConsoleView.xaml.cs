@@ -27,7 +27,7 @@ namespace GitLurker.UI.Views
             if (e.ExtentHeightChange == 0)
             {
                 if (ScrollViewer.VerticalOffset == ScrollViewer.ScrollableHeight)
-                { 
+                {
                     _autoScroll = true;
                 }
                 else

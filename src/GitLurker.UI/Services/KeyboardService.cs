@@ -64,19 +64,19 @@ namespace GitLurker.UI.Services
             _hook = new KeyboardHook(process.Id);
 
             // Enter
-            _hook.AddHandler(KeyCode.Enter, Modifiers.None, KeyDirection.Down, (o, e) => 
+            _hook.AddHandler(KeyCode.Enter, Modifiers.None, KeyDirection.Down, (o, e) =>
             {
                 Execute.OnUIThread(() =>
                 {
-                    _debounceService.Debounce(666, () => 
-                    { 
+                    _debounceService.Debounce(666, () =>
+                    {
                         EnterLongPressed?.Invoke(this, EventArgs.Empty);
                         _debounceService.Reset();
                     });
                 });
             });
 
-            _hook.AddHandler(KeyCode.Enter, (o, e) => 
+            _hook.AddHandler(KeyCode.Enter, (o, e) =>
             {
                 if (_debounceService.Reset())
                 {
@@ -112,7 +112,7 @@ namespace GitLurker.UI.Services
             _hook.AddHandler(KeyCode.Down, (o, e) => DownPressed?.Invoke(this, EventArgs.Empty));
 
             _hook.AddHandler(KeyCode.Tab, (o, e) => NextTabPressed?.Invoke(this, EventArgs.Empty));
-            _hook.AddHandler(KeyCode.Tab, Modifiers.Shift,(o, e) => PreviousTabPressed?.Invoke(this, EventArgs.Empty));
+            _hook.AddHandler(KeyCode.Tab, Modifiers.Shift, (o, e) => PreviousTabPressed?.Invoke(this, EventArgs.Empty));
 
             _hook.AddHandler(KeyCode.D1, (o, e) => OnePressed?.Invoke(this, EventArgs.Empty));
             _hook.AddHandler(KeyCode.D2, (o, e) => TwoPressed?.Invoke(this, EventArgs.Empty));
