@@ -447,22 +447,24 @@
                 _debouncer.Reset();
                 SearchTerm = string.Empty;
 
+                var settings = new SettingsFile();
+                settings.Initialize();
                 if (ItemListViewModel is WorkspaceViewModel)
                 {
                     var steamSettings = new GameSettingsFile();
                     steamSettings.Initialize();
                     _themeService.Apply(steamSettings.Entity.Scheme);
                     ItemListViewModel = _gameLibraryViewModel;
-                    _settingsFile.Entity.Mode = Mode.Game;
+                    settings.Entity.Mode = Mode.Game;
                 }
                 else
                 {
                     _themeService.Apply();
                     ItemListViewModel = _workspaceViewModel;
-                    _settingsFile.Entity.Mode = Mode.Git;
+                    settings.Entity.Mode = Mode.Git;
                 }
 
-                _settingsFile.Save(false);
+                settings.Save(false);
                 ItemListViewModel.ShowRecent();
                 NotifyOfPropertyChange(() => ItemListViewModel);
 
