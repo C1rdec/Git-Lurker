@@ -359,6 +359,12 @@
             });
         }
 
+        public async void Close()
+        {
+            _parent.Close();
+            await TryCloseAsync();
+        }
+
         protected override async void OnViewLoaded(object view)
         {
             View = view as ShellView;
