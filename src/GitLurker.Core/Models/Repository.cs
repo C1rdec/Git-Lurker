@@ -434,7 +434,7 @@
         {
             // TODO: Handle multiple sln files
             var slnFile = _slnFiles.FirstOrDefault();
-            if (slnFile == null)
+            if (slnFile == null || !File.Exists(slnFile.FullName))
             {
                 return false;
             }
