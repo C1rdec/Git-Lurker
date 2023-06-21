@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using Caliburn.Micro;
-using GitLurker.Core.Models;
-using Lurker.Patreon;
+using GitLurker.Core.Services;
+using GitLurker.UI.Messages;
 
 namespace GitLurker.UI.ViewModels;
 
@@ -9,39 +9,26 @@ public class PatreonViewModel : Screen
 {
     #region Fields
 
-    private string _patreonId;
-    private bool _isPledged;
-    private PatreonFile _patreonFile;
+    private PatronService _patronService;
+    private IEventAggregator _eventAggregator;
 
     #endregion
 
-    public PatreonViewModel()
+    public PatreonViewModel(PatronService service, IEventAggregator eventAggregator)
     {
-        _patreonFile = new PatreonFile();
-        _patreonFile.Initialize();
+        _patronService = service;
+        _eventAggregator = eventAggregator;
     }
 
     #region Properties
 
-    public string PatreonId
-    {
-        get => _patreonId;
-        set
-        {
-            _patreonId = value;
-            NotifyOfPropertyChange();
-        }
-    }
+    public string PatreonId => _patronService.PatreonId;
 
-    public bool IsPledged
-    {
-        get => _isPledged;
-        set
-        {
-            _isPledged = value;
-            NotifyOfPropertyChange();
-        }
-    }
+    public bool IsPledged => _patronService.IsPledged;
+
+    public bool IsNotPledged => !IsPledged;
+
+    public bool IsNotLoggedIn => string.IsNullOrEmpty(PatreonId);
 
     #endregion
 
@@ -49,13 +36,14 @@ public class PatreonViewModel : Screen
 
     public async void Login()
     {
-        using var service = CreateService();
-        var tokenResult = await service.GetAccessTokenAsync();
+        await _patronService.LoginAsync();
 
-        _patreonFile.Save(PatreonToken.FromTokenResult(tokenResult));
+        NotifyOfPropertyChange(() => PatreonId);
+        NotifyOfPropertyChange(() => IsPledged);
+        NotifyOfPropertyChange(() => IsNotPledged);
+        NotifyOfPropertyChange(() => IsNotLoggedIn);
 
-        PatreonId = await service.GetPatronId(tokenResult.AccessToken);
-        IsPledged = await service.IsPledging("3779584", tokenResult.AccessToken);
+        await _eventAggregator.PublishOnCurrentThreadAsync(new PatronMessage());
     }
 
     public void Pledge()
@@ -67,9 +55,6 @@ public class PatreonViewModel : Screen
         };
         Process.Start(psi);
     }
-
-    private PatreonService CreateService()
-        => new PatreonService(new int[] { 8080, 8181, 8282 }, "uI0ZqaEsUckHlpQdOgnJfGtA9tjdKy4A9IpfJj9M2ZIMRkZrRZSemBJ2DtNxbPJm");
 
     #endregion
 }

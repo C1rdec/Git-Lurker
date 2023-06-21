@@ -40,7 +40,7 @@
         /// </summary>
         /// <param name="sender">The sender.</param>
         /// <param name="e">The args.</param>
-        protected override void OnStartup(object sender, System.Windows.StartupEventArgs e)
+        protected async override void OnStartup(object sender, System.Windows.StartupEventArgs e)
         {
             if (RunningInstance() != null)
             {
@@ -50,7 +50,9 @@
                 return;
             }
 
-            DisplayRootViewForAsync<ShellViewModel>();
+            await IoC.Get<PatronService>().CheckPledgeStatusAsync();
+
+            await DisplayRootViewForAsync<ShellViewModel>();
         }
 
         /// <summary>
@@ -61,6 +63,7 @@
             _container = new SimpleContainer();
 
             // Services
+            _container.Singleton<PatronService, PatronService>();
             _container.Singleton<PopupService, PopupService>();
             _container.Singleton<ConsoleService, ConsoleService>();
             _container.Singleton<RepositoryService, RepositoryService>();
