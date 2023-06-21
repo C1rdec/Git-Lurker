@@ -76,6 +76,7 @@
             // ViewModels
             _container.PerRequest<ShellViewModel, ShellViewModel>();
             _container.Singleton<SettingsViewModel, SettingsViewModel>();
+            _container.Singleton<PatreonViewModel, PatreonViewModel>();
             _container.Singleton<WelcomeViewModel, WelcomeViewModel>();
             _container.Singleton<ConsoleViewModel, ConsoleViewModel>();
 

@@ -287,7 +287,7 @@
                 return;
             }
 
-            await IoC.Get<IWindowManager>().ShowWindowAsync(IoC.Get<SettingsViewModel>());
+            await IoC.Get<IWindowManager>().ShowWindowAsync(viewModel);
         }
 
         public void Search(string term)
@@ -363,6 +363,17 @@
         {
             _parent.Close();
             await TryCloseAsync();
+        }
+
+        public async void OpenPatreon()
+        {
+            var viewModel = IoC.Get<PatreonViewModel>();
+            if (viewModel.IsActive)
+            {
+                return;
+            }
+
+            await IoC.Get<IWindowManager>().ShowWindowAsync(viewModel);
         }
 
         protected override async void OnViewLoaded(object view)
