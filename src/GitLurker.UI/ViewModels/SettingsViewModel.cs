@@ -9,6 +9,7 @@ using System.Xml.Linq;
 using Caliburn.Micro;
 using GitLurker.Core.Models;
 using GitLurker.Core.Services;
+using GitLurker.UI.Messages;
 using GitLurker.UI.Models;
 using GitLurker.UI.Services;
 using LibGit2Sharp;
@@ -18,7 +19,7 @@ using Lurker.Windows;
 
 namespace GitLurker.UI.ViewModels
 {
-    public class SettingsViewModel : Screen
+    public class SettingsViewModel : Screen, IHandle<PatronMessage>, IDisposable
     {
         #region Fields
 
@@ -36,6 +37,8 @@ namespace GitLurker.UI.ViewModels
         private RepositoryService _repositoryService;
         private PropertyChangedBase _flyoutContent;
         private ThemeService _themeService;
+        private PatronService _patronService;
+        private IEventAggregator _eventAggregator;
         private bool _steamLoading;
         private bool _epicLoading;
         private bool _flyoutOpen;
@@ -52,11 +55,14 @@ namespace GitLurker.UI.ViewModels
             ThemeService themeService,
             WindowsLink windowsLink,
             DialogService dialogService,
-            RepositoryService repositoryService)
+            RepositoryService repositoryService, 
+            PatronService patronService,
+            IEventAggregator eventAggregator)
         {
             _flyoutService = flyoutService;
             _repositoryService = repositoryService;
             _themeService = themeService;
+            _patronService = patronService;
             _windowsStartupService = windowsLink;
             _settingsFile = settingsFile;
             _settingsFile.Initialize();
@@ -73,11 +79,15 @@ namespace GitLurker.UI.ViewModels
             _flyoutService.ShowFlyoutRequested += FlyoutService_ShowFlyout;
             _flyoutService.CloseFlyoutRequested += FlyoutService_CloseFlyout;
             _selectedOperation = _settingsFile.Entity.RebaseOperation;
+            _eventAggregator = eventAggregator;
+            _eventAggregator.SubscribeOnPublishedThread(this);
         }
 
         #endregion
 
         #region Properties
+
+        public bool IsPledged => _patronService.IsPledged;
 
         public IEnumerable<CurrentOperation> Operations => _operations;
 
@@ -423,6 +433,18 @@ namespace GitLurker.UI.ViewModels
         private void FlyoutService_ShowFlyout(object _, FlyoutRequest e) => ShowFlyout(e.Header, e.Content);
 
         private void FlyoutService_CloseFlyout(object _, EventArgs e) => CloseFlyout();
+
+        public Task HandleAsync(PatronMessage message, CancellationToken cancellationToken)
+        {
+            NotifyOfPropertyChange(() => IsPledged);
+
+            return Task.CompletedTask;
+        }
+
+        public void Dispose()
+        {
+            _eventAggregator.Unsubscribe(this);
+        }
 
         #endregion
     }

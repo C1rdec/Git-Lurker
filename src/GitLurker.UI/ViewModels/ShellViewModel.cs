@@ -53,6 +53,7 @@
         private IDebounceService _debouncer;
         private WorkspaceViewModel _workspaceViewModel;
         private GameLibraryViewModel _gameLibraryViewModel;
+        private SettingsViewModel _settingsViewModel;
 
         #endregion
 
@@ -69,7 +70,8 @@
             ConsoleService consoleService,
             GithubUpdateManager updateManager,
             ConsoleViewModel console,
-            PatronService patronService)
+            PatronService patronService,
+            SettingsViewModel settingsViewModel)
         {
             _console = console;
             _searchTerm = string.Empty;
@@ -119,6 +121,7 @@
 
             SetGlobalHotkey();
             _eventAggregator.SubscribeOnPublishedThread(this);
+            _settingsViewModel = settingsViewModel;
         }
 
         #endregion
@@ -284,15 +287,14 @@
 
         #region Methods
 
-        public static async void OpenSettings(object parameter)
+        public async void OpenSettings(object parameter)
         {
-            var viewModel = IoC.Get<SettingsViewModel>();
-            if (viewModel.IsActive)
+            if (_settingsViewModel.IsActive)
             {
                 return;
             }
 
-            await IoC.Get<IWindowManager>().ShowWindowAsync(viewModel);
+            await IoC.Get<IWindowManager>().ShowWindowAsync(_settingsViewModel);
         }
 
         public void Search(string term)
@@ -410,6 +412,7 @@
                 _keyboardService.EnterLongPressed -= KeyboardService_EnterLongPressed;
                 _keyboardService?.Dispose();
                 _gameLibraryViewModel?.Dispose();
+                _settingsViewModel?.Dispose();
             }
         }
 
