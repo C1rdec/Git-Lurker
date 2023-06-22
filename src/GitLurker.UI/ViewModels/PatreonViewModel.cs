@@ -1,23 +1,31 @@
 ﻿using System.Diagnostics;
+using System.Threading;
+using System.Threading.Tasks;
 using Caliburn.Micro;
 using GitLurker.Core.Services;
 using GitLurker.UI.Messages;
+using GitLurker.UI.Services;
 
 namespace GitLurker.UI.ViewModels;
 
-public class PatreonViewModel : Screen
+public class PatreonViewModel : FlyoutScreenBase, IHandle<PatronMessage>
 {
     #region Fields
 
     private PatronService _patronService;
     private IEventAggregator _eventAggregator;
+    private PatreonSettingsViewModel _settings;
 
     #endregion
 
-    public PatreonViewModel(PatronService service, IEventAggregator eventAggregator)
+    public PatreonViewModel(PatronService service, IEventAggregator eventAggregator, PatreonSettingsViewModel settings, FlyoutService flyoutService)
+        : base(flyoutService)
     {
         _patronService = service;
         _eventAggregator = eventAggregator;
+        _settings = settings;
+
+        _eventAggregator.SubscribeOnPublishedThread(this);
     }
 
     #region Properties
@@ -34,9 +42,18 @@ public class PatreonViewModel : Screen
 
     public bool IsLoggedIn => !IsNotLoggedIn;
 
+    public PatreonSettingsViewModel Settings => _settings;
+
     #endregion
 
     #region Methods
+
+    public Task HandleAsync(PatronMessage message, CancellationToken cancellationToken)
+    {
+        Notify();
+
+        return Task.CompletedTask;
+    }
 
     public async void Login()
     {

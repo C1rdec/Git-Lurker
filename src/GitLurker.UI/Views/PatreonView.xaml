@@ -5,11 +5,40 @@
                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-                 xmlns:gif="clr-namespace:XamlAnimatedGif;assembly=XamlAnimatedGif"
+                 xmlns:cal="http://www.caliburnproject.org"
                  WindowStartupLocation="CenterScreen"
                  mc:Ignorable="d"
                  Title="BECOME A Patreon" Height="450" Width="800">
-    <Grid Margin="15,0,15,0">
+    <mah:MetroWindow.Resources>
+        <ResourceDictionary>
+            <Style x:Key="LabelHeaderStyle"
+                   BasedOn="{StaticResource {x:Type Label}}"
+                   TargetType="{x:Type Label}">
+                <Setter Property="FontSize" Value="32" />
+                <Setter Property="FontWeight" Value="SemiBold" />
+                <Setter Property="HorizontalAlignment" Value="Center" />
+            </Style>
+            <Style x:Key="TextBoxStyle"
+                   BasedOn="{StaticResource {x:Type TextBox}}"
+                   TargetType="{x:Type TextBox}">
+                <Setter Property="BorderThickness" Value="0,0,0,1" />
+            </Style>
+        </ResourceDictionary>
+    </mah:MetroWindow.Resources>
+    <mah:MetroWindow.Flyouts>
+        <mah:FlyoutsControl Focusable="False" KeyboardNavigation.TabNavigation="None">
+            <mah:Flyout Header="{Binding FlyoutHeader}"
+                             x:Name="MyFlyout"
+                             KeyboardNavigation.TabNavigation="None"
+                             Focusable="False"
+                             IsOpen="{Binding FlyoutOpen}" 
+                             Width="{Binding ActualWidth, ElementName=FlyoutWidth}"
+                             Position="Right">
+                <ContentControl cal:View.Model="{Binding Path=FlyoutContent,Mode=OneWay}" VerticalAlignment="Center" MaxWidth="650"/>
+            </mah:Flyout>
+        </mah:FlyoutsControl>
+    </mah:MetroWindow.Flyouts>
+    <Grid Margin="0" x:Name="FlyoutWidth">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"></RowDefinition>
             <RowDefinition Height="3*"></RowDefinition>
@@ -96,12 +125,7 @@
                 <iconPacks:BootstrapIcons Kind="Unlock" Height="25" Width="25" />
             </Button>
         </Grid>
-        <!--<Image gif:ImageBehavior.RepeatBehavior="3x"
-               gif:ImageBehavior.AnimatedSource="C:\Users\cedri\Documents\Snagit\2023-06-22_00-01-13.gif" 
-               Grid.Column="1"></Image>-->
-
-        <Image gif:AnimationBehavior.SourceUri="C:\Users\cedri\Documents\Snagit\2023-06-22_00-01-13.gif"
-               Grid.Row="1"></Image>
+        <ContentControl x:Name="Settings" Grid.Row="1"/>
         <!--<MediaElement Source="C:\Users\cedri\Documents\Snagit\2023-06-22_00-01-13.gif" Grid.Column="1"></MediaElement>-->
     </Grid>
 </mah:MetroWindow>

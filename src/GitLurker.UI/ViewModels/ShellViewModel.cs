@@ -412,7 +412,6 @@
                 _keyboardService.EnterLongPressed -= KeyboardService_EnterLongPressed;
                 _keyboardService?.Dispose();
                 _gameLibraryViewModel?.Dispose();
-                _settingsViewModel?.Dispose();
             }
         }
 

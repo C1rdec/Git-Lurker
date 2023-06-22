@@ -37,6 +37,8 @@ namespace GitLurker.Core.Services
 
         public void LogOut()
         {
+            _patreonId = string.Empty;
+            _isPledged = false;
             _patreonFile.Delete();
         }
 
