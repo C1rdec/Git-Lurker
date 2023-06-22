@@ -90,20 +90,6 @@
                          Controls:TextBoxHelper.SelectAllOnFocus="True"
                          Controls:TextBoxHelper.Watermark="{Binding SearchWatermark}"
                          BorderBrush="{DynamicResource MahApps.Brushes.Accent}"/>
-                <StackPanel Orientation="Horizontal" 
-                            VerticalAlignment="Bottom"
-                            HorizontalAlignment="Right"
-                            Visibility="{Binding HasSurfaceDial, Converter={StaticResource BooleanToVisibilityConverter}}" 
-                            Margin="0,0,10,2">
-
-                    <iconPacks:PackIconMaterial Kind="HockeyPuck" 
-                                                Height="18"
-                                                Width="18"
-                                                Foreground="{DynamicResource MahApps.Brushes.Accent4}"/>
-                    <TextBlock VerticalAlignment="Center"
-                               Margin="10,0,0,0"
-                               Foreground="{DynamicResource MahApps.Brushes.Accent4}">Connected</TextBlock>
-                </StackPanel>
                 <StackPanel VerticalAlignment="Top"
                             Visibility="{Binding UpToDate, Converter={StaticResource BooleanToVisibilityConverter}}"
                             Margin="0,2,4,0"
@@ -149,32 +135,45 @@
                         </Button.ContentTemplate>
                     </Button>
                 </StackPanel>
-                <Grid Visibility="{Binding ShowConsoleOutput, Converter={StaticResource BooleanToVisibilityConverter}}"
-                    VerticalAlignment="Center" 
-                      HorizontalAlignment="Right" 
-                      cal:Message.Attach="[Event MouseUp] = [Action OpenConsole()]"
-                      Margin="0,20,10,0" 
-                      Cursor="Hand">
-                    <Grid.Style>
-                        <Style TargetType="Grid">
-                            <Setter Property="Opacity" Value="0.60"/>
-                            <Setter Property="Background">
-                                <Setter.Value>
-                                    <SolidColorBrush Color="White" Opacity="0.003"/>
-                                </Setter.Value>
-                            </Setter>
-                            <Style.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Opacity" Value="1"/>
-                                </Trigger>
-                            </Style.Triggers>
-                        </Style>
-                    </Grid.Style>
-                    <iconPacks:PackIconFontAwesome Kind="TerminalSolid" 
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,20,10,0" >
+                    <Border Cursor="Hand" cal:Message.Attach="[Event MouseUp] = [Action OpenPatreon()]" Visibility="{Binding IsNotPledged, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <Border.Background>
+                            <SolidColorBrush Color="White" Opacity="0.005"/>
+                        </Border.Background>
+                        <StackPanel Orientation="Horizontal" Opacity="0.3">
+                            <iconPacks:PackIconMaterial Kind="Patreon" Height="18" Width="18" Foreground="#f96854"/>
+                            <TextBlock VerticalAlignment="Center"
+                                       FontWeight="Bold"
+                                       Margin="10,0,0,0"
+                                       Foreground="#f96854">BECOME A PATRON</TextBlock>
+                        </StackPanel>
+                    </Border>
+                    <Grid Visibility="{Binding ShowConsoleOutput, Converter={StaticResource BooleanToVisibilityConverter}}"
+                          Margin="12,0,0,0"
+                          cal:Message.Attach="[Event MouseUp] = [Action OpenConsole()]"
+                          Cursor="Hand">
+                        <Grid.Style>
+                            <Style TargetType="Grid">
+                                <Setter Property="Opacity" Value="0.60"/>
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <SolidColorBrush Color="White" Opacity="0.003"/>
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Opacity" Value="1"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Grid.Style>
+                        <iconPacks:PackIconFontAwesome Kind="TerminalSolid" 
                                                    Height="26"
                                                    Width="26"
                                                    Foreground="{DynamicResource MahApps.Brushes.Accent}"/>
-                </Grid>
+                    </Grid>
+                </StackPanel>
+                
                 <ContentControl x:Name="Console" 
                                 MaxHeight="300"
                                 Visibility="{Binding ShowConsoleOverview, Converter={StaticResource BooleanToVisibilityConverter}}"

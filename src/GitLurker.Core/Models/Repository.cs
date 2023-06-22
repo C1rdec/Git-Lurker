@@ -373,13 +373,21 @@
 
         public bool HasOperationInProgress() => _gitService.HasOperationInProgress();
 
-        private FileInfo[] GetFiles(string extention, int maxRecursionDepth = 2) => new DirectoryInfo(_folder).GetFiles($"*{extention}", new EnumerationOptions()
+        private FileInfo[] GetFiles(string extention, int maxRecursionDepth = 2)
         {
-            IgnoreInaccessible = true,
-            AttributesToSkip = FileAttributes.ReparsePoint,
-            RecurseSubdirectories = true,
-            MaxRecursionDepth = maxRecursionDepth,
-        });
+            if (!Directory.Exists(_folder))
+            {
+                return Array.Empty<FileInfo>();
+            }
+
+            return new DirectoryInfo(_folder).GetFiles($"*{extention}", new EnumerationOptions()
+            {
+                IgnoreInaccessible = true,
+                AttributesToSkip = FileAttributes.ReparsePoint,
+                RecurseSubdirectories = true,
+                MaxRecursionDepth = maxRecursionDepth,
+            });
+        }
 
         private static Configuration GetConfiguration(string folder)
         {

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -9,16 +8,13 @@ using System.Xml.Linq;
 using Caliburn.Micro;
 using GitLurker.Core.Models;
 using GitLurker.Core.Services;
-using GitLurker.UI.Models;
 using GitLurker.UI.Services;
 using LibGit2Sharp;
-using Lurker.Epic.Services;
-using Lurker.Steam.Services;
 using Lurker.Windows;
 
 namespace GitLurker.UI.ViewModels
 {
-    public class SettingsViewModel : Screen
+    public class SettingsViewModel : FlyoutScreenBase
     {
         #region Fields
 
@@ -32,14 +28,8 @@ namespace GitLurker.UI.ViewModels
         private SettingsFile _settingsFile;
         private GameSettingsFile _gameSettingsFile;
         private WindowsLink _windowsStartupService;
-        private FlyoutService _flyoutService;
         private RepositoryService _repositoryService;
-        private PropertyChangedBase _flyoutContent;
-        private ThemeService _themeService;
-        private bool _steamLoading;
-        private bool _epicLoading;
-        private bool _flyoutOpen;
-        private string _flyoutHeader;
+        private PatronService _patronService;
         private int _selectedTabIndex;
 
         #endregion
@@ -49,14 +39,14 @@ namespace GitLurker.UI.ViewModels
         public SettingsViewModel(
             FlyoutService flyoutService,
             SettingsFile settingsFile,
-            ThemeService themeService,
             WindowsLink windowsLink,
             DialogService dialogService,
-            RepositoryService repositoryService)
+            RepositoryService repositoryService,
+            PatreonSettingsViewModel patreonViewModel,
+            PatronService patronService)
+            : base(flyoutService)
         {
-            _flyoutService = flyoutService;
             _repositoryService = repositoryService;
-            _themeService = themeService;
             _windowsStartupService = windowsLink;
             _settingsFile = settingsFile;
             _settingsFile.Initialize();
@@ -67,17 +57,22 @@ namespace GitLurker.UI.ViewModels
             RepoManager = new RepoManagerViewModel(_settingsFile);
             Hotkey = new HotkeyViewModel(_settingsFile.Entity.HotKey, Save);
             DevToysHotkey = new HotkeyViewModel(_settingsFile.Entity.DevToysHotKey, Save, "DevToys");
-            ActionManager = new CustomActionManagerViewModel();
-            dialogService.Register(this);
+            PatreonViewModel = patreonViewModel;
 
-            _flyoutService.ShowFlyoutRequested += FlyoutService_ShowFlyout;
-            _flyoutService.CloseFlyoutRequested += FlyoutService_CloseFlyout;
+            PatreonViewModel.PropertyChanged += PatreonViewModel_PropertyChanged;
+
+            dialogService.Register(this);
             _selectedOperation = _settingsFile.Entity.RebaseOperation;
+            _patronService = patronService;
         }
 
         #endregion
 
         #region Properties
+
+        public bool IsNotPledged => !_patronService.IsPledged;
+
+        public PatreonSettingsViewModel PatreonViewModel { get; set; }
 
         public IEnumerable<CurrentOperation> Operations => _operations;
 
@@ -87,35 +82,9 @@ namespace GitLurker.UI.ViewModels
 
         public HotkeyViewModel DevToysHotkey { get; set; }
 
-        public CustomActionManagerViewModel ActionManager { get; set; }
-
         public bool HasNugetSource => _settingsFile.HasNugetSource();
 
         public bool IsAdmin => _settingsFile.Entity.IsAdmin;
-
-        public IEnumerable<Scheme> Schemes => _themeService.GetSchemes();
-
-        public IEnumerable<Scheme> SteamSchemes => _themeService.GetSchemes();
-
-        public bool SteamLoading
-        {
-            get => _steamLoading;
-            set
-            {
-                _steamLoading = value;
-                NotifyOfPropertyChange();
-            }
-        }
-
-        public bool EpicLoading
-        {
-            get => _epicLoading;
-            set
-            {
-                _epicLoading = value;
-                NotifyOfPropertyChange();
-            }
-        }
 
         public CurrentOperation SelectedOperation
         {
@@ -127,72 +96,9 @@ namespace GitLurker.UI.ViewModels
             }
         }
 
-        public string FlyoutHeader
-        {
-            get => _flyoutHeader;
-            set
-            {
-                _flyoutHeader = value;
-                NotifyOfPropertyChange(() => FlyoutHeader);
-            }
-        }
-
-        public Scheme SelectedScheme
-        {
-            get => _settingsFile.Entity.Scheme;
-            set
-            {
-                if (_settingsFile.Entity.Scheme != value)
-                {
-                    _themeService.Change(Theme.Dark, value);
-                    _settingsFile.Entity.Scheme = value;
-                    NotifyOfPropertyChange();
-                }
-            }
-        }
-
-        public Scheme SelectedSteamScheme
-        {
-            get => _gameSettingsFile.Entity.Scheme;
-            set
-            {
-                if (_gameSettingsFile.Entity.Scheme != value)
-                {
-                    _gameSettingsFile.Entity.Scheme = value;
-                    _gameSettingsFile.Save();
-                    NotifyOfPropertyChange();
-                }
-            }
-        }
-
         public bool IsSteamInitialized => !string.IsNullOrEmpty(_gameSettingsFile.Entity.SteamExePath);
 
         public bool IsEpicInitialized => !string.IsNullOrEmpty(_gameSettingsFile.Entity.EpicExePath);
-
-        public bool FlyoutOpen
-        {
-            get => _flyoutOpen;
-            set
-            {
-                if (!value)
-                {
-                    _flyoutService.NotifyFlyoutClosed();
-                }
-
-                _flyoutOpen = value;
-                NotifyOfPropertyChange(() => FlyoutOpen);
-            }
-        }
-
-        public PropertyChangedBase FlyoutContent
-        {
-            get => _flyoutContent;
-            set
-            {
-                _flyoutContent = value;
-                NotifyOfPropertyChange(() => FlyoutContent);
-            }
-        }
 
         public int SelectedTabIndex
         {
@@ -261,47 +167,6 @@ namespace GitLurker.UI.ViewModels
             }
         }
 
-        public void ShowFlyout(string header, PropertyChangedBase content)
-        {
-            FlyoutHeader = header;
-            FlyoutContent = content;
-            FlyoutOpen = true;
-        }
-
-        public async Task InitializeGames()
-        {
-            SteamLoading = true;
-
-            var steamService = new SteamService();
-            var steamPath = await steamService.InitializeAsync(_gameSettingsFile.Entity.SteamExePath);
-            if (!string.IsNullOrEmpty(steamPath))
-            {
-                _gameSettingsFile.SetSteamExePath(steamPath);
-                NotifyOfPropertyChange(() => IsSteamInitialized);
-            }
-
-            SteamLoading = false;
-            EpicLoading = true;
-
-            var epicService = new EpicService();
-            var epicPath = await epicService.InitializeAsync(_gameSettingsFile.Entity.EpicExePath);
-            if (!string.IsNullOrEmpty(epicPath))
-            {
-                _gameSettingsFile.SetEpicExePath(epicPath);
-                NotifyOfPropertyChange(() => IsEpicInitialized);
-            }
-
-            EpicLoading = false;
-        }
-
-        public void CloseFlyout()
-        {
-            FlyoutOpen = false;
-
-            // We use the field since we dont want to notify the UI
-            _flyoutContent = null;
-        }
-
         public void Save()
         {
             _settingsFile.Save();
@@ -332,19 +197,6 @@ namespace GitLurker.UI.ViewModels
             else
             {
                 _windowsStartupService.RemoveStartWithWindows();
-            }
-
-            Save();
-        }
-
-        public async void ToggleSteam()
-        {
-            IsSteamEnabled = !IsSteamEnabled;
-
-            _settingsFile.Entity.SteamEnabled = IsSteamEnabled;
-            if (IsSteamEnabled)
-            {
-                await Task.Run(async () => await InitializeGames());
             }
 
             Save();
@@ -414,15 +266,32 @@ namespace GitLurker.UI.ViewModels
             Process.GetCurrentProcess().Kill();
         }
 
+        public async void OpenPatreon()
+        {
+            var viewModel = IoC.Get<PatreonViewModel>();
+            if (viewModel.IsActive)
+            {
+                return;
+            }
+            await IoC.Get<IWindowManager>().ShowWindowAsync(viewModel);
+
+            await viewModel.ActivateAsync();
+        }
+
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
             Save();
+
             return base.OnDeactivateAsync(close, cancellationToken);
         }
 
-        private void FlyoutService_ShowFlyout(object _, FlyoutRequest e) => ShowFlyout(e.Header, e.Content);
-
-        private void FlyoutService_CloseFlyout(object _, EventArgs e) => CloseFlyout();
+        private void PatreonViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(PatreonSettingsViewModel.IsPledged))
+            {
+                NotifyOfPropertyChange(() => IsNotPledged);
+            }
+        }
 
         #endregion
     }

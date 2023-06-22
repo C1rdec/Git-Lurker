@@ -19,7 +19,7 @@
     using Lurker.Windows;
     using NHotkey.Wpf;
 
-    public class ShellViewModel : Screen, IHandle<CloseMessage>, IDisposable
+    public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessage>, IDisposable
     {
         #region Fields
 
@@ -27,6 +27,7 @@
         private Window _parent;
         private SettingsFile _settingsFile;
         private ThemeService _themeService;
+        private PatronService _patronService;
         private KeyboardService _keyboardService;
         private RepositoryService _repositoryService;
         private ConsoleService _consoleService;
@@ -52,6 +53,7 @@
         private IDebounceService _debouncer;
         private WorkspaceViewModel _workspaceViewModel;
         private GameLibraryViewModel _gameLibraryViewModel;
+        private SettingsViewModel _settingsViewModel;
 
         #endregion
 
@@ -67,7 +69,9 @@
             ThemeService themeService,
             ConsoleService consoleService,
             GithubUpdateManager updateManager,
-            ConsoleViewModel console)
+            ConsoleViewModel console,
+            PatronService patronService,
+            SettingsViewModel settingsViewModel)
         {
             _console = console;
             _searchTerm = string.Empty;
@@ -76,6 +80,7 @@
             _showInTaskBar = true;
             _eventAggregator = aggregator;
             _keyboardService = keyboardService;
+            _patronService = patronService;
             _startupService = startupService;
             _repositoryService = repositoryService;
             _consoleService = consoleService;
@@ -116,11 +121,14 @@
 
             SetGlobalHotkey();
             _eventAggregator.SubscribeOnPublishedThread(this);
+            _settingsViewModel = settingsViewModel;
         }
 
         #endregion
 
         #region Properties
+
+        public bool IsNotPledged => !_patronService.IsPledged;
 
         public DoubleClickCommand ShowSettings => new(OpenSettings);
 
@@ -279,15 +287,14 @@
 
         #region Methods
 
-        public static async void OpenSettings(object parameter)
+        public async void OpenSettings(object parameter)
         {
-            var viewModel = IoC.Get<SettingsViewModel>();
-            if (viewModel.IsActive)
+            if (_settingsViewModel.IsActive)
             {
                 return;
             }
 
-            await IoC.Get<IWindowManager>().ShowWindowAsync(IoC.Get<SettingsViewModel>());
+            await IoC.Get<IWindowManager>().ShowWindowAsync(_settingsViewModel);
         }
 
         public void Search(string term)
@@ -363,6 +370,49 @@
         {
             _parent.Close();
             await TryCloseAsync();
+        }
+
+        public async void OpenPatreon()
+        {
+            var viewModel = IoC.Get<PatreonViewModel>();
+            if (viewModel.IsActive)
+            {
+                return;
+            }
+
+            await IoC.Get<IWindowManager>().ShowWindowAsync(viewModel);
+        }
+
+        public Task HandleAsync(PatronMessage message, CancellationToken cancellationToken)
+        {
+            NotifyOfPropertyChange(() => IsNotPledged);
+
+            return Task.CompletedTask;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _console.OnExecute -= Console_OnExecute;
+                _consoleService.ShowRequested -= ConsoleService_ShowRequested;
+
+                _console?.Dispose();
+
+                _keyboardService.EnterPressed -= KeyboardService_EnterPressed;
+                _keyboardService.DownPressed -= KeyboardService_DownPressed;
+                _keyboardService.UpPressed -= KeyboardService_UpPressed;
+                _keyboardService.NextTabPressed -= KeyboardService_NextTabPressed;
+                _keyboardService.EnterLongPressed -= KeyboardService_EnterLongPressed;
+                _keyboardService?.Dispose();
+                _gameLibraryViewModel?.Dispose();
+            }
         }
 
         protected override async void OnViewLoaded(object view)
@@ -645,31 +695,6 @@
 
         private void KeyboardService_EnterLongPressed(object sender, EventArgs e)
             => ItemListViewModel.EnterLongPressed();
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                _console.OnExecute -= Console_OnExecute;
-                _consoleService.ShowRequested -= ConsoleService_ShowRequested;
-
-                _console?.Dispose();
-
-                _keyboardService.EnterPressed -= KeyboardService_EnterPressed;
-                _keyboardService.DownPressed -= KeyboardService_DownPressed;
-                _keyboardService.UpPressed -= KeyboardService_UpPressed;
-                _keyboardService.NextTabPressed -= KeyboardService_NextTabPressed;
-                _keyboardService.EnterLongPressed -= KeyboardService_EnterLongPressed;
-                _keyboardService?.Dispose();
-                _gameLibraryViewModel?.Dispose();
-            }
-        }
 
         #endregion
     }
