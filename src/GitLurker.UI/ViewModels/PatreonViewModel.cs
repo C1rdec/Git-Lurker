@@ -11,7 +11,6 @@ public class PatreonViewModel : Screen
 
     private PatronService _patronService;
     private IEventAggregator _eventAggregator;
-    private bool _needJoin;
 
     #endregion
 
@@ -19,21 +18,11 @@ public class PatreonViewModel : Screen
     {
         _patronService = service;
         _eventAggregator = eventAggregator;
-
-        NeedJoin = IsLoggedIn && !IsPledged;
     }
 
     #region Properties
 
-    public bool NeedJoin
-    {
-        get => _needJoin;
-        set
-        {
-            _needJoin = value;
-            NotifyOfPropertyChange();
-        }
-    }
+    public bool NeedJoin => IsLoggedIn && !IsPledged;
 
     public string PatreonId => _patronService.PatreonId;
 
@@ -77,6 +66,7 @@ public class PatreonViewModel : Screen
 
     private void Notify()
     {
+        NotifyOfPropertyChange(() => NeedJoin);
         NotifyOfPropertyChange(() => PatreonId);
         NotifyOfPropertyChange(() => IsPledged);
         NotifyOfPropertyChange(() => IsNotPledged);
