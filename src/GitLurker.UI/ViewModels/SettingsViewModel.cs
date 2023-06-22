@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -427,6 +428,12 @@ namespace GitLurker.UI.ViewModels
             Process.GetCurrentProcess().Kill();
         }
 
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
             Save();
@@ -444,9 +451,12 @@ namespace GitLurker.UI.ViewModels
             return Task.CompletedTask;
         }
 
-        public void Dispose()
+        protected virtual void Dispose(bool disposing)
         {
-            _eventAggregator.Unsubscribe(this);
+            if (disposing)
+            {
+                _eventAggregator.Unsubscribe(this);
+            }
         }
 
         #endregion
