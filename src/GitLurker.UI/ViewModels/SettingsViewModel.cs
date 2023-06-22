@@ -66,14 +66,6 @@ namespace GitLurker.UI.ViewModels
             _patronService = patronService;
         }
 
-        private void PatreonViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(PatreonSettingsViewModel.IsPledged))
-            {
-                NotifyOfPropertyChange(() => IsNotPledged);
-            }
-        }
-
         #endregion
 
         #region Properties
@@ -291,6 +283,14 @@ namespace GitLurker.UI.ViewModels
             Save();
 
             return base.OnDeactivateAsync(close, cancellationToken);
+        }
+
+        private void PatreonViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(PatreonSettingsViewModel.IsPledged))
+            {
+                NotifyOfPropertyChange(() => IsNotPledged);
+            }
         }
 
         #endregion
