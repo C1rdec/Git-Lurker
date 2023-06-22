@@ -35,6 +35,11 @@ namespace GitLurker.Core.Services
 
         #region Methods
 
+        public void LogOut()
+        {
+            _patreonFile.Delete();
+        }
+
         public async Task LoginAsync()
         {
             using var service = CreateService();

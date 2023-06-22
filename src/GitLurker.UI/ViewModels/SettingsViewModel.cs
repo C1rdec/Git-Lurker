@@ -259,6 +259,9 @@ namespace GitLurker.UI.ViewModels
 
         #region Methods
 
+        public void Logout()
+            => _patronService.LogOut();
+
         public DoubleClickCommand RebaseOperationCommand => new((operation) => OnRebaseOperationChanged(operation));
 
         public void OnRebaseOperationChanged(object operation)
