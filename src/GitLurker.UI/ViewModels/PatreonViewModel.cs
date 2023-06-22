@@ -11,6 +11,7 @@ public class PatreonViewModel : Screen
 
     private PatronService _patronService;
     private IEventAggregator _eventAggregator;
+    private bool _needJoin;
 
     #endregion
 
@@ -18,9 +19,21 @@ public class PatreonViewModel : Screen
     {
         _patronService = service;
         _eventAggregator = eventAggregator;
+
+        NeedJoin = IsLoggedIn && !IsPledged;
     }
 
     #region Properties
+
+    public bool NeedJoin
+    {
+        get => _needJoin;
+        set
+        {
+            _needJoin = value;
+            NotifyOfPropertyChange();
+        }
+    }
 
     public string PatreonId => _patronService.PatreonId;
 
@@ -30,6 +43,8 @@ public class PatreonViewModel : Screen
 
     public bool IsNotLoggedIn => string.IsNullOrEmpty(PatreonId);
 
+    public bool IsLoggedIn => !IsNotLoggedIn;
+
     #endregion
 
     #region Methods
@@ -38,22 +53,35 @@ public class PatreonViewModel : Screen
     {
         await _patronService.LoginAsync();
 
-        NotifyOfPropertyChange(() => PatreonId);
-        NotifyOfPropertyChange(() => IsPledged);
-        NotifyOfPropertyChange(() => IsNotPledged);
-        NotifyOfPropertyChange(() => IsNotLoggedIn);
+        Notify();
 
         await _eventAggregator.PublishOnCurrentThreadAsync(new PatronMessage());
     }
 
-    public void Pledge()
+    public async void Pledge()
     {
+        if (await _patronService.CheckPledgeStatusAsync())
+        {
+            Notify();
+
+            return;
+        }
+
         var psi = new ProcessStartInfo
         {
             FileName = "https://www.patreon.com/poelurker",
             UseShellExecute = true
         };
         Process.Start(psi);
+    }
+
+    private void Notify()
+    {
+        NotifyOfPropertyChange(() => PatreonId);
+        NotifyOfPropertyChange(() => IsPledged);
+        NotifyOfPropertyChange(() => IsNotPledged);
+        NotifyOfPropertyChange(() => IsNotLoggedIn);
+        NotifyOfPropertyChange(() => IsLoggedIn);
     }
 
     #endregion
