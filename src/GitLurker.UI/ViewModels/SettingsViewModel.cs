@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using Caliburn.Micro;
 using GitLurker.Core.Models;
 using GitLurker.Core.Services;
 using GitLurker.UI.Services;
@@ -28,6 +29,7 @@ namespace GitLurker.UI.ViewModels
         private GameSettingsFile _gameSettingsFile;
         private WindowsLink _windowsStartupService;
         private RepositoryService _repositoryService;
+        private PatronService _patronService;
         private int _selectedTabIndex;
 
         #endregion
@@ -40,7 +42,8 @@ namespace GitLurker.UI.ViewModels
             WindowsLink windowsLink,
             DialogService dialogService,
             RepositoryService repositoryService,
-            PatreonSettingsViewModel patreonViewModel)
+            PatreonSettingsViewModel patreonViewModel,
+            PatronService patronService)
             : base(flyoutService)
         {
             _repositoryService = repositoryService;
@@ -56,13 +59,26 @@ namespace GitLurker.UI.ViewModels
             DevToysHotkey = new HotkeyViewModel(_settingsFile.Entity.DevToysHotKey, Save, "DevToys");
             PatreonViewModel = patreonViewModel;
 
+            PatreonViewModel.PropertyChanged += PatreonViewModel_PropertyChanged;
+
             dialogService.Register(this);
             _selectedOperation = _settingsFile.Entity.RebaseOperation;
+            _patronService = patronService;
+        }
+
+        private void PatreonViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(PatreonSettingsViewModel.IsPledged))
+            {
+                NotifyOfPropertyChange(() => IsNotPledged);
+            }
         }
 
         #endregion
 
         #region Properties
+
+        public bool IsNotPledged => !_patronService.IsPledged;
 
         public PatreonSettingsViewModel PatreonViewModel { get; set; }
 
@@ -256,6 +272,18 @@ namespace GitLurker.UI.ViewModels
 
             _ = gitLurker.ExecuteCommandAsync("dotnet run --project .\\src\\GitLurker.UI\\GitLurker.UI.csproj -c release");
             Process.GetCurrentProcess().Kill();
+        }
+
+        public async void OpenPatreon()
+        {
+            var viewModel = IoC.Get<PatreonViewModel>();
+            if (viewModel.IsActive)
+            {
+                return;
+            }
+            await IoC.Get<IWindowManager>().ShowWindowAsync(viewModel);
+
+            await viewModel.ActivateAsync();
         }
 
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)

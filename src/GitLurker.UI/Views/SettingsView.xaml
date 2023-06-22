@@ -5,7 +5,6 @@
                  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                  xmlns:cal="http://www.caliburnproject.org"
                  xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
-                 Topmost="True"
                  WindowStartupLocation="CenterScreen"
                  Title="Settings"
                  Icon="pack://application:,,,/Resources/GitLurker.ico"
@@ -290,7 +289,27 @@
             </Grid>
         </TabItem>
         <TabItem Header="Patreon" Width="175">
-            <ContentControl x:Name="PatreonViewModel"/>
+            <Grid>
+                <ContentControl x:Name="PatreonViewModel"/>
+                <Border Cursor="Hand" 
+                        Visibility="{Binding IsNotPledged, Converter={StaticResource BooleanToVisibilityConverter}}"
+                        cal:Message.Attach="[Event MouseUp] = [Action OpenPatreon()]"
+                        HorizontalAlignment="Right" 
+                        VerticalAlignment="Top" 
+                        Margin="0,18,8,0">
+                    <Border.Background>
+                        <SolidColorBrush Color="White" Opacity="0.005"/>
+                    </Border.Background>
+                    <StackPanel Orientation="Horizontal" Opacity="0.6">
+                        <iconPacks:PackIconMaterial Kind="Patreon" Height="12" Width="12" Foreground="#f96854"/>
+                        <TextBlock VerticalAlignment="Center"
+                                       FontWeight="Bold"
+                                       Margin="10,0,0,0"
+                                        FontSize="8"
+                                       Foreground="#f96854">BECOME A PATRON</TextBlock>
+                    </StackPanel>
+                </Border>
+            </Grid>
         </TabItem>
     </mah:MetroAnimatedTabControl>
 </mah:MetroWindow>
