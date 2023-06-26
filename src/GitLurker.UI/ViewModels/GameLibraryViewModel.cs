@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using GitLurker.Core.Models;
+using Lurker.BattleNet.Models;
+using Lurker.BattleNet.Services;
 using Lurker.Common.Models;
 using Lurker.Epic.Models;
 using Lurker.Epic.Services;
@@ -15,8 +17,10 @@ namespace GitLurker.UI.ViewModels
 {
     public class GameLibraryViewModel : PropertyChangedBase, IItemListViewModel, IDisposable
     {
+        private BattleNetService _battleNetService;
         private SteamService _steamService;
         private EpicService _epicService;
+        private List<BattleNetGame> _battleNetGames;
         private List<SteamGame> _steamGames;
         private List<EpicGame> _epicGames;
         private ObservableCollection<GameViewModel> _gameViewModels;
@@ -28,6 +32,8 @@ namespace GitLurker.UI.ViewModels
         {
             _epicGames = new List<EpicGame>();
             _steamGames = new List<SteamGame>();
+            _battleNetGames = new List<BattleNetGame>();
+            _battleNetService = new BattleNetService();
             _steamService = new SteamService();
             _epicService = new EpicService();
             _gameViewModels = new ObservableCollection<GameViewModel>();
@@ -56,7 +62,7 @@ namespace GitLurker.UI.ViewModels
 
         public bool HasSelectedGame => SelectedGameViewModel != null || _mouseOver;
 
-        private IEnumerable<GameBase> Games => _steamGames.Cast<GameBase>().Concat(_epicGames);
+        private IEnumerable<GameBase> Games => _steamGames.Cast<GameBase>().Concat(_epicGames).Concat(_battleNetGames);
 
         #endregion
 
@@ -145,6 +151,7 @@ namespace GitLurker.UI.ViewModels
                 settings.Initialize();
 
                 await CheckInitialize(settings);
+                _battleNetGames = _battleNetService.FindGames();
                 _steamGames = _steamService.FindGames();
                 _epicGames = _epicService.FindGames();
             });
@@ -237,6 +244,8 @@ namespace GitLurker.UI.ViewModels
                     settings.SetEpicExePath(epicPath);
                     _epicGames = _epicService.FindGames();
                 }
+
+                _battleNetGames = _battleNetService.FindGames();
 
                 _initialize = true;
             }

@@ -61,6 +61,8 @@ namespace GitLurker.UI.ViewModels
 
         public bool IsEpic => _game.Launcher == LauncherType.Epic;
 
+        public bool IsBattleNet => _game.Launcher == LauncherType.BattleNet;
+
         #endregion
 
         #region Methods
