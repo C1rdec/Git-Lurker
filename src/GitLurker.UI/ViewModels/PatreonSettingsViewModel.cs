@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Caliburn.Micro;
@@ -6,6 +7,7 @@ using GitLurker.Core.Models;
 using GitLurker.Core.Services;
 using GitLurker.UI.Messages;
 using GitLurker.UI.Services;
+using Lurker.BattleNet.Services;
 using Lurker.Epic.Services;
 using Lurker.Steam.Services;
 
@@ -17,6 +19,7 @@ namespace GitLurker.UI.ViewModels
 
         private bool _steamLoading; 
         private bool _epicLoading;
+        private bool _battleNetLoading;
         private ThemeService _themeService;
         private SettingsFile _settingsFile;
         private GameSettingsFile _gameSettingsFile;
@@ -76,6 +79,16 @@ namespace GitLurker.UI.ViewModels
             }
         }
 
+        public bool BattleNetLoading
+        {
+            get => _battleNetLoading;
+            set
+            {
+                _battleNetLoading = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
         public Scheme SelectedScheme
         {
             get => _settingsFile.Entity.Scheme;
@@ -111,6 +124,8 @@ namespace GitLurker.UI.ViewModels
         public bool IsSteamInitialized => !string.IsNullOrEmpty(_gameSettingsFile.Entity.SteamExePath);
 
         public bool IsEpicInitialized => !string.IsNullOrEmpty(_gameSettingsFile.Entity.EpicExePath);
+
+        public bool IsBattleNetInitialized => _gameSettingsFile.Entity.BattleNetInstalled;
 
         public bool IsSteamEnabled
         {
@@ -163,6 +178,14 @@ namespace GitLurker.UI.ViewModels
             }
 
             EpicLoading = false;
+
+            BattleNetLoading = true;
+
+            var battleNetService = new BattleNetService();
+            _gameSettingsFile.Entity.BattleNetInstalled = battleNetService.FindGames().Any();
+            _gameSettingsFile.Save();
+
+            BattleNetLoading = false;
         }
 
         public async void ToggleGames()

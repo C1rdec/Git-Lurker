@@ -246,6 +246,8 @@ namespace GitLurker.UI.ViewModels
                 }
 
                 _battleNetGames = _battleNetService.FindGames();
+                settings.Entity.BattleNetInstalled = _battleNetGames.Any();
+                settings.Save();
 
                 _initialize = true;
             }

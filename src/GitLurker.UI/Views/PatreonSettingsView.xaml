@@ -85,11 +85,11 @@
                             <RowDefinition></RowDefinition>
                         </Grid.RowDefinitions>
                         <Grid Grid.Row="1" Margin="0,20,0,0">
-                            <Grid.RowDefinitions>
-                                <RowDefinition></RowDefinition>
-                                <RowDefinition></RowDefinition>
-                                <RowDefinition></RowDefinition>
-                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                                <ColumnDefinition></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
                             <Viewbox>
                                 <Viewbox.Style>
                                     <Style TargetType="Viewbox">
@@ -110,7 +110,28 @@
                                     <mah:ProgressRing Width="38" Height="38" Foreground="{DynamicResource Brushes.Secondary}" IsActive="{Binding SteamLoading}"></mah:ProgressRing>
                                 </Grid>
                             </Viewbox>
-                            <Viewbox Grid.Row="2">
+                            <Viewbox Grid.Column="1">
+                                <Viewbox.Style>
+                                    <Style TargetType="Viewbox">
+                                        <Setter Property="Opacity" Value="0.2"></Setter>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding IsBattleNetInitialized}" Value="True">
+                                                <Setter Property="Opacity" Value="0.8"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Viewbox.Style>
+                                <Grid>
+                                    <iconPacks:PackIconFontAwesome Kind="BattleNetBrands"
+                                                    Width="40"
+                                                    Height="40"
+                                                    HorizontalAlignment="Center" 
+                                                    VerticalAlignment="Center"
+                                                    Grid.Row="1"/>
+                                    <mah:ProgressRing Width="38" Height="38" Foreground="{DynamicResource Brushes.Secondary}" IsActive="{Binding BattleNetLoading}"></mah:ProgressRing>
+                                </Grid>
+                            </Viewbox>
+                            <Viewbox Grid.Column="2">
                                 <Viewbox.Style>
                                     <Style TargetType="Viewbox">
                                         <Setter Property="Opacity" Value="0.2"></Setter>
