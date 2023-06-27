@@ -210,6 +210,20 @@ namespace GitLurker.UI.ViewModels
             NotifyOfPropertyChange(() => HasSelectedGame);
         }
 
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                _gameViewModels.CollectionChanged -= GameViewModels_CollectionChanged;
+            }
+        }
+
         private void ExecuteOnGame(System.Action<GameViewModel> action)
         {
             if (SelectedGameViewModel != null)
@@ -256,11 +270,6 @@ namespace GitLurker.UI.ViewModels
         private void GameViewModels_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             NotifyOfPropertyChange(nameof(NoGamesDisplayed));
-        }
-
-        public void Dispose()
-        {
-            _gameViewModels.CollectionChanged -= GameViewModels_CollectionChanged;
         }
 
         #endregion
