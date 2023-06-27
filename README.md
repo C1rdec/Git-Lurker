@@ -1,4 +1,4 @@
-# Git-Lurker [<img align='right' src="Microsoft.png" height="100" />](ms-windows-store://pdp/?productid=9N2MN78QLVKB)
+# Git-Lurker <a href="ms-windows-store://pdp/?productid=9N2MN78QLVKB" target="_blank"><img align='right' src="https://raw.githubusercontent.com/C1rdec/Git-Lurker/main/Microsoft.png" height="100"></a>
 
 GitLurker is an overlay to ease the navigation between Git Repositories
 
