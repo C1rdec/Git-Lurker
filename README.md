@@ -1,4 +1,5 @@
-# Git-Lurker
+# Git-Lurker <img align='right' src="Microsoft.png" height="100" />
+
 GitLurker is an overlay to ease the navigation between Git Repositories
 
 ## Hotkeys
