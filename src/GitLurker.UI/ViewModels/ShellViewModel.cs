@@ -333,7 +333,7 @@
             ItemListViewModel.Clear();
             await ItemListViewModel.RefreshItems();
             var gitLurkerRepo = _repositoryService.GetAllRepo().FirstOrDefault(r => r.Name == "GitLurker");
-            if (gitLurkerRepo != null)
+            if (gitLurkerRepo != null && AppDomain.CurrentDomain.BaseDirectory.StartsWith(gitLurkerRepo.Folder, StringComparison.InvariantCultureIgnoreCase))
             {
                 _updateManager.Watch(gitLurkerRepo);
             }
