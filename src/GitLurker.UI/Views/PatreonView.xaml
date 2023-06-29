@@ -9,6 +9,8 @@
                  Title="BECOME A Patreon"
                  Width="800"
                  Height="450"
+                 MinWidth="650"
+                 MinHeight="400"
                  WindowStartupLocation="CenterScreen"
                  mc:Ignorable="d">
     <mah:MetroWindow.Resources>
