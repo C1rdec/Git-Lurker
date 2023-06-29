@@ -368,6 +368,8 @@
 
         public async void Close()
         {
+            await _settingsViewModel.TryCloseAsync();
+
             _parent.Close();
             await TryCloseAsync();
         }

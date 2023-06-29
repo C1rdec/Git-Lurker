@@ -1,46 +1,48 @@
 ﻿<UserControl x:Class="GitLurker.UI.Views.ActionView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:cal="http://www.caliburnproject.org"
-             mc:Ignorable="d" 
-             d:DesignHeight="80" d:DesignWidth="80">
-    <Border cal:Message.Attach="[Event MouseUp] = [Action OnClick()]"
-            CornerRadius="6" 
-            Grid.Column="1"
-            IsEnabled="{Binding IsEnable}"
-            Height="50" Width="50">
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="80"
+             d:DesignWidth="80"
+             mc:Ignorable="d">
+    <Border Grid.Column="1"
+            Width="50"
+            Height="50"
+            cal:Message.Attach="[Event MouseUp] = [Action OnClick()]"
+            CornerRadius="6"
+            IsEnabled="{Binding IsEnable}">
         <Border.Style>
             <Style TargetType="Border">
                 <Setter Property="Background">
                     <Setter.Value>
-                        <SolidColorBrush Color="White" Opacity="0.0003"/>
+                        <SolidColorBrush Opacity="0.0003" Color="White" />
                     </Setter.Value>
                 </Setter>
-                <Setter Property="Opacity" Value="0.6"/>
+                <Setter Property="Opacity" Value="0.6" />
                 <Style.Triggers>
                     <DataTrigger Binding="{Binding IsDisable}" Value="true">
-                        <Setter Property="Opacity" Value="0.2"/>
+                        <Setter Property="Opacity" Value="0.2" />
                     </DataTrigger>
                     <DataTrigger Binding="{Binding IsActive}" Value="true">
-                        <Setter Property="BorderThickness" Value="1.5"/>
-                        <Setter Property="BorderBrush" Value="{DynamicResource Brushes.Secondary}"/>
-                        <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
-                        <Setter Property="Opacity" Value="1"/>
+                        <Setter Property="BorderThickness" Value="1.5" />
+                        <Setter Property="BorderBrush" Value="{DynamicResource Brushes.Secondary}" />
+                        <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}" />
+                        <Setter Property="Opacity" Value="1" />
                     </DataTrigger>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="BorderThickness" Value="1.5"/>
-                        <Setter Property="BorderBrush" Value="{DynamicResource Brushes.Secondary}"/>
-                        <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}"/>
-                        <Setter Property="Opacity" Value="1"/>
+                        <Setter Property="BorderThickness" Value="1.5" />
+                        <Setter Property="BorderBrush" Value="{DynamicResource Brushes.Secondary}" />
+                        <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Accent}" />
+                        <Setter Property="Opacity" Value="1" />
                     </Trigger>
                 </Style.Triggers>
             </Style>
         </Border.Style>
-        <ContentControl Content="{Binding Icon}" 
-                        HorizontalAlignment="Center"
+        <ContentControl HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Opacity="0.4"/>
+                        Content="{Binding Icon}"
+                        Opacity="0.4" />
     </Border>
 </UserControl>

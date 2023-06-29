@@ -1,101 +1,112 @@
 ﻿<UserControl x:Class="GitLurker.UI.Views.HotkeyView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:cal="http://www.caliburnproject.org"
              xmlns:Converters="clr-namespace:GitLurker.UI.Converters"
              xmlns:Winook="clr-namespace:Winook;assembly=Winook"
-             mc:Ignorable="d"
-             d:DesignHeight="450" d:DesignWidth="800" Focusable="False">
-    <Border CornerRadius="8" Focusable="False" Height="100" Cursor="Hand" cal:Message.Attach="[Event MouseDown] = [Action SetKeyCode()]" MaxWidth="250">
+             xmlns:cal="http://www.caliburnproject.org"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             d:DesignHeight="450"
+             d:DesignWidth="800"
+             Focusable="False"
+             mc:Ignorable="d">
+    <Border Height="100"
+            MaxWidth="250"
+            cal:Message.Attach="[Event MouseDown] = [Action SetKeyCode()]"
+            CornerRadius="8"
+            Cursor="Hand"
+            Focusable="False">
         <Border.Style>
             <Style TargetType="Border">
-                <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Gray10}"/>
+                <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Gray10}" />
                 <Style.Triggers>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Gray8}"/>
+                        <Setter Property="Background" Value="{DynamicResource MahApps.Brushes.Gray8}" />
                     </Trigger>
                 </Style.Triggers>
             </Style>
         </Border.Style>
         <Grid>
-            <Label x:Name="NameValue" 
-                   HorizontalAlignment="Center" 
+            <Label x:Name="NameValue"
+                   HorizontalAlignment="Center"
+                   FontSize="25"
                    FontWeight="Light"
-                   Foreground="{DynamicResource MahApps.Brushes.Accent}"
-                   FontSize="25"/>
+                   Foreground="{DynamicResource MahApps.Brushes.Accent}" />
             <Grid Width="180" HorizontalAlignment="Center">
                 <Grid.RowDefinitions>
-                    <RowDefinition ></RowDefinition>
-                    <RowDefinition Height="2*"></RowDefinition>
+                    <RowDefinition />
+                    <RowDefinition Height="2*" />
                 </Grid.RowDefinitions>
-                <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                <StackPanel Grid.Row="1"
+                            HorizontalAlignment="Center"
+                            Orientation="Horizontal">
 
-                    <Border BorderThickness="3" 
-                            Visibility="{Binding HasModifier, Converter={StaticResource BooleanToVisibilityConverter}}"
-                            BorderBrush="#606060"
-                            CornerRadius="10" 
-                            Background="Gray" 
-                            Grid.Row="1" 
+                    <Border Grid.Row="1"
+                            Width="60"
                             Height="40"
-                            Width="60">
+                            Background="Gray"
+                            BorderBrush="#606060"
+                            BorderThickness="3"
+                            CornerRadius="10"
+                            Visibility="{Binding HasModifier, Converter={StaticResource BooleanToVisibilityConverter}}">
                         <Grid>
-                            <TextBlock VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center" 
-                                       FontWeight="Bold" 
+                            <TextBlock HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
                                        FontFamily="pack://application:,,,/Assets/#Fontin"
-                                       Visibility="{Binding Modifier,
-                                            Converter={Converters:ModifierConverter}, 
-                                            ConverterParameter={x:Static Winook:Modifiers.Alt}}">Alt</TextBlock>
-                            <TextBlock VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center" 
-                                       FontWeight="Bold" 
+                                       FontWeight="Bold"
+                                       Visibility="{Binding Modifier, Converter={Converters:ModifierConverter}, ConverterParameter={x:Static Winook:Modifiers.Alt}}">
+                                Alt
+                            </TextBlock>
+                            <TextBlock HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
                                        FontFamily="pack://application:,,,/Assets/#Fontin"
-                                       Visibility="{Binding Modifier,
-                                            Converter={Converters:ModifierConverter}, 
-                                            ConverterParameter={x:Static Winook:Modifiers.Control}}">Ctrl</TextBlock>
-                            <TextBlock VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center" 
-                                       FontWeight="Bold" 
+                                       FontWeight="Bold"
+                                       Visibility="{Binding Modifier, Converter={Converters:ModifierConverter}, ConverterParameter={x:Static Winook:Modifiers.Control}}">
+                                Ctrl
+                            </TextBlock>
+                            <TextBlock HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
                                        FontFamily="pack://application:,,,/Assets/#Fontin"
-                                       Visibility="{Binding Modifier,
-                                            Converter={Converters:ModifierConverter}, 
-                                            ConverterParameter={x:Static Winook:Modifiers.Shift}}">Shift</TextBlock>
+                                       FontWeight="Bold"
+                                       Visibility="{Binding Modifier, Converter={Converters:ModifierConverter}, ConverterParameter={x:Static Winook:Modifiers.Shift}}">
+                                Shift
+                            </TextBlock>
                         </Grid>
                     </Border>
-                    <TextBlock Grid.Column="1" 
-                               Grid.Row="1" 
-                               Foreground="Gray"
-                               Visibility="{Binding HasModifier, Converter={StaticResource BooleanToVisibilityConverter}}"
-                               VerticalAlignment="Center" 
-                               HorizontalAlignment="Center" 
+                    <TextBlock Grid.Row="1"
+                               Grid.Column="1"
                                Margin="6,0,6,0"
-                               FontSize="25" 
-                               FontFamily="pack://application:,,,/Assets/#Fontin">➞</TextBlock>
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontFamily="pack://application:,,,/Assets/#Fontin"
+                               FontSize="25"
+                               Foreground="Gray"
+                               Visibility="{Binding HasModifier, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        ➞
+                    </TextBlock>
                     <Grid>
-                        <Border Focusable="False"
-                            CornerRadius="4"
-                            Background="{StaticResource MahApps.Brushes.Accent3}"
-                            Height="30"
-                            Width="60"
-                            Visibility="{Binding HasKeyCode, Converter={StaticResource BooleanToVisibilityConverter}}">
-                            <TextBlock HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"
-                                   x:Name="KeyCode" 
-                                   FontSize="12"
-                                   FontWeight="Bold"
-                                   FontFamily="pack://application:,,,/Assets/#Fontin" />
-                        </Border>
-                        <Border Focusable="False"
-                                CornerRadius="4"
-                                Background="{StaticResource MahApps.Brushes.Accent3}"
+                        <Border Width="60"
                                 Height="30"
-                                Width="60"
+                                Background="{StaticResource MahApps.Brushes.Accent3}"
+                                CornerRadius="4"
+                                Focusable="False"
+                                Visibility="{Binding HasKeyCode, Converter={StaticResource BooleanToVisibilityConverter}}">
+                            <TextBlock x:Name="KeyCode"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       FontFamily="pack://application:,,,/Assets/#Fontin"
+                                       FontSize="12"
+                                       FontWeight="Bold" />
+                        </Border>
+                        <Border Width="60"
+                                Height="30"
+                                Background="{StaticResource MahApps.Brushes.Accent3}"
+                                CornerRadius="4"
+                                Focusable="False"
                                 Visibility="{Binding HasIcon, Converter={StaticResource BooleanToVisibilityConverter}}">
-                            <ContentControl Content="{Binding Icon}" 
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Center"/>
+                            <ContentControl HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Content="{Binding Icon}" />
                         </Border>
                     </Grid>
                 </StackPanel>
