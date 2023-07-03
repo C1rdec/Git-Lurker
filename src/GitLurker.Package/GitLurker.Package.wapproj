@@ -56,6 +56,7 @@
     <DefaultLanguage>en-US</DefaultLanguage>
     <AppxPackageSigningEnabled>True</AppxPackageSigningEnabled>
     <NoWarn>$(NoWarn);NU1702</NoWarn>
+	<Version>1.0.4</Version>
     <EntryPointProjectUniqueName>..\GitLurker.UI\GitLurker.UI.csproj</EntryPointProjectUniqueName>
     <PackageCertificateThumbprint>F3F680B83C7B0CB27C970D13080F01D98588FB04</PackageCertificateThumbprint>
     <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
