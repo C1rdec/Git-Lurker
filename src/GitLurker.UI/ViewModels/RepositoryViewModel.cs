@@ -20,6 +20,8 @@
         private CancellationTokenSource _nugetTokenSource;
         private CancellationTokenSource _secretTokenSource;
         private CancellationTokenSource _pullRequestTokenSource;
+        private bool _isBranchManagerOpen;
+        private bool _isFileChangedOpen;
         private PopupService _popupService;
         private ConsoleService _consoleService;
         private Repository _repo;
@@ -73,6 +75,16 @@
             set
             {
                 _isRunning = value;
+                NotifyOfPropertyChange();
+            }
+        }
+
+        public bool IsFileChangedOpen
+        {
+            get => _isFileChangedOpen;
+            set
+            {
+                _isFileChangedOpen = value;
                 NotifyOfPropertyChange();
             }
         }
@@ -157,10 +169,11 @@
 
         public bool IsBranchManagerOpen
         {
-            get => _popupService.IsOpen;
+            get => _isBranchManagerOpen;
             set
             {
                 _popupService.IsOpen = value;
+                _isBranchManagerOpen = value;
                 NotifyOfPropertyChange();
             }
         }
@@ -214,7 +227,7 @@
             IsRunning = false;
         }
 
-        public void OnBranchManagerClosed() => _popupService.SetClosed();
+        public void OnPopupClosed() => _popupService.SetClosed();
 
         public void ShowBranches()
             => ShowBranches(true);
@@ -422,6 +435,11 @@
 
             CancelOperationVisisble = false;
             BranchName = _repo.GetCurrentBranchName();
+        }
+
+        public void OpenFileChanged()
+        {
+            IsFileChangedOpen = true;
         }
 
         public async void GitStash()

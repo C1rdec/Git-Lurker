@@ -27,7 +27,7 @@
               cal:Message.Attach="[Event MouseEnter] = [Action OnMouseEnter()]; [Event MouseLeave] = [Action OnMouseLeave()]"
               Background="{DynamicResource MahApps.Brushes.Accent4}"
               Cursor="Hand">
-            <Popup cal:Message.Attach="[Event Closed] = [Action OnBranchManagerClosed()]"
+            <Popup cal:Message.Attach="[Event Closed] = [Action OnPopupClosed()]"
                    IsOpen="{Binding IsBranchManagerOpen}"
                    Placement="Center"
                    StaysOpen="False">
@@ -222,7 +222,7 @@
             <ContentControl x:Name="ActionBar" HorizontalAlignment="Right" />
             <Border HorizontalAlignment="Right"
                     VerticalAlignment="Top"
-                    cal:Message.Attach="[Event MouseUp] = [Action GitStashPop()]"
+                    cal:Message.Attach="[Event MouseUp] = [Action OpenFileChanged()]"
                     CornerRadius="4"
                     Visibility="{Binding HasStashes, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <Border.Style>
@@ -258,6 +258,14 @@
                   HorizontalAlignment="Right"
                   VerticalAlignment="Center"
                   Visibility="{Binding IsNotStashLoading, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Popup cal:Message.Attach="[Event Closed] = [Action OnPopupClosed()]"
+                   IsOpen="{Binding IsFileChangedOpen}"
+                   Placement="Center"
+                   StaysOpen="False">
+                    <Border Background="#252525">
+                        <TextBox Width="200"></TextBox>    
+                    </Border>
+                </Popup>
                 <Border x:Name="FileChangeBorder"
                         Padding="4,2,4,2"
                         HorizontalAlignment="Center"
