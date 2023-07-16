@@ -133,13 +133,13 @@
 
         public async Task<ExecutionResult> SyncAsync(string message)
         {
-            var result = await ExecuteCommandAsync("git add -A -- .", true);
+            var result = await ExecuteCommandAsync("git add -A -- .");
             if (result.ExitCode < 0)
             {
                 return result;
             }
 
-            result = await ExecuteCommandAsync($"git commit -m \"{message}\"", true);
+            result = await ExecuteCommandAsync($"git commit -m \"{message}\"");
             if (result.ExitCode < 0)
             {
                 return result;

@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using GitLurker.Core.Models;
+using GitLurker.UI.Services;
 
 namespace GitLurker.UI.ViewModels
 {
@@ -54,6 +54,7 @@ namespace GitLurker.UI.ViewModels
 
         public async Task<bool> Open(bool skipModifier)
         {
+            IoC.Get<ConsoleService>().Listen(_repository);
             await _repository.SyncAsync(_message);
 
             return false;
