@@ -223,7 +223,7 @@
         public async Task RefreshItems()
         {
             await Task.Run(() => _repositoryService.GetWorkspaces());
-            _repos.Clear();
+            Execute.OnUIThread(() => _repos.Clear());
         }
 
         public void NextTabPressed()

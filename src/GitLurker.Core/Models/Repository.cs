@@ -131,6 +131,25 @@
 
         public Task<ExecutionResult> PullAsync() => ExecuteCommandAsync("git pull", true);
 
+        public async Task<ExecutionResult> SyncAsync(string message)
+        {
+            var result = await ExecuteCommandAsync("git add -A -- .", true);
+            if (result.ExitCode < 0)
+            {
+                return result;
+            }
+
+            result = await ExecuteCommandAsync($"git commit -m \"{message}\"", true);
+            if (result.ExitCode < 0)
+            {
+                return result;
+            }
+
+            result = await ExecuteCommandAsync($"git push", true);
+
+            return result;
+        }
+
         public Task RebaseAsync(string branchName) => ExecuteCommandAsync($"git rebase {branchName}", true);
 
         public Task MergeAsync(string branchName) => ExecuteCommandAsync($"git merge {branchName}", true);

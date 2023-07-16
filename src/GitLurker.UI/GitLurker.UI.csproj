@@ -58,6 +58,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\FileView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="GitLurker.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

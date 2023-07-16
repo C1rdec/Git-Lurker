@@ -44,12 +44,6 @@
             <RowDefinition Height="auto" />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <Button x:Name="HideWindow"
-                Width="1"
-                Height="1"
-                Background="Transparent"
-                BorderThickness="0"
-                IsCancel="true" />
         <tb:TaskbarIcon DoubleClickCommand="{Binding ShowSettings}"
                         IconSource="/Resources/GitLurker.ico"
                         ToolTipText="GitLurker">

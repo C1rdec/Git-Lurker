@@ -21,7 +21,6 @@
         private CancellationTokenSource _secretTokenSource;
         private CancellationTokenSource _pullRequestTokenSource;
         private bool _isBranchManagerOpen;
-        private bool _isFileChangedOpen;
         private PopupService _popupService;
         private ConsoleService _consoleService;
         private Repository _repo;
@@ -75,16 +74,6 @@
             set
             {
                 _isRunning = value;
-                NotifyOfPropertyChange();
-            }
-        }
-
-        public bool IsFileChangedOpen
-        {
-            get => _isFileChangedOpen;
-            set
-            {
-                _isFileChangedOpen = value;
                 NotifyOfPropertyChange();
             }
         }
@@ -226,8 +215,6 @@
             await _repo.StartDefaultProject();
             IsRunning = false;
         }
-
-        public void OnPopupClosed() => _popupService.SetClosed();
 
         public void ShowBranches()
             => ShowBranches(true);
@@ -437,9 +424,9 @@
             BranchName = _repo.GetCurrentBranchName();
         }
 
-        public void OpenFileChanged()
+        public async void OpenFileChanged()
         {
-            IsFileChangedOpen = true;
+            await _eventAggregator.PublishOnUIThreadAsync(new CommitActionViewModel(_repo));
         }
 
         public async void GitStash()

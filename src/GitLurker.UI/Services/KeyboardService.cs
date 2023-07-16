@@ -26,6 +26,8 @@ namespace GitLurker.UI.Services
 
         public event EventHandler TwoPressed;
 
+        public event EventHandler EscapePressed;
+
         public event EventHandler UpPressed;
 
         public event EventHandler DownPressed;
@@ -98,6 +100,8 @@ namespace GitLurker.UI.Services
             {
                 EnterPressed?.Invoke(this, EventArgs.Empty);
             });
+
+            _hook.AddHandler(KeyCode.Escape, (o, e) => EscapePressed?.Invoke(this, EventArgs.Empty));
 
             // Left
             _hook.AddHandler(KeyCode.Left, (o, e) => LeftPressed?.Invoke(this, EventArgs.Empty));

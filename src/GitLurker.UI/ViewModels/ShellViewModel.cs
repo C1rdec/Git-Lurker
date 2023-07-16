@@ -19,7 +19,7 @@
     using Lurker.Windows;
     using NHotkey.Wpf;
 
-    public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessage>, IDisposable
+    public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessage>, IHandle<IItemListViewModel>, IDisposable
     {
         #region Fields
 
@@ -54,6 +54,7 @@
         private WorkspaceViewModel _workspaceViewModel;
         private GameLibraryViewModel _gameLibraryViewModel;
         private SettingsViewModel _settingsViewModel;
+        private IItemListViewModel _activeAction;
 
         #endregion
 
@@ -101,6 +102,7 @@
             var assemblyVersion = Assembly.GetExecutingAssembly().GetName().Version;
             _version = $"{assemblyVersion.Major}.{assemblyVersion.Minor}.{assemblyVersion.Build}";
 
+            _keyboardService.EscapePressed += KeyboardService_EscapePressed;
             _keyboardService.EnterPressed += KeyboardService_EnterPressed;
             _keyboardService.DownPressed += KeyboardService_DownPressed;
             _keyboardService.UpPressed += KeyboardService_UpPressed;
@@ -319,6 +321,8 @@
                 IsVisible = false;
                 SearchTerm = string.Empty;
                 ItemListViewModel?.Clear();
+
+                ClearAction();
             }
         }
 
@@ -407,6 +411,7 @@
 
                 _console?.Dispose();
 
+                _keyboardService.EscapePressed -= KeyboardService_EscapePressed;
                 _keyboardService.EnterPressed -= KeyboardService_EnterPressed;
                 _keyboardService.DownPressed -= KeyboardService_DownPressed;
                 _keyboardService.UpPressed -= KeyboardService_UpPressed;
@@ -674,6 +679,18 @@
             });
         }
 
+        private void KeyboardService_EscapePressed(object sender, EventArgs e)
+        {
+            if (_activeAction != null)
+            {
+                ClearAction();
+
+                return;
+            }
+
+            HideWindow();
+        }
+
         private async void KeyboardService_EnterPressed(object sender, EventArgs e)
         {
             if (await ItemListViewModel.Open(false))
@@ -684,6 +701,20 @@
             {
                 SearchTerm = string.Empty;
             }
+
+            if (_activeAction != null)
+            {
+                ClearAction();
+            }
+        }
+
+        private void ClearAction()
+        {
+            _activeAction = null;
+            ItemListViewModel = _workspaceViewModel;
+            ItemListViewModel.ShowRecent();
+
+            NotifyOfPropertyChange(() => ItemListViewModel);
         }
 
         private void KeyboardService_DownPressed(object sender, EventArgs e)
@@ -697,6 +728,16 @@
 
         private void KeyboardService_EnterLongPressed(object sender, EventArgs e)
             => ItemListViewModel.EnterLongPressed();
+
+        public Task HandleAsync(IItemListViewModel message, CancellationToken cancellationToken)
+        {
+            _activeAction = message;
+            ItemListViewModel = _activeAction;
+            ItemListViewModel.ShowRecent();
+            NotifyOfPropertyChange(() => ItemListViewModel);
+
+            return Task.CompletedTask;
+        }
 
         #endregion
     }
