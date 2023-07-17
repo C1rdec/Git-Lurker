@@ -72,9 +72,8 @@ namespace GitLurker.Core.Services
             {
                 GetCurrentBranchName().Replace("origin/", string.Empty)
             };
-            var branches = Execute(r => r.Branches.Where(b => b.FriendlyName != "origin/HEAD").ToArray());
 
-            foreach (var remoteBrach in branches.Where(b => b.IsRemote).OrderBy(b => b.FriendlyName))
+            foreach (var remoteBrach in GetRemoteBranches())
             {
                 var branchName = remoteBrach.FriendlyName.Replace("origin/", string.Empty);
                 if (branchNames.Contains(branchName))
@@ -129,6 +128,13 @@ namespace GitLurker.Core.Services
 
                 return filePaths;
             });
+        }
+
+        public List<Branch> GetRemoteBranches()
+        {
+            var branches = Execute(r => r.Branches.Where(b => b.FriendlyName != "origin/HEAD" && b.IsRemote).ToArray());
+
+            return branches.OrderBy(b => b.FriendlyName).ToList();
         }
 
         private T Execute<T>(Func<Repository, T> action, T defaultValue)
