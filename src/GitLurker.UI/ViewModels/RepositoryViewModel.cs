@@ -281,6 +281,8 @@
 
         public void Open() => Open(skipModifier: false);
 
+        public void OnPopupClosed() => _popupService.SetClosed();
+
         public void Open(bool skipModifier)
         {
             _pullRequestTokenSource?.Cancel();
