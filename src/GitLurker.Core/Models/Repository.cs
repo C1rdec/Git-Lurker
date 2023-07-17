@@ -153,9 +153,7 @@
             }
             else
             {
-                var r = await ExecuteCommandAsync($"git push --set-upstream origin {currentBranch}", true);
-
-                return r;
+                return await ExecuteCommandAsync($"git push --set-upstream origin {currentBranch}", true);
             }
         }
 
