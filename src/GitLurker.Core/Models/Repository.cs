@@ -133,6 +133,7 @@
 
         public async Task<ExecutionResult> SyncAsync(string message)
         {
+            var current = GetCurrentBranchName();
             var result = await ExecuteCommandAsync("git add -A -- .");
             if (result.ExitCode < 0)
             {
