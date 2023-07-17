@@ -145,11 +145,16 @@
                 return result;
             }
 
-            var branchExist = _gitService.GetRemoteBranches().Any(b => b.FriendlyName.Replace("origin/", string.Empty) == GetCurrentBranchName());
-
-            result = await ExecuteCommandAsync($"git push", true);
-
-            return result;
+            var currentBranch = GetCurrentBranchName();
+            var branchExist = _gitService.GetRemoteBranches().Any(b => b.FriendlyName.Replace("origin/", string.Empty) == currentBranch);
+            if (branchExist)
+            {
+                return await ExecuteCommandAsync($"git push", true);
+            }
+            else
+            {
+                return await ExecuteCommandAsync($"git push --set-upstream origin {currentBranch}");
+            }
         }
 
         public Task RebaseAsync(string branchName) => ExecuteCommandAsync($"git rebase {branchName}", true);
