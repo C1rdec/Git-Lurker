@@ -153,7 +153,7 @@
             }
             else
             {
-                var r = await ExecuteCommandAsync($"git push --set-upstream origin {currentBranch}");
+                var r = await ExecuteCommandAsync($"git push --set-upstream origin {currentBranch}", true);
 
                 return r;
             }
