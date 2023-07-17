@@ -145,6 +145,8 @@
                 return result;
             }
 
+            var branchExist = _gitService.GetRemoteBranches().Any(b => b.FriendlyName.Replace("origin/", string.Empty) == GetCurrentBranchName());
+
             result = await ExecuteCommandAsync($"git push", true);
 
             return result;
