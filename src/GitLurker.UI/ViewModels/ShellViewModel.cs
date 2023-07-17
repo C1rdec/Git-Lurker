@@ -322,7 +322,10 @@
                 SearchTerm = string.Empty;
                 ItemListViewModel?.Clear();
 
-                ClearAction();
+                if (_activeAction != null)
+                {
+                    ClearAction();
+                }
             }
         }
 
