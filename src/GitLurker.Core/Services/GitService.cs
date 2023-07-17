@@ -73,9 +73,7 @@ namespace GitLurker.Core.Services
                 GetCurrentBranchName().Replace("origin/", string.Empty)
             };
 
-            var remote = GetRemoteBranches();
-
-            foreach (var remoteBrach in remote)
+            foreach (var remoteBrach in GetRemoteBranches())
             {
                 var branchName = remoteBrach.FriendlyName.Replace("origin/", string.Empty);
                 if (branchNames.Contains(branchName))
