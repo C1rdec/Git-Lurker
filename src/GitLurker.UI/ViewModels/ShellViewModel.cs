@@ -694,15 +694,15 @@
             if (await ItemListViewModel.Open(false))
             {
                 HideWindow();
+            }
+            else
+            {
+                SearchTerm = string.Empty;
 
                 if (_activeAction != null)
                 {
                     ClearAction();
                 }
-            }
-            else
-            {
-                SearchTerm = string.Empty;
             }
         }
 

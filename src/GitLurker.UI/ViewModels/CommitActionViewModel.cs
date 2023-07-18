@@ -59,7 +59,7 @@ namespace GitLurker.UI.ViewModels
                 SelectedFileViewModel.Open();
                 SelectedFileViewModel = null;
 
-                return false;
+                return true;
             }
 
             if (!string.IsNullOrEmpty(_message))
@@ -68,7 +68,7 @@ namespace GitLurker.UI.ViewModels
                 await _repository.SyncAsync(_message);
             }
 
-            return true;
+            return false;
         }
 
         public void Search(string term)
