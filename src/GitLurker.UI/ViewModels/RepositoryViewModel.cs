@@ -428,6 +428,11 @@
 
         public async void OpenFileChanged()
         {
+            if (!HasFilesChanged)
+            {
+                return;    
+            }
+
             var message = new Messages.ActionMessage
             {
                 ListViewModel = new CommitActionViewModel(_repo),

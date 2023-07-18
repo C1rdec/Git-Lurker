@@ -15,6 +15,7 @@
     {
         #region Fields
 
+        private KeyboardService _keyboardService;
         private RepositoryService _repositoryService;
         private ConsoleService _consoleService;
         private ObservableCollection<RepositoryViewModel> _repos;
@@ -26,11 +27,14 @@
 
         #region Constructors
 
-        public WorkspaceViewModel(RepositoryService repositoryService, ConsoleService consoleService)
+        public WorkspaceViewModel(RepositoryService repositoryService, ConsoleService consoleService, KeyboardService keyboardService)
         {
             _repos = new ObservableCollection<RepositoryViewModel>();
             _repositoryService = repositoryService;
             _consoleService = consoleService;
+            _keyboardService = keyboardService;
+
+            _keyboardService.RightPressed += KeyboardService_RightPressed;
         }
 
         #endregion
@@ -263,6 +267,14 @@
             {
                 action(firstRepo);
             }
+        }
+
+        private void KeyboardService_RightPressed(object sender, EventArgs e)
+        {
+            ExecuteOnRepo(r => 
+            {
+                r.OpenFileChanged();
+            });
         }
 
         #endregion

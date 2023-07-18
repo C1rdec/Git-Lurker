@@ -103,13 +103,14 @@
             _version = $"{assemblyVersion.Major}.{assemblyVersion.Minor}.{assemblyVersion.Build}";
 
             _keyboardService.EscapePressed += KeyboardService_EscapePressed;
+            _keyboardService.LeftPressed += KeyboardService_EscapePressed;
             _keyboardService.EnterPressed += KeyboardService_EnterPressed;
             _keyboardService.DownPressed += KeyboardService_DownPressed;
             _keyboardService.UpPressed += KeyboardService_UpPressed;
             _keyboardService.NextTabPressed += KeyboardService_NextTabPressed;
             _keyboardService.EnterLongPressed += KeyboardService_EnterLongPressed;
 
-            _workspaceViewModel = new WorkspaceViewModel(_repositoryService, _consoleService);
+            _workspaceViewModel = new WorkspaceViewModel(_repositoryService, _consoleService, _keyboardService);
             _gameLibraryViewModel = new GameLibraryViewModel();
 
             _workspaceViewModel.ShowRecent();
@@ -410,6 +411,7 @@
                 _console?.Dispose();
 
                 _keyboardService.EscapePressed -= KeyboardService_EscapePressed;
+                _keyboardService.LeftPressed -= KeyboardService_EscapePressed;
                 _keyboardService.EnterPressed -= KeyboardService_EnterPressed;
                 _keyboardService.DownPressed -= KeyboardService_DownPressed;
                 _keyboardService.UpPressed -= KeyboardService_UpPressed;
