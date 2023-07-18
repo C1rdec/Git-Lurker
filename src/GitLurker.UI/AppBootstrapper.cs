@@ -72,9 +72,9 @@
             _container.Singleton<DialogService, DialogService>();
             _container.Singleton<KeyboardService, KeyboardService>();
             _container.Singleton<GithubUpdateManager, GithubUpdateManager>();
-            _container.Singleton<IDebounceService, DebounceService>();
             _container.Singleton<IWindowManager, WindowManager>();
             _container.Singleton<IEventAggregator, EventAggregator>();
+            _container.PerRequest<IDebounceService, DebounceService>();
 
             // ViewModels
             _container.PerRequest<ShellViewModel, ShellViewModel>();

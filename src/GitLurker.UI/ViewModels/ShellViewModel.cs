@@ -51,6 +51,7 @@
         private bool _updating;
         private string _consoleHeader;
         private IDebounceService _debouncer;
+        private IDebounceService _searchDebouncer;
         private WorkspaceViewModel _workspaceViewModel;
         private GameLibraryViewModel _gameLibraryViewModel;
         private SettingsViewModel _settingsViewModel;
@@ -62,7 +63,8 @@
 
         public ShellViewModel(
             IEventAggregator aggregator,
-            IDebounceService debounceService,
+            IDebounceService debouncer,
+            IDebounceService searchDebouncer,
             SettingsFile settings,
             KeyboardService keyboardService,
             WindowsLink startupService,
@@ -87,7 +89,8 @@
             _consoleService = consoleService;
             _settingsFile = settings;
             _updateManager = updateManager;
-            _debouncer = debounceService;
+            _debouncer = debouncer;
+            _searchDebouncer = searchDebouncer;
             _themeService = themeService;
 
             _updateManager.UpdateRequested += UpdateManager_UpdateRequested;
@@ -185,7 +188,7 @@
                 }
 
                 _searchTerm = value;
-                _debouncer.Debounce(250, () => Search(_searchTerm));
+                _searchDebouncer.Debounce(250, () => Search(_searchTerm));
                 NotifyOfPropertyChange();
             }
         }
