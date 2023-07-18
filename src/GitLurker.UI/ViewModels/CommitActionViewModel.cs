@@ -151,6 +151,7 @@ namespace GitLurker.UI.ViewModels
             foreach (var file in _repository.GetFilesChanged().OrderBy(f => Path.GetFileName(f)))
             {
                 _fileViewModels.Add(new FileViewModel(file, _repository));
+
             }
         }
     }
