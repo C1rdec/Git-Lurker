@@ -1,16 +1,20 @@
-﻿using Caliburn.Micro;
+﻿using System;
+using Caliburn.Micro;
 
 namespace GitLurker.UI.ViewModels
 {
-    public abstract class ItemViewModelBase : PropertyChangedBase
+    public abstract class ItemViewModelBase : ViewAware
     {
         #region Fields
 
+        private object _view;
         private bool _isSelected;
 
         #endregion
 
         #region Properties
+
+        public abstract string Id { get; }
 
         public bool IsSelected
         {
@@ -20,6 +24,18 @@ namespace GitLurker.UI.ViewModels
                 _isSelected = value;
                 NotifyOfPropertyChange();
             }
+        }
+
+        protected object View => _view;
+
+        #endregion
+
+        #region Methods
+
+        protected override void OnViewLoaded(object view)
+        {
+            _view = view;
+            base.OnViewLoaded(view);
         }
 
         #endregion

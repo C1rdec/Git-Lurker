@@ -62,6 +62,8 @@
 
         #region Properties
 
+        public override string Id => _repo.Folder;
+
         public ObservableCollection<string> FileChanges { get; set; }
 
         public BranchManagerViewModel BranchManager { get; private set; }

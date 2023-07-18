@@ -29,7 +29,7 @@ namespace GitLurker.UI.ViewModels
 
         #region Properties
 
-        public string Id => _game.Id;
+        public override string Id => _game.Id;
 
         public BitmapImage IconSource
         {

@@ -133,6 +133,8 @@
 
         public async Task<ExecutionResult> SyncAsync(string message)
         {
+            AddToRecent();
+
             var result = await ExecuteCommandAsync("git add -A -- .");
             if (result.ExitCode < 0)
             {

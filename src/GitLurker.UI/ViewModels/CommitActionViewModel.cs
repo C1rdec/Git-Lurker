@@ -15,6 +15,7 @@ namespace GitLurker.UI.ViewModels
         private FileViewModel _selectedFileViewModel;
         private bool _mouseOver;
         private string _message;
+        private string _selecteFiledId;
 
         public CommitActionViewModel(Repository repo)
         {
@@ -73,6 +74,13 @@ namespace GitLurker.UI.ViewModels
 
         public void Search(string term)
         {
+            if (SelectedFileViewModel != null)
+            {
+                SelectedFileViewModel.IsSelected = false;
+                SelectedFileViewModel = null;
+                _selecteFiledId = null;
+            }
+
             _message = term;
         }
 
@@ -97,7 +105,7 @@ namespace GitLurker.UI.ViewModels
                 SelectedFileViewModel = _fileViewModels.FirstOrDefault();
                 if (SelectedFileViewModel != null)
                 {
-                    SelectedFileViewModel.IsSelected = true;
+                    _selecteFiledId = SelectedFileViewModel.Select();
                 }
 
                 return;
@@ -114,7 +122,7 @@ namespace GitLurker.UI.ViewModels
             index++;
             SelectedFileViewModel.IsSelected = false;
             SelectedFileViewModel = _fileViewModels.ElementAt(index);
-            SelectedFileViewModel.IsSelected = true;
+            _selecteFiledId = SelectedFileViewModel.Select();
         }
 
         public void MoveUp()
@@ -134,7 +142,7 @@ namespace GitLurker.UI.ViewModels
             index--;
             SelectedFileViewModel.IsSelected = false;
             SelectedFileViewModel = _fileViewModels.ElementAt(index);
-            SelectedFileViewModel.IsSelected = true;
+            _selecteFiledId = SelectedFileViewModel.Select();
         }
 
         public void NextTabPressed()
@@ -150,7 +158,14 @@ namespace GitLurker.UI.ViewModels
         {
             foreach (var file in _repository.GetFilesChanged().OrderBy(f => Path.GetFileName(f)))
             {
-                _fileViewModels.Add(new FileViewModel(file, _repository));
+                var viewModel = new FileViewModel(file, _repository);
+                if (_selecteFiledId == file)
+                {
+                    viewModel.IsSelected = true;
+                    SelectedFileViewModel = viewModel;
+                }
+
+                _fileViewModels.Add(viewModel);
             }
         }
     }
