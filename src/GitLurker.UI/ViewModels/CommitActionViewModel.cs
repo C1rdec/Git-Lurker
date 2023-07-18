@@ -22,7 +22,7 @@ namespace GitLurker.UI.ViewModels
             _fileViewModels = new ObservableCollection<FileViewModel>();
         }
 
-        public FileViewModel SelectedGameViewModel
+        public FileViewModel SelectedFileViewModel
         {
             get
             {
@@ -36,7 +36,7 @@ namespace GitLurker.UI.ViewModels
             }
         }
 
-        public bool HasSelectedFile => SelectedGameViewModel != null || _mouseOver;
+        public bool HasSelectedFile => SelectedFileViewModel != null || _mouseOver;
 
         public ObservableCollection<FileViewModel> FileViewModels => _fileViewModels;
 
@@ -54,10 +54,21 @@ namespace GitLurker.UI.ViewModels
 
         public async Task<bool> Open(bool skipModifier)
         {
-            IoC.Get<ConsoleService>().Listen(_repository);
-            await _repository.SyncAsync(_message);
+            if (SelectedFileViewModel != null)
+            {
+                SelectedFileViewModel.Open();
+                SelectedFileViewModel = null;
 
-            return false;
+                return false;
+            }
+
+            if (!string.IsNullOrEmpty(_message))
+            {
+                IoC.Get<ConsoleService>().Listen(_repository);
+                await _repository.SyncAsync(_message);
+            }
+
+            return true;
         }
 
         public void Search(string term)
@@ -67,6 +78,7 @@ namespace GitLurker.UI.ViewModels
 
         public void Clear()
         {
+            _fileViewModels.Clear();
         }
 
         public bool Close()
@@ -80,10 +92,49 @@ namespace GitLurker.UI.ViewModels
 
         public void MoveDown()
         {
+            if (SelectedFileViewModel == null)
+            {
+                SelectedFileViewModel = _fileViewModels.FirstOrDefault();
+                if (SelectedFileViewModel != null)
+                {
+                    SelectedFileViewModel.IsSelected = true;
+                }
+
+                return;
+            }
+
+            SelectedFileViewModel = _fileViewModels.FirstOrDefault(g => g.Id == SelectedFileViewModel.Id);
+
+            var index = _fileViewModels.IndexOf(SelectedFileViewModel);
+            if (index == -1 || (index + 1) >= _fileViewModels.Count)
+            {
+                return;
+            }
+
+            index++;
+            SelectedFileViewModel.IsSelected = false;
+            SelectedFileViewModel = _fileViewModels.ElementAt(index);
+            SelectedFileViewModel.IsSelected = true;
         }
 
         public void MoveUp()
         {
+            if (SelectedFileViewModel == null)
+            {
+                return;
+            }
+
+            SelectedFileViewModel = _fileViewModels.FirstOrDefault(g => g.Id == SelectedFileViewModel.Id);
+            var index = _fileViewModels.IndexOf(SelectedFileViewModel);
+            if (index <= 0)
+            {
+                return;
+            }
+
+            index--;
+            SelectedFileViewModel.IsSelected = false;
+            SelectedFileViewModel = _fileViewModels.ElementAt(index);
+            SelectedFileViewModel.IsSelected = true;
         }
 
         public void NextTabPressed()
@@ -99,7 +150,7 @@ namespace GitLurker.UI.ViewModels
         {
             foreach (var file in _repository.GetFilesChanged().OrderBy(f => Path.GetFileName(f)))
             {
-                _fileViewModels.Add(new FileViewModel(file));
+                _fileViewModels.Add(new FileViewModel(file, _repository));
             }
         }
     }

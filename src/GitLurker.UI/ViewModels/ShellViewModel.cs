@@ -321,11 +321,6 @@
                 IsVisible = false;
                 SearchTerm = string.Empty;
                 ItemListViewModel?.Clear();
-
-                if (_activeAction != null)
-                {
-                    ClearAction();
-                }
             }
         }
 
@@ -699,15 +694,15 @@
             if (await ItemListViewModel.Open(false))
             {
                 HideWindow();
+
+                if (_activeAction != null)
+                {
+                    ClearAction();
+                }
             }
             else
             {
                 SearchTerm = string.Empty;
-            }
-
-            if (_activeAction != null)
-            {
-                ClearAction();
             }
         }
 

@@ -1,6 +1,5 @@
-﻿namespace GitLurker.UI.Messages
+﻿namespace GitLurker.UI.Messages;
+
+public class CloseMessage
 {
-    public class CloseMessage
-    {
-    }
 }
