@@ -78,7 +78,7 @@ namespace GitLurker.UI.ViewModels
 
         public void Clear()
         {
-            _fileViewModels.Clear();
+            Execute.OnUIThread(() => _fileViewModels.Clear());
         }
 
         public bool Close()
