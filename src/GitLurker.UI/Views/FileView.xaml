@@ -53,7 +53,7 @@
                        VerticalAlignment="Center"
                        FontSize="20"
                        Opacity="0.4"
-                       Text="M" />
+                       Text="{Binding Letter}" />
         </Grid>
     </Border>
 </UserControl>

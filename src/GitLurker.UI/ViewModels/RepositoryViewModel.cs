@@ -53,7 +53,7 @@
             _showParentFolder = repo.Duplicate;
             _eventAggregator = IoC.Get<IEventAggregator>();
 
-            FileChanges = new ObservableCollection<string>();
+            FileChanges = new ObservableCollection<FileChange>();
             BranchManager = new BranchManagerViewModel(repo, OnSelectionChanged, OnBranchManagerClose, Rebase);
             GetStatus();
         }
@@ -64,7 +64,7 @@
 
         public override string Id => _repo.Folder;
 
-        public ObservableCollection<string> FileChanges { get; set; }
+        public ObservableCollection<FileChange> FileChanges { get; set; }
 
         public BranchManagerViewModel BranchManager { get; private set; }
 

@@ -327,7 +327,7 @@
 
         public IEnumerable<string> GetBranchNames() => _gitService.GetBranchNames();
 
-        public IEnumerable<string> GetFilesChanged() => _gitService.GetFilesChanged();
+        public IEnumerable<FileChange> GetFilesChanged() => _gitService.GetFilesChanged();
 
         public IEnumerable<Stash> GetStashes() => _gitService.GetStashes();
 

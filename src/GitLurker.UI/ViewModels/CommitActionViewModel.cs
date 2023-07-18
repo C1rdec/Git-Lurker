@@ -156,10 +156,10 @@ namespace GitLurker.UI.ViewModels
 
         public void ShowRecent()
         {
-            foreach (var file in _repository.GetFilesChanged().OrderBy(f => Path.GetFileName(f)))
+            foreach (var file in _repository.GetFilesChanged().OrderBy(f => Path.GetFileName(f.FilePath)))
             {
                 var viewModel = new FileViewModel(file, _repository);
-                if (_selecteFiledId == file)
+                if (_selecteFiledId == file.FilePath)
                 {
                     viewModel.IsSelected = true;
                     SelectedFileViewModel = viewModel;

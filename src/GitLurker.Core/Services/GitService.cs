@@ -98,23 +98,31 @@ namespace GitLurker.Core.Services
         public void Pop()
             => Execute(r => r.Stashes.Pop(r.Stashes.Count() - 1));
 
-        public IEnumerable<string> GetFilesChanged()
+        public IEnumerable<Models.FileChange> GetFilesChanged()
         {
             return Execute(repo =>
             {
-                var filePaths = new List<string>();
+                var filePaths = new List<Models.FileChange>();
                 var status = repo.RetrieveStatus();
 
                 foreach (var change in status.Modified)
                 {
-                    filePaths.Add(change.FilePath);
+                    filePaths.Add(new Models.FileChange
+                    {
+                        FilePath = change.FilePath,
+                        Status = Models.ChangeStatus.Modified,
+                    });
                 }
 
                 foreach (var change in status.Missing)
                 {
                     if (change.State == FileStatus.DeletedFromWorkdir)
                     {
-                        filePaths.Add(change.FilePath);
+                        filePaths.Add(new Models.FileChange
+                        {
+                            FilePath = change.FilePath,
+                            Status = Models.ChangeStatus.Deleted,
+                        });
                     }
                 }
 
@@ -122,7 +130,11 @@ namespace GitLurker.Core.Services
                 {
                     if (change.State == FileStatus.NewInWorkdir)
                     {
-                        filePaths.Add(change.FilePath);
+                        filePaths.Add(new Models.FileChange
+                        {
+                            FilePath = change.FilePath,
+                            Status = Models.ChangeStatus.Added,
+                        });
                     }
                 }
 

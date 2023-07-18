@@ -12,7 +12,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\Action.png" />
     <None Remove="Resources\Game.gif" />
     <None Remove="Resources\GitLurker.ico" />
     <None Remove="Resources\SystemTray.png" />
@@ -51,7 +50,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\Action.png" />
     <Resource Include="Resources\Game.gif" />
     <Resource Include="Resources\GitLurker.ico" />
     <Resource Include="Resources\Theme.gif" />

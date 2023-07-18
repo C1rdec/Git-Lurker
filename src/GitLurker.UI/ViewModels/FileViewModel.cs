@@ -9,34 +9,42 @@ namespace GitLurker.UI.ViewModels
     {
         #region Fields
 
-        private string _filePath;
+        private FileChange _fileChange;
         private Repository _repo;
 
         #endregion
 
         #region Constructors
 
-        public FileViewModel(string filePath, Repository repo)
+        public FileViewModel(FileChange fileChange, Repository repo)
         {
             _repo = repo;
-            _filePath = filePath;
+            _fileChange = fileChange;
         }
 
         #endregion
 
         #region Properties
 
-        public string FileName => Path.GetFileName(_filePath);
+        public string FileName => Path.GetFileName(_fileChange.FilePath);
 
-        public override string Id => _filePath;
+        public override string Id => _fileChange.FilePath;
 
-        #endregion
-
-        #region Methods
-
-        public async void Open()
+        public string Letter => _fileChange.Status switch
         {
-            await _repo.ExecuteCommandAsync($"git difftool -x \"code --wait --diff\" -y -- \"{_filePath}\"");
+            ChangeStatus.Deleted => "D",
+            ChangeStatus.Modified => "M",
+            ChangeStatus.Added => "A",
+            _ => string.Empty,
+        };
+
+    #endregion
+
+    #region Methods
+
+    public async void Open()
+        {
+            await _repo.ExecuteCommandAsync($"git difftool -x \"code --wait --diff\" -y -- \"{_fileChange.FilePath}\"");
         }
 
         public string Select()
