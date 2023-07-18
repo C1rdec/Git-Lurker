@@ -428,7 +428,13 @@
 
         public async void OpenFileChanged()
         {
-            await _eventAggregator.PublishOnUIThreadAsync(new CommitActionViewModel(_repo));
+            var message = new Messages.ActionMessage
+            {
+                ListViewModel = new CommitActionViewModel(_repo),
+                WaterMark = "Commit & Push"
+            };
+
+            await _eventAggregator.PublishOnUIThreadAsync(message);
         }
 
         public async void GitStash()

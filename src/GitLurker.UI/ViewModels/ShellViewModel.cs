@@ -19,7 +19,7 @@
     using Lurker.Windows;
     using NHotkey.Wpf;
 
-    public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessage>, IHandle<IItemListViewModel>, IDisposable
+    public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessage>, IHandle<Messages.ActionMessage>, IDisposable
     {
         #region Fields
 
@@ -714,6 +714,7 @@
         private void ClearAction()
         {
             _activeAction = null;
+            SearchWatermark = DefaultWaterMark;
             ItemListViewModel = _workspaceViewModel;
             ItemListViewModel.ShowRecent();
 
@@ -732,9 +733,10 @@
         private void KeyboardService_EnterLongPressed(object sender, EventArgs e)
             => ItemListViewModel.EnterLongPressed();
 
-        public Task HandleAsync(IItemListViewModel message, CancellationToken cancellationToken)
+        public Task HandleAsync(Messages.ActionMessage message, CancellationToken cancellationToken)
         {
-            _activeAction = message;
+            _activeAction = message.ListViewModel;
+            SearchWatermark = message.WaterMark;
             ItemListViewModel = _activeAction;
             ItemListViewModel.ShowRecent();
             NotifyOfPropertyChange(() => ItemListViewModel);
