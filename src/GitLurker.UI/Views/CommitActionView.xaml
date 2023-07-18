@@ -36,21 +36,23 @@
                 </Style.Triggers>
             </Style>
         </Grid.Style>
-        <ItemsControl x:Name="FileViewModels">
-            <ItemsControl.ItemContainerStyle>
-                <Style>
-                    <Setter Property="FrameworkElement.Margin" Value="0,0,0,10" />
-                </Style>
-            </ItemsControl.ItemContainerStyle>
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <StackPanel VerticalAlignment="Top">
-                        <StackPanel.Background>
-                            <SolidColorBrush Opacity="0.003" Color="White" />
-                        </StackPanel.Background>
-                    </StackPanel>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-        </ItemsControl>
+        <ScrollViewer VerticalScrollBarVisibility="Hidden">
+            <ItemsControl x:Name="FileViewModels">
+                <ItemsControl.ItemContainerStyle>
+                    <Style>
+                        <Setter Property="FrameworkElement.Margin" Value="0,0,0,10" />
+                    </Style>
+                </ItemsControl.ItemContainerStyle>
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel VerticalAlignment="Top">
+                            <StackPanel.Background>
+                                <SolidColorBrush Opacity="0.003" Color="White" />
+                            </StackPanel.Background>
+                        </StackPanel>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </ScrollViewer>
     </Grid>
 </UserControl>
