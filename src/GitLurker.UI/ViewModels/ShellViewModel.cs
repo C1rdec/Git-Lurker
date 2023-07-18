@@ -185,7 +185,7 @@
                 }
 
                 _searchTerm = value;
-                Search(_searchTerm);
+                _debouncer.Debounce(250, () => Search(_searchTerm));
                 NotifyOfPropertyChange();
             }
         }
