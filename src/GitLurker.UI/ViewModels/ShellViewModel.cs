@@ -106,7 +106,6 @@
             _version = $"{assemblyVersion.Major}.{assemblyVersion.Minor}.{assemblyVersion.Build}";
 
             _keyboardService.EscapePressed += KeyboardService_EscapePressed;
-            _keyboardService.LeftPressed += KeyboardService_EscapePressed;
             _keyboardService.EnterPressed += KeyboardService_EnterPressed;
             _keyboardService.DownPressed += KeyboardService_DownPressed;
             _keyboardService.UpPressed += KeyboardService_UpPressed;
@@ -414,7 +413,6 @@
                 _console?.Dispose();
 
                 _keyboardService.EscapePressed -= KeyboardService_EscapePressed;
-                _keyboardService.LeftPressed -= KeyboardService_EscapePressed;
                 _keyboardService.EnterPressed -= KeyboardService_EnterPressed;
                 _keyboardService.DownPressed -= KeyboardService_DownPressed;
                 _keyboardService.UpPressed -= KeyboardService_UpPressed;
