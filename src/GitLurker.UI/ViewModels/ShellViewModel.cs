@@ -133,7 +133,7 @@
 
         #region Properties
 
-        public bool IsNotPledged => !_patronService.IsPledged;
+        public bool IsNotPledged => !_patronService.IsPledged && !NeedUpdate;
 
         public DoubleClickCommand ShowSettings => new(OpenSettings);
 
@@ -201,7 +201,8 @@
                 NotifyOfPropertyChange();
                 NotifyOfPropertyChange(() => UpToDate);
                 NotifyOfPropertyChange(() => ShowConsoleOutput);
-            }
+                NotifyOfPropertyChange(() => IsNotPledged);
+			}
         }
 
         public bool HasSurfaceDial
