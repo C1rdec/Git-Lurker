@@ -368,7 +368,7 @@
 
         public string GetUserSecretId()
         {
-            foreach (var csproj in GetFiles(".csproj"))
+            foreach (var csproj in GetFiles(".csproj", maxRecursionDepth: 3))
             {
                 var fileContent = File.ReadAllText(csproj.FullName);
                 try
