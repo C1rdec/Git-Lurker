@@ -271,7 +271,7 @@
 
         private void KeyboardService_RightPressed(object sender, EventArgs e)
         {
-            ExecuteOnRepo(r => 
+            ExecuteOnRepo(r =>
             {
                 r.OpenFileChanged();
             });

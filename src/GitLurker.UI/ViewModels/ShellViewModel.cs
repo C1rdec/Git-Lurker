@@ -202,7 +202,7 @@
                 NotifyOfPropertyChange(() => UpToDate);
                 NotifyOfPropertyChange(() => ShowConsoleOutput);
                 NotifyOfPropertyChange(() => IsNotPledged);
-			}
+            }
         }
 
         public bool HasSurfaceDial

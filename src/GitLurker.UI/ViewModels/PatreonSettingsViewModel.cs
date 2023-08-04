@@ -17,7 +17,7 @@ namespace GitLurker.UI.ViewModels
     {
         #region Fields
 
-        private bool _steamLoading; 
+        private bool _steamLoading;
         private bool _epicLoading;
         private bool _battleNetLoading;
         private ThemeService _themeService;

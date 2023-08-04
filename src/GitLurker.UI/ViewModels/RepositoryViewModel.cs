@@ -432,7 +432,7 @@
         {
             if (!HasFilesChanged)
             {
-                return;    
+                return;
             }
 
             var message = new Messages.ActionMessage

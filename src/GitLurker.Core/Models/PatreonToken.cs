@@ -19,7 +19,7 @@ public class PatreonToken
 
     public string RefreshToken { get; set; }
 
-    public DateTime ExpiredDate{ get; set; }
+    public DateTime ExpiredDate { get; set; }
 
     #endregion
 

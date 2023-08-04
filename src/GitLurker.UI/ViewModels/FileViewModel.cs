@@ -38,11 +38,11 @@ namespace GitLurker.UI.ViewModels
             _ => string.Empty,
         };
 
-    #endregion
+        #endregion
 
-    #region Methods
+        #region Methods
 
-    public async void Open()
+        public async void Open()
         {
             await _repo.ExecuteCommandAsync($"git difftool -x \"code --wait --diff\" -y -- \"{_fileChange.FilePath}\"");
         }
