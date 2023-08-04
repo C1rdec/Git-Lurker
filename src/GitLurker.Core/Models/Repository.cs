@@ -93,19 +93,7 @@
                 return;
             }
 
-            var solutionFile = _slnFiles.FirstOrDefault();
-            if (solutionFile == null)
-            {
-                return;
-            }
-
-            var startupProjectGuid = new StartProjectFinder().GetStartProjects(solutionFile.FullName).FirstOrDefault();
-            if (startupProjectGuid == null)
-            {
-                return;
-            }
-
-            var defaultProject = SolutionProjectExtractor.GetAllProjectFiles(solutionFile.FullName).FirstOrDefault(p => p.Guid == startupProjectGuid);
+            var defaultProject = GetDefaultProject();
             if (defaultProject == null)
             {
                 return;
@@ -119,6 +107,23 @@
 
             _tokenSource?.Dispose();
             _tokenSource = null;
+        }
+
+        private Project GetDefaultProject()
+        {
+            var solutionFile = _slnFiles.FirstOrDefault();
+            if (solutionFile == null)
+            {
+                return null;
+            }
+
+            var startupProjectGuid = new StartProjectFinder().GetStartProjects(solutionFile.FullName).FirstOrDefault();
+            if (startupProjectGuid == null)
+            {
+                return null;
+            }
+
+            return SolutionProjectExtractor.GetAllProjectFiles(solutionFile.FullName).FirstOrDefault(p => p.Guid == startupProjectGuid);
         }
 
         public bool IsBehind()
@@ -368,22 +373,24 @@
 
         public string GetUserSecretId()
         {
-            foreach (var csproj in GetFiles(".csproj", maxRecursionDepth: 3))
+            var defaultProject = GetDefaultProject();
+            if (defaultProject == null)
             {
-                var fileContent = File.ReadAllText(csproj.FullName);
-                try
+                return null;
+            }
+
+            var fileContent = File.ReadAllText(defaultProject.FullPath);
+            try
+            {
+                var xml = XDocument.Parse(fileContent);
+                var userSecretId = xml.Root.Descendants("UserSecretsId").FirstOrDefault();
+                if (userSecretId != null)
                 {
-                    var xml = XDocument.Parse(fileContent);
-                    var userSecretId = xml.Root.Descendants("UserSecretsId").FirstOrDefault();
-                    if (userSecretId != null)
-                    {
-                        return userSecretId.Value;
-                    }
+                    return userSecretId.Value;
                 }
-                catch
-                {
-                    continue;
-                }
+            }
+            catch
+            {
             }
 
             return null;
