@@ -67,6 +67,7 @@
         {
             if (Uri.TryCreate(_lastSearchTerm, UriKind.Absolute, out var result))
             {
+                _lastSearchTerm = string.Empty;
                 await CloneAsync(result);
 
                 return false;
