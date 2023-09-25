@@ -12,14 +12,14 @@ namespace GitLurker.UI.ViewModels
 
         private string _name;
         private Hotkey _hotkey;
-        private System.Action _save;
+        private System.Action<KeyCode, Modifiers> _save;
         private PackIconControlBase _icon;
 
         #endregion
 
         #region Constructors
 
-        public HotkeyViewModel(Hotkey hotkey, System.Action callback, string name)
+        public HotkeyViewModel(Hotkey hotkey, System.Action<KeyCode, Modifiers> callback, string name)
         {
             _name = name;
             _hotkey = hotkey;
@@ -31,7 +31,7 @@ namespace GitLurker.UI.ViewModels
             }
         }
 
-        public HotkeyViewModel(Hotkey hotkey, System.Action callback)
+        public HotkeyViewModel(Hotkey hotkey, System.Action<KeyCode, Modifiers> callback)
             : this(hotkey, callback, "Open")
         {
         }
@@ -107,7 +107,7 @@ namespace GitLurker.UI.ViewModels
 
             HandleIcon(KeyCode);
 
-            _save();
+            _save(result.Key, result.Modifier);
         }
 
         private void HandleIcon(KeyCode code)

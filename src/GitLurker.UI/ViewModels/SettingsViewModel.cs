@@ -11,6 +11,7 @@ using GitLurker.Core.Services;
 using GitLurker.UI.Services;
 using LibGit2Sharp;
 using Lurker.Windows;
+using Winook;
 
 namespace GitLurker.UI.ViewModels
 {
@@ -49,14 +50,13 @@ namespace GitLurker.UI.ViewModels
             _repositoryService = repositoryService;
             _windowsStartupService = windowsLink;
             _settingsFile = settingsFile;
-            _settingsFile.Initialize();
 
             _gameSettingsFile = new GameSettingsFile();
             _gameSettingsFile.Initialize();
 
             RepoManager = new RepoManagerViewModel(_settingsFile);
-            Hotkey = new HotkeyViewModel(_settingsFile.Entity.HotKey, Save);
-            DevToysHotkey = new HotkeyViewModel(_settingsFile.Entity.DevToysHotKey, Save, "DevToys");
+            Hotkey = new HotkeyViewModel(_settingsFile.Entity.HotKey, SaveHotKey);
+            DevToysHotkey = new HotkeyViewModel(_settingsFile.Entity.DevToysHotKey, SaveDevToy, "DevToys");
             PatreonViewModel = patreonViewModel;
 
             PatreonViewModel.PropertyChanged += PatreonViewModel_PropertyChanged;
@@ -167,8 +167,19 @@ namespace GitLurker.UI.ViewModels
             }
         }
 
-        public void Save()
+        public void SaveHotKey(KeyCode code, Modifiers modifier)
         {
+            _settingsFile.Entity.HotKey.KeyCode = code;
+            _settingsFile.Entity.HotKey.Modifier = modifier;
+
+            _settingsFile.Save();
+        }
+
+        public void SaveDevToy(KeyCode code, Modifiers modifier)
+        {
+            _settingsFile.Entity.DevToysHotKey.KeyCode = code;
+            _settingsFile.Entity.DevToysHotKey.Modifier = modifier;
+
             _settingsFile.Save();
         }
 
@@ -184,7 +195,7 @@ namespace GitLurker.UI.ViewModels
                 _windowsStartupService.RemoveStartMenu();
             }
 
-            Save();
+            _settingsFile.Save();
         }
 
         public void ToggleStartWithWindows()
@@ -199,13 +210,13 @@ namespace GitLurker.UI.ViewModels
                 _windowsStartupService.RemoveStartWithWindows();
             }
 
-            Save();
+            _settingsFile.Save();
         }
 
         public void ToggleConsoleOutput()
         {
             ConsoleOuput = !ConsoleOuput;
-            Save();
+            _settingsFile.Save();
         }
 
         public void ToggleLocalNuget()
@@ -226,7 +237,7 @@ namespace GitLurker.UI.ViewModels
 
             _settingsFile.Entity.NugetSource = path;
             NotifyOfPropertyChange(() => HasNugetSource);
-            Save();
+            _settingsFile.Save();
         }
 
         public void ToggleAdmin()
@@ -260,7 +271,7 @@ namespace GitLurker.UI.ViewModels
 
             _settingsFile.Entity.IsAdmin = isAdmin;
             NotifyOfPropertyChange(() => IsAdmin);
-            Save();
+            _settingsFile.Save();
 
             _ = gitLurker.ExecuteCommandAsync("dotnet run --project .\\src\\GitLurker.UI\\GitLurker.UI.csproj -c release");
             Process.GetCurrentProcess().Kill();
@@ -280,7 +291,7 @@ namespace GitLurker.UI.ViewModels
 
         protected override Task OnDeactivateAsync(bool close, CancellationToken cancellationToken)
         {
-            Save();
+            _settingsFile.Save();
 
             return base.OnDeactivateAsync(close, cancellationToken);
         }
