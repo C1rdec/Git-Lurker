@@ -42,7 +42,7 @@
                     Margin="6"
                     CornerRadius="15"
                     Cursor="Hand"
-                    Opacity="0.3"
+                    Opacity="0.2"
                     Visibility="{Binding HasNoQuote, Converter={StaticResource BooleanToVisibilityConverter}}">
                 <iconPacks:PackIconFontAwesome Height="12"
                                                HorizontalAlignment="Center"
