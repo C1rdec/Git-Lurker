@@ -55,7 +55,8 @@
         private WorkspaceViewModel _workspaceViewModel;
         private GameLibraryViewModel _gameLibraryViewModel;
         private SettingsViewModel _settingsViewModel;
-        private IItemListViewModel _activeAction;
+        private QuoteViewModel _quoteViewModel;
+		private IItemListViewModel _activeAction;
 
         #endregion
 
@@ -74,7 +75,8 @@
             GithubUpdateManager updateManager,
             ConsoleViewModel console,
             PatronService patronService,
-            SettingsViewModel settingsViewModel)
+            SettingsViewModel settingsViewModel,
+            QuoteViewModel quoteViewModel)
         {
             _console = console;
             _searchTerm = string.Empty;
@@ -92,6 +94,7 @@
             _debouncer = debouncer;
             _searchDebouncer = searchDebouncer;
             _themeService = themeService;
+            _quoteViewModel = quoteViewModel;
 
             _updateManager.UpdateRequested += UpdateManager_UpdateRequested;
             _settingsFile.OnFileSaved += OnSettingsSave;
@@ -134,6 +137,8 @@
         #region Properties
 
         public bool IsNotPledged => !_patronService.IsPledged && !NeedUpdate;
+
+        public QuoteViewModel QuoteViewModel => _quoteViewModel;
 
         public DoubleClickCommand ShowSettings => new(OpenSettings);
 

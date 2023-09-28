@@ -59,6 +59,7 @@ namespace GitLurker.Core.Services
             settingsFile.Initialize();
 
             _workspaces = settingsFile.Entity.Workspaces.Select(w => new Workspace(w)).ToArray();
+
             return _workspaces;
         }
 

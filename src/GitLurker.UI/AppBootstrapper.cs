@@ -83,8 +83,9 @@
             _container.Singleton<PatreonViewModel, PatreonViewModel>();
             _container.Singleton<WelcomeViewModel, WelcomeViewModel>();
             _container.Singleton<ConsoleViewModel, ConsoleViewModel>();
+            _container.Singleton<QuoteViewModel, QuoteViewModel>();
 
-            var settings = new SettingsFile();
+			var settings = new SettingsFile();
             settings.Initialize();
             _container.Instance(settings);
 

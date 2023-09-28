@@ -58,6 +58,8 @@ namespace GitLurker.Core.Models
 
         public Mode Mode { get; set; }
 
+        public string Quote { get; set; }
+
         #endregion
     }
 }

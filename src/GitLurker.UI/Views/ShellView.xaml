@@ -190,7 +190,6 @@
                                                        Kind="TerminalSolid" />
                     </Grid>
                 </StackPanel>
-
                 <ContentControl x:Name="Console"
                                 MaxHeight="300"
                                 Margin="3,4,3,4"
@@ -228,6 +227,7 @@
                         </StackPanel>
                     </Border>
                 </Grid>
+                <ContentControl x:Name="QuoteViewModel" />
             </Grid>
         </Border>
 

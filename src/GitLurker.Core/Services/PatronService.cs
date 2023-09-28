@@ -61,8 +61,15 @@ namespace GitLurker.Core.Services
             }
 
             using var service = CreateService();
-            _isPledged = await service.IsPledging(CampaignId, _patreonFile.Entity.AccessToken);
-            _patreonId = await service.GetPatronId(_patreonFile.Entity.AccessToken);
+            try
+            {
+                _isPledged = await service.IsPledging(CampaignId, _patreonFile.Entity.AccessToken);
+                _patreonId = await service.GetPatronId(_patreonFile.Entity.AccessToken);
+            }
+            catch
+            {
+                return false;
+            }
 
             return _isPledged;
         }
