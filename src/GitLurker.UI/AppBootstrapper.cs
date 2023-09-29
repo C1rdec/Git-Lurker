@@ -31,16 +31,36 @@
             Initialize();
         }
 
-        #endregion
+		#endregion
 
-        #region Methods
+		#region Methods
 
-        /// <summary>
-        /// Override this to add custom behavior to execute after the application starts.
-        /// </summary>
-        /// <param name="sender">The sender.</param>
-        /// <param name="e">The args.</param>
-        protected async override void OnStartup(object sender, System.Windows.StartupEventArgs e)
+		public static Process RunningInstance()
+		{
+			var currentProcess = Process.GetCurrentProcess();
+			var processes = Process.GetProcessesByName(currentProcess.ProcessName);
+
+			var currentFilePath = currentProcess.GetMainModuleFileName();
+			foreach (var process in processes)
+			{
+				if (process.Id != currentProcess.Id)
+				{
+					if (process.GetMainModuleFileName() == currentFilePath)
+					{
+						return process;
+					}
+				}
+			}
+
+			return null;
+		}
+
+		/// <summary>
+		/// Override this to add custom behavior to execute after the application starts.
+		/// </summary>
+		/// <param name="sender">The sender.</param>
+		/// <param name="e">The args.</param>
+		protected async override void OnStartup(object sender, System.Windows.StartupEventArgs e)
         {
             if (RunningInstance() != null)
             {
@@ -107,9 +127,7 @@
         /// The located service.
         /// </returns>
         protected override object GetInstance(Type service, string key)
-        {
-            return _container.GetInstance(service, key);
-        }
+            => _container.GetInstance(service, key);
 
         /// <summary>
         /// Override this to provide an IoC specific implementation.
@@ -119,38 +137,15 @@
         /// The located services.
         /// </returns>
         protected override IEnumerable<object> GetAllInstances(Type service)
-        {
-            return _container.GetAllInstances(service);
-        }
+            => _container.GetAllInstances(service);
 
-        /// <summary>
-        /// Override this to provide an IoC specific implementation.
-        /// </summary>
-        /// <param name="instance">The instance to perform injection on.</param>
-        protected override void BuildUp(object instance)
-        {
-            _container.BuildUp(instance);
-        }
 
-        public static Process RunningInstance()
-        {
-            var currentProcess = Process.GetCurrentProcess();
-            var processes = Process.GetProcessesByName(currentProcess.ProcessName);
-
-            var currentFilePath = currentProcess.GetMainModuleFileName();
-            foreach (var process in processes)
-            {
-                if (process.Id != currentProcess.Id)
-                {
-                    if (process.GetMainModuleFileName() == currentFilePath)
-                    {
-                        return process;
-                    }
-                }
-            }
-
-            return null;
-        }
+		/// <summary>
+		/// Override this to provide an IoC specific implementation.
+		/// </summary>
+		/// <param name="instance">The instance to perform injection on.</param>
+		protected override void BuildUp(object instance)
+            => _container.BuildUp(instance);
 
         private void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
         {
