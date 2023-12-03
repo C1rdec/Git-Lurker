@@ -597,13 +597,16 @@
                 if (handleWorkItem)
                 {
                     var branchName = GetCurrentBranchName();
-                    var segments = branchName.Split("/");
-                    var lastSegment = segments.Last();
-
-                    if (lastSegment.All(char.IsDigit))
+                    if (branchName != null)
                     {
-                        var index = absolutePath.IndexOf("_git");
-                        absolutePath = $"{absolutePath.Substring(0, index)}_workitems/edit/{lastSegment}/";
+                        var segments = branchName.Split("/");
+                        var lastSegment = segments.Last();
+
+                        if (lastSegment.All(char.IsDigit))
+                        {
+                            var index = absolutePath.IndexOf("_git");
+                            absolutePath = $"{absolutePath.Substring(0, index)}_workitems/edit/{lastSegment}/";
+                        }
                     }
                 }
 
