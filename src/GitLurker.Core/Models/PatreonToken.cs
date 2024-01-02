@@ -1,7 +1,7 @@
-﻿using System;
-using Lurker.Patreon;
+﻿namespace GitLurker.Core.Models;
 
-namespace GitLurker.Core.Models;
+using System;
+using Lurker.Patreon;
 
 public class PatreonToken
 {

@@ -1,15 +1,14 @@
-﻿using System.Windows.Controls;
+﻿namespace GitLurker.UI.Views;
 
-namespace GitLurker.UI.Views
+using System.Windows.Controls;
+
+/// <summary>
+/// Interaction logic for SteamGameView.xaml
+/// </summary>
+public partial class GameView : UserControl
 {
-    /// <summary>
-    /// Interaction logic for SteamGameView.xaml
-    /// </summary>
-    public partial class GameView : UserControl
+    public GameView()
     {
-        public GameView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

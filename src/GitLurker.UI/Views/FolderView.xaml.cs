@@ -1,15 +1,14 @@
-﻿using System.Windows.Controls;
+﻿namespace GitLurker.UI.Views;
 
-namespace GitLurker.UI.Views
+using System.Windows.Controls;
+
+/// <summary>
+/// Interaction logic for FolderView.xaml
+/// </summary>
+public partial class FolderView : UserControl
 {
-    /// <summary>
-    /// Interaction logic for FolderView.xaml
-    /// </summary>
-    public partial class FolderView : UserControl
+    public FolderView()
     {
-        public FolderView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

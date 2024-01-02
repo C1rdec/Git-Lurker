@@ -1,27 +1,26 @@
-﻿using System.Threading.Tasks;
+﻿namespace GitLurker.UI.ViewModels;
 
-namespace GitLurker.UI.ViewModels
+using System.Threading.Tasks;
+
+public interface IItemListViewModel
 {
-    public interface IItemListViewModel
-    {
-        Task RefreshItems();
+    Task RefreshItems();
 
-        void Search(string term);
+    void Search(string term);
 
-        bool Close();
+    bool Close();
 
-        void Clear();
+    void Clear();
 
-        void ShowRecent();
+    void ShowRecent();
 
-        void MoveUp();
+    void MoveUp();
 
-        void MoveDown();
+    void MoveDown();
 
-        Task<bool> Open(bool skipModifier);
+    Task<bool> Open(bool skipModifier);
 
-        void EnterLongPressed();
+    void EnterLongPressed();
 
-        void NextTabPressed();
-    }
+    void NextTabPressed();
 }

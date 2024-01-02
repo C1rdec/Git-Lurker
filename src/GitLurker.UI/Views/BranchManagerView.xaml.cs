@@ -1,15 +1,14 @@
-﻿using System.Windows.Controls;
+﻿namespace GitLurker.UI.Views;
 
-namespace GitLurker.UI.Views
+using System.Windows.Controls;
+
+/// <summary>
+/// Interaction logic for BranchManagerView.xaml
+/// </summary>
+public partial class BranchManagerView : UserControl
 {
-    /// <summary>
-    /// Interaction logic for BranchManagerView.xaml
-    /// </summary>
-    public partial class BranchManagerView : UserControl
+    public BranchManagerView()
     {
-        public BranchManagerView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

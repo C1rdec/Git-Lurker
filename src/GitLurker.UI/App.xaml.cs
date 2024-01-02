@@ -1,15 +1,14 @@
-﻿namespace GitLurker.UI
-{
-    using System.Windows;
+﻿namespace GitLurker.UI;
 
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
+using System.Windows;
+
+/// <summary>
+/// Interaction logic for App.xaml
+/// </summary>
+public partial class App : Application
+{
+    public App()
     {
-        public App()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

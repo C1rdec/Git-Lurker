@@ -1,6 +1,6 @@
-﻿using Lurker.AppData;
+﻿namespace GitLurker.Core.Models;
 
-namespace GitLurker.Core.Models;
+using Lurker.AppData;
 
 public class PatreonFile : AppDataFileBase<PatreonToken>
 {

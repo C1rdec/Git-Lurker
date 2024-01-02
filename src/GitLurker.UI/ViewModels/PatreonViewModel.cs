@@ -1,12 +1,12 @@
-﻿using System.Diagnostics;
+﻿namespace GitLurker.UI.ViewModels;
+
+using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using GitLurker.Core.Services;
 using GitLurker.UI.Messages;
 using GitLurker.UI.Services;
-
-namespace GitLurker.UI.ViewModels;
 
 public class PatreonViewModel : FlyoutScreenBase, IHandle<PatronMessage>
 {

@@ -1,4 +1,6 @@
-﻿using System;
+﻿namespace GitLurker.Core.Services;
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -7,136 +9,133 @@ using System.Threading.Tasks;
 using CliWrap.EventStream;
 using GitLurker.Core.Models;
 
-namespace GitLurker.Core.Services
+public class ProcessService
 {
-    public class ProcessService
+    #region Fields
+
+    private string _folder;
+
+    #endregion
+
+    #region Constructors
+
+    public ProcessService(string folder)
     {
-        #region Fields
+        _folder = folder;
+    }
 
-        private string _folder;
+    #endregion
 
-        #endregion
+    #region Events
 
-        #region Constructors
+    public event EventHandler<CLIEvent> NewProcessMessage;
 
-        public ProcessService(string folder)
+    public event EventHandler<int> NewExitCode;
+
+    #endregion
+
+    #region Methods
+
+    public Task<ExecutionResult> ExecuteCommandAsync(string arguments) => ExecuteCommandAsync(arguments, false, _folder, CancellationToken.None);
+
+    public Task<ExecutionResult> ExecuteCommandAsync(string arguments, bool listen) => ExecuteCommandAsync(arguments, listen, _folder, CancellationToken.None);
+
+    public Task<ExecutionResult> ExecuteCommandAsync(string arguments, bool listen, string workingDirectory, CancellationToken token)
+    {
+        if (!string.IsNullOrEmpty(_folder) && !Directory.Exists(_folder))
         {
-            _folder = folder;
+            if (listen)
+            {
+                NewExitCode?.Invoke(this, -1);
+            }
+
+            return Task.FromResult(new ExecutionResult());
         }
 
-        #endregion
+        var taskCompletionSource = new TaskCompletionSource<ExecutionResult>();
+        var data = new List<string>();
 
-        #region Events
+        var command = CliWrap.Cli
+            .Wrap("cmd.exe")
+            .WithWorkingDirectory(workingDirectory)
+            .WithArguments($"/C {arguments}");
 
-        public event EventHandler<CLIEvent> NewProcessMessage;
 
-        public event EventHandler<int> NewExitCode;
-
-        #endregion
-
-        #region Methods
-
-        public Task<ExecutionResult> ExecuteCommandAsync(string arguments) => ExecuteCommandAsync(arguments, false, _folder, CancellationToken.None);
-
-        public Task<ExecutionResult> ExecuteCommandAsync(string arguments, bool listen) => ExecuteCommandAsync(arguments, listen, _folder, CancellationToken.None);
-
-        public Task<ExecutionResult> ExecuteCommandAsync(string arguments, bool listen, string workingDirectory, CancellationToken token)
+        _ = Task.Run(async () =>
         {
-            if (!string.IsNullOrEmpty(_folder) && !Directory.Exists(_folder))
+            try
+            {
+                await foreach (var cmdEvent in command.ListenAsync(token))
+                {
+                    switch (cmdEvent)
+                    {
+                        case StandardErrorCommandEvent error:
+                            HandleProcessMessage(error.Text, false, data, listen);
+                            break;
+                        case StandardOutputCommandEvent standard:
+                            HandleProcessMessage(standard.Text, false, data, listen);
+                            break;
+                        case ExitedCommandEvent exit:
+                            if (listen)
+                            {
+                                NewExitCode?.Invoke(this, exit.ExitCode);
+                            }
+
+                            taskCompletionSource.SetResult(new ExecutionResult()
+                            {
+                                Output = data,
+                                ExitCode = exit.ExitCode,
+                            });
+                            return;
+                    }
+                }
+            }
+            catch (Exception)
             {
                 if (listen)
                 {
                     NewExitCode?.Invoke(this, -1);
                 }
 
-                return Task.FromResult(new ExecutionResult());
-            }
-
-            var taskCompletionSource = new TaskCompletionSource<ExecutionResult>();
-            var data = new List<string>();
-
-            var command = CliWrap.Cli
-                .Wrap("cmd.exe")
-                .WithWorkingDirectory(workingDirectory)
-                .WithArguments($"/C {arguments}");
-
-
-            _ = Task.Run(async () =>
-            {
-                try
+                taskCompletionSource.SetResult(new ExecutionResult()
                 {
-                    await foreach (var cmdEvent in command.ListenAsync(token))
-                    {
-                        switch (cmdEvent)
-                        {
-                            case StandardErrorCommandEvent error:
-                                HandleProcessMessage(error.Text, false, data, listen);
-                                break;
-                            case StandardOutputCommandEvent standard:
-                                HandleProcessMessage(standard.Text, false, data, listen);
-                                break;
-                            case ExitedCommandEvent exit:
-                                if (listen)
-                                {
-                                    NewExitCode?.Invoke(this, exit.ExitCode);
-                                }
-
-                                taskCompletionSource.SetResult(new ExecutionResult()
-                                {
-                                    Output = data,
-                                    ExitCode = exit.ExitCode,
-                                });
-                                return;
-                        }
-                    }
-                }
-                catch (Exception)
-                {
-                    if (listen)
-                    {
-                        NewExitCode?.Invoke(this, -1);
-                    }
-
-                    taskCompletionSource.SetResult(new ExecutionResult()
-                    {
-                        Output = data,
-                        ExitCode = -1,
-                    });
-                }
-            }, token);
-
-
-            return taskCompletionSource.Task;
-        }
-
-        protected void OpenFile(string filePath)
-        {
-            new Process()
-            {
-                StartInfo = new ProcessStartInfo(filePath)
-                {
-                    UseShellExecute = true,
-                }
-            }.Start();
-        }
-
-        protected void SetExitCode(int code)
-            => NewExitCode?.Invoke(this, code);
-
-        private void HandleProcessMessage(string text, bool isError, List<string> data, bool listen)
-        {
-            data.Add(text);
-
-            if (listen && text != null)
-            {
-                NewProcessMessage?.Invoke(this, new CLIEvent()
-                {
-                    Text = text,
-                    IsError = isError,
+                    Output = data,
+                    ExitCode = -1,
                 });
             }
-        }
+        }, token);
 
-        #endregion
+
+        return taskCompletionSource.Task;
     }
+
+    protected void OpenFile(string filePath)
+    {
+        new Process()
+        {
+            StartInfo = new ProcessStartInfo(filePath)
+            {
+                UseShellExecute = true,
+            }
+        }.Start();
+    }
+
+    protected void SetExitCode(int code)
+        => NewExitCode?.Invoke(this, code);
+
+    private void HandleProcessMessage(string text, bool isError, List<string> data, bool listen)
+    {
+        data.Add(text);
+
+        if (listen && text != null)
+        {
+            NewProcessMessage?.Invoke(this, new CLIEvent()
+            {
+                Text = text,
+                IsError = isError,
+            });
+        }
+    }
+
+    #endregion
 }

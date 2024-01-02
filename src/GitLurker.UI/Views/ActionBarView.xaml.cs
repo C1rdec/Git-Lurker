@@ -1,15 +1,14 @@
-﻿using System.Windows.Controls;
+﻿namespace GitLurker.UI.Views;
 
-namespace GitLurker.UI.Views
+using System.Windows.Controls;
+
+/// <summary>
+/// Interaction logic for ActionBarView.xaml
+/// </summary>
+public partial class ActionBarView : UserControl
 {
-    /// <summary>
-    /// Interaction logic for ActionBarView.xaml
-    /// </summary>
-    public partial class ActionBarView : UserControl
+    public ActionBarView()
     {
-        public ActionBarView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

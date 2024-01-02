@@ -1,58 +1,57 @@
-﻿using System;
+﻿namespace GitLurker.UI.Services;
+
+using System;
 using System.Windows.Threading;
 
-namespace GitLurker.UI.Services
+public class DebounceService : IDebounceService
 {
-    public class DebounceService : IDebounceService
+    #region Fields
+
+    private DispatcherTimer _timer;
+
+    #endregion
+
+    #region Properties
+
+    public bool HasTimer => _timer != null;
+
+    #endregion
+
+    #region Methods
+
+    public void Debounce(int interval, Action action)
     {
-        #region Fields
+        _timer?.Stop();
+        _timer = null;
 
-        private DispatcherTimer _timer;
-
-        #endregion
-
-        #region Properties
-
-        public bool HasTimer => _timer != null;
-
-        #endregion
-
-        #region Methods
-
-        public void Debounce(int interval, Action action)
-        {
-            _timer?.Stop();
-            _timer = null;
-
-            _timer = new DispatcherTimer(TimeSpan.FromMilliseconds(interval), DispatcherPriority.Normal, (s, e) =>
-            {
-                if (_timer == null)
-                {
-                    return;
-                }
-
-                _timer?.Stop();
-                _timer = null;
-
-                action.Invoke();
-            }, Dispatcher.CurrentDispatcher);
-
-            _timer.Start();
-        }
-
-        public bool Reset()
+        _timer = new DispatcherTimer(TimeSpan.FromMilliseconds(interval), DispatcherPriority.Normal, (s, e) =>
         {
             if (_timer == null)
             {
-                return false;
+                return;
             }
 
             _timer?.Stop();
             _timer = null;
 
-            return true;
+            action.Invoke();
+        }, Dispatcher.CurrentDispatcher);
+
+        _timer.Start();
+    }
+
+    public bool Reset()
+    {
+        if (_timer == null)
+        {
+            return false;
         }
 
-        #endregion
+        _timer?.Stop();
+        _timer = null;
+
+        return true;
     }
+
+    #endregion
 }

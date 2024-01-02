@@ -1,15 +1,14 @@
-﻿namespace GitLurker.Core.Models
+﻿namespace GitLurker.Core.Models;
+
+public class Configuration
 {
-    public class Configuration
-    {
-        #region Properties
+    #region Properties
 
-        public string Name { get; set; }
+    public string Name { get; set; }
 
-        public string IconPath { get; set; }
+    public string IconPath { get; set; }
 
-        public string FrontEndPath { get; set; }
+    public string FrontEndPath { get; set; }
 
-        #endregion
-    }
+    #endregion
 }

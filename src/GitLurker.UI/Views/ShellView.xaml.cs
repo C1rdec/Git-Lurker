@@ -1,7 +1,7 @@
-﻿using System.Windows.Input;
-using MahApps.Metro.Controls;
+﻿namespace GitLurker.UI.Views;
 
-namespace GitLurker.UI.Views;
+using System.Windows.Input;
+using MahApps.Metro.Controls;
 
 public partial class ShellView : MetroWindow
 {

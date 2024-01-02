@@ -1,8 +1,7 @@
-﻿namespace GitLurker.Core.Models
+﻿namespace GitLurker.Core.Models;
+
+public enum Mode
 {
-    public enum Mode
-    {
-        Git,
-        Game,
-    }
+    Git,
+    Game,
 }

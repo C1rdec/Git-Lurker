@@ -1,15 +1,14 @@
-﻿using System.Collections.Generic;
+﻿namespace GitLurker.Core.Models;
 
-namespace GitLurker.Core.Models
+using System.Collections.Generic;
+
+public class ExecutionResult
 {
-    public class ExecutionResult
-    {
-        #region Properties
+    #region Properties
 
-        public IEnumerable<string> Output { get; set; }
+    public IEnumerable<string> Output { get; set; }
 
-        public int ExitCode { get; set; }
+    public int ExitCode { get; set; }
 
-        #endregion
-    }
+    #endregion
 }

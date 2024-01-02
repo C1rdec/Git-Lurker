@@ -1,15 +1,14 @@
-﻿using System.Windows.Controls;
+﻿namespace GitLurker.UI.Views;
 
-namespace GitLurker.UI.Views
+using System.Windows.Controls;
+
+/// <summary>
+/// Interaction logic for CustomActionView.xaml
+/// </summary>
+public partial class CustomActionView : UserControl
 {
-    /// <summary>
-    /// Interaction logic for CustomActionView.xaml
-    /// </summary>
-    public partial class CustomActionView : UserControl
+    public CustomActionView()
     {
-        public CustomActionView()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
     }
 }

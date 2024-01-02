@@ -1,13 +1,12 @@
-﻿namespace GitLurker.UI.Models
+﻿namespace GitLurker.UI.Models;
+
+public class ConsoleLine
 {
-    public class ConsoleLine
-    {
-        #region Properties
+    #region Properties
 
-        public string Line { get; set; }
+    public string Line { get; set; }
 
-        public bool IsError { get; set; }
+    public bool IsError { get; set; }
 
-        #endregion
-    }
+    #endregion
 }

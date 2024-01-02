@@ -1,9 +1,8 @@
-﻿namespace GitLurker.Core.Models
+﻿namespace GitLurker.Core.Models;
+
+public enum ChangeStatus
 {
-    public enum ChangeStatus
-    {
-        Modified,
-        Added,
-        Deleted,
-    }
+    Modified,
+    Added,
+    Deleted,
 }

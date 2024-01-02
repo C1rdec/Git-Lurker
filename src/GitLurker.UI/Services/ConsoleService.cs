@@ -1,24 +1,23 @@
-﻿using System;
+﻿namespace GitLurker.UI.Services;
+
+using System;
 using GitLurker.Core.Services;
 
-namespace GitLurker.UI.Services
+public class ConsoleService
 {
-    public class ConsoleService
-    {
-        #region Events
+    #region Events
 
-        public event EventHandler<ProcessService> ExecutionRequested;
+    public event EventHandler<ProcessService> ExecutionRequested;
 
-        public event EventHandler ShowRequested;
+    public event EventHandler ShowRequested;
 
-        #endregion
+    #endregion
 
-        #region Methods
+    #region Methods
 
-        public void Listen(ProcessService process) => ExecutionRequested?.Invoke(this, process);
+    public void Listen(ProcessService process) => ExecutionRequested?.Invoke(this, process);
 
-        public void Show() => ShowRequested?.Invoke(this, EventArgs.Empty);
+    public void Show() => ShowRequested?.Invoke(this, EventArgs.Empty);
 
-        #endregion
-    }
+    #endregion
 }

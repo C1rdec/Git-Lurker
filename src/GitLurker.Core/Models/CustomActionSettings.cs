@@ -1,22 +1,21 @@
-﻿using System.Collections.Generic;
+﻿namespace GitLurker.Core.Models;
 
-namespace GitLurker.Core.Models
+using System.Collections.Generic;
+
+public class CustomActionSettings
 {
-    public class CustomActionSettings
+    #region Constructors
+
+    public CustomActionSettings()
     {
-        #region Constructors
-
-        public CustomActionSettings()
-        {
-            Actions = new List<CustomAction>();
-        }
-
-        #endregion
-
-        #region Properties
-
-        public List<CustomAction> Actions { get; set; }
-
-        #endregion
+        Actions = new List<CustomAction>();
     }
+
+    #endregion
+
+    #region Properties
+
+    public List<CustomAction> Actions { get; set; }
+
+    #endregion
 }

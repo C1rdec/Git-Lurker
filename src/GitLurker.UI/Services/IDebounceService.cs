@@ -1,13 +1,12 @@
-﻿using System;
+﻿namespace GitLurker.UI.Services;
 
-namespace GitLurker.UI.Services
+using System;
+
+public interface IDebounceService
 {
-    public interface IDebounceService
-    {
-        bool HasTimer { get; }
+    bool HasTimer { get; }
 
-        void Debounce(int interval, Action action);
+    void Debounce(int interval, Action action);
 
-        bool Reset();
-    }
+    bool Reset();
 }

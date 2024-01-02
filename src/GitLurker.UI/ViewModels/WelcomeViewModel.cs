@@ -1,13 +1,12 @@
-﻿using Caliburn.Micro;
+﻿namespace GitLurker.UI.ViewModels;
 
-namespace GitLurker.UI.ViewModels
+using Caliburn.Micro;
+
+internal class WelcomeViewModel : Screen
 {
-    internal class WelcomeViewModel : Screen
+    public async void Start()
     {
-        public async void Start()
-        {
-            var shellViewModel = IoC.Get<ShellViewModel>();
-            await IoC.Get<IWindowManager>().ShowWindowAsync(shellViewModel);
-        }
+        var shellViewModel = IoC.Get<ShellViewModel>();
+        await IoC.Get<IWindowManager>().ShowWindowAsync(shellViewModel);
     }
 }
