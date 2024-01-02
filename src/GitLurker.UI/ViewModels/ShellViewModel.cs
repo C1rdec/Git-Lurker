@@ -629,7 +629,7 @@
 
         private void ApplySettings(SettingsFile settings)
         {
-            if (settings.Entity.StartWithWindows)
+            if (settings.Entity.AddToStartMenu)
             {
                 _startupService.AddStartMenu();
             }
@@ -638,7 +638,7 @@
                 _startupService.RemoveStartMenu();
             }
 
-            if (settings.Entity.AddToStartMenu)
+            if (settings.Entity.StartWithWindows)
             {
                 _startupService.AddStartWithWindows();
             }

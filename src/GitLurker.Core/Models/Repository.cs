@@ -112,7 +112,7 @@
         private Project GetDefaultProject()
         {
             var solutionFile = _slnFiles.FirstOrDefault();
-            if (solutionFile == null)
+            if (solutionFile == null || !File.Exists(solutionFile.FullName))
             {
                 return null;
             }
