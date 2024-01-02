@@ -138,6 +138,5 @@
             </Button>
         </Grid>
         <ContentControl x:Name="Settings" Grid.Row="1" />
-        <!--<MediaElement Source="C:\Users\cedri\Documents\Snagit\2023-06-22_00-01-13.gif" Grid.Column="1"></MediaElement>-->
     </Grid>
 </mah:MetroWindow>
