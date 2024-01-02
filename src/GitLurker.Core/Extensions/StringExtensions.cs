@@ -5,7 +5,7 @@ using System.Linq;
 
 public static class StringExtension
 {
-    private static readonly string[] LineSeparators = new[] { "\r\n", "\r", "\n" };
+    private static readonly string[] LineSeparators = ["\r\n", "\r", "\n"];
     private static char WildCard = '*';
 
     /// <summary>
@@ -16,7 +16,7 @@ public static class StringExtension
     /// <returns>Split the current string using another string</returns>
     public static string[] Split(this string value, string splitValue)
     {
-        return value.Split(new string[] { splitValue }, System.StringSplitOptions.RemoveEmptyEntries);
+        return value.Split(new string[] { splitValue }, StringSplitOptions.RemoveEmptyEntries);
     }
 
     /// <summary>
@@ -26,7 +26,7 @@ public static class StringExtension
     /// <returns>The lines.</returns>
     public static string[] GetLines(this string value)
     {
-        return value.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+        return value.Split(LineSeparators, StringSplitOptions.None);
     }
 
     /// <summary>

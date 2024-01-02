@@ -8,7 +8,7 @@ public class CustomAction
 
     public CustomAction()
     {
-        Repositories = new List<string>();
+        Repositories = [];
     }
 
     #endregion

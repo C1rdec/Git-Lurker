@@ -109,7 +109,7 @@ public class ActionBarViewModel : PropertyChangedBase
 
     private void SetActions()
     {
-        Actions = new ObservableCollection<ActionViewModel>();
+        Actions = [];
         Execute.OnUIThread(() => AddAction(_repo.PullAsync, new PackIconMaterial() { Kind = PackIconMaterialKind.ChevronDown }));
 
         foreach (var action in _actionsFile.GetActions(_repo.Folder))

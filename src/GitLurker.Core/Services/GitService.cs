@@ -10,17 +10,17 @@ public class GitService
 {
     #region Fields
 
-    private static readonly List<CurrentOperation> RebaseOperations = new()
-    {
+    private static readonly List<CurrentOperation> RebaseOperations =
+    [
         CurrentOperation.Rebase,
         CurrentOperation.RebaseMerge,
         CurrentOperation.RebaseInteractive,
-    };
+    ];
 
-    private static readonly List<CurrentOperation> MergeOperations = new()
-    {
+    private static readonly List<CurrentOperation> MergeOperations =
+    [
         CurrentOperation.Merge,
-    };
+    ];
 
     private string _gitFolderPath;
 
@@ -146,7 +146,7 @@ public class GitService
     {
         var branches = Execute(r => r.Branches.Where(b => b.FriendlyName != "origin/HEAD" && b.IsRemote).ToArray());
 
-        return branches.OrderBy(b => b.FriendlyName).ToList();
+        return [.. branches.OrderBy(b => b.FriendlyName)];
     }
 
     private T Execute<T>(Func<Repository, T> action, T defaultValue)

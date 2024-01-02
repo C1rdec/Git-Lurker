@@ -22,7 +22,7 @@ public class Workspace : ProcessService
         : base(folderPath)
     {
         _folder = folderPath;
-        _repositories = new List<Repository>();
+        _repositories = [];
         var options = new EnumerationOptions()
         {
             IgnoreInaccessible = true,
@@ -69,8 +69,8 @@ public class Workspace : ProcessService
 
     public IEnumerable<Repository> Search(string term)
     {
-        var startWith = Repositories.Where(r => r.Name.ToUpper().StartsWith(term.ToUpper()));
-        var contain = Repositories.Where(r => r.Name.ToUpper().Contains(term.ToUpper())).ToList();
+        var startWith = Repositories.Where(r => r.Name.ToUpper().StartsWith(term.ToUpper(), StringComparison.InvariantCulture));
+        var contain = Repositories.Where(r => r.Name.ToUpper().Contains(term.ToUpper(), StringComparison.InvariantCulture)).ToList();
         contain.InsertRange(0, startWith);
         return contain.Distinct();
     }

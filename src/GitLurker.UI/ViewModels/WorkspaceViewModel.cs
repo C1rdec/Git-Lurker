@@ -29,7 +29,7 @@ public class WorkspaceViewModel : PropertyChangedBase, IItemListViewModel
 
     public WorkspaceViewModel(RepositoryService repositoryService, ConsoleService consoleService, KeyboardService keyboardService)
     {
-        _repos = new ObservableCollection<RepositoryViewModel>();
+        _repos = [];
         _repositoryService = repositoryService;
         _consoleService = consoleService;
         _keyboardService = keyboardService;

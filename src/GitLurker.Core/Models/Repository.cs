@@ -80,7 +80,7 @@ public class Repository : NugetService
     #region Methods
 
     public static bool IsValid(string folder)
-        => !Path.GetFileName(folder).StartsWith(".");
+        => !Path.GetFileName(folder).StartsWith('.');
 
     public async Task StartDefaultProject()
     {
@@ -412,7 +412,7 @@ public class Repository : NugetService
     {
         if (!Directory.Exists(_folder))
         {
-            return Array.Empty<FileInfo>();
+            return [];
         }
 
         return new DirectoryInfo(_folder).GetFiles($"*{extention}", new EnumerationOptions()

@@ -34,7 +34,7 @@ public class ModifierConverter : MarkupExtension, IValueConverter
     /// </returns>
     public override object ProvideValue(IServiceProvider serviceProvider)
     {
-        return _instance ?? (_instance = new ModifierConverter());
+        return _instance ??= new ModifierConverter();
     }
 
     /// <summary>
