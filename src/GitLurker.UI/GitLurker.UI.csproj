@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net6.0-windows</TargetFramework>
+    <TargetFramework>net8.0-windows7.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Resources\GitLurker.ico</ApplicationIcon>
 	<Version>1.0.10</Version>
@@ -31,11 +31,11 @@
     <PackageReference Include="Caliburn.Micro" Version="4.0.212" />
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
     <PackageReference Include="Lurker.AppData" Version="1.1.0" />
-    <PackageReference Include="Lurker.BattleNet" Version="1.0.4" />
-    <PackageReference Include="Lurker.Common" Version="1.2.1" />
-    <PackageReference Include="Lurker.Epic" Version="1.1.0" />
+    <PackageReference Include="Lurker.BattleNet" Version="8.0.0" />
+    <PackageReference Include="Lurker.Common" Version="8.0.1" />
+    <PackageReference Include="Lurker.Epic" Version="8.0.0" />
     <PackageReference Include="Lurker.Patreon" Version="2.1.0" />
-    <PackageReference Include="Lurker.Steam" Version="1.1.0" />
+    <PackageReference Include="Lurker.Steam" Version="8.0.1" />
     <PackageReference Include="Lurker.Windows" Version="1.0.0" />
     <PackageReference Include="MahApps.Metro" Version="2.4.9" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
