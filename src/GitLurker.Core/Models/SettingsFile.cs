@@ -21,6 +21,12 @@ public class SettingsFile : AppDataFileBase<Settings>
 
     #region Methods
 
+    public void AddSnippet(Snippet snippet)
+        => Entity.Snippets.Add(snippet);
+
+    public void RemoveSnippet(Snippet snippet)
+        => Entity.Snippets.Remove(snippet);
+
     public void AddRecent(string folder)
     {
         var recentRepos = Entity.RecentRepos;

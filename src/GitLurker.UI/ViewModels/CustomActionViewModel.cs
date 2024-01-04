@@ -6,6 +6,7 @@ using System.Linq;
 using Caliburn.Micro;
 using GitLurker.Core.Models;
 using GitLurker.Core.Services;
+using GitLurker.UI.Services;
 using MahApps.Metro.IconPacks;
 
 public class CustomActionViewModel : PropertyChangedBase
@@ -155,6 +156,8 @@ public class CustomActionViewModel : PropertyChangedBase
         {
             file.Save();
         }
+
+        IoC.Get<FlyoutService>().Close();
     }
 
     public void ToggleExcludeRepositories() => ExcludeRepositories = !ExcludeRepositories;

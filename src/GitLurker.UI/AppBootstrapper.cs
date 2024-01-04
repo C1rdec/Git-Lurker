@@ -83,6 +83,7 @@ public class AppBootstrapper : BootstrapperBase
         _container.Singleton<PatreonViewModel, PatreonViewModel>();
         _container.Singleton<WelcomeViewModel, WelcomeViewModel>();
         _container.Singleton<ConsoleViewModel, ConsoleViewModel>();
+        _container.Singleton<SnippetManagerViewModel, SnippetManagerViewModel>();
 
         var settings = new SettingsFile();
         settings.Initialize();

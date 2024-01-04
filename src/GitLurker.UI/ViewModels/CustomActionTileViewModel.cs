@@ -9,7 +9,6 @@ public class CustomActionTileViewModel : PropertyChangedBase
 {
     #region Fields
 
-
     private static readonly CustomActionSettingsFile CustomActionSettingsFile = IoC.Get<CustomActionSettingsFile>();
     private static readonly FlyoutService CurrentFlyoutService = IoC.Get<FlyoutService>();
     private CustomAction _action;

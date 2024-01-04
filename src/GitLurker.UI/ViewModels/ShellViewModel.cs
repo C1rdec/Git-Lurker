@@ -10,6 +10,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using Caliburn.Micro;
+using Desktop.Robot;
+using Desktop.Robot.Extensions;
 using GitLurker.Core.Models;
 using GitLurker.Core.Services;
 using GitLurker.UI.Helpers;
@@ -23,6 +25,7 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
 {
     #region Fields
 
+    private static readonly Robot Robot = new();
     private static readonly string DefaultWaterMark = "Search";
     private Window _parent;
     private SettingsFile _settingsFile;
@@ -452,7 +455,7 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
 
         var modifier = Enum.Parse<ModifierKeys>(hotkey.Modifier.ToString());
 
-        if (Enum.TryParse(hotkey.KeyCode.ToString(), ignoreCase: true, out Key key))
+        if (Enum.TryParse(hotkey.KeyCode.ToString(), ignoreCase: true, out System.Windows.Input.Key key))
         {
             try
             {
@@ -625,6 +628,17 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
 
         SetHotkey(settings.Entity.HotKey, ToggleWindow, "Open");
         SetHotkey(settings.Entity.DevToysHotKey, OpenDevtoys, "OpenDevToys");
+
+        foreach (var snippet in settings.Entity.Snippets)
+        {
+            SetHotkey(snippet.Hotkey, () => TypeSnippet(snippet.Value), snippet.Id.ToString());
+        }
+    }
+
+    private async void TypeSnippet(string value)
+    {
+        await Task.Delay(300);
+        Robot.Type(value, 10);
     }
 
     private void ApplySettings(SettingsFile settings)

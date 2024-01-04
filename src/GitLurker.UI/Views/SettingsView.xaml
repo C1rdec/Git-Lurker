@@ -77,6 +77,21 @@
                 </StackPanel>
             </Grid>
         </TabItem>
+
+        <TabItem Header="Snippet">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <Label Style="{DynamicResource LabelHeaderStyle}">Snippet</Label>
+                <ContentControl x:Name="SnippetManager"
+                                Grid.Row="1"
+                                Margin="20,8,20,0"
+                                VerticalAlignment="Top"
+                                Focusable="False" />
+            </Grid>
+        </TabItem>
         <TabItem Header="Advanced">
             <Grid>
                 <Grid.RowDefinitions>

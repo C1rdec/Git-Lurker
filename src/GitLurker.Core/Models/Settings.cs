@@ -9,8 +9,9 @@ public class Settings
 
     public Settings()
     {
-        Workspaces = new List<string>();
-        RecentRepos = new List<string>();
+        Snippets = [];
+        Workspaces = [];
+        RecentRepos = [];
         HotKey = new Hotkey()
         {
             Modifier = Winook.Modifiers.Control,
@@ -31,6 +32,8 @@ public class Settings
     #endregion
 
     #region Properties
+
+    public List<Snippet> Snippets { get; set; }
 
     public List<string> Workspaces { get; set; }
 

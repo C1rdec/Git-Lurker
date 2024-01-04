@@ -31,6 +31,7 @@
   <ItemGroup>
     <PackageReference Include="BusyIndicator" Version="2.0.2.1" />
     <PackageReference Include="Caliburn.Micro" Version="4.0.212" />
+    <PackageReference Include="Desktop.Robot" Version="1.5.0" />
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
     <PackageReference Include="Lurker.AppData" Version="1.1.0" />
     <PackageReference Include="Lurker.BattleNet" Version="8.0.0" />
@@ -58,6 +59,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\SnippetTileView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\FileView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
