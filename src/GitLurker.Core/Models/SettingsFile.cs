@@ -25,7 +25,13 @@ public class SettingsFile : AppDataFileBase<Settings>
         => Entity.Snippets.Add(snippet);
 
     public void RemoveSnippet(Snippet snippet)
-        => Entity.Snippets.Remove(snippet);
+    {
+        var existingSnippet = Entity.Snippets.FirstOrDefault(s => s.Id == snippet.Id);
+        if (existingSnippet != null)
+        {
+            Entity.Snippets.Remove(existingSnippet);
+        }
+    }
 
     public void AddRecent(string folder)
     {

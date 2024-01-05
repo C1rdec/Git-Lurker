@@ -17,11 +17,14 @@
                      FontSize="18"
                      Style="{DynamicResource TextBoxStyle}" />
             <TextBox x:Name="Value"
+                     MaxHeight="150"
                      Margin="0,15,0,0"
                      mah:TextBoxHelper.UseFloatingWatermark="True"
                      mah:TextBoxHelper.Watermark="Value"
+                     AcceptsReturn="True"
                      FontSize="18"
-                     Style="{DynamicResource TextBoxStyle}" />
+                     Style="{DynamicResource TextBoxStyle}"
+                     VerticalScrollBarVisibility="Visible" />
             <ContentControl x:Name="Hotkey" Margin="0,15,0,0" />
         </StackPanel>
         <Button x:Name="Save"
