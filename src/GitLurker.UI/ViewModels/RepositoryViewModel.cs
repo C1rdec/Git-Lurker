@@ -495,7 +495,7 @@ public class RepositoryViewModel : ItemViewModelBase
         {
             _nugetTokenSource = new CancellationTokenSource();
             var token = _nugetTokenSource.Token;
-            var nuget = await _repo.GetNewNugetAsync(_settingsFile.Entity.NugetSource);
+            var nuget = await _repo.GetNewNugetAsync();
             if (nuget != null)
             {
                 if (token.IsCancellationRequested)

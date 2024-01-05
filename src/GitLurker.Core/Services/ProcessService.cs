@@ -120,6 +120,22 @@ public class ProcessService
         }.Start();
     }
 
+    protected FileInfo[] GetFiles(string extention, int maxRecursionDepth = 2)
+    {
+        if (!Directory.Exists(_folder))
+        {
+            return [];
+        }
+
+        return new DirectoryInfo(_folder).GetFiles($"*{extention}", new EnumerationOptions()
+        {
+            IgnoreInaccessible = true,
+            AttributesToSkip = FileAttributes.ReparsePoint,
+            RecurseSubdirectories = true,
+            MaxRecursionDepth = maxRecursionDepth,
+        });
+    }
+
     protected void SetExitCode(int code)
         => NewExitCode?.Invoke(this, code);
 

@@ -28,7 +28,7 @@ public class SnippetViewModel : PropertyChangedBase
 
     #region Properties
 
-    public string Name
+    public string SnippetName
     {
         get => _snippet.Name;
         set

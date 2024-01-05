@@ -9,9 +9,8 @@
              d:DesignWidth="800"
              mc:Ignorable="d">
     <Grid>
-
         <StackPanel Margin="30,0,30,0">
-            <TextBox x:Name="Name"
+            <TextBox x:Name="SnippetName"
                      mah:TextBoxHelper.UseFloatingWatermark="True"
                      mah:TextBoxHelper.Watermark="Name"
                      FontSize="18"
