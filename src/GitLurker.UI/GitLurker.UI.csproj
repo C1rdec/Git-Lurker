@@ -36,7 +36,7 @@
     <PackageReference Include="Lurker.AppData" Version="1.1.0" />
     <PackageReference Include="Lurker.BattleNet" Version="8.0.0" />
     <PackageReference Include="Lurker.Common" Version="8.0.1" />
-    <PackageReference Include="Lurker.Epic" Version="8.0.0" />
+    <PackageReference Include="Lurker.Epic" Version="8.0.1" />
     <PackageReference Include="Lurker.Patreon" Version="2.1.0" />
     <PackageReference Include="Lurker.Steam" Version="8.0.1" />
     <PackageReference Include="Lurker.Windows" Version="1.0.0" />

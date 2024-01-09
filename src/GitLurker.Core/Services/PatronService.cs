@@ -68,7 +68,7 @@ public class PatronService
     }
 
     private PatreonService CreateService()
-        => new(new int[] { 8080, 8181, 8282 }, "uI0ZqaEsUckHlpQdOgnJfGtA9tjdKy4A9IpfJj9M2ZIMRkZrRZSemBJ2DtNxbPJm", "https://raw.githubusercontent.com/C1rdec/Git-Lurker/main/Patrons.csv");
+        => new([8080, 8181, 8282], "uI0ZqaEsUckHlpQdOgnJfGtA9tjdKy4A9IpfJj9M2ZIMRkZrRZSemBJ2DtNxbPJm", "https://raw.githubusercontent.com/C1rdec/Git-Lurker/main/Patrons.csv");
 
     #endregion
 }
