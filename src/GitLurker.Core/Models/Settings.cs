@@ -51,6 +51,8 @@ public class Settings
 
     public string NugetSource { get; set; }
 
+    public string NugetApiKey { get; set; }
+
     public bool IsAdmin { get; set; }
 
     public bool SteamEnabled { get; set; }

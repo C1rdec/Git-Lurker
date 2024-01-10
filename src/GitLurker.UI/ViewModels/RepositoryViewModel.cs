@@ -495,7 +495,7 @@ public class RepositoryViewModel : ItemViewModelBase
         {
             _nugetTokenSource = new CancellationTokenSource();
             var token = _nugetTokenSource.Token;
-            var nuget = await _repo.GetNewNugetAsync();
+            var nuget = await _repo.GetLatestNugetAsync();
             if (nuget != null)
             {
                 if (token.IsCancellationRequested)
@@ -504,7 +504,7 @@ public class RepositoryViewModel : ItemViewModelBase
                 }
 
                 var icon = new PackIconSimpleIcons() { Kind = PackIconSimpleIconsKind.NuGet };
-                _actionBar.AddAction(() => _repo.AddNugetAsync(nuget), icon, openConsole: false, permanent: false);
+                _actionBar.AddAction(() => _repo.AddNugetAsync(nuget), () => _repo.AddNugetAsync(nuget, true), icon, openConsole: false, permanent: false);
             }
         }
     }
@@ -537,7 +537,7 @@ public class RepositoryViewModel : ItemViewModelBase
                     {
                         _repo.OpenUserSecret(secretId);
                         return Task.FromResult(new ExecutionResult());
-                    }, icon, openConsole: false, permanent: false);
+                    }, null, icon, openConsole: false, permanent: false);
                 });
             }
         });

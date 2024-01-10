@@ -10,7 +10,7 @@
     <Border Grid.Column="1"
             Width="50"
             Height="50"
-            cal:Message.Attach="[Event MouseUp] = [Action OnClick()]"
+            cal:Message.Attach="[Event MouseUp] = [Action OnMouseUp()]; [Event MouseDown] = [Action OnMouseDown()]; [Event MouseLeave] = [Action OnMouseLeave()]"
             CornerRadius="6"
             IsEnabled="{Binding IsEnable}">
         <Border.Style>
@@ -40,9 +40,53 @@
                 </Style.Triggers>
             </Style>
         </Border.Style>
-        <ContentControl HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Content="{Binding Icon}"
-                        Opacity="0.4" />
+        <Grid>
+            <ProgressBar Background="Transparent"
+                         BorderThickness="0"
+                         Maximum="100"
+                         Minimum="0"
+                         Orientation="Vertical"
+                         Value="{Binding HoldProgress}">
+                <ProgressBar.Style>
+                    <Style TargetType="ProgressBar">
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="ProgressBar">
+                                    <Grid x:Name="Root">
+                                        <Border Name="PART_Track"
+                                                Background="Transparent"
+                                                BorderThickness="0"
+                                                CornerRadius="2" />
+                                        <Border Name="PART_Indicator"
+                                                HorizontalAlignment="Left"
+                                                Background="{DynamicResource Brushes.Secondary}"
+                                                BorderThickness="0"
+                                                CornerRadius="2" />
+                                    </Grid>
+                                    <ControlTemplate.Triggers>
+                                        <!--  Getting vertical style working using technique described here: http://stackoverflow.com/a/6849237/7532  -->
+                                        <Trigger Property="Orientation" Value="Vertical">
+                                            <Setter TargetName="Root" Property="LayoutTransform">
+                                                <Setter.Value>
+                                                    <RotateTransform Angle="270" />
+                                                </Setter.Value>
+                                            </Setter>
+
+                                            <Setter TargetName="Root" Property="Width" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Height}" />
+                                            <Setter TargetName="Root" Property="Height" Value="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Width}" />
+                                        </Trigger>
+                                    </ControlTemplate.Triggers>
+
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ProgressBar.Style>
+            </ProgressBar>
+            <ContentControl HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Content="{Binding Icon}"
+                            Opacity="0.4" />
+        </Grid>
     </Border>
 </UserControl>

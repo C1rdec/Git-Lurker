@@ -68,12 +68,12 @@ public class ActionBarViewModel : PropertyChangedBase
     }
 
     public void AddAction(Func<Task<ExecutionResult>> task, PackIconControlBase icon)
-        => AddAction(task, icon, openConsole: false, permanent: true);
+        => AddAction(task, null, icon, openConsole: false, permanent: true);
 
     public void AddAction(Func<Task<ExecutionResult>> task, PackIconControlBase icon, bool openConsole)
-        => AddAction(task, icon, openConsole, permanent: true);
+        => AddAction(task, null, icon, openConsole, permanent: true);
 
-    public void AddAction(Func<Task<ExecutionResult>> task, PackIconControlBase icon, bool openConsole, bool permanent)
+    public void AddAction(Func<Task<ExecutionResult>> task, Func<Task<ExecutionResult>> holdTask, PackIconControlBase icon, bool openConsole, bool permanent)
     {
         // Block the ability to insert the same action
         var existingAction = Actions.FirstOrDefault(a => a.Icon.Data == icon.Data);
@@ -83,7 +83,7 @@ public class ActionBarViewModel : PropertyChangedBase
         }
 
         var id = Guid.NewGuid();
-        async Task callback()
+        async Task execute(Func<Task<ExecutionResult>> t)
         {
             if (Busy)
             {
@@ -98,13 +98,13 @@ public class ActionBarViewModel : PropertyChangedBase
                 _consoleService.Show();
             }
 
-            var result = await task();
+            var result = await t();
 
             _repo.AddToRecent();
             SetDisable(false, id);
         }
 
-        Actions.Insert(0, new ActionViewModel(callback, icon, permanent, id));
+        Actions.Insert(0, new ActionViewModel(() => execute(task), holdTask == null ? null : () => execute(holdTask), icon, permanent, id));
     }
 
     private void SetActions()

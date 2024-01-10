@@ -92,6 +92,29 @@
                                 Focusable="False" />
             </Grid>
         </TabItem>
+
+        <TabItem Header="Nuget">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                    <Label Style="{DynamicResource LabelHeaderStyle}">Nuget</Label>
+                    <iconPacks:PackIconSimpleIcons Width="40"
+                                                   Height="40"
+                                                   Margin="10,0,0,0"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   Kind="NuGet" />
+                </StackPanel>
+                <ContentControl x:Name="NugetConfiguration"
+                                Grid.Row="1"
+                                Margin="20,8,20,0"
+                                VerticalAlignment="Top"
+                                Focusable="False" />
+            </Grid>
+        </TabItem>
         <TabItem Header="Advanced">
             <Grid>
                 <Grid.RowDefinitions>
