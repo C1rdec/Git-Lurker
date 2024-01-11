@@ -235,12 +235,16 @@ public class Repository : NugetService
 
         if (!Directory.Exists(folderPath))
         {
+            SetExitCode(-1);
+
             return;
         }
 
         var filePath = Path.Combine(folderPath, "secrets.json");
         if (!File.Exists(filePath))
         {
+            SetExitCode(-1);
+
             return;
         }
 
