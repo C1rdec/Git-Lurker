@@ -45,6 +45,7 @@ public class SettingsViewModel : FlyoutScreenBase
         RepositoryService repositoryService,
         PatreonSettingsViewModel patreonViewModel,
         SnippetManagerViewModel snippetManager,
+        NugetSettingsViewModel nugetSettingsViewModel,
         PatronService patronService)
         : base(flyoutService)
     {
@@ -55,6 +56,7 @@ public class SettingsViewModel : FlyoutScreenBase
         _gameSettingsFile = new GameSettingsFile();
         _gameSettingsFile.Initialize();
 
+        NugetSettings = nugetSettingsViewModel;
         SnippetManager = snippetManager;
         RepoManager = new RepoManagerViewModel(_settingsFile);
         Hotkey = new HotkeyViewModel(_settingsFile.Entity.HotKey, SaveHotKey);
@@ -73,6 +75,8 @@ public class SettingsViewModel : FlyoutScreenBase
     #region Properties
 
     public bool IsNotPledged => !_patronService.IsPledged;
+
+    public NugetSettingsViewModel NugetSettings { get; set; }
 
     public SnippetManagerViewModel SnippetManager { get; set; }
 

@@ -1,6 +1,5 @@
 ﻿namespace GitLurker.Core.Services;
 
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using GitLurker.Core.Models;

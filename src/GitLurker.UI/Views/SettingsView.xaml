@@ -6,10 +6,10 @@
                  xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                  Title="Settings"
-                 Width="720"
-                 Height="450"
-                 MinWidth="720"
-                 MinHeight="450"
+                 Width="625"
+                 Height="360"
+                 MinWidth="625"
+                 MinHeight="360"
                  Dialog:DialogParticipation.Register="{Binding}"
                  Icon="pack://application:,,,/Resources/GitLurker.ico"
                  WindowStartupLocation="CenterScreen">
@@ -108,7 +108,7 @@
                                                    VerticalAlignment="Center"
                                                    Kind="NuGet" />
                 </StackPanel>
-                <ContentControl x:Name="NugetConfiguration"
+                <ContentControl x:Name="NugetSettings"
                                 Grid.Row="1"
                                 Margin="20,8,20,0"
                                 VerticalAlignment="Top"
@@ -146,48 +146,6 @@
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"
                            Cursor="Hand">
-                    <Border x:Name="Nuget"
-                            Height="45"
-                            Margin="0,10,10,0"
-                            HorizontalAlignment="Center"
-                            cal:Message.Attach="[Event MouseDown] = [Action ToggleLocalNuget]"
-                            CornerRadius="15"
-                            Cursor="Hand">
-                        <Border.Style>
-                            <Style TargetType="Border">
-                                <Setter Property="Opacity" Value="0.25" />
-                                <Setter Property="Background">
-                                    <Setter.Value>
-                                        <SolidColorBrush Opacity="0.05" Color="White" />
-                                    </Setter.Value>
-                                </Setter>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background">
-                                            <Setter.Value>
-                                                <SolidColorBrush Opacity="0.15" Color="White" />
-                                            </Setter.Value>
-                                        </Setter>
-                                    </Trigger>
-                                    <DataTrigger Binding="{Binding HasNugetSource}" Value="True">
-                                        <Setter Property="Opacity" Value="1" />
-                                    </DataTrigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Border.Style>
-                        <StackPanel Margin="10,0,10,0"
-                                    HorizontalAlignment="Center"
-                                    Orientation="Horizontal">
-                            <iconPacks:PackIconSimpleIcons HorizontalAlignment="Center"
-                                                           VerticalAlignment="Center"
-                                                           Kind="NuGet" />
-                            <TextBlock Margin="10,0,0,0"
-                                       HorizontalAlignment="Center"
-                                       VerticalAlignment="Center">
-                                Nuget
-                            </TextBlock>
-                        </StackPanel>
-                    </Border>
                     <Border x:Name="StartMenu"
                             Grid.Row="1"
                             Height="45"
