@@ -9,6 +9,7 @@ using GitLurker.Core.Services;
 using GitLurker.UI.Extensions;
 using GitLurker.UI.Services;
 using GitLurker.UI.ViewModels;
+using Lurker.Patreon;
 using Lurker.Windows;
 
 public class AppBootstrapper : BootstrapperBase
@@ -50,7 +51,7 @@ public class AppBootstrapper : BootstrapperBase
             return;
         }
 
-        await IoC.Get<PatronService>().CheckPledgeStatusAsync();
+        await IoC.Get<PatreonService>().CheckPledgeStatusAsync("3779584");
 
         await DisplayRootViewForAsync<ShellViewModel>();
     }
@@ -63,7 +64,6 @@ public class AppBootstrapper : BootstrapperBase
         _container = new SimpleContainer();
 
         // Services
-        _container.Singleton<PatronService, PatronService>();
         _container.Singleton<PopupService, PopupService>();
         _container.Singleton<ConsoleService, ConsoleService>();
         _container.Singleton<RepositoryService, RepositoryService>();
@@ -85,6 +85,15 @@ public class AppBootstrapper : BootstrapperBase
         _container.Singleton<ConsoleViewModel, ConsoleViewModel>();
         _container.Singleton<NugetSettingsViewModel, NugetSettingsViewModel>();
         _container.Singleton<SnippetManagerViewModel, SnippetManagerViewModel>();
+
+        var patreonService = new PatreonService(new Lurker.Patreon.Models.PatreonApiCredential
+        {
+            ClientId = "uI0ZqaEsUckHlpQdOgnJfGtA9tjdKy4A9IpfJj9M2ZIMRkZrRZSemBJ2DtNxbPJm",
+            Ports = [8080, 8181, 8282],
+            WhiteListUrl = "https://raw.githubusercontent.com/C1rdec/Git-Lurker/main/Patrons.csv"
+        });
+        _container.Instance(patreonService);
+
 
         var settings = new SettingsFile();
         settings.Initialize();

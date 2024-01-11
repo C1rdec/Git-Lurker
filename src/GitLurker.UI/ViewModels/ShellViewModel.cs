@@ -18,6 +18,7 @@ using GitLurker.UI.Helpers;
 using GitLurker.UI.Messages;
 using GitLurker.UI.Services;
 using GitLurker.UI.Views;
+using Lurker.Patreon;
 using Lurker.Windows;
 using NHotkey.Wpf;
 
@@ -30,7 +31,7 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
     private Window _parent;
     private SettingsFile _settingsFile;
     private ThemeService _themeService;
-    private PatronService _patronService;
+    private PatreonService _patronService;
     private KeyboardService _keyboardService;
     private RepositoryService _repositoryService;
     private ConsoleService _consoleService;
@@ -76,7 +77,7 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
         ConsoleService consoleService,
         GithubUpdateManager updateManager,
         ConsoleViewModel console,
-        PatronService patronService,
+        PatreonService patronService,
         SettingsViewModel settingsViewModel)
     {
         _console = console;

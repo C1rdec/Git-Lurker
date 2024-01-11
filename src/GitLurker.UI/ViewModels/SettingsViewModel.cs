@@ -12,6 +12,7 @@ using GitLurker.Core.Models;
 using GitLurker.Core.Services;
 using GitLurker.UI.Services;
 using LibGit2Sharp;
+using Lurker.Patreon;
 using Lurker.Windows;
 using Winook;
 
@@ -30,7 +31,7 @@ public class SettingsViewModel : FlyoutScreenBase
     private GameSettingsFile _gameSettingsFile;
     private WindowsLink _windowsStartupService;
     private RepositoryService _repositoryService;
-    private PatronService _patronService;
+    private PatreonService _patronService;
     private int _selectedTabIndex;
 
     #endregion
@@ -46,7 +47,7 @@ public class SettingsViewModel : FlyoutScreenBase
         PatreonSettingsViewModel patreonViewModel,
         SnippetManagerViewModel snippetManager,
         NugetSettingsViewModel nugetSettingsViewModel,
-        PatronService patronService)
+        PatreonService patronService)
         : base(flyoutService)
     {
         _repositoryService = repositoryService;

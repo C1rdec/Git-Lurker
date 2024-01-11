@@ -6,11 +6,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using GitLurker.Core.Models;
-using GitLurker.Core.Services;
 using GitLurker.UI.Messages;
 using GitLurker.UI.Services;
 using Lurker.BattleNet.Services;
 using Lurker.Epic.Services;
+using Lurker.Patreon;
 using Lurker.Steam.Services;
 
 public class PatreonSettingsViewModel : PropertyChangedBase, IHandle<PatronMessage>
@@ -23,14 +23,14 @@ public class PatreonSettingsViewModel : PropertyChangedBase, IHandle<PatronMessa
     private ThemeService _themeService;
     private SettingsFile _settingsFile;
     private GameSettingsFile _gameSettingsFile;
-    private PatronService _patronService;
+    private PatreonService _patronService;
     private IEventAggregator _eventAggregator;
 
     #endregion
 
     #region Constructors
 
-    public PatreonSettingsViewModel(SettingsFile settingsFile, ThemeService themeService, PatronService patronService, IEventAggregator eventAggregator)
+    public PatreonSettingsViewModel(SettingsFile settingsFile, ThemeService themeService, PatreonService patronService, IEventAggregator eventAggregator)
     {
         _themeService = themeService;
         _patronService = patronService;

@@ -4,21 +4,21 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Caliburn.Micro;
-using GitLurker.Core.Services;
 using GitLurker.UI.Messages;
 using GitLurker.UI.Services;
+using Lurker.Patreon;
 
 public class PatreonViewModel : FlyoutScreenBase, IHandle<PatronMessage>
 {
     #region Fields
 
-    private PatronService _patronService;
+    private PatreonService _patronService;
     private IEventAggregator _eventAggregator;
     private PatreonSettingsViewModel _settings;
 
     #endregion
 
-    public PatreonViewModel(PatronService service, IEventAggregator eventAggregator, PatreonSettingsViewModel settings, FlyoutService flyoutService)
+    public PatreonViewModel(PatreonService service, IEventAggregator eventAggregator, PatreonSettingsViewModel settings, FlyoutService flyoutService)
         : base(flyoutService)
     {
         _patronService = service;
@@ -58,6 +58,7 @@ public class PatreonViewModel : FlyoutScreenBase, IHandle<PatronMessage>
     public async void Login()
     {
         await _patronService.LoginAsync();
+        await _patronService.CheckPledgeStatusAsync("3779584");
 
         Notify();
 
@@ -66,7 +67,7 @@ public class PatreonViewModel : FlyoutScreenBase, IHandle<PatronMessage>
 
     public async void Pledge()
     {
-        if (await _patronService.CheckPledgeStatusAsync())
+        if (await _patronService.CheckPledgeStatusAsync("3779584"))
         {
             Notify();
 
