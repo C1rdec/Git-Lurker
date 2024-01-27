@@ -27,6 +27,7 @@ public class Settings
         AddToStartMenu = true;
         RebaseOperation = CurrentOperation.Rebase;
         Mode = Mode.Git;
+        RemoteNugetSource = "https://api.nuget.org/v3/index.json";
     }
 
     #endregion
@@ -49,7 +50,9 @@ public class Settings
 
     public bool AddToStartMenu { get; set; }
 
-    public string NugetSource { get; set; }
+    public string LocalNugetSource { get; set; }
+
+    public string RemoteNugetSource { get; set; }
 
     public string NugetApiKey { get; set; }
 

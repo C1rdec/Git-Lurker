@@ -45,12 +45,22 @@ public class NugetSettingsViewModel : PropertyChangedBase
         }
     }
 
-    public string NugetSource
+    public string LocalSource
     {
-        get => _settingsFile.Entity.NugetSource;
+        get => _settingsFile.Entity.LocalNugetSource;
         set
         {
-            _settingsFile.Entity.NugetSource = value;
+            _settingsFile.Entity.LocalNugetSource = value;
+            NotifyOfPropertyChange();
+        }
+    }
+
+    public string RemoteSource
+    {
+        get => _settingsFile.Entity.RemoteNugetSource;
+        set
+        {
+            _settingsFile.Entity.RemoteNugetSource = value;
             NotifyOfPropertyChange();
         }
     }
@@ -77,7 +87,7 @@ public class NugetSettingsViewModel : PropertyChangedBase
             path = dialog.SelectedPath;
         }
 
-        NugetSource = path;
+        LocalSource = path;
         NotifyOfPropertyChange(() => HasNugetSource);
         _settingsFile.Save();
     }
@@ -90,7 +100,7 @@ public class NugetSettingsViewModel : PropertyChangedBase
 
     private void NugetSettingsViewModel_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(Modified) || e.PropertyName == nameof(NugetSource))
+        if (e.PropertyName == nameof(Modified) || e.PropertyName == nameof(LocalSource))
         {
             return;
         }

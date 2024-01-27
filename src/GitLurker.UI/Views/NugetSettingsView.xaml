@@ -17,12 +17,14 @@
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition />
+            <RowDefinition />
         </Grid.RowDefinitions>
         <TextBlock Grid.Column="1"
                    VerticalAlignment="Center"
                    FontSize="22"
-                   Text="{Binding NugetSource}" />
+                   Text="{Binding LocalSource}" />
         <Border x:Name="Nuget"
+                Width="100"
                 Height="45"
                 Margin="0,10,10,0"
                 HorizontalAlignment="Left"
@@ -59,14 +61,54 @@
                                                Kind="NuGet" />
                 <TextBlock Margin="10,0,0,0"
                            HorizontalAlignment="Center"
-                           VerticalAlignment="Center">
+                           VerticalAlignment="Center"
+                           FontSize="14">
                     Local
                 </TextBlock>
             </StackPanel>
         </Border>
+        <Border Grid.Row="1"
+                Width="100"
+                Height="45"
+                Margin="0,10,10,0"
+                HorizontalAlignment="Left"
+                cal:Message.Attach="[Event MouseDown] = [Action ToggleLocalNuget]"
+                CornerRadius="15">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="Background">
+                        <Setter.Value>
+                            <SolidColorBrush Opacity="0.05" Color="White" />
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </Border.Style>
+            <StackPanel Margin="10,0,10,0"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal">
+                <iconPacks:PackIconSimpleIcons HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"
+                                               Kind="NuGet" />
+                <TextBlock Margin="10,0,0,0"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontSize="14">
+                    Remote
+                </TextBlock>
+            </StackPanel>
+        </Border>
+        <TextBox x:Name="RemoteSource"
+                 Grid.Row="1"
+                 Grid.Column="1"
+                 VerticalAlignment="Center"
+                 mah:TextBoxHelper.SelectAllOnFocus="True"
+                 mah:TextBoxHelper.UseFloatingWatermark="True"
+                 mah:TextBoxHelper.Watermark="Remote Source"
+                 FontSize="18"
+                 Style="{DynamicResource TextBoxStyle}" />
 
         <TextBox x:Name="NugetApiKey"
-                 Grid.Row="1"
+                 Grid.Row="2"
                  Grid.ColumnSpan="2"
                  Margin="0,30,0,0"
                  mah:TextBoxHelper.UseFloatingWatermark="True"

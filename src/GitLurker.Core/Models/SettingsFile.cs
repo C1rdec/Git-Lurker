@@ -78,7 +78,7 @@ public class SettingsFile : AppDataFileBase<Settings>
         Save();
     }
 
-    public bool HasNugetSource() => !string.IsNullOrEmpty(Entity.NugetSource);
+    public bool HasNugetSource() => !string.IsNullOrEmpty(Entity.LocalNugetSource);
 
     #endregion
 }

@@ -30,7 +30,7 @@ public class NugetService : ProcessService
             return null;
         }
 
-        var source = online ? "https://api.nuget.org/v3/index.json" : settings.Entity.NugetSource;
+        var source = online ? settings.Entity.RemoteNugetSource : settings.Entity.LocalNugetSource;
         var apiKey = online && !string.IsNullOrEmpty(settings.Entity.NugetApiKey) ? $"-k {settings.Entity.NugetApiKey}" : "";
 
         return ExecuteCommandAsync($@"dotnet nuget push ""{nuget.FilePath}"" {apiKey} -s {source} --skip-duplicate", true);

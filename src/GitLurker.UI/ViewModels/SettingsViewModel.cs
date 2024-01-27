@@ -244,7 +244,7 @@ public class SettingsViewModel : FlyoutScreenBase
             path = dialog.SelectedPath;
         }
 
-        _settingsFile.Entity.NugetSource = path;
+        _settingsFile.Entity.LocalNugetSource = path;
         NotifyOfPropertyChange(() => HasNugetSource);
         _settingsFile.Save();
     }
