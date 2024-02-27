@@ -217,7 +217,7 @@ public class BranchManagerViewModel : ViewAware
         Caliburn.Micro.Execute.OnUIThread(() =>
         {
             BranchNames.Clear();
-            foreach (var branch in _branchNames.Where(b => b.Contains(term)))
+            foreach (var branch in _branchNames.Where(b => b.Contains(term, StringComparison.InvariantCultureIgnoreCase)))
             {
                 BranchNames.Add(branch);
             }
