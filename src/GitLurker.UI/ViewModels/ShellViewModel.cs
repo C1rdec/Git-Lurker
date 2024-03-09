@@ -432,7 +432,7 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
     {
         View = view as ShellView;
 
-        var source = PresentationSource.FromVisual(this.View);
+        var source = PresentationSource.FromVisual(View);
         if (source != null)
         {
             _dpiX = source.CompositionTarget.TransformToDevice.M11;
