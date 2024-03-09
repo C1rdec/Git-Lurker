@@ -753,6 +753,12 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
         SearchWatermark = message.WaterMark;
         ItemListViewModel = _activeAction;
         ItemListViewModel.ShowRecent();
+
+        if (message.Focus)
+        {
+            FocusSearch();
+        }
+
         NotifyOfPropertyChange(() => ItemListViewModel);
 
         return Task.CompletedTask;

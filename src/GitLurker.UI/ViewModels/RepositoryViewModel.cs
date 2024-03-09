@@ -438,7 +438,8 @@ public class RepositoryViewModel : ItemViewModelBase
         var message = new Messages.ActionMessage
         {
             ListViewModel = new CommitActionViewModel(_repo),
-            WaterMark = "Commit & Push"
+            WaterMark = "Commit & Push",
+            Focus = true,
         };
 
         await _eventAggregator.PublishOnUIThreadAsync(message);
