@@ -51,6 +51,7 @@ public class ModifierConverter : MarkupExtension, IValueConverter
     {
         var myModifiers = (Winook.Modifiers)Enum.Parse(typeof(Winook.Modifiers), parameter.ToString());
         var currentModifiers = (Winook.Modifiers)Enum.Parse(typeof(Winook.Modifiers), value.ToString());
+
         return myModifiers == currentModifiers ? System.Windows.Visibility.Visible : System.Windows.Visibility.Collapsed;
     }
 

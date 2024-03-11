@@ -10,6 +10,7 @@ public static class ProcessExtensions
     {
         var fileNameBuilder = new StringBuilder(buffer);
         var bufferLength = (uint)fileNameBuilder.Capacity + 1;
+
         return Native.QueryFullProcessImageName(process.Handle, 0, fileNameBuilder, ref bufferLength) ?
             fileNameBuilder.ToString() :
             null;

@@ -53,7 +53,7 @@ public class RepositoryViewModel : ItemViewModelBase
         _showParentFolder = repo.Duplicate;
         _eventAggregator = IoC.Get<IEventAggregator>();
 
-        FileChanges = new ObservableCollection<FileChange>();
+        FileChanges = [];
         BranchManager = new BranchManagerViewModel(repo, OnSelectionChanged, OnBranchManagerClose, Rebase);
         GetStatus();
     }

@@ -43,6 +43,8 @@ public class WorkspaceViewModel : PropertyChangedBase, IItemListViewModel
 
     public ObservableCollection<RepositoryViewModel> Repos => _repos;
 
+    public bool HasSelectedRepo => SelectedRepo != null || !string.IsNullOrEmpty(_lastSearchTerm) || _mouseOver;
+
     public RepositoryViewModel SelectedRepo
     {
         get
@@ -56,8 +58,6 @@ public class WorkspaceViewModel : PropertyChangedBase, IItemListViewModel
             NotifyOfPropertyChange(() => HasSelectedRepo);
         }
     }
-
-    public bool HasSelectedRepo => SelectedRepo != null || !string.IsNullOrEmpty(_lastSearchTerm) || _mouseOver;
 
     #endregion
 

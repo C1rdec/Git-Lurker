@@ -30,8 +30,8 @@ public class RepositoryService
     {
         var allRepos = GetAllRepo();
 
-        var startWith = allRepos.Where(r => r.Name.ToUpper().StartsWith(term.ToUpper()));
-        var contain = allRepos.Where(r => r.Name.ToUpper().Contains(term.ToUpper())).ToList();
+        var startWith = allRepos.Where(r => r.Name.StartsWith(term, System.StringComparison.CurrentCultureIgnoreCase));
+        var contain = allRepos.Where(r => r.Name.Contains(term, System.StringComparison.CurrentCultureIgnoreCase)).ToList();
         contain.InsertRange(0, startWith);
 
         return contain.Distinct().Take(5);

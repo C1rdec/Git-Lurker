@@ -37,26 +37,6 @@ public class GitService
 
     #region Methods
 
-    public CurrentOperation GetCurrentOperation()
-    {
-        return Execute(r =>
-        {
-            var currentOperation = r.Info.CurrentOperation;
-
-            if (RebaseOperations.Contains(currentOperation))
-            {
-                return CurrentOperation.Rebase;
-            }
-
-            if (MergeOperations.Contains(currentOperation))
-            {
-                return CurrentOperation.Merge;
-            }
-
-            return currentOperation;
-        });
-    }
-
     public void Fetch()
         => Execute(r => Commands.Fetch(r, "origin", Array.Empty<string>(), null, null));
 
@@ -66,28 +46,8 @@ public class GitService
     public string GetCurrentBranchName()
         => Execute(r => r.Head.FriendlyName);
 
-    public IEnumerable<string> GetBranchNames()
-    {
-        var branchNames = new List<string>()
-        {
-            GetCurrentBranchName().Replace("origin/", string.Empty)
-        };
-
-        foreach (var remoteBrach in GetRemoteBranches())
-        {
-            var branchName = remoteBrach.FriendlyName.Replace("origin/", string.Empty);
-            if (branchNames.Contains(branchName))
-            {
-                continue;
-            }
-
-            branchNames.Add(branchName);
-        }
-
-        return branchNames;
-    }
-
-    public bool HasOperationInProgress() => Execute(r => r.Info.CurrentOperation != CurrentOperation.None);
+    public bool HasOperationInProgress() 
+        => Execute(r => r.Info.CurrentOperation != CurrentOperation.None);
 
     public IEnumerable<Stash> GetStashes()
         => Execute(r => r.Stashes.ToArray());
@@ -140,6 +100,47 @@ public class GitService
 
             return filePaths;
         });
+    }
+
+    public CurrentOperation GetCurrentOperation()
+    {
+        return Execute(r =>
+        {
+            var currentOperation = r.Info.CurrentOperation;
+
+            if (RebaseOperations.Contains(currentOperation))
+            {
+                return CurrentOperation.Rebase;
+            }
+
+            if (MergeOperations.Contains(currentOperation))
+            {
+                return CurrentOperation.Merge;
+            }
+
+            return currentOperation;
+        });
+    }
+
+    public IEnumerable<string> GetBranchNames()
+    {
+        var branchNames = new List<string>()
+        {
+            GetCurrentBranchName().Replace("origin/", string.Empty)
+        };
+
+        foreach (var remoteBrach in GetRemoteBranches())
+        {
+            var branchName = remoteBrach.FriendlyName.Replace("origin/", string.Empty);
+            if (branchNames.Contains(branchName))
+            {
+                continue;
+            }
+
+            branchNames.Add(branchName);
+        }
+
+        return branchNames;
     }
 
     public List<Branch> GetRemoteBranches()
