@@ -8,7 +8,6 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Input;
 using Caliburn.Micro;
 using Desktop.Robot;
 using Desktop.Robot.Extensions;
@@ -21,6 +20,7 @@ using GitLurker.UI.Views;
 using Lurker.Patreon;
 using Lurker.Windows;
 using NHotkey.Wpf;
+using TextCopy;
 
 public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessage>, IHandle<Messages.ActionMessage>, IDisposable
 {
@@ -454,7 +454,7 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
             return;
         }
 
-        var modifier = Enum.Parse<ModifierKeys>(hotkey.Modifier.ToString());
+        var modifier = Enum.Parse<System.Windows.Input.ModifierKeys>(hotkey.Modifier.ToString());
 
         if (Enum.TryParse(hotkey.KeyCode.ToString(), ignoreCase: true, out System.Windows.Input.Key key))
         {
@@ -638,8 +638,8 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
 
     private async void TypeSnippet(string value)
     {
-        await Task.Delay(300);
-        Robot.Type(value, 10);
+        await ClipboardService.SetTextAsync(value);
+        Robot.CombineKeys(Key.Control, Key.V);
     }
 
     private void ApplySettings(SettingsFile settings)
