@@ -272,6 +272,11 @@ public class WorkspaceViewModel : PropertyChangedBase, IItemListViewModel
 
     private void KeyboardService_RightPressed(object sender, EventArgs e)
     {
+        if (SelectedRepo == null)
+        {
+            return;
+        }
+
         ExecuteOnRepo(r =>
         {
             r.OpenFileChanged();

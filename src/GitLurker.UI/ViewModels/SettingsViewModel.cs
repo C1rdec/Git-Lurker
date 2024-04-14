@@ -140,6 +140,16 @@ public class SettingsViewModel : FlyoutScreenBase
         }
     }
 
+    public bool AudioEnabled
+    {
+        get => _settingsFile.Entity.AudioEnabled;
+        set
+        {
+            _settingsFile.Entity.AudioEnabled = value;
+            NotifyOfPropertyChange();
+        }
+    }
+
     public bool IsSteamEnabled
     {
         get => _settingsFile.Entity.SteamEnabled;
@@ -225,6 +235,12 @@ public class SettingsViewModel : FlyoutScreenBase
     public void ToggleConsoleOutput()
     {
         ConsoleOuput = !ConsoleOuput;
+        _settingsFile.Save();
+    }
+
+    public void ToggleAudio()
+    {
+        AudioEnabled = !AudioEnabled;
         _settingsFile.Save();
     }
 

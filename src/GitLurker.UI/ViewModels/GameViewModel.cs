@@ -1,6 +1,8 @@
 ﻿namespace GitLurker.UI.ViewModels;
 
-using System.IO;
+using System;
+using System.Windows;
+using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 using Caliburn.Micro;
 using GitLurker.Core.Models;
@@ -31,22 +33,19 @@ public class GameViewModel : ItemViewModelBase
 
     public override string Id => _game.Id;
 
-    public BitmapImage IconSource
+    public BitmapSource IconSource
     {
         get
         {
             try
             {
-                using var memory = new MemoryStream();
-                _game.GetIcon().Save(memory, System.Drawing.Imaging.ImageFormat.Bmp);
-                memory.Position = 0;
-                var bitmapimage = new BitmapImage();
-                bitmapimage.BeginInit();
-                bitmapimage.StreamSource = memory;
-                bitmapimage.CacheOption = BitmapCacheOption.OnLoad;
-                bitmapimage.EndInit();
+                var bitmapSource = Imaging.CreateBitmapSourceFromHBitmap(
+                _game.GetIcon().GetHbitmap(),
+                IntPtr.Zero,
+                Int32Rect.Empty,
+                BitmapSizeOptions.FromEmptyOptions());
 
-                return bitmapimage;
+                return bitmapSource;
             }
             catch
             {

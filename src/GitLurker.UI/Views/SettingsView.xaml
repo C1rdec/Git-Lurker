@@ -322,6 +322,50 @@
                             </TextBlock>
                         </StackPanel>
                     </Border>
+                    <Border x:Name="Audio"
+                            Grid.Row="1"
+                            Height="45"
+                            Margin="0,10,10,0"
+                            HorizontalAlignment="Center"
+                            cal:Message.Attach="[Event MouseDown] = [Action ToggleAudio]"
+                            CornerRadius="15"
+                            Cursor="Hand">
+                        <Border.Style>
+                            <Style TargetType="Border">
+                                <Setter Property="Opacity" Value="0.25" />
+                                <Setter Property="Background">
+                                    <Setter.Value>
+                                        <SolidColorBrush Opacity="0.05" Color="White" />
+                                    </Setter.Value>
+                                </Setter>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <SolidColorBrush Opacity="0.15" Color="White" />
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Trigger>
+                                    <DataTrigger Binding="{Binding AudioEnabled}" Value="True">
+                                        <Setter Property="Opacity" Value="1" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Border.Style>
+                        <StackPanel Margin="10,0,10,0"
+                                    HorizontalAlignment="Center"
+                                    Orientation="Horizontal">
+                            <iconPacks:PackIconMaterial HorizontalAlignment="Center"
+                                                        VerticalAlignment="Center"
+                                                        Kind="Speaker" />
+                            <TextBlock Grid.Column="1"
+                                       Margin="10,0,0,0"
+                                       HorizontalAlignment="Center"
+                                       VerticalAlignment="Center">
+                                Audio
+                            </TextBlock>
+                        </StackPanel>
+                    </Border>
                 </WrapPanel>
             </Grid>
         </TabItem>

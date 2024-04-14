@@ -34,6 +34,7 @@
     <PackageReference Include="Desktop.Robot" Version="1.5.0" />
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
     <PackageReference Include="Lurker.AppData" Version="8.0.0" />
+    <PackageReference Include="Lurker.Audio" Version="8.0.5" />
     <PackageReference Include="Lurker.BattleNet" Version="8.0.0" />
     <PackageReference Include="Lurker.Common" Version="8.0.1" />
     <PackageReference Include="Lurker.Epic" Version="8.0.1" />
@@ -60,6 +61,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\AudioSessionView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\AudioLibraryView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\SnippetTileView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

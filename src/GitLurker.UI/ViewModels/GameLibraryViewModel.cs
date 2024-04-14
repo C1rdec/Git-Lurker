@@ -30,13 +30,13 @@ public class GameLibraryViewModel : PropertyChangedBase, IItemListViewModel, IDi
 
     public GameLibraryViewModel()
     {
-        _epicGames = new List<EpicGame>();
-        _steamGames = new List<SteamGame>();
-        _battleNetGames = new List<BattleNetGame>();
+        _epicGames = [];
+        _steamGames = [];
+        _battleNetGames = [];
+        _gameViewModels = [];
         _battleNetService = new BattleNetService();
         _steamService = new SteamService();
         _epicService = new EpicService();
-        _gameViewModels = new ObservableCollection<GameViewModel>();
         _gameViewModels.CollectionChanged += GameViewModels_CollectionChanged;
     }
 

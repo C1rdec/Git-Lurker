@@ -3,5 +3,6 @@
 public enum Mode
 {
     Git,
+    Audio,
     Game,
 }

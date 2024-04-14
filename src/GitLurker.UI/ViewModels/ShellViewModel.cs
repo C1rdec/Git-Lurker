@@ -33,6 +33,7 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
     private ThemeService _themeService;
     private PatreonService _patronService;
     private KeyboardService _keyboardService;
+    private MouseService _mouseService;
     private RepositoryService _repositoryService;
     private ConsoleService _consoleService;
     private GithubUpdateManager _updateManager;
@@ -58,6 +59,7 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
     private IDebounceService _searchDebouncer;
     private WorkspaceViewModel _workspaceViewModel;
     private GameLibraryViewModel _gameLibraryViewModel;
+    private AudioLibraryViewModel _audioLibraryViewModel;
     private SettingsViewModel _settingsViewModel;
     private IItemListViewModel _activeAction;
 
@@ -71,6 +73,7 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
         IDebounceService searchDebouncer,
         SettingsFile settings,
         KeyboardService keyboardService,
+        MouseService mouseService,
         WindowsLink startupService,
         RepositoryService repositoryService,
         ThemeService themeService,
@@ -87,6 +90,7 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
         _showInTaskBar = true;
         _eventAggregator = aggregator;
         _keyboardService = keyboardService;
+        _mouseService = mouseService;
         _patronService = patronService;
         _startupService = startupService;
         _repositoryService = repositoryService;
@@ -118,6 +122,7 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
 
         _workspaceViewModel = new WorkspaceViewModel(_repositoryService, _consoleService, _keyboardService);
         _gameLibraryViewModel = new GameLibraryViewModel();
+        _audioLibraryViewModel = new AudioLibraryViewModel(_mouseService);
 
         _workspaceViewModel.ShowRecent();
         if (settings.Entity.SteamEnabled)
@@ -150,6 +155,12 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
     public bool UpToDate => !NeedUpdate;
 
     public string Version => _version;
+
+    public bool GitActive => ItemListViewModel is WorkspaceViewModel;
+
+    public bool AudioActive => ItemListViewModel is AudioLibraryViewModel;
+
+    public bool GameActive => ItemListViewModel is GameLibraryViewModel;
 
     public bool Updating
     {
@@ -441,6 +452,7 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
 
         await Task.Delay(200);
         await _keyboardService.InstallAsync();
+        await _mouseService.InstallAsync();
 
         // Needs to be done after Winook
         ShowInTaskBar = false;
@@ -470,18 +482,21 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
 
     private void SetMode()
     {
-        if (_settingsFile.Entity.Mode == Mode.Game && _settingsFile.Entity.SteamEnabled)
+        switch (_settingsFile.Entity.Mode)
         {
-            var steamSettings = new GameSettingsFile();
-            steamSettings.Initialize();
-            _themeService.Apply(steamSettings.Entity.Scheme);
-            ItemListViewModel = _gameLibraryViewModel;
-
-        }
-        else
-        {
-            ItemListViewModel = _workspaceViewModel;
-            _themeService.Apply();
+            case Mode.Game:
+                var steamSettings = new GameSettingsFile();
+                steamSettings.Initialize();
+                _themeService.Apply(steamSettings.Entity.Scheme);
+                ItemListViewModel = _gameLibraryViewModel;
+                break;
+            case Mode.Git:
+                ItemListViewModel = _workspaceViewModel;
+                _themeService.Apply();
+                break;
+            case Mode.Audio:
+                ItemListViewModel = _audioLibraryViewModel;
+                break;
         }
     }
 
@@ -504,38 +519,98 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
         await new ProcessService("").ExecuteCommandAsync("start devtoys:");
     }
 
+    private void NotifyModeChange()
+    {
+        NotifyOfPropertyChange(() => GitActive);
+        NotifyOfPropertyChange(() => AudioActive);
+        NotifyOfPropertyChange(() => GameActive);
+    }
+
+    public void SetGit()
+    {
+        var settings = new SettingsFile();
+        settings.Initialize();
+
+        _themeService.Apply();
+        ItemListViewModel = _workspaceViewModel;
+        settings.Entity.Mode = Mode.Git;
+
+        settings.Save(false);
+        ItemListViewModel.ShowRecent();
+        NotifyOfPropertyChange(() => ItemListViewModel);
+        NotifyModeChange();
+    }
+
+    public void SetAudio()
+    {
+        var settings = new SettingsFile();
+        settings.Initialize();
+
+        _themeService.Apply();
+        ItemListViewModel = _audioLibraryViewModel;
+        settings.Entity.Mode = Mode.Audio;
+
+        settings.Save(false);
+        ItemListViewModel.ShowRecent();
+        NotifyOfPropertyChange(() => ItemListViewModel);
+        NotifyModeChange();
+    }
+
+    public void SetGame()
+    {
+        var settings = new SettingsFile();
+        settings.Initialize();
+
+        var steamSettings = new GameSettingsFile();
+        steamSettings.Initialize();
+        _themeService.Apply(steamSettings.Entity.Scheme);
+        ItemListViewModel = _gameLibraryViewModel;
+        settings.Entity.Mode = Mode.Game;
+
+        settings.Save(false);
+        ItemListViewModel.ShowRecent();
+        NotifyOfPropertyChange(() => ItemListViewModel);
+        NotifyModeChange();
+    }
+
     private void ToggleWindow()
     {
         if (_debouncer.HasTimer)
         {
-            if (!_settingsFile.Entity.SteamEnabled || !_settingsFile.Entity.Workspaces.Any())
-            {
-                return;
-            }
-
             _debouncer.Reset();
             SearchTerm = string.Empty;
 
+            
             var settings = new SettingsFile();
             settings.Initialize();
-            if (ItemListViewModel is WorkspaceViewModel)
+
+            var nextMode = GetNextMode(settings);
+
+            switch (nextMode)
             {
-                var steamSettings = new GameSettingsFile();
-                steamSettings.Initialize();
-                _themeService.Apply(steamSettings.Entity.Scheme);
-                ItemListViewModel = _gameLibraryViewModel;
-                settings.Entity.Mode = Mode.Game;
-            }
-            else
-            {
-                _themeService.Apply();
-                ItemListViewModel = _workspaceViewModel;
-                settings.Entity.Mode = Mode.Git;
+                case Mode.Git:
+                    _themeService.Apply();
+                    ItemListViewModel = _workspaceViewModel;
+                    settings.Entity.Mode = Mode.Git;
+                    break;
+                case Mode.Audio:
+                    _themeService.Apply();
+                    ItemListViewModel = _audioLibraryViewModel;
+                    settings.Entity.Mode = Mode.Audio;
+                    break;
+                case Mode.Game:
+                    var steamSettings = new GameSettingsFile();
+                    steamSettings.Initialize();
+                    _themeService.Apply(steamSettings.Entity.Scheme);
+                    ItemListViewModel = _gameLibraryViewModel;
+                    settings.Entity.Mode = Mode.Game;
+                    break;
             }
 
             settings.Save(false);
             ItemListViewModel.ShowRecent();
             NotifyOfPropertyChange(() => ItemListViewModel);
+            NotifyModeChange();
 
             if (!_isVisible)
             {
@@ -555,6 +630,42 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
                 ShowWindow();
             });
         }
+    }
+
+    private Mode GetNextMode(SettingsFile settings)
+    {
+        var modes = Enum.GetValues(typeof(Mode)).Cast<Mode>().ToList();
+        var currentIndex = modes.IndexOf(settings.Entity.Mode);
+        
+        var turnOn = false;
+
+        var nextMode = Mode.Git;
+        while (!turnOn)
+        {
+            var nextIndex = currentIndex + 1;
+            if (nextIndex >= modes.Count)
+            {
+                nextIndex = 0;
+            }
+
+            nextMode = modes[nextIndex];
+            currentIndex = modes.IndexOf(nextMode);
+
+            switch (nextMode)
+            {
+                case Mode.Audio:
+                    turnOn = settings.Entity.AudioEnabled;
+                    break;
+                case Mode.Game:
+                    turnOn = settings.Entity.SteamEnabled;
+                    break;
+                case Mode.Git:
+                    turnOn = true;
+                    break;
+            }
+        }
+
+        return nextMode;
     }
 
     private void ShowWindow()

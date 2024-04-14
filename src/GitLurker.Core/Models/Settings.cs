@@ -60,6 +60,8 @@ public class Settings
 
     public bool SteamEnabled { get; set; }
 
+    public bool AudioEnabled { get; set; }
+
     public Scheme Scheme { get; set; }
 
     public CurrentOperation RebaseOperation { get; set; }
