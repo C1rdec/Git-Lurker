@@ -20,11 +20,11 @@ public class SettingsViewModel : FlyoutScreenBase
 {
     #region Fields
 
-    private List<CurrentOperation> _operations = new()
-    {
+    private List<CurrentOperation> _operations =
+    [
         CurrentOperation.Merge,
         CurrentOperation.Rebase
-    };
+    ];
 
     private CurrentOperation _selectedOperation;
     private SettingsFile _settingsFile;

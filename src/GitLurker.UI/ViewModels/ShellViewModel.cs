@@ -301,8 +301,6 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
 
     protected ShellView View { get; private set; }
 
-    private bool GameMode => ItemListViewModel is GameLibraryViewModel;
-
     #endregion
 
     #region Methods
@@ -644,21 +642,7 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
     private void OnSettingsSave(object sender, Settings e)
     {
         SetGlobalHotkey();
-
         NotifyOfPropertyChange(() => ShowConsoleOutput);
-    }
-
-    private void ShowGit()
-        => Show(_workspaceViewModel);
-
-    private void ShowGame()
-        => Show(_gameLibraryViewModel);
-
-    private void Show(IItemListViewModel itemList)
-    {
-        ItemListViewModel = itemList;
-        ItemListViewModel.ShowRecent();
-        NotifyOfPropertyChange(() => ItemListViewModel);
     }
 
     private void SetGlobalHotkey()
