@@ -87,7 +87,7 @@ public class AudioSessionViewModel : ItemViewModelBase
 
     private void MouseService_MousePositionChanged(object sender, MousePosition e)
     {
-        if (_currentMousePosition == null)
+        if (_currentMousePosition == null || _progressBar == null)
         {
             return;
         }

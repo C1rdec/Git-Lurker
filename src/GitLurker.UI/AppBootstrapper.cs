@@ -79,6 +79,7 @@ public class AppBootstrapper : BootstrapperBase
 
         // ViewModels
         _container.PerRequest<ShellViewModel, ShellViewModel>();
+        _container.PerRequest<ModeStatusViewModel, ModeStatusViewModel>();
         _container.Singleton<PatreonSettingsViewModel, PatreonSettingsViewModel>();
         _container.Singleton<SettingsViewModel, SettingsViewModel>();
         _container.Singleton<PatreonViewModel, PatreonViewModel>();

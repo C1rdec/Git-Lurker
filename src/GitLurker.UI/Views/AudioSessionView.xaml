@@ -27,28 +27,33 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
-            <ProgressBar Value="{Binding Volume}" Margin="2" Maximum="100" Minimum="0" Opacity="0.5"></ProgressBar>
+            <ProgressBar Margin="2"
+                         Maximum="100"
+                         Minimum="0"
+                         Opacity="0.5"
+                         Value="{Binding Volume}" />
             <DockPanel HorizontalAlignment="Left">
                 <Image Width="50"
                        Height="50"
-                       IsHitTestVisible="False"
                        Margin="16"
+                       IsHitTestVisible="False"
                        Source="{Binding IconSource}" />
                 <TextBlock x:Name="SessionName"
-                           IsHitTestVisible="False"
                            MaxWidth="620"
                            Margin="12,0,0,0"
                            VerticalAlignment="Center"
                            FontSize="32"
                            Foreground="White"
+                           IsHitTestVisible="False"
                            TextTrimming="CharacterEllipsis" />
             </DockPanel>
-            <TextBlock x:Name="Volume" 
-                       VerticalAlignment="Center" 
-                       FontSize="42" 
+            <TextBlock x:Name="Volume"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       FontSize="42"
                        FontWeight="UltraLight"
-                       Visibility="{Binding VolumeVisible, Converter={StaticResource BooleanToVisibilityConverter}}"
-                       HorizontalAlignment="Center"/>
+                       IsHitTestVisible="False"
+                       Visibility="{Binding VolumeVisible, Converter={StaticResource BooleanToVisibilityConverter}}" />
         </Grid>
     </Border>
 </UserControl>

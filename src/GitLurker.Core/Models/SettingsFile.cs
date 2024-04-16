@@ -1,5 +1,6 @@
 ﻿namespace GitLurker.Core.Models;
 
+using System;
 using System.Linq;
 using Lurker.AppData;
 
@@ -79,6 +80,42 @@ public class SettingsFile : AppDataFileBase<Settings>
     }
 
     public bool HasNugetSource() => !string.IsNullOrEmpty(Entity.LocalNugetSource);
+
+    public Mode GetNextMode()
+    {
+        var modes = Enum.GetValues(typeof(Mode)).Cast<Mode>().ToList();
+        var currentIndex = modes.IndexOf(Entity.Mode);
+
+        var turnOn = false;
+
+        var nextMode = Mode.Git;
+        while (!turnOn)
+        {
+            var nextIndex = currentIndex + 1;
+            if (nextIndex >= modes.Count)
+            {
+                nextIndex = 0;
+            }
+
+            nextMode = modes[nextIndex];
+            currentIndex = modes.IndexOf(nextMode);
+
+            switch (nextMode)
+            {
+                case Mode.Audio:
+                    turnOn = Entity.AudioEnabled;
+                    break;
+                case Mode.Game:
+                    turnOn = Entity.SteamEnabled;
+                    break;
+                case Mode.Git:
+                    turnOn = true;
+                    break;
+            }
+        }
+
+        return nextMode;
+    }
 
     #endregion
 }
