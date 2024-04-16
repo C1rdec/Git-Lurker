@@ -592,7 +592,7 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
         }
         else
         {
-            _debouncer.Debounce(175, () =>
+            _debouncer.Debounce(250, () =>
             {
                 if (IsVisible)
                 {
