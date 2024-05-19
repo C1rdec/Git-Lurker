@@ -1,6 +1,7 @@
 ﻿namespace GitLurker.Core.Services;
 
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using GitLurker.Core.Models;
 
@@ -58,7 +59,7 @@ public class RepositoryService
         var settingsFile = new SettingsFile();
         settingsFile.Initialize();
 
-        _workspaces = settingsFile.Entity.Workspaces.Select(w => new Workspace(w)).ToArray();
+        _workspaces = settingsFile.Entity.Workspaces.Where(Directory.Exists).Select(w => new Workspace(w)).ToArray();
         return _workspaces;
     }
 

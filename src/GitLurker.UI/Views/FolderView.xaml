@@ -16,7 +16,8 @@
                    Grid.Column="1"
                    Margin="10,0,0,0"
                    VerticalAlignment="Center"
-                   FontSize="22" />
+                   FontSize="22"
+                   Foreground="{Binding Foreground}" />
         <Button x:Name="Delete"
                 Grid.Column="0"
                 Margin="0,4,0,4"
