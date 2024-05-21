@@ -1,6 +1,7 @@
 ﻿namespace GitLurker.UI.ViewModels;
 
 using System;
+using System.IO;
 
 public class FolderViewModel
 {
@@ -24,6 +25,8 @@ public class FolderViewModel
     #region Properties
 
     public string Folder => _folder;
+
+    public bool FolderExists => Directory.Exists(Folder);
 
     #endregion
 
