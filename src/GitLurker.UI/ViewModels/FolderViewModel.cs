@@ -2,7 +2,6 @@
 
 using System;
 using System.IO;
-using System.Windows.Media;
 
 public class FolderViewModel
 {
@@ -27,7 +26,7 @@ public class FolderViewModel
 
     public string Folder => _folder;
 
-    public Brush Foreground => Directory.Exists(Folder) ? Brushes.Black : Brushes.Red;
+    public bool FolderExists => Directory.Exists(Folder);
 
     #endregion
 

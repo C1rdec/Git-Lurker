@@ -16,8 +16,17 @@
                    Grid.Column="1"
                    Margin="10,0,0,0"
                    VerticalAlignment="Center"
-                   FontSize="22"
-                   Foreground="{Binding Foreground}" />
+                   FontSize="22" >
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding FolderExists}" Value="false">
+                            <Setter Property="Foreground" Value="Red" />
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
         <Button x:Name="Delete"
                 Grid.Column="0"
                 Margin="0,4,0,4"
