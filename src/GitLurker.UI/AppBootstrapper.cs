@@ -9,6 +9,7 @@ using GitLurker.Core.Services;
 using GitLurker.UI.Extensions;
 using GitLurker.UI.Services;
 using GitLurker.UI.ViewModels;
+using Lurker.Audio;
 using Lurker.Patreon;
 using Lurker.Windows;
 
@@ -73,6 +74,8 @@ public class AppBootstrapper : BootstrapperBase
         _container.Singleton<KeyboardService, KeyboardService>();
         _container.Singleton<MouseService, MouseService>();
         _container.Singleton<GithubUpdateManager, GithubUpdateManager>();
+        _container.PerRequest<AudioSessionService, AudioSessionService>();
+        _container.PerRequest<ModeService, ModeService>();
         _container.Singleton<IWindowManager, WindowManager>();
         _container.Singleton<IEventAggregator, EventAggregator>();
         _container.PerRequest<IDebounceService, DebounceService>();

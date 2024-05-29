@@ -1,7 +1,6 @@
 ﻿namespace GitLurker.UI.ViewModels;
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -36,6 +35,7 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
     private MouseService _mouseService;
     private RepositoryService _repositoryService;
     private ConsoleService _consoleService;
+    private ModeService _modeService;
     private GithubUpdateManager _updateManager;
     private WindowsLink _startupService;
     private ConsoleViewModel _console;
@@ -83,7 +83,8 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
         ConsoleViewModel console,
         PatreonService patronService,
         SettingsViewModel settingsViewModel,
-        ModeStatusViewModel modeStatusViewModel)
+        ModeStatusViewModel modeStatusViewModel,
+        ModeService modeService)
     {
         _console = console;
         _searchTerm = string.Empty;
@@ -103,6 +104,7 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
         _searchDebouncer = searchDebouncer;
         _themeService = themeService;
         _modeStatusViewModel = modeStatusViewModel;
+        _modeService = modeService;
 
         _updateManager.UpdateRequested += UpdateManager_UpdateRequested;
         _settingsFile.OnFileSaved += OnSettingsSave;
@@ -558,7 +560,7 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
             _debouncer.Reset();
             SearchTerm = string.Empty;
 
-            var nextMode = _settingsFile.GetNextMode();
+            var nextMode = _modeService.GetNextMode();
 
             switch (nextMode)
             {
@@ -607,8 +609,8 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
 
     private void ShowWindow()
     {
+        _modeStatusViewModel.NotifyModeChange();
         ItemListViewModel?.ShowRecent();
-
         TopMost = true;
         IsVisible = true;
         HandleScreenPosition();
