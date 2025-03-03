@@ -536,7 +536,7 @@ public class Repository : NugetService
 
         var text = File.ReadAllText(configFilePath);
         var url = text.GetLineAfter("url = ");
-        if (!string.IsNullOrEmpty(url) && url.StartsWith("git@ssh") || url.Contains("@vs-ssh.visualstudio.com"))
+        if (!string.IsNullOrEmpty(url) && url.StartsWith("git@ssh") || url.Contains("@vs-ssh.visualstudio.com") || url.StartsWith("git@"))
         {
             try
             {
@@ -578,19 +578,30 @@ public class Repository : NugetService
     {
         var vsSsh = "vs-ssh.";
         var vsSshIndex = url.IndexOf(vsSsh);
-        if (vsSshIndex >= 0)
+        var isAzureDevops = vsSshIndex >= 0;
+        if (isAzureDevops)
         {
             url = url.Substring(vsSshIndex + vsSsh.Length);
         }
         else
         {
             url = url.Replace("git@ssh.", string.Empty);
+            url = url.Replace("git@", string.Empty);
         }
 
         var segments = url.Split('/');
         var firstSegment = segments.First();
         var index = firstSegment.IndexOf(":v");
-        var domainName = firstSegment.Substring(0, index);
+        var domainName = firstSegment;
+        if (index >= 0)
+        {
+            domainName = firstSegment.Substring(0, index);
+        }
+        else
+        {
+            domainName = domainName.Replace(":", "/");
+        }
+
         domainName = domainName.Replace("visualstudio.com", "dev.azure.com");
 
         var newSegments = new List<string>
@@ -598,7 +609,11 @@ public class Repository : NugetService
             $"https://{domainName}"
         };
         newSegments.AddRange(segments.Skip(1).Take(segments.Length - 2));
-        newSegments.Add("_git");
+        if (isAzureDevops)
+        {
+            newSegments.Add("_git");
+        }
+
         newSegments.Add(segments.Last());
 
         return string.Join("/", newSegments);
