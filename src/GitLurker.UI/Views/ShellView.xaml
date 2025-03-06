@@ -43,7 +43,6 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="auto" />
             <RowDefinition Height="auto" />
-            <RowDefinition />
         </Grid.RowDefinitions>
         <tb:TaskbarIcon DoubleClickCommand="{Binding ShowSettings}"
                         IconSource="/Resources/GitLurker.ico"
@@ -112,6 +111,8 @@
                             </Style.Triggers>
                         </Style>
                     </StackPanel.Style>
+                    <ContentControl x:Name="ModeStatusViewModel" Grid.Row="1" />
+
                     <Button x:Name="RefreshItems"
                             Width="25"
                             Height="25"
@@ -231,7 +232,8 @@
                 </Grid>
             </Grid>
         </Border>
-        <ContentControl x:Name="ModeStatusViewModel" Grid.Row="1" />
-        <ContentControl x:Name="ItemListViewModel" Grid.Row="2" />
+        <ContentControl x:Name="ItemListViewModel"
+                        Grid.Row="1"
+                        Margin="0,10,0,0" />
     </Grid>
 </mah:MetroWindow>
