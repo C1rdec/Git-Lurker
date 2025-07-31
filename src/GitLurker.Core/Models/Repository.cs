@@ -506,7 +506,7 @@ public class Repository : NugetService
         var solutionName = Path.GetFileName(slnFile.FullName).Replace(".sln", string.Empty);
         var expectedTitles = new[]
         {
-            $"{solutionName} - Microsoft Visual Studio",
+            $"{solutionName} -",
             $"{solutionName} (Running) - Microsoft Visual Studio",
             $"{solutionName} (Debugging) - Microsoft Visual Studio",
         };
