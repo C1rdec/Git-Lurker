@@ -555,11 +555,12 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
 
     private void ToggleWindow()
     {
-        if (_debouncer.HasTimer)
+        if (!IsVisible)
         {
-            _debouncer.Reset();
-            SearchTerm = string.Empty;
-
+            ShowWindow();
+        }
+        else
+        {
             var nextMode = _modeService.GetNextMode();
 
             switch (nextMode)
@@ -586,35 +587,17 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
             _settingsFile.Save();
             ItemListViewModel.ShowRecent();
             NotifyOfPropertyChange(() => ItemListViewModel);
-
-            if (!_isVisible)
-            {
-                ShowWindow();
-            }
-        }
-        else
-        {
-            _debouncer.Debounce(250, () =>
-            {
-                if (IsVisible)
-                {
-                    HideWindow();
-                    return;
-                }
-
-                ShowWindow();
-            });
         }
     }
 
     private void ShowWindow()
     {
         _modeStatusViewModel.NotifyModeChange();
-        ItemListViewModel?.ShowRecent();
         TopMost = true;
         IsVisible = true;
         HandleScreenPosition();
         FocusSearch();
+        ItemListViewModel?.ShowRecent();
     }
 
     private void FocusSearch() => DockingHelper.SetForeground(View, () =>

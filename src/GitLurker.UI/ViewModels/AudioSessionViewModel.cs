@@ -1,7 +1,6 @@
 ﻿namespace GitLurker.UI.ViewModels;
 
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -11,7 +10,6 @@ using System.Windows.Media.Imaging;
 using GitLurker.UI.Models;
 using GitLurker.UI.Services;
 using Lurker.Audio;
-using MahApps.Metro.Controls;
 
 public class AudioSessionViewModel : ItemViewModelBase
 {

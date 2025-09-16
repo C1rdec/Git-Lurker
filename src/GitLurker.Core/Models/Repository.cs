@@ -38,7 +38,10 @@ public class Repository : NugetService
         : base(folder)
     {
         _folder = folder;
-        _slnFiles = GetFiles(".sln");
+        var slns = GetFiles(".sln");
+        var slnxs = GetFiles(".slnx");
+
+        _slnFiles = slns.Concat(slnxs).ToArray();
         _configuration = GetConfiguration(folder);
         _gitService = new GitService(folder);
 

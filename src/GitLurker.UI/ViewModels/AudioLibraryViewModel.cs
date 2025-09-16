@@ -57,15 +57,16 @@ public class AudioLibraryViewModel : ItemListViewModelBase<AudioSessionViewModel
         return Task.FromResult(false);
     }
 
-    public Task RefreshItems()
+    public async Task RefreshItems()
     {
         Clear();
-        foreach (var session in _audioSessionService.GetSessions())
+        await Task.Run(() => 
         {
-            Execute.OnUIThread(() => _audioSessionViewModels.Add(new AudioSessionViewModel(session, _mouseService)));
-        }
-
-        return Task.CompletedTask;
+            foreach (var session in _audioSessionService.GetSessions())
+            {
+                Execute.OnUIThread(() => _audioSessionViewModels.Add(new AudioSessionViewModel(session, _mouseService)));
+            }
+        });
     }
 
     public void Search(string term)
@@ -92,7 +93,9 @@ public class AudioLibraryViewModel : ItemListViewModelBase<AudioSessionViewModel
     }
 
     public void ShowRecent()
-        => RefreshItems();
+    {
+        _ = RefreshItems();
+    }
 
     #endregion
 }
