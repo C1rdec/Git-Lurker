@@ -506,7 +506,7 @@ public class Repository : NugetService
         }
 
         var runningVS = Process.GetProcessesByName("devenv");
-        var solutionName = Path.GetFileName(slnFile.FullName).Replace(".sln", string.Empty);
+        var solutionName = Path.GetFileNameWithoutExtension(slnFile.FullName);
         var expectedTitles = new[]
         {
             $"{solutionName} -",
