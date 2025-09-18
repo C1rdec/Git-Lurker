@@ -510,8 +510,8 @@ public class Repository : NugetService
         var expectedTitles = new[]
         {
             $"{solutionName} -",
-            $"{solutionName} (Running) - Microsoft Visual Studio",
-            $"{solutionName} (Debugging) - Microsoft Visual Studio",
+            $"{solutionName} (Running)",
+            $"{solutionName} (Debugging)",
         };
 
         foreach (var title in expectedTitles)
