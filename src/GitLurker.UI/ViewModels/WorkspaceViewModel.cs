@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Caliburn.Micro;
 using GitLurker.Core.Models;
@@ -14,6 +15,8 @@ using GitLurker.UI.Services;
 public class WorkspaceViewModel : PropertyChangedBase, IItemListViewModel
 {
     #region Fields
+
+    private static readonly Regex SshRegex = new(@"^(git@|ssh://)", RegexOptions.IgnoreCase);
 
     private KeyboardService _keyboardService;
     private RepositoryService _repositoryService;
@@ -65,10 +68,11 @@ public class WorkspaceViewModel : PropertyChangedBase, IItemListViewModel
 
     public async Task<bool> Open(bool skipModifier)
     {
-        if (Uri.TryCreate(_lastSearchTerm, UriKind.Absolute, out var result))
+        if (Uri.TryCreate(_lastSearchTerm, UriKind.Absolute, out var result) || SshRegex.IsMatch(_lastSearchTerm))
         {
+            var repoUrl = _lastSearchTerm;
             _lastSearchTerm = string.Empty;
-            await CloneAsync(result);
+            await CloneAsync(repoUrl);
 
             return false;
         }
@@ -78,7 +82,7 @@ public class WorkspaceViewModel : PropertyChangedBase, IItemListViewModel
         return true;
     }
 
-    public async Task CloneAsync(Uri url)
+    public async Task CloneAsync(string url)
     {
         var workspace = _repositoryService.Workspaces.FirstOrDefault();
         if (workspace == null)

@@ -77,10 +77,10 @@ public class Workspace : ProcessService
 
     public Repository GetRepo(string folderPath) => _repositories.FirstOrDefault(r => r.Folder == folderPath);
 
-    public async Task<Repository> CloneAsync(Uri url)
+    public async Task<Repository> CloneAsync(string url)
     {
         await ExecuteCommandAsync($"git clone {url}", true);
-        var lastSegment = url.LocalPath.Split("/").LastOrDefault();
+        var lastSegment = url.Split("/").LastOrDefault();
 
         if (string.IsNullOrEmpty(lastSegment))
         {
