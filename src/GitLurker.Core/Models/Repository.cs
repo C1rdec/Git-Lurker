@@ -120,13 +120,20 @@ public class Repository : NugetService
             return null;
         }
 
-        var startupProjectGuid = new StartProjectFinder().GetStartProjects(solutionFile.FullName).FirstOrDefault();
-        if (startupProjectGuid == null)
+        try
+        {
+            var startupProjectGuid = new StartProjectFinder().GetStartProjects(solutionFile.FullName).FirstOrDefault();
+            if (startupProjectGuid == null)
+            {
+                return null;
+            }
+
+            return SolutionProjectExtractor.GetAllProjectFiles(solutionFile.FullName).FirstOrDefault(p => p.Guid == startupProjectGuid);
+        }
+        catch
         {
             return null;
         }
-
-        return SolutionProjectExtractor.GetAllProjectFiles(solutionFile.FullName).FirstOrDefault(p => p.Guid == startupProjectGuid);
     }
 
     public bool IsBehind()

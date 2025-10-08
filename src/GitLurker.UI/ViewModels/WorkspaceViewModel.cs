@@ -68,7 +68,7 @@ public class WorkspaceViewModel : PropertyChangedBase, IItemListViewModel
 
     public async Task<bool> Open(bool skipModifier)
     {
-        if (Uri.TryCreate(_lastSearchTerm, UriKind.Absolute, out var result) || SshRegex.IsMatch(_lastSearchTerm))
+        if (!string.IsNullOrEmpty(_lastSearchTerm) && (Uri.TryCreate(_lastSearchTerm, UriKind.Absolute, out var result) || SshRegex.IsMatch(_lastSearchTerm)))
         {
             var repoUrl = _lastSearchTerm;
             _lastSearchTerm = string.Empty;
