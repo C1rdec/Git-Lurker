@@ -561,6 +561,7 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
         }
         else
         {
+            _settingsFile.Initialize();
             var nextMode = _modeService.GetNextMode();
 
             switch (nextMode)
