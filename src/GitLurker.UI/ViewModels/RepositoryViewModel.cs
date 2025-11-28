@@ -439,7 +439,7 @@ public class RepositoryViewModel : ItemViewModelBase
     public async void GitStash()
     {
         IsStashLoading = true;
-        await Task.Run(() => _repo.Stash());
+        await Task.Run(_repo.Stash);
         await GetStatus();
 
         IsStashLoading = false;

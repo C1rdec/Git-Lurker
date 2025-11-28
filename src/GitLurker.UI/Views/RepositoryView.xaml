@@ -261,7 +261,7 @@
                 <Border x:Name="FileChangeBorder"
                         Padding="4,2,4,2"
                         HorizontalAlignment="Center"
-                        cal:Message.Attach="[Event MouseLeftButtonUp] = [Action OpenFileChanged()]; [Event MouseRightButtonUp] = [Action GitStash()]"
+                        cal:Message.Attach="[Event MouseLeftButtonUp] = [Action GitStash()]"
                         BorderBrush="{DynamicResource Brushes.Secondary}"
                         BorderThickness="1.5"
                         CornerRadius="4"
