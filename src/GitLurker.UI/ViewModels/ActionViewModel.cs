@@ -16,10 +16,7 @@ public class ActionViewModel : PropertyChangedBase
     private Func<Task> _holdAction;
     private PackIconControlBase _icon;
     private bool _permanent;
-    private bool _isDisable;
-    private bool _isActive;
     private DebounceService _debounceService;
-    private int _holdProgress;
     private CancellationTokenSource _tokenSource;
 
     #endregion
@@ -53,10 +50,10 @@ public class ActionViewModel : PropertyChangedBase
 
     public bool IsDisable
     {
-        get => _isDisable;
+        get => field;
         set
         {
-            _isDisable = value;
+            field = value;
             NotifyOfPropertyChange();
             NotifyOfPropertyChange(() => IsEnable);
         }
@@ -64,20 +61,20 @@ public class ActionViewModel : PropertyChangedBase
 
     public bool IsActive
     {
-        get => _isActive;
+        get => field;
         set
         {
-            _isActive = value;
+            field = value;
             NotifyOfPropertyChange();
         }
     }
 
     public int HoldProgress
     {
-        get => _holdProgress;
+        get => field;
         set
         {
-            _holdProgress = value;
+            field = value;
             NotifyOfPropertyChange();
         }
     }

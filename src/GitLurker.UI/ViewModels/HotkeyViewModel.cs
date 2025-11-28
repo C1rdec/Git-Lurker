@@ -13,7 +13,6 @@ public class HotkeyViewModel : PropertyChangedBase
     private string _name;
     private Hotkey _hotkey;
     private System.Action<KeyCode, Modifiers> _save;
-    private PackIconControlBase _icon;
 
     #endregion
 
@@ -73,10 +72,10 @@ public class HotkeyViewModel : PropertyChangedBase
 
     public PackIconControlBase Icon
     {
-        get => _icon;
+        get => field;
         private set
         {
-            _icon = value;
+            field = value;
             NotifyOfPropertyChange();
             NotifyOfPropertyChange(() => HasIcon);
             NotifyOfPropertyChange(() => HasKeyCode);

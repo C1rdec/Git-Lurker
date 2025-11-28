@@ -22,7 +22,6 @@ public class WorkspaceViewModel : PropertyChangedBase, IItemListViewModel
     private RepositoryService _repositoryService;
     private ConsoleService _consoleService;
     private ObservableCollection<RepositoryViewModel> _repos;
-    private RepositoryViewModel _selectedRepo;
     private string _lastSearchTerm;
     private bool _mouseOver;
 
@@ -50,14 +49,10 @@ public class WorkspaceViewModel : PropertyChangedBase, IItemListViewModel
 
     public RepositoryViewModel SelectedRepo
     {
-        get
-        {
-            return _selectedRepo;
-        }
-
+        get => field;
         private set
         {
-            _selectedRepo = value;
+            field = value;
             NotifyOfPropertyChange(() => HasSelectedRepo);
         }
     }
@@ -141,7 +136,7 @@ public class WorkspaceViewModel : PropertyChangedBase, IItemListViewModel
             return;
         }
 
-        var index = _repos.IndexOf(_selectedRepo);
+        var index = _repos.IndexOf(SelectedRepo);
         if (index == -1 || (index + 1) >= _repos.Count)
         {
             return;

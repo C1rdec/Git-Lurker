@@ -40,22 +40,11 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
     private WindowsLink _startupService;
     private ConsoleViewModel _console;
     private string _searchTerm;
-    private string _searchWatermark;
-    private bool _isVisible;
-    private bool _showInTaskBar;
-    private bool _disable;
-    private bool _showConsoleOverview;
     private IEventAggregator _eventAggregator;
-    private bool _topMost;
     private string _version;
     private double _dpiX = 1;
     private double _dpiY = 1;
-    private bool _hasSurfaceDial;
-    private bool _isConsoleOpen;
-    private bool _needUpdate;
-    private bool _updating;
     private string _consoleHeader;
-    private IDebounceService _debouncer;
     private IDebounceService _searchDebouncer;
     private WorkspaceViewModel _workspaceViewModel;
     private GameLibraryViewModel _gameLibraryViewModel;
@@ -88,9 +77,9 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
     {
         _console = console;
         _searchTerm = string.Empty;
-        _searchWatermark = DefaultWaterMark;
-        _isVisible = false;
-        _showInTaskBar = true;
+        SearchWatermark = DefaultWaterMark;
+        IsVisible = false;
+        ShowInTaskBar = true;
         _eventAggregator = aggregator;
         _keyboardService = keyboardService;
         _mouseService = mouseService;
@@ -100,7 +89,6 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
         _consoleService = consoleService;
         _settingsFile = settings;
         _updateManager = updateManager;
-        _debouncer = debouncer;
         _searchDebouncer = searchDebouncer;
         _themeService = themeService;
         _modeStatusViewModel = modeStatusViewModel;
@@ -165,44 +153,36 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
 
     public bool Updating
     {
-        get
-        {
-            return _updating;
-        }
-
+        get => field;
         set
         {
-            _updating = value;
+            field = value;
             NotifyOfPropertyChange();
         }
     }
 
     public bool ShowConsoleOverview
     {
-        get
-        {
-            return _showConsoleOverview;
-        }
-
+        get => field;
         set
         {
-            _showConsoleOverview = value;
+            field = value;
             NotifyOfPropertyChange();
         }
     }
 
     public string SearchTerm
     {
-        get => _searchTerm;
+        get => field;
         set
         {
-            if (_searchTerm == value)
+            if (field == value)
             {
                 return;
 
             }
 
-            _searchTerm = value;
+            field = value;
             _searchDebouncer.Debounce(250, () => Search(_searchTerm));
             NotifyOfPropertyChange();
         }
@@ -210,10 +190,10 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
 
     public bool NeedUpdate
     {
-        get => _needUpdate;
+        get => field;
         set
         {
-            _needUpdate = value;
+            field = value;
             NotifyOfPropertyChange();
             NotifyOfPropertyChange(() => UpToDate);
             NotifyOfPropertyChange(() => ShowConsoleOutput);
@@ -223,70 +203,70 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
 
     public bool HasSurfaceDial
     {
-        get => _hasSurfaceDial;
+        get => field;
         set
         {
-            _hasSurfaceDial = value;
+            field = value;
             NotifyOfPropertyChange();
         }
     }
 
     public string SearchWatermark
     {
-        get => _searchWatermark;
+        get => field;
         set
         {
-            _searchWatermark = value;
+            field = value;
             NotifyOfPropertyChange();
         }
     }
 
     public bool IsVisible
     {
-        get => _isVisible;
+        get => field;
         set
         {
-            _isVisible = value;
+            field = value;
             NotifyOfPropertyChange();
         }
     }
 
     public bool ShowInTaskBar
     {
-        get => _showInTaskBar;
+        get => field;
         set
         {
-            _showInTaskBar = value;
+            field = value;
             NotifyOfPropertyChange();
         }
     }
 
     public bool TopMost
     {
-        get => _topMost;
+        get => field;
         set
         {
-            _topMost = value;
+            field = value;
             NotifyOfPropertyChange();
         }
     }
 
     public bool Disable
     {
-        get => _disable;
+        get => field;
         set
         {
-            _disable = value;
+            field = value;
             NotifyOfPropertyChange();
         }
     }
 
     public bool IsConsoleOpen
     {
-        get => _isConsoleOpen;
+        get => field;
         set
         {
-            _isConsoleOpen = value;
+            field = value;
             NotifyOfPropertyChange();
         }
     }

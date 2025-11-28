@@ -24,7 +24,6 @@ public class GameLibraryViewModel : PropertyChangedBase, IItemListViewModel, IDi
     private List<SteamGame> _steamGames;
     private List<EpicGame> _epicGames;
     private ObservableCollection<GameViewModel> _gameViewModels;
-    private GameViewModel _selectedGameViewModel;
     private bool _mouseOver;
     private bool _initialize;
 
@@ -48,14 +47,10 @@ public class GameLibraryViewModel : PropertyChangedBase, IItemListViewModel, IDi
 
     public GameViewModel SelectedGameViewModel
     {
-        get
-        {
-            return _selectedGameViewModel;
-        }
-
+        get => field;
         private set
         {
-            _selectedGameViewModel = value;
+            field = value;
             NotifyOfPropertyChange(() => HasSelectedGame);
         }
     }

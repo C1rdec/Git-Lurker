@@ -17,9 +17,6 @@ public class PatreonSettingsViewModel : PropertyChangedBase, IHandle<PatronMessa
 {
     #region Fields
 
-    private bool _steamLoading;
-    private bool _epicLoading;
-    private bool _battleNetLoading;
     private ThemeService _themeService;
     private SettingsFile _settingsFile;
     private GameSettingsFile _gameSettingsFile;
@@ -61,30 +58,30 @@ public class PatreonSettingsViewModel : PropertyChangedBase, IHandle<PatronMessa
 
     public bool SteamLoading
     {
-        get => _steamLoading;
+        get => field;
         set
         {
-            _steamLoading = value;
+            field = value;
             NotifyOfPropertyChange();
         }
     }
 
     public bool EpicLoading
     {
-        get => _epicLoading;
+        get => field;
         set
         {
-            _epicLoading = value;
+            field = value;
             NotifyOfPropertyChange();
         }
     }
 
     public bool BattleNetLoading
     {
-        get => _battleNetLoading;
+        get => field;
         set
         {
-            _battleNetLoading = value;
+            field = value;
             NotifyOfPropertyChange();
         }
     }

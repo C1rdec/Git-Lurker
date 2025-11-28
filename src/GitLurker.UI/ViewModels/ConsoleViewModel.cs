@@ -14,8 +14,6 @@ public class ConsoleViewModel : PropertyChangedBase, IDisposable
 
     private ProcessService _processService;
     private ConsoleService _consoleService;
-    private int _exitCode;
-    private bool _isLoading;
 
     #endregion
 
@@ -42,20 +40,20 @@ public class ConsoleViewModel : PropertyChangedBase, IDisposable
 
     public int ExitCode
     {
-        get => _exitCode;
+        get => field;
         set
         {
-            _exitCode = value;
+            field = value;
             NotifyOfPropertyChange();
         }
     }
 
     public bool IsLoading
     {
-        get => _isLoading;
+        get => field;
         set
         {
-            _isLoading = value;
+            field = value;
             NotifyOfPropertyChange();
         }
     }

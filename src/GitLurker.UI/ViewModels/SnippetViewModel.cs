@@ -10,7 +10,6 @@ public class SnippetViewModel : PropertyChangedBase
     #region Fields
 
     private Snippet _snippet;
-    private bool _modified;
 
     #endregion
 
@@ -50,10 +49,10 @@ public class SnippetViewModel : PropertyChangedBase
 
     public bool Modified
     {
-        get => _modified;
+        get => field;
         set
         {
-            _modified = value;
+            field = value;
             NotifyOfPropertyChange();
         }
     }
