@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net8.0-windows7.0</TargetFramework>
+    <TargetFramework>net10.0-windows7.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Resources\GitLurker.ico</ApplicationIcon>
 	<Version>1.3.0</Version>
@@ -30,24 +30,24 @@
 
   <ItemGroup>
     <PackageReference Include="BusyIndicator" Version="2.0.2.1" />
-    <PackageReference Include="Caliburn.Micro" Version="4.0.212" />
+    <PackageReference Include="Caliburn.Micro" Version="5.0.258" />
     <PackageReference Include="Desktop.Robot" Version="1.5.0" />
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.1.0" />
-    <PackageReference Include="Lurker.AppData" Version="8.0.0" />
+    <PackageReference Include="Lurker.AppData" Version="8.0.1" />
     <PackageReference Include="Lurker.Audio" Version="8.0.6" />
     <PackageReference Include="Lurker.BattleNet" Version="8.0.0" />
     <PackageReference Include="Lurker.Common" Version="8.0.1" />
     <PackageReference Include="Lurker.Epic" Version="8.0.1" />
-    <PackageReference Include="Lurker.Patreon" Version="8.0.0" />
+    <PackageReference Include="Lurker.Patreon" Version="8.0.5" />
     <PackageReference Include="Lurker.Steam" Version="8.0.2" />
     <PackageReference Include="Lurker.Windows" Version="1.0.0" />
-    <PackageReference Include="MahApps.Metro" Version="2.4.10" />
+    <PackageReference Include="MahApps.Metro" Version="2.4.11" />
     <PackageReference Include="MahApps.Metro.IconPacks" Version="4.11.0" />
-    <PackageReference Include="NHotkey.Wpf" Version="2.1.1" />
-    <PackageReference Include="NLog" Version="5.2.8" />
+    <PackageReference Include="NHotkey.Wpf" Version="3.0.0" />
+    <PackageReference Include="NLog" Version="6.0.6" />
     <PackageReference Include="TextCopy" Version="6.2.1" />
     <PackageReference Include="Winook" Version="1.3.2" />
-    <PackageReference Include="XamlAnimatedGif" Version="2.2.0" />
+    <PackageReference Include="XamlAnimatedGif" Version="2.3.1" />
   </ItemGroup>
 
   <ItemGroup>
