@@ -7,7 +7,6 @@ public abstract class ItemViewModelBase : ViewAware
     #region Fields
 
     private object _view;
-    private bool _isSelected;
 
     #endregion
 
@@ -17,10 +16,10 @@ public abstract class ItemViewModelBase : ViewAware
 
     public bool IsSelected
     {
-        get => _isSelected;
+        get => field;
         set
         {
-            _isSelected = value;
+            field = value;
             NotifyOfPropertyChange();
         }
     }

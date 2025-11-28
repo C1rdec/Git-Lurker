@@ -26,13 +26,11 @@ public class SettingsViewModel : FlyoutScreenBase
         CurrentOperation.Rebase
     ];
 
-    private CurrentOperation _selectedOperation;
     private SettingsFile _settingsFile;
     private GameSettingsFile _gameSettingsFile;
     private WindowsLink _windowsStartupService;
     private RepositoryService _repositoryService;
     private PatreonService _patronService;
-    private int _selectedTabIndex;
 
     #endregion
 
@@ -67,7 +65,7 @@ public class SettingsViewModel : FlyoutScreenBase
         PatreonViewModel.PropertyChanged += PatreonViewModel_PropertyChanged;
 
         dialogService.Register(this);
-        _selectedOperation = _settingsFile.Entity.RebaseOperation;
+        SelectedOperation = _settingsFile.Entity.RebaseOperation;
         _patronService = patronService;
     }
 
@@ -97,10 +95,10 @@ public class SettingsViewModel : FlyoutScreenBase
 
     public CurrentOperation SelectedOperation
     {
-        get => _selectedOperation;
+        get => field;
         set
         {
-            _selectedOperation = value;
+            field = value;
             NotifyOfPropertyChange();
         }
     }
@@ -111,10 +109,10 @@ public class SettingsViewModel : FlyoutScreenBase
 
     public int SelectedTabIndex
     {
-        get => _selectedTabIndex;
+        get => field;
         set
         {
-            _selectedTabIndex = value;
+            field = value;
             FlyoutOpen = false;
             NotifyOfPropertyChange();
         }

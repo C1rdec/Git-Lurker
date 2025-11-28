@@ -20,23 +20,14 @@ public class RepositoryViewModel : ItemViewModelBase
     private CancellationTokenSource _nugetTokenSource;
     private CancellationTokenSource _secretTokenSource;
     private CancellationTokenSource _pullRequestTokenSource;
-    private bool _isBranchManagerOpen;
     private PopupService _popupService;
     private ConsoleService _consoleService;
     private Repository _repo;
     private IEventAggregator _eventAggregator;
-    private string _branchName;
-    private bool _busy;
-    private bool _showParentFolder;
     private ActionBarViewModel _actionBar;
     private SettingsFile _settingsFile;
     private bool _skipBranchSelection;
-    private bool _operationInProgress;
-    private bool _cancelOperationVisible;
     private bool _skipOpen;
-    private bool _hasStashes;
-    private bool _stashLoading;
-    private bool _isRunning;
 
     #endregion
 
@@ -45,13 +36,13 @@ public class RepositoryViewModel : ItemViewModelBase
     public RepositoryViewModel(Repository repo)
     {
         _repo = repo;
-        _isRunning = repo.IsRunning;
         _settingsFile = IoC.Get<SettingsFile>();
         _popupService = IoC.Get<PopupService>();
         _consoleService = IoC.Get<ConsoleService>();
         _actionBar = new ActionBarViewModel(repo);
-        _showParentFolder = repo.Duplicate;
         _eventAggregator = IoC.Get<IEventAggregator>();
+        IsRunning = repo.IsRunning;
+        ShowParentFolder = repo.Duplicate;
 
         FileChanges = [];
         BranchManager = new BranchManagerViewModel(repo, OnSelectionChanged, OnBranchManagerClose, Rebase);
@@ -72,10 +63,10 @@ public class RepositoryViewModel : ItemViewModelBase
 
     public bool IsRunning
     {
-        get => _isRunning;
+        get => field;
         set
         {
-            _isRunning = value;
+            field = value;
             NotifyOfPropertyChange();
         }
     }
@@ -103,44 +94,44 @@ public class RepositoryViewModel : ItemViewModelBase
 
     public bool OperationInProgress
     {
-        get => _operationInProgress;
+        get => field;
         set
         {
-            _operationInProgress = value;
+            field = value;
             NotifyOfPropertyChange();
         }
     }
 
     public string BranchName
     {
-        get => _branchName;
+        get => field;
         set
         {
-            _branchName = value;
+            field = value;
             NotifyOfPropertyChange();
             NotifyOfPropertyChange(() => BranchNameVisible);
             NotifyOfPropertyChange(() => CancelOperationVisisble);
         }
     }
 
-    public bool BranchNameVisible => !string.IsNullOrEmpty(_branchName) || OperationInProgress;
+    public bool BranchNameVisible => !string.IsNullOrEmpty(BranchName) || OperationInProgress;
 
     public bool CancelOperationVisisble
     {
-        get => _cancelOperationVisible;
+        get => field;
         set
         {
-            _cancelOperationVisible = value;
+            field = value;
             NotifyOfPropertyChange();
         }
     }
 
     public bool Busy
     {
-        get => _busy;
+        get => field;
         set
         {
-            _busy = value;
+            field = value;
             NotifyOfPropertyChange();
             NotifyOfPropertyChange(() => NotBusy);
         }
@@ -150,41 +141,41 @@ public class RepositoryViewModel : ItemViewModelBase
 
     public bool ShowParentFolder
     {
-        get => _showParentFolder;
+        get => field;
         set
         {
-            _showParentFolder = value;
+            field = value;
             NotifyOfPropertyChange();
         }
     }
 
     public bool IsBranchManagerOpen
     {
-        get => _isBranchManagerOpen;
+        get => field;
         set
         {
             _popupService.IsOpen = value;
-            _isBranchManagerOpen = value;
+            field = value;
             NotifyOfPropertyChange();
         }
     }
 
     public bool HasStashes
     {
-        get => _hasStashes;
+        get => field;
         set
         {
-            _hasStashes = value;
+            field = value;
             NotifyOfPropertyChange();
         }
     }
 
     public bool IsStashLoading
     {
-        get => _stashLoading;
+        get => field;
         set
         {
-            _stashLoading = value;
+            field = value;
             NotifyOfPropertyChange();
             NotifyOfPropertyChange(() => IsNotStashLoading);
         }
@@ -331,8 +322,8 @@ public class RepositoryViewModel : ItemViewModelBase
 
     public async void OnMouseEnter()
     {
-        BranchName = _operationInProgress ? "Conflict(s)" : _repo.GetCurrentBranchName();
-        CancelOperationVisisble = _operationInProgress;
+        BranchName = OperationInProgress ? "Conflict(s)" : _repo.GetCurrentBranchName();
+        CancelOperationVisisble = OperationInProgress;
 
         await HandleUserSecret();
         await HandleNuget();

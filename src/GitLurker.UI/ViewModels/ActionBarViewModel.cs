@@ -13,7 +13,6 @@ public class ActionBarViewModel : PropertyChangedBase
 {
     #region Fields
 
-    private bool _busy;
     private Repository _repo;
     private ConsoleService _consoleService;
     private CustomActionSettingsFile _actionsFile;
@@ -39,11 +38,11 @@ public class ActionBarViewModel : PropertyChangedBase
 
     public bool Busy
     {
-        get => _busy;
+        get => field;
 
         set
         {
-            _busy = value;
+            field = value;
             NotifyOfPropertyChange();
             NotifyOfPropertyChange(() => NotBusy);
         }

@@ -15,15 +15,10 @@ public class BranchManagerViewModel : ViewAware
     private static readonly string Origin = "origin/";
     private BranchManagerView _view;
     private Repository _repo;
-    private string _selectedBranch;
     private Action<string> _onSelected;
     private System.Action _onClose;
     private System.Action<string> _onRebase;
     private bool _skipMainAction;
-    private bool _isLoading;
-    private bool _isCreateBranch;
-    private string _newBranchName;
-    private string _searchTerm;
     private List<string> _branchNames;
 
     #endregion
@@ -47,30 +42,30 @@ public class BranchManagerViewModel : ViewAware
 
     public bool IsLoading
     {
-        get => _isLoading;
+        get => field;
         set
         {
-            _isLoading = value;
+            field = value;
             NotifyOfPropertyChange();
         }
     }
 
     public string NewBranchName
     {
-        get => _newBranchName;
+        get => field;
         set
         {
-            _newBranchName = value;
+            field = value;
             NotifyOfPropertyChange();
         }
     }
 
     public string SearchTerm
     {
-        get => _searchTerm;
+        get => field;
         set
         {
-            _searchTerm = value;
+            field = value;
             Search(value);
             NotifyOfPropertyChange();
         }
@@ -78,10 +73,10 @@ public class BranchManagerViewModel : ViewAware
 
     public bool IsCreateBranch
     {
-        get => _isCreateBranch;
+        get => field;
         set
         {
-            _isCreateBranch = value;
+            field = value;
             NotifyOfPropertyChange();
             NotifyOfPropertyChange(() => IsNotCreateBranch);
         }
@@ -91,10 +86,10 @@ public class BranchManagerViewModel : ViewAware
 
     public string SelectedBranchName
     {
-        get => _selectedBranch;
+        get => field;
         set
         {
-            _selectedBranch = value;
+            field = value;
             NotifyOfPropertyChange();
         }
     }

@@ -8,7 +8,6 @@ public class NugetSettingsViewModel : PropertyChangedBase
     #region Fields
 
     private SettingsFile _settingsFile;
-    private bool _modified;
 
     #endregion
 
@@ -27,10 +26,10 @@ public class NugetSettingsViewModel : PropertyChangedBase
 
     public bool Modified
     {
-        get => _modified;
+        get => field;
         set
         {
-            _modified = value;
+            field = value;
             NotifyOfPropertyChange();
         }
     }

@@ -14,11 +14,8 @@ public class CustomActionViewModel : PropertyChangedBase
     #region Fields
 
     private static readonly PackIconMaterialKind[] IconKinds = Enum.GetValues(typeof(PackIconMaterialKind)).Cast<PackIconMaterialKind>().ToArray();
-    private PackIconMaterialKind _selectedIcon;
     private CustomAction _action;
-    private bool _modified;
     private RepositoryService _repositoryService;
-    private Repository _selectedRepository;
     private bool _isNew;
 
     #endregion
@@ -38,11 +35,11 @@ public class CustomActionViewModel : PropertyChangedBase
         _repositoryService = IoC.Get<RepositoryService>();
         if (string.IsNullOrEmpty(action.Icon))
         {
-            _selectedIcon = PackIconMaterialKind.Cog;
+            SelectedIcon = PackIconMaterialKind.Cog;
         }
         else
         {
-            _selectedIcon = Enum.Parse<PackIconMaterialKind>(action.Icon);
+            SelectedIcon = Enum.Parse<PackIconMaterialKind>(action.Icon);
         }
 
         PropertyChanged += CustomActionViewModel_PropertyChanged;
@@ -67,10 +64,10 @@ public class CustomActionViewModel : PropertyChangedBase
 
     public Repository SelectedRepository
     {
-        get => _selectedRepository;
+        get => field;
         set
         {
-            _selectedRepository = value;
+            field = value;
             AddRepository(value);
             NotifyOfPropertyChange();
         }
@@ -78,10 +75,10 @@ public class CustomActionViewModel : PropertyChangedBase
 
     public PackIconMaterialKind SelectedIcon
     {
-        get => _selectedIcon;
+        get => field;
         set
         {
-            _selectedIcon = value;
+            field = value;
             NotifyOfPropertyChange();
         }
     }
@@ -98,10 +95,10 @@ public class CustomActionViewModel : PropertyChangedBase
 
     public bool Modified
     {
-        get => _modified;
+        get => field;
         set
         {
-            _modified = value;
+            field = value;
             NotifyOfPropertyChange();
         }
     }
@@ -144,7 +141,7 @@ public class CustomActionViewModel : PropertyChangedBase
     {
         Modified = false;
 
-        _action.Icon = _selectedIcon.ToString();
+        _action.Icon = SelectedIcon.ToString();
         var file = IoC.Get<CustomActionSettingsFile>();
 
         if (_isNew)

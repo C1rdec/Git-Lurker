@@ -12,7 +12,6 @@ internal class CommitActionViewModel : PropertyChangedBase, IItemListViewModel
 {
     private Repository _repository;
     private ObservableCollection<FileViewModel> _fileViewModels;
-    private FileViewModel _selectedFileViewModel;
     private bool _mouseOver;
     private string _message;
     private string _selecteFiledId;
@@ -20,19 +19,15 @@ internal class CommitActionViewModel : PropertyChangedBase, IItemListViewModel
     public CommitActionViewModel(Repository repo)
     {
         _repository = repo;
-        _fileViewModels = new ObservableCollection<FileViewModel>();
+        _fileViewModels = [];
     }
 
     public FileViewModel SelectedFileViewModel
     {
-        get
-        {
-            return _selectedFileViewModel;
-        }
-
+        get => field;
         private set
         {
-            _selectedFileViewModel = value;
+            field = value;
             NotifyOfPropertyChange(() => HasSelectedFile);
         }
     }

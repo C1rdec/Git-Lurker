@@ -8,8 +8,6 @@ using GitLurker.UI.Services;
 public abstract class FlyoutScreenBase : Screen
 {
     private FlyoutService _flyoutService;
-    private bool _flyoutOpen;
-    private string _flyoutHeader;
     private PropertyChangedBase _flyoutContent;
 
     public FlyoutScreenBase(FlyoutService service)
@@ -21,17 +19,17 @@ public abstract class FlyoutScreenBase : Screen
 
     public string FlyoutHeader
     {
-        get => _flyoutHeader;
+        get => field;
         set
         {
-            _flyoutHeader = value;
+            field = value;
             NotifyOfPropertyChange(() => FlyoutHeader);
         }
     }
 
     public bool FlyoutOpen
     {
-        get => _flyoutOpen;
+        get => field;
         set
         {
             if (!value)
@@ -39,7 +37,7 @@ public abstract class FlyoutScreenBase : Screen
                 _flyoutService.NotifyFlyoutClosed();
             }
 
-            _flyoutOpen = value;
+            field = value;
             NotifyOfPropertyChange(() => FlyoutOpen);
         }
     }
