@@ -39,7 +39,6 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
     private GithubUpdateManager _updateManager;
     private WindowsLink _startupService;
     private ConsoleViewModel _console;
-    private string _searchTerm;
     private IEventAggregator _eventAggregator;
     private string _version;
     private double _dpiX = 1;
@@ -76,7 +75,6 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
         ModeService modeService)
     {
         _console = console;
-        _searchTerm = string.Empty;
         SearchWatermark = DefaultWaterMark;
         IsVisible = false;
         ShowInTaskBar = true;
@@ -183,7 +181,7 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
             }
 
             field = value;
-            _searchDebouncer.Debounce(250, () => Search(_searchTerm));
+            _searchDebouncer.Debounce(250, () => Search(field));
             NotifyOfPropertyChange();
         }
     }
