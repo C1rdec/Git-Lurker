@@ -472,7 +472,7 @@ public class Repository : NugetService
             // Shift
             if (Native.IsKeyPressed(Native.VirtualKeyStates.VK_SHIFT))
             {
-                _ = ExecuteCommandAsync($"start {_folder}");
+                _ = ExecuteCommandAsync($"explorer \"{_folder}\"");
                 return true;
             }
 
