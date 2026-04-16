@@ -60,7 +60,8 @@
                             <Grid>
                                 <Image Width="50"
                                        Height="50"
-                                       Margin="16">
+                                       Margin="16"
+                                       RenderOptions.BitmapScalingMode="HighQuality">
                                     <Image.Style>
                                         <Style TargetType="Image">
                                             <Setter Property="Source" Value="/Resources/vs-icon.png" />
