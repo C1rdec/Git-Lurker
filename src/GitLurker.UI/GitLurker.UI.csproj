@@ -22,6 +22,8 @@
   <ItemGroup>
     <Resource Include="Resources\Action.png" />
     <EmbeddedResource Include="Resources\SystemTray.png" />
+    <Resource Include="Resources\vscode-icon.png" />
+    <Resource Include="Resources\vs-icon.png" />
   </ItemGroup>
 
   <ItemGroup>
