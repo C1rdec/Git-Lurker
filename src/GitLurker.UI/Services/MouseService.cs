@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using GitLurker.UI.Models;
 using Winook;
 
-public class MouseService
+public class MouseService : IDisposable
 {
     #region Fields
 
@@ -19,6 +19,12 @@ public class MouseService
     public event EventHandler LeftButtonUp;
 
     public event EventHandler<MousePosition> MousePositionChanged;
+
+    public void Dispose()
+    {
+        _hook?.RemoveAllHandlers();
+        _hook?.Dispose();
+    }
 
     public MousePosition GetCurrentPosition()
         => new() { X = _x, Y = _y };

@@ -65,19 +65,6 @@ public class KeyboardService : IDisposable
         var process = Process.GetCurrentProcess();
         _hook = new KeyboardHook(process.Id);
 
-        // Enter
-        _hook.AddHandler(KeyCode.Enter, Modifiers.None, KeyDirection.Down, (o, e) =>
-        {
-            Execute.OnUIThread(() =>
-            {
-                _debounceService.Debounce(666, () =>
-                {
-                    EnterLongPressed?.Invoke(this, EventArgs.Empty);
-                    _debounceService.Reset();
-                });
-            });
-        });
-
         _hook.AddHandler(KeyCode.Enter, (o, e) =>
         {
             if (_debounceService.Reset())
@@ -169,8 +156,8 @@ public class KeyboardService : IDisposable
     {
         if (disposing)
         {
-            _hook.RemoveAllHandlers();
-            _hook.Dispose();
+            _hook?.RemoveAllHandlers();
+            _hook?.Dispose();
         }
     }
 

@@ -366,6 +366,8 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
 
     public async void Close()
     {
+        _keyboardService?.Dispose();
+        _mouseService?.Dispose();
         await _settingsViewModel.TryCloseAsync();
 
         _parent.Close();
