@@ -368,6 +368,15 @@ public class ShellViewModel : Screen, IHandle<CloseMessage>, IHandle<PatronMessa
     {
         _keyboardService?.Dispose();
         _mouseService?.Dispose();
+
+        HotkeyManager.Current.Remove("Open");
+        HotkeyManager.Current.Remove("OpenDevToys");
+
+        foreach (var snippet in _settingsFile.Entity.Snippets)
+        {
+            HotkeyManager.Current.Remove(snippet.Id.ToString());
+        }
+
         await _settingsViewModel.TryCloseAsync();
 
         _parent.Close();

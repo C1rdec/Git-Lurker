@@ -122,7 +122,7 @@ public class Repository : NugetService
 
         try
         {
-            var startupProjectGuid = new StartProjectFinder().GetStartProjects(solutionFile.FullName).FirstOrDefault();
+            var startupProjectGuid = StartProjectFinder.GetStartProjects(solutionFile.FullName).FirstOrDefault();
             if (startupProjectGuid == null)
             {
                 return null;

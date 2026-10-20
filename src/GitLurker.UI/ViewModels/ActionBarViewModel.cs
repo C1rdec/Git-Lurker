@@ -122,9 +122,9 @@ public class ActionBarViewModel : PropertyChangedBase
 
         if (_repo.HasFrontEnd)
         {
-            var icon = new PackIconSimpleIcons
+            var icon = new PackIconCodicons
             {
-                Kind = PackIconSimpleIconsKind.VisualStudioCode,
+                Kind = PackIconCodiconsKind.Vscode,
             };
 
             AddAction(_repo.OpenFrontEnd, icon);
