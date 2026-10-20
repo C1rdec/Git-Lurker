@@ -112,7 +112,7 @@ public class Repository : NugetService
         _tokenSource = null;
     }
 
-    private Project GetDefaultProject()
+    private SolutionProject GetDefaultProject()
     {
         var solutionFile = _slnFiles.FirstOrDefault();
         if (solutionFile == null || !File.Exists(solutionFile.FullName))
@@ -122,19 +122,79 @@ public class Repository : NugetService
 
         try
         {
+            if (solutionFile.Extension.Equals(".slnx", StringComparison.OrdinalIgnoreCase))
+            {
+                return GetSlnxDefaultProject(solutionFile);
+            }
+
             var startupProjectGuid = StartProjectFinder.GetStartProjects(solutionFile.FullName).FirstOrDefault();
             if (startupProjectGuid == null)
             {
                 return null;
             }
 
-            return SolutionProjectExtractor.GetAllProjectFiles(solutionFile.FullName).FirstOrDefault(p => p.Guid == startupProjectGuid);
+            var project = SolutionProjectExtractor.GetAllProjectFiles(solutionFile.FullName).FirstOrDefault(p => p.Guid == startupProjectGuid);
+            return project == null ? null : new SolutionProject(project.FullPath, project.RelativePath);
         }
         catch
         {
             return null;
         }
     }
+
+    private SolutionProject GetSlnxDefaultProject(FileInfo solutionFile)
+    {
+        var solutionFolder = solutionFile.DirectoryName;
+        var document = XDocument.Load(solutionFile.FullName);
+        var projectPaths = document.Descendants()
+            .Where(e => e.Name.LocalName == "Project")
+            .Select(e => e.Attribute("Path")?.Value)
+            .Where(p => !string.IsNullOrEmpty(p));
+
+        foreach (var path in projectPaths)
+        {
+            var fullPath = Path.GetFullPath(Path.Combine(solutionFolder, path.Replace('\\', Path.DirectorySeparatorChar)));
+            if (!File.Exists(fullPath) || !IsStartupProject(fullPath))
+            {
+                continue;
+            }
+
+            return new SolutionProject(fullPath, Path.GetRelativePath(_folder, fullPath));
+        }
+
+        return null;
+    }
+
+    private static bool IsStartupProject(string projectPath)
+    {
+        try
+        {
+            var xml = XDocument.Load(projectPath);
+            var elements = xml.Descendants().ToArray();
+
+            var isTest = elements.Any(e => e.Name.LocalName == "IsTestProject" && e.Value.Trim().Equals("true", StringComparison.OrdinalIgnoreCase))
+                || elements.Any(e => e.Name.LocalName == "PackageReference" && (e.Attribute("Include")?.Value ?? string.Empty).Equals("Microsoft.NET.Test.Sdk", StringComparison.OrdinalIgnoreCase));
+            if (isTest)
+            {
+                return false;
+            }
+
+            var sdk = xml.Root?.Attribute("Sdk")?.Value ?? string.Empty;
+            if (sdk.Contains("Microsoft.NET.Sdk.Web", StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            return elements.Any(e => e.Name.LocalName == "OutputType"
+                && (e.Value.Trim().Equals("Exe", StringComparison.OrdinalIgnoreCase) || e.Value.Trim().Equals("WinExe", StringComparison.OrdinalIgnoreCase)));
+        }
+        catch
+        {
+            return false;
+        }
+    }
+
+    private sealed record SolutionProject(string FullPath, string RelativePath);
 
     public bool IsBehind()
         => _gitService.IsBehind();
@@ -264,7 +324,7 @@ public class Repository : NugetService
 
     public Task CheckoutLastBranchAsync() => ExecuteCommandAsync($"git checkout -", true);
 
-    private async Task OpenProject(Project project)
+    private async Task OpenProject(SolutionProject project)
     {
         var folder = Path.GetDirectoryName(project.FullPath);
 
