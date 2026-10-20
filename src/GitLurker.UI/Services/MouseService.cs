@@ -32,7 +32,7 @@ public class MouseService : IDisposable
     public Task InstallAsync()
     {
         var process = Process.GetCurrentProcess();
-        _hook = new MouseHook(process.Id, MouseMessageTypes.IgnoreMove);
+        _hook = new MouseHook(process.Id);
         _hook.MouseMove += Hook_MouseMove;
         _hook.LeftButtonUp += Hook_LeftButtonUp;
 
